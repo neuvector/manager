@@ -4,7 +4,32 @@ import { Group, NetworkRule, ResponseRule, Service } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { Observable } from 'rxjs';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+
+interface GroupResponse {
+  group: Group;
+}
+
+interface ServiceResponse {
+  services: Service[];
+  service: Service;
+}
+
+interface ConfigResponse {
+  config: any;
+}
+
+interface DLPGroupResponse {
+  dlp_group: any;
+}
+
+interface WAFGroupResponse {
+  waf_group: any;
+}
+
+interface SensorsResponse {
+  sensors: any[];
+}
 
 @Injectable()
 export class PolicyHttpService {
@@ -30,10 +55,10 @@ export class PolicyHttpService {
 
   getGroup(name: string): Observable<Group> {
     return GlobalVariable.http
-      .get<Group>(PathConstant.GROUP_URL, {
+      .get<GroupResponse>(PathConstant.GROUP_URL, {
         params: { name },
       })
-      .pipe(pluck('group'));
+      .pipe(map(r => r.group));
   }
 
   postGroup(payload) {
@@ -68,20 +93,20 @@ export class PolicyHttpService {
   getServices(params?: any): Observable<Service[]> {
     if (params) {
       return GlobalVariable.http
-        .get<Service[]>(PathConstant.SERVICE_URL, {
+        .get<ServiceResponse>(PathConstant.SERVICE_URL, {
           params,
         })
-        .pipe(pluck('services'));
+        .pipe(map(r => r.services));
     }
     return GlobalVariable.http
-      .get<Service[]>(PathConstant.SERVICE_URL)
-      .pipe(pluck('services'));
+      .get<ServiceResponse>(PathConstant.SERVICE_URL)
+      .pipe(map(r => r.services));
   }
 
   getService(name: string): Observable<Service> {
     return GlobalVariable.http
-      .get<Service>(PathConstant.SERVICE_URL, { params: { name } })
-      .pipe(pluck('service'));
+      .get<ServiceResponse>(PathConstant.SERVICE_URL, { params: { name } })
+      .pipe(map(r => r.service));
   }
 
   patchService(payload, config?) {
@@ -113,8 +138,8 @@ export class PolicyHttpService {
 
   getGroupScript(name: string) {
     return GlobalVariable.http
-      .get(PathConstant.GROUP_SCRIPT_URL, { params: { name } })
-      .pipe(pluck('config'));
+      .get<ConfigResponse>(PathConstant.GROUP_SCRIPT_URL, { params: { name } })
+      .pipe(map(r => r.config));
   }
 
   patchGroupScript(payload) {
@@ -123,8 +148,8 @@ export class PolicyHttpService {
 
   getDLPGroups(name: string) {
     return GlobalVariable.http
-      .get(PathConstant.DLP_GROUPS_URL, { params: { name } })
-      .pipe(pluck('dlp_group'));
+      .get<DLPGroupResponse>(PathConstant.DLP_GROUPS_URL, { params: { name } })
+      .pipe(map(r => r.dlp_group));
   }
 
   patchDLPGroup(payload) {
@@ -147,14 +172,14 @@ export class PolicyHttpService {
       });
     }
     return GlobalVariable.http
-      .get(PathConstant.DLP_SENSORS_URL, ...options)
-      .pipe(pluck('sensors'));
+      .get<SensorsResponse>(PathConstant.DLP_SENSORS_URL, ...options)
+      .pipe(map(r => r.sensors));
   }
 
   getWAFGroups(name: string) {
     return GlobalVariable.http
-      .get(PathConstant.WAF_GROUPS_URL, { params: { name } })
-      .pipe(pluck('waf_group'));
+      .get<WAFGroupResponse>(PathConstant.WAF_GROUPS_URL, { params: { name } })
+      .pipe(map(r => r.waf_group));
   }
 
   patchWAFGroup(payload) {
@@ -177,7 +202,7 @@ export class PolicyHttpService {
       });
     }
     return GlobalVariable.http
-      .get(PathConstant.WAF_SENSORS_URL, ...options)
-      .pipe(pluck('sensors'));
+      .get<SensorsResponse>(PathConstant.WAF_SENSORS_URL, ...options)
+      .pipe(map(r => r.sensors));
   }
 }

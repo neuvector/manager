@@ -70,7 +70,7 @@
         'ldap.gridHeader.DOMAINS' | translate
       }}</label>
       <label class="sr-only" for="namespaceMatch">Match</label>
-      <mat-form-field appearance="standard" class="col-2 match">
+      <mat-form-field class="col-2 match">
         <mat-select formControlName="matchType4Ns" id="namespaceMatch">
           <mat-option
             *ngFor="let matchType of matchTypes"
@@ -79,20 +79,20 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="standard" class="col pl-0">
-        <mat-chip-list
+      <mat-form-field class="col pl-0">
+        <mat-chip-grid
           #chipList
           aria-label="Namespace selection"
           formControlName="selectedDomains"
           id="namespaceInput">
-          <mat-chip
+          <mat-chip-row
             (removed)="remove(domainChip)"
             *ngFor="let domainChip of form.controls.selectedDomains.value">
             {{ domainChip }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
-          </mat-chip>
+          </mat-chip-row>
           <input
             #namespaceInput
             (matChipInputTokenEnd)="add($event)"
@@ -101,7 +101,7 @@
             [matChipInputFor]="chipList"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [placeholder]="'ldap.ADD_DOMAIN' | translate" />
-        </mat-chip-list>
+        </mat-chip-grid>
         <mat-autocomplete
           #auto="matAutocomplete"
           (optionActivated)="optionActivated($event)"
@@ -145,10 +145,7 @@
               'admissionControl.names.SERVICE' | translate
             }}</label>
             <label class="sr-only" for="serviceMatch">Match</label>
-            <mat-form-field
-              appearance="standard"
-              class="col-2 pr-0 match"
-              formGroupName="matchTypes">
+            <mat-form-field class="col-2 pr-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Service" id="serviceMatch">
                 <mat-option
                   *ngFor="let matchType of matchTypes"
@@ -157,7 +154,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="standard" class="col">
+            <mat-form-field class="col">
               <input formControlName="serviceName" id="serviceName" matInput />
             </mat-form-field>
           </ng-container>
@@ -166,10 +163,7 @@
               'admissionControl.names.IMAGE' | translate
             }}</label>
             <label class="sr-only" for="imageMatch">Match</label>
-            <mat-form-field
-              appearance="standard"
-              class="col-2 pr-0 match"
-              formGroupName="matchTypes">
+            <mat-form-field class="col-2 pr-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Image" id="imageMatch">
                 <mat-option
                   *ngFor="let matchType of matchTypes"
@@ -178,7 +172,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="standard" class="col">
+            <mat-form-field class="col">
               <input formControlName="imageName" id="imageName" matInput />
             </mat-form-field>
           </ng-container>
@@ -187,10 +181,7 @@
               'admissionControl.names.NODE' | translate
             }}</label>
             <label class="sr-only" for="nodeMatch">Match</label>
-            <mat-form-field
-              appearance="standard"
-              class="col-2 pr-0 match"
-              formGroupName="matchTypes">
+            <mat-form-field class="col-2 pr-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Node" id="nodeMatch">
                 <mat-option
                   *ngFor="let matchType of matchTypes"
@@ -199,7 +190,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="standard" class="col">
+            <mat-form-field class="col">
               <input formControlName="nodeName" id="nodeName" matInput />
             </mat-form-field>
           </ng-container>
@@ -208,10 +199,7 @@
               'admissionControl.names.CONTAINER' | translate
             }}</label>
             <label class="sr-only" for="containerMatch">Match</label>
-            <mat-form-field
-              appearance="standard"
-              class="col-2 pr-0 match"
-              formGroupName="matchTypes">
+            <mat-form-field class="col-2 pr-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Container" id="containerMatch">
                 <mat-option
                   *ngFor="let matchType of matchTypes"
@@ -220,7 +208,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="standard" class="col">
+            <mat-form-field class="col">
               <input
                 formControlName="containerName"
                 id="containerName"

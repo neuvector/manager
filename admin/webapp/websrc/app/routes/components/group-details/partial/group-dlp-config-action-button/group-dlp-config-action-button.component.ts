@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-group-dlp-config-action-button',
   templateUrl: './group-dlp-config-action-button.component.html',
   styleUrls: ['./group-dlp-config-action-button.component.scss'],

@@ -10,11 +10,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
+
 @Component({
+  standalone: false,
   selector: 'app-action-buttons',
   templateUrl: './action-buttons.component.html',
   styleUrls: ['./action-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  
 })
 export class ActionButtonsComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

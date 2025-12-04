@@ -6,6 +6,7 @@ import { groupBy } from '@common/utils/common.utils';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-risk-reports-printable-report',
   templateUrl: './risk-reports-printable-report.component.html',
   styleUrls: ['./risk-reports-printable-report.component.scss'],

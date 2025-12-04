@@ -3,6 +3,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
+
 type TemplateType = 'compliance' | 'scan' | 'admission' | '';
 const TemplateTypes: TemplateType[] = ['compliance', 'scan', 'admission'];
 interface AdmissionItem {
@@ -11,9 +12,11 @@ interface AdmissionItem {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-risk-report-grid-message-cell',
   templateUrl: './risk-report-grid-message-cell.component.html',
   styleUrls: ['./risk-report-grid-message-cell.component.scss'],
+  
 })
 export class RiskReportGridMessageCellComponent
   implements ICellRendererAngularComp

@@ -3,11 +3,14 @@ import { Check } from '@common/types';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
+
 @Component({
+  standalone: false,
   selector: 'app-compliance-grid-name-cell',
   templateUrl: './compliance-grid-name-cell.component.html',
   styleUrls: ['./compliance-grid-name-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  
 })
 export class ComplianceGridNameCellComponent
   implements ICellRendererAngularComp

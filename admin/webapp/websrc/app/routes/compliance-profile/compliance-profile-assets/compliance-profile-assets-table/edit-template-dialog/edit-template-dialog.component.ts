@@ -3,10 +3,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ComplianceProfileService } from '@routes/compliance-profile/compliance-profile.service';
 import { iconMap } from '../compliance-profile-assets-table.component';
 
+
 @Component({
+  standalone: false,
   selector: 'app-edit-template-dialog',
   templateUrl: './edit-template-dialog.component.html',
   styleUrls: ['./edit-template-dialog.component.scss'],
+  
 })
 export class EditTemplateDialogComponent implements OnInit {
   regulations = ['NIST', 'HIPAA', 'GDPR', 'PCI'];

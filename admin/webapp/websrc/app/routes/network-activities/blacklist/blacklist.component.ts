@@ -24,10 +24,13 @@ import {
   GroupItem,
 } from '@common/types/network-activities/blacklist';
 
+
 @Component({
+  standalone: false,
   selector: 'app-blacklist',
   templateUrl: './blacklist.component.html',
   styleUrls: ['./blacklist.component.scss'],
+  
 })
 export class BlacklistComponent implements OnInit {
   get blacklist(): Blacklist {

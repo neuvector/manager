@@ -16,10 +16,13 @@ import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { updateGridData } from '@common/utils/common.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-add-edit-sensor-modal',
   templateUrl: './add-edit-sensor-modal.component.html',
   styleUrls: ['./add-edit-sensor-modal.component.scss'],
+  
 })
 export class AddEditSensorModalComponent implements OnInit {
   opTypeOptions = GlobalConstant.MODAL_OP;

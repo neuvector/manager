@@ -7,13 +7,27 @@ import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 import { forkJoin } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ActionButtonsComponent } from '@components/network-rules/partial/action-buttons/action-buttons.component';
 import { FromToCellComponent } from '@components/network-rules/partial/from-to-cell/from-to-cell.component';
 import { IdCellComponent } from '@components/network-rules/partial/id-cell/id-cell.component';
 import { PortsCellComponent } from '@components/network-rules/partial/ports-cell/ports-cell.component';
 import { NetworkRule } from '@common/types/network-rules/network-rules';
 import * as pako from 'pako';
+
+interface GroupResponse {
+  groups: Array<any>;
+}
+
+interface HostResponse {
+  hosts: Array<any>;
+}
+
+interface ApplicationResponse {
+  list: {
+    application: Array<string>;
+  };
+}
 
 @Injectable({
   providedIn: 'root',
@@ -337,7 +351,7 @@ export class NetworkRulesService {
 
   getAutoCompleteData = source => {
     let groupReq = GlobalVariable.http
-      .get(PathConstant.GROUP_LIST_URL, {
+      .get<GroupResponse>(PathConstant.GROUP_LIST_URL, {
         params: {
           scope:
             source === GlobalConstant.NAV_SOURCE.FED_POLICY
@@ -345,15 +359,15 @@ export class NetworkRulesService {
               : GlobalConstant.SCOPE.LOCAL,
         },
       })
-      .pipe(pluck('groups'));
+      .pipe(map(r => r.groups));
 
     let hostReq = GlobalVariable.http
-      .get(PathConstant.NODES_URL)
-      .pipe(pluck('hosts'));
+      .get<HostResponse>(PathConstant.NODES_URL)
+      .pipe(map(r => r.hosts));
 
     let applicationReq = GlobalVariable.http
-      .get(PathConstant.POLICY_APP_URL)
-      .pipe(pluck('list', 'application'));
+      .get<ApplicationResponse>(PathConstant.POLICY_APP_URL)
+      .pipe(map(r => r.list.application));
 
     return forkJoin([groupReq, hostReq, applicationReq]).pipe();
   };

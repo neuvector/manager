@@ -17,6 +17,7 @@ import { Vulnerability } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-vulnerabilities-table',
   templateUrl: './vulnerabilities-table.component.html',
   styleUrls: ['./vulnerabilities-table.component.scss'],

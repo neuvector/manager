@@ -5,10 +5,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PortsFullListModalComponent } from '@components/network-rules/partial/ports-full-list-modal/ports-full-list-modal.component';
 
+
 @Component({
+  standalone: false,
   selector: 'app-ports-cell',
   templateUrl: './ports-cell.component.html',
   styleUrls: ['./ports-cell.component.scss'],
+  
 })
 export class PortsCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

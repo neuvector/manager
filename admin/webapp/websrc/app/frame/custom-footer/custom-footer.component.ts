@@ -8,9 +8,11 @@ import {
 } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-custom-footer',
   templateUrl: './custom-footer.component.html',
   styleUrls: ['./custom-footer.component.scss'],
+  
 })
 export class CustomFooterComponent implements OnInit {
   footerText: SafeHtml = '';

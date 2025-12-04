@@ -7,10 +7,13 @@ import {
 } from '@services/score-improvement-modal.service';
 import { ScoreImprovementExposureViewComponent } from './partial/score-improvement-exposure-view/score-improvement-exposure-view.component';
 
+
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-modal',
   templateUrl: './score-improvement-modal.component.html',
   styleUrls: ['./score-improvement-modal.component.scss'],
+  
 })
 export class ScoreImprovementModalComponent implements OnInit {
   @ViewChild(ScoreImprovementExposureViewComponent)

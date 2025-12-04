@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { shortenString } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-layers-table',
   templateUrl: './layers-table.component.html',
   styleUrls: ['./layers-table.component.scss'],

@@ -3,6 +3,7 @@ import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-containers-printable-report-chart',
   templateUrl: './containers-printable-report-chart.component.html',
   styleUrls: ['./containers-printable-report-chart.component.scss'],

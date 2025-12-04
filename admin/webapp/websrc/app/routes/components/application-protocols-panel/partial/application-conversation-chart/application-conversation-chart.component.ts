@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+
 @Component({
+  standalone: false,
   selector: 'app-application-conversation-chart',
   templateUrl: './application-conversation-chart.component.html',
   styleUrls: ['./application-conversation-chart.component.scss'],
+  
 })
 export class ApplicationConversationChartComponent implements OnInit {
   @Input() applications: any;

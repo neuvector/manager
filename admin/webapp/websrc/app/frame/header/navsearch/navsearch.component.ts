@@ -10,9 +10,11 @@ import {
 } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-navsearch',
   templateUrl: './navsearch.component.html',
   styleUrls: ['./navsearch.component.scss'],
+  
 })
 export class NavsearchComponent implements OnInit, OnChanges {
   @Input() visible: boolean;

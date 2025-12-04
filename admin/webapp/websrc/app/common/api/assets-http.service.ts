@@ -19,7 +19,37 @@ import {
 import { PathConstant } from '@common/constants/path.constant';
 import { PlatformsData } from '@common/types/compliance/platformsData';
 import { Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+
+interface WorkloadResponse {
+  workloads: Workload[];
+}
+
+interface VulnerabilityReportResponse {
+  report: {
+    vulnerabilities: Vulnerability[];
+  };
+}
+
+interface ProcessInfoResponse {
+  processes: ProcessInfo[];
+}
+
+interface ConfigResponse {
+  config: ScanConfig;
+}
+
+interface ControllerResponse {
+  controllers: Controller[];
+}
+
+interface EnforcerResponse {
+  enforcers: Enforcer[];
+}
+
+interface ScannerResponse {
+  scanners: Scanner[];
+}
 
 @Injectable()
 export class AssetsHttpService {
@@ -42,8 +72,8 @@ export class AssetsHttpService {
 
   getContainers(): Observable<Workload[]> {
     return GlobalVariable.http
-      .get<Workload[]>(PathConstant.CONTAINER_URL)
-      .pipe(pluck('workloads'));
+      .get<WorkloadResponse>(PathConstant.CONTAINER_URL)
+      .pipe(map(r => r.workloads));
   }
 
   getScannedContainers(start: number, limit: number): Observable<WorkloadV2[]> {
@@ -72,10 +102,10 @@ export class AssetsHttpService {
       isShowingAccepted ? { id, show: 'accepted' } : { id }
     ) as any;
     return GlobalVariable.http
-      .get<Vulnerability[]>(PathConstant.SCAN_URL, {
+      .get<VulnerabilityReportResponse>(PathConstant.SCAN_URL, {
         params,
       })
-      .pipe(pluck('report', 'vulnerabilities'));
+      .pipe(map(r => r.report.vulnerabilities));
   }
 
   getHostReport(
@@ -86,8 +116,8 @@ export class AssetsHttpService {
       isShowingAccepted ? { id, show: 'accepted' } : { id }
     ) as any;
     return GlobalVariable.http
-      .get<Vulnerability[]>(PathConstant.SCAN_HOST_URL, { params })
-      .pipe(pluck('report', 'vulnerabilities'));
+      .get<VulnerabilityReportResponse>(PathConstant.SCAN_HOST_URL, { params })
+      .pipe(map(r => r.report.vulnerabilities));
   }
 
   getPlatformReport(
@@ -98,36 +128,36 @@ export class AssetsHttpService {
       isShowingAccepted ? { platform, show: 'accepted' } : { platform }
     ) as any;
     return GlobalVariable.http
-      .get<Vulnerability[]>(PathConstant.SCAN_PLATFORM_URL, { params })
-      .pipe(pluck('report', 'vulnerabilities'));
+      .get<VulnerabilityReportResponse>(PathConstant.SCAN_PLATFORM_URL, { params })
+      .pipe(map(r => r.report.vulnerabilities));
   }
 
   getNodeWorkloads(id: string): Observable<Workload[]> {
     return GlobalVariable.http
-      .get<Workload[]>(PathConstant.NODE_WORKLOADS_URL, { params: { id } })
-      .pipe(pluck('workloads'));
+      .get<WorkloadResponse>(PathConstant.NODE_WORKLOADS_URL, { params: { id } })
+      .pipe(map(r => r.workloads));
   }
 
   getProcess(id: string): Observable<ProcessInfo[]> {
     return GlobalVariable.http
-      .get<ProcessInfo>(PathConstant.CONTAINER_PROCESS_URL, {
+      .get<ProcessInfoResponse>(PathConstant.CONTAINER_PROCESS_URL, {
         params: { id },
       })
-      .pipe(pluck('processes'));
+      .pipe(map(r => r.processes));
   }
 
   getProcessHistory(id: string): Observable<ProcessInfo[]> {
     return GlobalVariable.http
-      .get(PathConstant.CONTAINER_PROCESS_HISTORY_URL, {
+      .get<ProcessInfoResponse>(PathConstant.CONTAINER_PROCESS_HISTORY_URL, {
         params: { id },
       })
-      .pipe(pluck('processes'));
+      .pipe(map(r => r.processes));
   }
 
   getScanConfig(): Observable<ScanConfig> {
     return GlobalVariable.http
-      .get<ScanConfig>(PathConstant.SCAN_CONFIG_URL)
-      .pipe(pluck('config'));
+      .get<ConfigResponse>(PathConstant.SCAN_CONFIG_URL)
+      .pipe(map(r => r.config));
   }
 
   postScanConfig(config: ScanConfig): Observable<unknown> {
@@ -189,8 +219,8 @@ export class AssetsHttpService {
 
   getControllers(): Observable<Controller[]> {
     return GlobalVariable.http
-      .get<Controller[]>(PathConstant.CONTROLLER_URL)
-      .pipe(pluck('controllers'));
+      .get<ControllerResponse>(PathConstant.CONTROLLER_URL)
+      .pipe(map(r => r.controllers));
   }
 
   getControllerStats(id: string): Observable<SystemStatsData> {
@@ -202,8 +232,8 @@ export class AssetsHttpService {
 
   getEnforcers(): Observable<Enforcer[]> {
     return GlobalVariable.http
-      .get<Enforcer[]>(PathConstant.ENFORCER_URL)
-      .pipe(pluck('enforcers'));
+      .get<EnforcerResponse>(PathConstant.ENFORCER_URL)
+      .pipe(map(r => r.enforcers));
   }
 
   getEnforcerStats(id: string): Observable<SystemStatsData> {
@@ -214,7 +244,7 @@ export class AssetsHttpService {
 
   getScanners(): Observable<Scanner[]> {
     return GlobalVariable.http
-      .get<Scanner[]>(PathConstant.SCANNER_URL)
-      .pipe(pluck('scanners'));
+      .get<ScannerResponse>(PathConstant.SCANNER_URL)
+      .pipe(map(r => r.scanners));
   }
 }

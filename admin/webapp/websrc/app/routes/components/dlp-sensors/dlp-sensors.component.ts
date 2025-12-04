@@ -32,10 +32,13 @@ import { ExportOptionsModalComponent } from '@components/export-options-modal/ex
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-dlp-sensors',
   templateUrl: './dlp-sensors.component.html',
   styleUrls: ['./dlp-sensors.component.scss'],
+  
 })
 export class DlpSensorsComponent implements OnInit, OnDestroy {
   @Input() source: string;

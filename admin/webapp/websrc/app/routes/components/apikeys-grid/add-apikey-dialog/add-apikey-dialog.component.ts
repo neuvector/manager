@@ -9,7 +9,6 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   MatTableDataSource,
-  _MatTableDataSource,
 } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { ApikeysGridComponent } from '../apikeys-grid.component';
@@ -29,6 +28,7 @@ import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { getNamespaceRoleGridData } from '@common/utils/common.utils';
 
+
 interface AddApikeyDialog {
   globalRoles: string[];
   domainRoles: string[];
@@ -38,9 +38,11 @@ interface AddApikeyDialog {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-apikey-dialog',
   templateUrl: './add-apikey-dialog.component.html',
   styleUrls: ['./add-apikey-dialog.component.scss'],
+  
 })
 export class AddApikeyDialogComponent implements OnInit {
   expirationOptions: ApikeyExpiration[] = [
@@ -70,7 +72,7 @@ export class AddApikeyDialogComponent implements OnInit {
       )
     );
   }
-  domainTableSource!: _MatTableDataSource<any>;
+  domainTableSource!: MatTableDataSource<any>;
   activeRole!: string;
   get isKube() {
     return GlobalVariable.summary

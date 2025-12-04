@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ChartConfiguration } from 'chart.js';
 
 @Component({
+  standalone: false,
   selector: 'app-risk-reports-printable-report-pie-chart',
   templateUrl: './risk-reports-printable-report-pie-chart.component.html',
   styleUrls: ['./risk-reports-printable-report-pie-chart.component.scss'],

@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
+  standalone: false,
   selector: 'app-predefined-file-access-rules-modal',
   templateUrl: './predefined-file-access-rules-modal.component.html',
   styleUrls: ['./predefined-file-access-rules-modal.component.scss'],

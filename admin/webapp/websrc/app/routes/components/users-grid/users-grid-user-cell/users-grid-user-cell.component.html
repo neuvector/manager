@@ -1,10 +1,10 @@
 <ng-container *ngIf="gravatarEnabled; else altAvatar">
-  <ngx-avatar
+  <ngx-avatars
     class="userIcon"
     [gravatarId]="emailHash"
     [name]="username"
-    size="35"></ngx-avatar>
+    size="35"></ngx-avatars>
 </ng-container>
 <ng-template #altAvatar>
-  <ngx-avatar class="userIcon" [name]="username" size="35"></ngx-avatar>
+  <ngx-avatars class="userIcon" [name]="username" size="35"></ngx-avatars>
 </ng-template>

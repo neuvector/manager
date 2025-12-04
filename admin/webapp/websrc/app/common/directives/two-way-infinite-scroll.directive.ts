@@ -8,10 +8,11 @@ import {
 
 @Directive({
   selector: '[appTwoWayInfiniteScroll]',
+  standalone: false,
 })
 export class TwoWayInfiniteScrollDirective implements OnInit {
   @Input() ctx: any;
-  element: HTMLDivElement;
+  element!: HTMLDivElement;
 
   constructor(private elementRef: ElementRef) {
     console.log('appTwoWayInfiniteScroll is working...');

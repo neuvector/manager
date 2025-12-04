@@ -15,10 +15,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DomainNameCellComponent } from '@routes/namespaces/namespace-items/domain-name-cell/domain-name-cell.component';
 import { GlobalConstant } from '@common/constants/global.constant';
 
+
 @Component({
+  standalone: false,
   selector: 'app-namespaces-grid',
   templateUrl: './namespaces-grid.component.html',
   styleUrls: ['./namespaces-grid.component.scss'],
+  
 })
 export class NamespacesGridComponent implements OnInit {
   private readonly $win;

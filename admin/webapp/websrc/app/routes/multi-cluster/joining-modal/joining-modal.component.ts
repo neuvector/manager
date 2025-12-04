@@ -9,10 +9,13 @@ import { NotificationService } from '@services/notification.service';
 import { Router } from '@angular/router';
 import { ConfigHttpService } from '@common/api/config-http.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-joining-modal',
   templateUrl: './joining-modal.component.html',
   styleUrls: ['./joining-modal.component.scss'],
+  
 })
 export class JoiningModalComponent implements OnInit {
   public cluster: any;

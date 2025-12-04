@@ -1,6 +1,5 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
 import { NgModule, Inject } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -13,6 +12,9 @@ import { RoutesModule } from './routes/routes.module';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { BrowserModule } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor } from '@core/interceptor/auth.interceptor';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -27,12 +29,11 @@ export function getWindow() {
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    HttpClientModule,
-    BrowserAnimationsModule,
     CoreModule,
     FrameModule,
     NvCommonModule.forRoot(),
     RoutesModule,
+    BrowserModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -41,7 +42,17 @@ export function getWindow() {
       },
     }),
   ],
-  providers: [{ provide: WindowWrapper, useFactory: getWindow }],
+  providers: [
+    provideHttpClient(
+      withInterceptorsFromDi(),
+    ),
+    { provide: WindowWrapper, useFactory: getWindow },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true, // This is mandatory
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {

@@ -16,16 +16,19 @@ import { RolesGridPermissionsCellComponent } from './roles-grid-permissions-cell
 import { RolesGridActionCellComponent } from './roles-grid-action-cell/roles-grid-action-cell.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
-import { finalize, map, pluck, switchMap, take } from 'rxjs/operators';
+import { finalize, map, switchMap, take } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { NotificationService } from '@services/notification.service';
 import { AddEditRoleDialogComponent } from './add-edit-role-dialog/add-edit-role-dialog.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-roles-grid',
   templateUrl: './roles-grid.component.html',
   styleUrls: ['./roles-grid.component.scss'],
+  
 })
 export class RolesGridComponent implements OnInit {
   private readonly $win;
@@ -109,7 +112,7 @@ export class RolesGridComponent implements OnInit {
     }
     this.settingsService
       .getPermissionOptions()
-      .pipe(pluck('global_options'))
+      .pipe(map(r => r.global_options))
       .subscribe(res => (this.globalOptions = res));
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
     this.gridOptions = {

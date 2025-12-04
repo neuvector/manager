@@ -4,10 +4,13 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { MapConstant } from '@common/constants/map.constant';
 import { ConversationReportEntryByService } from '@common/types';
 
+
 @Component({
+  standalone: false,
   selector: 'app-conversation-entry-list',
   templateUrl: './conversation-entry-list.component.html',
   styleUrls: ['./conversation-entry-list.component.scss'],
+  
 })
 export class ConversationEntryListComponent
   implements ICellRendererAngularComp

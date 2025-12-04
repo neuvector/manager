@@ -15,6 +15,7 @@ import { FederatedConfigurationService } from '@services/federated-configuration
 import { FormControl } from '@angular/forms';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
+
 export const fedGroupDetailsTabs = [
   'member',
   'process profile rules',
@@ -26,9 +27,11 @@ export const fedGroupDetailsTabs = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-fed-group-details',
   templateUrl: './fed-group-details.component.html',
   styleUrls: ['./fed-group-details.component.scss'],
+  
 })
 export class FedGroupDetailsComponent implements OnInit, AfterViewInit {
   @Input() kind: string;

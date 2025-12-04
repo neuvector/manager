@@ -1,54 +1,53 @@
 <div [class]="!to.isCell ? 'd-flex align-items-center' : ''">
-  <i class="eos-icons mr-3">{{ field.templateOptions.icon }}</i>
+  <i class="eos-icons mr-3">{{ field.templateOptions?.icon }}</i>
   <mat-form-field
-    appearance="standard"
     [class]="to.isCell ? 'pull-left' : 'w-' + (to.inputWidth ?? '100')"
     [hideRequiredMarker]="to.hideRequiredMarker ?? false"
     [floatLabel]="to.floatLabel ? 'always' : 'auto'">
-    <mat-label>{{ field.templateOptions.label || '' | translate }}</mat-label>
+    <mat-label>{{ field.templateOptions?.label || '' | translate }}</mat-label>
     <span
       matPrefix
       *ngIf="
         field.templateOptions?.prefix &&
         field.templateOptions?.prefix.length > 0
       "
-      >{{ field.templateOptions.prefix }}</span
+      >{{ field.templateOptions?.prefix ?? '' }}</span
     >
     <input
       *ngIf="field.templateOptions?.type !== 'number'; else numberTmp"
-      [attr.disabled]="field.templateOptions.disabled || false"
+      [attr.disabled]="field.templateOptions?.disabled || false"
       [formControl]="formControl"
       [formlyAttributes]="field"
-      [maskOnBlur]="field.templateOptions.maskOnBlur"
-      [required]="field.templateOptions.required || false"
-      [readonly]="field.templateOptions.disabled || false"
-      [placeholder]="field.templateOptions.placeholder || '' | translate"
-      [type]="passwordVisible ? 'text' : field.templateOptions.type || 'text'"
+      [maskOnBlur]="field.templateOptions?.maskOnBlur"
+      [required]="field.templateOptions?.required || false"
+      [readonly]="field.templateOptions?.disabled || false"
+      [placeholder]="field.templateOptions?.placeholder || '' | translate"
+      [type]="passwordVisible ? 'text' : field.templateOptions?.type || 'text'"
       appMaskInput
       matInput />
     <ng-template #numberTmp>
       <input
-        [attr.disabled]="field.templateOptions.disabled || false"
+        [attr.disabled]="field.templateOptions?.disabled || false"
         [formControl]="formControl"
         [formlyAttributes]="field"
-        [maskOnBlur]="field.templateOptions.maskOnBlur"
-        [required]="field.templateOptions.required || false"
+        [maskOnBlur]="field.templateOptions?.maskOnBlur"
+        [required]="field.templateOptions?.required || false"
         type="number"
         appMaskInput
         matInput />
     </ng-template>
     <mat-hint
       *ngIf="!field.templateOptions?.noInputHint"
-      [class.text-danger]="field.templateOptions.hintDanger"
-      >{{ field.templateOptions.hint || '' | translate }}</mat-hint
+      [class.text-danger]="field.templateOptions?.hintDanger"
+      >{{ field.templateOptions?.hint ?? '' | translate }}</mat-hint
     >
     <mat-error *ngIf="formControl.invalid">
       <app-formly-errors [field]="field"></app-formly-errors>
       <mat-hint
-        *ngIf="field.templateOptions.hint && field.templateOptions.alwaysHint"
+        *ngIf="field.templateOptions?.hint && field.templateOptions?.alwaysHint"
         class="float-right"
         align="end">
-        {{ field.templateOptions.hint | translate }}
+        {{ field.templateOptions?.hint ?? '' | translate }}
       </mat-hint>
     </mat-error>
   </mat-form-field>

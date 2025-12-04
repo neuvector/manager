@@ -1,16 +1,16 @@
 <div class="d-flex align-items-center justify-content-end score-header">
   <div class="flex-grow-1 text-muted mat-h4 pl-4">{{ message }}</div>
   <div class="score-container score-container-flex">
-    <mwl-gauge
+    <ngx-gauge
       class="score"
+      type="arch"
       [max]="100"
       [value]="score"
-      [animated]="true"
-      [animationDuration]="1"
-      [color]="getGaugeColor"
-      [showValue]="true"
-      [dialRadius]="40">
-    </mwl-gauge>
+      [animate]="true"
+      [duration]="1"
+      [foregroundColor]="gaugeColor"
+      [size]="40">
+    </ngx-gauge>
     <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
       {{ gaugeLabel }}
     </div>
@@ -25,16 +25,16 @@
     </div>
   </div>
   <div class="score-container score-container-flex mr-3">
-    <mwl-gauge
+    <ngx-gauge
       class="score"
+      type="arch"
       [max]="100"
       [value]="projectedScore || 0"
-      [animated]="true"
-      [animationDuration]="1"
-      [color]="getGaugeColor"
-      [showValue]="true"
-      [dialRadius]="40">
-    </mwl-gauge>
+      [animate]="true"
+      [duration]="1"
+      [foregroundColor]="gaugeColor"
+      [size]="40">
+    </ngx-gauge>
     <div class="score-label" [ngStyle]="{ color: gaugeLabelColorProj }">
       {{ gaugeLabelProj }}
     </div>

@@ -21,6 +21,7 @@ export class ErrorContext {
 
 @Directive({
   selector: '[appObserve]',
+  standalone: false,
 })
 export class ObserveDirective<T> implements OnDestroy, OnInit {
   private errorRef!: TemplateRef<ErrorContext>;

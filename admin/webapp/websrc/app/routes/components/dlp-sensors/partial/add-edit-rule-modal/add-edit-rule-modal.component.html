@@ -20,17 +20,17 @@
   <div mat-dialog-content>
     <form [formGroup]="addEditRuleForm">
       <div class="row">
-        <mat-form-field class="col-sm-3" appearance="standard">
+        <mat-form-field class="col-sm-3">
           <mat-label>{{ 'dlp.sensorModal.SENSOR_NAME' | translate }}</mat-label>
           <input type="text" matInput formControlName="sensorName" readonly />
         </mat-form-field>
-        <mat-form-field class="col-sm-9" appearance="standard">
+        <mat-form-field class="col-sm-9">
           <mat-label>{{ 'dlp.sensorModal.COMMENT' | translate }}</mat-label>
           <input type="text" matInput formControlName="comment" readonly />
         </mat-form-field>
       </div>
       <div class="row">
-        <mat-form-field class="col-sm-3" appearance="standard">
+        <mat-form-field class="col-sm-3">
           <mat-label>{{ 'dlp.ruleModal.PATTERN_NAME' | translate }}</mat-label>
           <input
             type="text"
@@ -42,7 +42,7 @@
       </div>
       <hr class="solid margin-top-s margin-bottom-s" />
       <div class="row">
-        <mat-form-field appearance="standard" class="col-sm-2">
+        <mat-form-field class="col-sm-2">
           <mat-label>{{
             'dlp.patternGrid.LOGIC_IS_NOT' | translate
           }}</mat-label>
@@ -58,7 +58,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-sm-7" appearance="standard">
+        <mat-form-field class="col-sm-7">
           <mat-label>{{ 'dlp.ruleModal.PATTERN' | translate }}</mat-label>
           <input
             style="position: relative; padding-right: 60px"
@@ -86,7 +86,7 @@
             {{ 'dlp.sensorModal.TEST_BTN' | translate }}
           </button>
         </mat-form-field>
-        <mat-form-field appearance="standard" class="col-sm-2">
+        <mat-form-field class="col-sm-2">
           <mat-label>{{ 'dlp.patternGrid.CONTEXT' | translate }}</mat-label>
           <mat-select
             matNativeControl

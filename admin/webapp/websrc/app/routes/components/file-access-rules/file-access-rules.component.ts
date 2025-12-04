@@ -25,10 +25,13 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { updateGridData } from '@common/utils/common.utils';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-file-access-rules',
   templateUrl: './file-access-rules.component.html',
   styleUrls: ['./file-access-rules.component.scss'],
+  
 })
 export class FileAccessRulesComponent implements OnInit, OnChanges {
   @Input() isScoreImprovement: boolean = false;

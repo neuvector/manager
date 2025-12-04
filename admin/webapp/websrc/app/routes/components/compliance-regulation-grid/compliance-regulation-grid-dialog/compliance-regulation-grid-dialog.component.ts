@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ComplianceCsvService } from '@routes/compliance/csv-generation/compliance-csv.service';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-regulation-grid-dialog',
   templateUrl: './compliance-regulation-grid-dialog.component.html',
   styleUrls: ['./compliance-regulation-grid-dialog.component.scss'],

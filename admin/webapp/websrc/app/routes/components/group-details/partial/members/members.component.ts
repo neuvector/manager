@@ -1,10 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ContainersService } from '@common/services/containers.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-members',
   templateUrl: './members.component.html',
   styleUrls: ['./members.component.scss'],
+  
 })
 export class MembersComponent implements OnInit {
   @Input() source: string = '';

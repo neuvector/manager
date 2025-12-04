@@ -15,10 +15,13 @@ import {
 } from './group-domain-role-dialog/group-domain-role-dialog.component';
 import { filter } from 'rxjs/operators';
 
+
 @Component({
+  standalone: false,
   selector: 'app-group-domain-role',
   templateUrl: './group-domain-role.component.html',
   styleUrls: ['./group-domain-role.component.scss'],
+  
 })
 export class GroupDomainRoleComponent {
   @Output() updateGroupMappedRoles: EventEmitter<GroupMappedRole[]> =

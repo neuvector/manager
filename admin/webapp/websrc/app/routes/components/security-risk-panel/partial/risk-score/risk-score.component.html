@@ -1,14 +1,14 @@
 <div class="score-container">
-  <mwl-gauge
+  <ngx-gauge
     class="score"
+    type="arch"
     [max]="100"
     [value]="score"
-    [animated]="true"
-    [animationDuration]="1"
-    [color]="getGaugeColor"
-    [showValue]="true"
-    [dialRadius]="40">
-  </mwl-gauge>
+    [animate]="true"
+    [duration]="1"
+    [foregroundColor]="gaugeColor"
+    [size]="40">
+  </ngx-gauge>
   <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
     {{ gaugeLabel }}
   </div>

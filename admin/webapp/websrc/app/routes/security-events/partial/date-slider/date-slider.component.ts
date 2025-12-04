@@ -5,6 +5,7 @@ import { SecurityEventsService } from '@services/security-events.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-date-slider',
   templateUrl: './date-slider.component.html',
   styleUrls: ['./date-slider.component.scss'],

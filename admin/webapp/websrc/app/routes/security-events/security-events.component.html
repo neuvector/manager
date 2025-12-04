@@ -80,9 +80,7 @@
         mat-button>
         <i class="eos-icons">search</i>{{ 'general.ADV_FILTER' | translate }}
       </button>
-      <mat-form-field
-        appearance="standard"
-        class="example-full-width pull-right">
+      <mat-form-field class="example-full-width pull-right">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input
           (keyup)="onQuickFilterChange(filter.value || '')"

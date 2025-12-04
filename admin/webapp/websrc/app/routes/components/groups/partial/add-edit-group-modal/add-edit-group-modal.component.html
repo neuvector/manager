@@ -23,7 +23,7 @@
   <div mat-dialog-content>
     <form [formGroup]="addEditGroupForm">
       <div class="row">
-        <mat-form-field class="col-sm-3" appearance="standard">
+        <mat-form-field class="col-sm-3">
           <mat-label>{{ 'group.editGroup.GROUP_NAME' | translate }}</mat-label>
           <input
             type="text"
@@ -41,7 +41,7 @@
             {{ 'group.NAME_VALID' | translate }} "fed."
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="col-sm-9" appearance="standard">
+        <mat-form-field class="col-sm-9">
           <mat-label>{{ 'policy.addPolicy.COMMENT' | translate }}</mat-label>
           <input
             type="text"
@@ -55,15 +55,15 @@
         </mat-form-field>
       </div>
       <div class="row">
-        <mat-form-field class="col-12 col-md-12" appearance="standard">
+        <mat-form-field class="col-12 col-md-12">
           <mat-label>{{
             'responsePolicy.gridHeader.CRITERIA' | translate
           }}</mat-label>
-          <mat-chip-list
+          <mat-chip-grid
             #chipList
             aria-label="Criteria"
             formControlName="criteriaCtrl">
-            <mat-chip
+            <mat-chip-row
               *ngFor="let criterion of criteria"
               (removed)="removeCriterion(criterion)"
               (click)="editCriterion(criterion)">
@@ -71,7 +71,7 @@
               <button matChipRemove>
                 <mat-icon class="eos-icons icon-18">cancel</mat-icon>
               </button>
-            </mat-chip>
+            </mat-chip-row>
             <input
               placeholder="{{
                 (data.opType !== modalOp.VIEW
@@ -86,7 +86,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               matChipInputAddOnBlur="true"
               (matChipInputTokenEnd)="addCriterion($event)" />
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
         <ng-container *ngIf="data.opType !== modalOp.VIEW">
           <mat-hint align="start" class="px-3">
@@ -129,10 +129,7 @@
         </div>
         <div class="row mt-2">
           <div class="col-lg-4 col-md-4">
-            <mat-form-field
-              class="pull-left"
-              appearance="standard"
-              style="width: 120px">
+            <mat-form-field class="pull-left" style="width: 120px">
               <mat-label>{{
                 'group.editGroup.GROUP_SESS_CUR' | translate
               }}</mat-label>
@@ -156,10 +153,7 @@
             </mat-form-field>
           </div>
           <div class="col-lg-4 col-md-4">
-            <mat-form-field
-              class="pull-left"
-              appearance="standard"
-              style="width: 120px">
+            <mat-form-field class="pull-left" style="width: 120px">
               <mat-label>{{
                 'group.editGroup.GROUP_SESS_RATE' | translate
               }}</mat-label>
@@ -186,10 +180,7 @@
             </div>
           </div>
           <div class="col-lg-4 col-md-4">
-            <mat-form-field
-              class="pull-left"
-              appearance="standard"
-              style="width: 120px">
+            <mat-form-field class="pull-left" style="width: 120px">
               <mat-label>{{
                 'group.editGroup.GROUP_BAND_WIDTH' | translate
               }}</mat-label>

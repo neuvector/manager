@@ -3,6 +3,7 @@ import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-network-rules-report-chart',
   templateUrl: './network-rules-report-chart.component.html',
   styleUrls: ['./network-rules-report-chart.component.scss'],

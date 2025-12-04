@@ -11,6 +11,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-operation-cell',
   templateUrl: './operation-cell.component.html',
   styleUrls: ['./operation-cell.component.scss'],

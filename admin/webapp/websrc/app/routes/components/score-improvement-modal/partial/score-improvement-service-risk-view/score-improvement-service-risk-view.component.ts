@@ -7,10 +7,13 @@ import { NotificationService } from '@services/notification.service';
 import { ScoreImprovementModalService } from '@services/score-improvement-modal.service';
 import { SettingsService } from '@services/settings.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-service-risk-view',
   templateUrl: './score-improvement-service-risk-view.component.html',
   styleUrls: ['./score-improvement-service-risk-view.component.scss'],
+  
 })
 export class ScoreImprovementServiceRiskViewComponent implements OnInit {
   @Input() isGlobalUser!: boolean;

@@ -8,10 +8,13 @@ import { NotificationService } from '@services/notification.service';
 import { Subscription } from 'rxjs';
 import { SystemComponentsCommunicationService } from '../system-components-communication.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-enforcer-details',
   templateUrl: './enforcer-details.component.html',
   styleUrls: ['./enforcer-details.component.scss'],
+  
 })
 export class EnforcerDetailsComponent implements OnInit, OnDestroy {
   @ViewChild(ContainerStatsComponent) containerStats!: ContainerStatsComponent;

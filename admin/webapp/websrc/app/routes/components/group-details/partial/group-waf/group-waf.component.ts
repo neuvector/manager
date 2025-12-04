@@ -19,10 +19,13 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { GlobalVariable } from '@common/variables/global.variable';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-group-waf',
   templateUrl: './group-waf.component.html',
   styleUrls: ['./group-waf.component.scss'],
+  
 })
 export class GroupWafComponent implements OnInit, OnChanges {
   @Input() source: string;

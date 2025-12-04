@@ -2,10 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HierarchicalExposure } from '@common/types';
 import { DashboardService } from '@common/services/dashboard.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-dashboard-printable-report',
   templateUrl: './dashboard-printable-report.component.html',
   styleUrls: ['./dashboard-printable-report.component.scss'],
+  
 })
 export class DashboardPrintableReportComponent implements OnInit {
   @Input() details: any;

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import {
   ChartDataUpdate,
   ContainerChartUpdate,
   Controller,
   Enforcer,
-  Scanner,
+  Scanner, 
 } from '@common/types';
 import { EnforcersService } from '@services/enforcers.service';
-import { delay, map, repeatWhen } from 'rxjs/operators';
+import { delay, map, switchMap } from 'rxjs/operators';
 import { ControllersService } from '@services/controllers.service';
 import { UtilsService } from '@common/utils/app.utils';
 
@@ -62,20 +62,22 @@ export class SystemComponentsCommunicationService {
   startControllerStats(
     currentController: Controller
   ): Observable<ChartDataUpdate> {
-    return this.controllersService
-      .getControllerStats(currentController.id)
-      .pipe(
-        map(statsData => this.utils.parseControllerStats(statsData)),
-        repeatWhen(res => res.pipe(delay(5000)))
-      );
+    return timer(0, 5000).pipe(
+    switchMap(() => 
+        this.controllersService.getControllerStats(currentController.id)
+    ),
+    map(statsData => this.utils.parseControllerStats(statsData))
+);
   }
 
   startEnforcerStats(
     currentEnforcer: Enforcer
   ): Observable<ContainerChartUpdate> {
-    return this.enforcersService.getEnforcerStats(currentEnforcer.id).pipe(
-      map(statsData => this.utils.parseContainerStats(statsData)),
-      repeatWhen(res => res.pipe(delay(5000)))
+    return timer(0, 5000).pipe(
+      switchMap(() => 
+          this.enforcersService.getEnforcerStats(currentEnforcer.id)
+      ),
+      map(statsData => this.utils.parseContainerStats(statsData))
     );
   }
 

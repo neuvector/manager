@@ -48,22 +48,22 @@
     </div>
     <div class="col-md-11">
       <mat-form-field class="w-100">
-        <mat-chip-list #chipList aria-label="Permissions selection">
-          <mat-chip
+        <mat-chip-grid #chipList aria-label="Permissions selection">
+          <mat-chip-row
             (removed)="remove(permissionChip.value)"
             *ngFor="let permissionChip of permissionChips">
             {{ permissionChip.name }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
-          </mat-chip>
+          </mat-chip-row>
           <input
             #permissionInput
             [formControl]="permissionCtrl"
             [matChipInputFor]="chipList"
             [matChipInputSeparatorKeyCodes]="[]"
             [placeholder]="'role.roleModal.PERMISSION_HINT' | translate" />
-        </mat-chip-list>
+        </mat-chip-grid>
       </mat-form-field>
     </div>
   </div>

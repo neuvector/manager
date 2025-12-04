@@ -9,15 +9,18 @@ import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 
+
 export interface TestConnectionDialogData {
   ldap: LDAP;
   name: string;
 }
 
 @Component({
+  standalone: false,
   selector: 'app-test-connection-dialog',
   templateUrl: './test-connection-dialog.component.html',
   styleUrls: ['./test-connection-dialog.component.scss'],
+  
 })
 export class TestConnectionDialogComponent {
   passwordVisible = false;

@@ -7,6 +7,7 @@ import {
 } from '@common/types/network-activities/activityState';
 
 @Component({
+  standalone: false,
   selector: 'app-host-info',
   templateUrl: './host-info.component.html',
   styleUrls: ['./host-info.component.scss'],

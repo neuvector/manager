@@ -11,10 +11,13 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MapConstant } from '@common/constants/map.constant';
 
+
 @Component({
+  standalone: false,
   selector: 'app-profile-form',
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss'],
+  
 })
 export class ProfileFormComponent implements OnInit {
   @Input() user!: Self;

@@ -25,10 +25,13 @@ import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-di
 import { saveAs } from 'file-saver';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-admission-rules',
   templateUrl: './admission-rules.component.html',
   styleUrls: ['./admission-rules.component.scss'],
+  
 })
 export class AdmissionRulesComponent implements OnInit {
   @Input() source!: string;

@@ -7,7 +7,9 @@ import { InputDialogComponent } from '@components/ui/input-dialog/input-dialog.c
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-chips-input',
+  
   templateUrl: './chips-input.component.html',
   styleUrls: ['./chips-input.component.scss'],
 })

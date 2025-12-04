@@ -23,6 +23,7 @@ import { ComplianceProfileService } from '@routes/compliance-profile/compliance-
 import { EditTemplateDialogComponent } from '@routes/compliance-profile/compliance-profile-assets/compliance-profile-assets-table/edit-template-dialog/edit-template-dialog.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
+
 export const iconMap = {
   _images: 'fa fa-archive',
   _nodes: 'fa fa-server',
@@ -30,9 +31,11 @@ export const iconMap = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-profile-assets-table',
   templateUrl: './compliance-profile-assets-table.component.html',
   styleUrls: ['./compliance-profile-assets-table.component.scss'],
+  
 })
 export class ComplianceProfileAssetsTableComponent
   implements OnInit, OnChanges, AfterViewInit

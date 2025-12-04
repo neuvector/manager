@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DashboardService } from '@common/services/dashboard.service';
 
 @Component({
+  standalone: false,
   selector: 'app-report-by-namespace-modal',
   templateUrl: './report-by-namespace-modal.component.html',
   styleUrls: ['./report-by-namespace-modal.component.scss'],

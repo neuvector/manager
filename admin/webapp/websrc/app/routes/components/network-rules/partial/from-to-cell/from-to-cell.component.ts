@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-from-to-cell',
   templateUrl: './from-to-cell.component.html',
   styleUrls: ['./from-to-cell.component.scss'],

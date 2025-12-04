@@ -172,14 +172,14 @@
       <div class="d-flex justify-content-between align-items-center">
         <ng-container *ngIf="gravatarEnabled; else altAvatar">
           <div class="avatar">
-            <ngx-avatar
+            <ngx-avatars
               gravatarId="{{ email }}"
-              name="{{ username }}"></ngx-avatar>
+              name="{{ username }}"></ngx-avatars>
           </div>
         </ng-container>
         <ng-template #altAvatar>
           <div class="avatar">
-            <ngx-avatar name="{{ username }}"></ngx-avatar>
+            <ngx-avatars name="{{ username }}"></ngx-avatars>
           </div>
         </ng-template>
         <div class="info mr-1">

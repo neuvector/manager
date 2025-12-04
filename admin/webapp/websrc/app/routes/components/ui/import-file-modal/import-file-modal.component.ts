@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
+  standalone: false,
   selector: 'app-import-file-modal',
   templateUrl: './import-file-modal.component.html',
   styleUrls: ['./import-file-modal.component.scss'],

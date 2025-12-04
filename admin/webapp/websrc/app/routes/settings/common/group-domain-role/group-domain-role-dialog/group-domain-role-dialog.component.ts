@@ -11,7 +11,8 @@ import { Observable } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GroupDomainRoleComponent } from '../group-domain-role.component';
 import { MatSort } from '@angular/material/sort';
-import { _MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
+
 
 export interface GroupDomainRoleDialogData {
   isEdit: boolean;
@@ -19,14 +20,16 @@ export interface GroupDomainRoleDialogData {
   group: string;
   group_roles: string[];
   group_domain_roles: string[];
-  dataSource: _MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any>;
   domains: string[];
 }
 
 @Component({
+  standalone: false,
   selector: 'app-group-domain-role-dialog-contents',
   templateUrl: './group-domain-role-dialog.component.html',
   styleUrls: ['./group-domain-role-dialog.component.scss'],
+  
 })
 export class GroupDomainRoleDialogComponent {
   activeRole = this.data.dataSource.data[0].namespaceRole;

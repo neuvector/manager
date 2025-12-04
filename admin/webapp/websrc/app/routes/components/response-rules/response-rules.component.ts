@@ -23,10 +23,13 @@ import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+
 @Component({
+  standalone: false,
   selector: 'app-response-rules',
   templateUrl: './response-rules.component.html',
   styleUrls: ['./response-rules.component.scss'],
+  
 })
 export class ResponseRulesComponent implements OnInit, OnDestroy {
   @Input() source: string = '';

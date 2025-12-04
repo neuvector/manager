@@ -57,7 +57,7 @@
             <i class="eos-icons icon-18">csv_file</i>
           </button>
         </div>
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input id="detail_filter" [formControl]="filter" matInput />
         </mat-form-field>
@@ -65,7 +65,7 @@
     </ng-container>
     <ng-container *ngSwitchDefault>
       <div class="filter" [style.visibility]="'hidden'">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input matInput disabled />
         </mat-form-field>

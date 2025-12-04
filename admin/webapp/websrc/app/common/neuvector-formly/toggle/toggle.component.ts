@@ -3,9 +3,11 @@ import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-toggle',
   templateUrl: './toggle.component.html',
   styleUrls: ['./toggle.component.scss'],
+  
 })
 export class ToggleComponent extends FieldType<FieldTypeConfig> {
   constructor(private tr: TranslateService) {

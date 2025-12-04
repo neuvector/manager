@@ -1021,7 +1021,7 @@ export function getNamespaceRoleGridData(
   }
 }
 
-export function sortByOrder<T>(array: T[], order: string[]): T[] {
+export function sortByOrder<T extends Record<string, any>>(array: T[], order: string[]): T[] {
   return array.map(item => {
     const sortedKeys = Object.keys(item).sort((a, b) => {
       const indexA = order.indexOf(a);

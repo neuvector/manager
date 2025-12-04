@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-response-rules-page',
   templateUrl: './response-rules-page.component.html',
   styleUrls: ['./response-rules-page.component.scss'],

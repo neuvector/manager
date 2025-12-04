@@ -42,11 +42,14 @@ import { FederatedConfigurationService } from '@services/federated-configuration
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss'],
   providers: [TitleCasePipe],
+  
 })
 export class GroupsComponent implements OnInit, OnDestroy {
   @Input() isScoreImprovement: boolean = false;

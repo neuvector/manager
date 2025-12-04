@@ -18,6 +18,7 @@ import { NotificationService } from '@services/notification.service';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { ConfigHttpService } from '@common/api/config-http.service';
 
+
 export interface EditClusterDialog {
   isEdit: boolean;
   cluster: {
@@ -30,9 +31,11 @@ export interface EditClusterDialog {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-promotion-modal',
   templateUrl: './promotion-modal.component.html',
   styleUrls: ['./promotion-modal.component.scss'],
+  
 })
 export class PromotionModalComponent implements OnInit {
   public cluster: any;

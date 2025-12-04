@@ -19,6 +19,7 @@ interface ContainerTwoHeightContext {
 }
 
 @Directive({
+  standalone: false,
   selector: '[appContainerOne]',
 })
 export class ContainerOneDirective {
@@ -26,6 +27,7 @@ export class ContainerOneDirective {
 }
 
 @Directive({
+  standalone: false,
   selector: '[appContainerTwo]',
 })
 export class ContainerTwoDirective {
@@ -33,6 +35,7 @@ export class ContainerTwoDirective {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-adjustable-div',
   templateUrl: './adjustable-div.component.html',
   styleUrls: ['./adjustable-div.component.scss'],

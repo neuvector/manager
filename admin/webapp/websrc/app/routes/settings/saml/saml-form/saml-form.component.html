@@ -15,7 +15,7 @@
   <div class="row align-items-center my-0 my-md-4">
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">organization</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'okta.IDP_URL' | translate }}</mat-label>
         <input
           formControlName="sso_url"
@@ -31,7 +31,7 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">account_box</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'okta.IDP_ISSUER' | translate }}</mat-label>
         <input
           formControlName="issuer"
@@ -52,7 +52,7 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">organization</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'okta.SLO_URL' | translate }}</mat-label>
         <input
           formControlName="slo_url"
@@ -68,7 +68,7 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">verified</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'okta.SLO_CERT' | translate }}</mat-label>
         <textarea
           cdkTextareaAutosize
@@ -78,7 +78,7 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">vpn_key</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'okta.SLO_KEY' | translate }}</mat-label>
         <textarea
           cdkTextareaAutosize
@@ -99,7 +99,7 @@
         class="col-12 d-flex align-items-center">
         <ng-container *ngIf="i === 0; else extraCertTemplate">
           <i class="eos-icons mr-3 text-primary">verified</i>
-          <mat-form-field appearance="standard" class="w-100">
+          <mat-form-field class="w-100">
             <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
             <textarea
               cdkTextareaAutosize
@@ -112,7 +112,7 @@
         </ng-container>
         <ng-template #extraCertTemplate>
           <i class="eos-icons mr-3 text-primary invisible">verified</i>
-          <mat-form-field appearance="standard" class="w-100">
+          <mat-form-field class="w-100">
             <mat-label>{{ 'okta.EXTRA_CERT' | translate }}</mat-label>
             <textarea
               cdkTextareaAutosize
@@ -139,7 +139,7 @@
     </div>
     <div class="col-12 d-flex align-items-center">
       <i class="eos-icons mr-3 text-primary">groups</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
         <input
           formControlName="group_claim"
@@ -148,7 +148,7 @@
       </mat-form-field>
     </div>
   </div>
-  <mat-form-field appearance="standard">
+  <mat-form-field>
     <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
     <mat-select formControlName="default_role">
       <mat-option

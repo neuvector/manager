@@ -12,6 +12,7 @@ import { catchError, tap } from 'rxjs/operators';
 
 @Directive({
   selector: '[remoteGridBinding]',
+  standalone: false,
 })
 export class RemoteGridBindingDirective {
   @Input() remoteGridBinding!: RemoteGridApi;

@@ -8,9 +8,11 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
+  
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   menuItems: Array<any>;

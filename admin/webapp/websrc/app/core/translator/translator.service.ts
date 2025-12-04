@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TranslatorService {
-  private defaultLanguage: string = 'en';
+  private defaultLanguage = 'en';
 
   private availablelangs = [
     { code: 'en', text: 'English' },
@@ -11,16 +13,20 @@ export class TranslatorService {
   ];
 
   constructor(public translate: TranslateService) {
-    this.setDefaultLang();
-  }
-
-  private setDefaultLang() {
+    // register supported languages
     this.translate.addLangs(this.availablelangs.map(lang => lang.code));
-    this.translate.setDefaultLang(this.defaultLanguage);
+
+    // set the fallback language (replacement for setDefaultLang)
+    this.translate.setFallbackLang(this.defaultLanguage);
+
+    // activate the default/fallback language
+    this.translate.use(this.defaultLanguage);
   }
 
   useLanguage(lang: string = '') {
-    this.translate.use(lang || this.translate.getDefaultLang());
+    const fallback = this.translate.getFallbackLang() ?? this.defaultLanguage;
+    const language = lang || fallback;
+    this.translate.use(language);
   }
 
   getAvailableLanguages() {

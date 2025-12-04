@@ -1,18 +1,18 @@
-<label [id]="field.templateOptions.id">{{
-  field.templateOptions.label || '' | translate
+<label [id]="field.templateOptions?.id">{{
+  field.templateOptions?.label ?? '' | translate
 }}</label>
 <mat-slider
   (input)="changeValue($event)"
-  [attr.aria-labelledby]="field.templateOptions.id"
+  [attr.aria-labelledby]="field.templateOptions?.id"
   [formControl]="formControl"
   [formlyAttributes]="field"
-  [max]="field.templateOptions.max"
-  [min]="field.templateOptions.min"
-  [step]="field.templateOptions.step"
+  [max]="field.templateOptions?.max"
+  [min]="field.templateOptions?.min"
+  [step]="field.templateOptions?.step"
   class="mx-2">
 </mat-slider>
 <span>{{
-  field.templateOptions.stepValues
-    ? field.templateOptions.stepValues[interval || formControl.value]
+  field.templateOptions?.stepValues
+    ? field.templateOptions?.stepValues[interval || formControl.value]
     : interval || formControl.value
 }}</span>

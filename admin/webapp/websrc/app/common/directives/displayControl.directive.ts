@@ -3,6 +3,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Directive({
   selector: '[appDisplayControl]',
+  standalone: false,
 })
 export class DisplayControlDirective {
   constructor(

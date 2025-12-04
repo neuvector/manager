@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
-import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
+import { catchError, map, startWith, switchMap, tap } from 'rxjs/operators';
 import {
   Compliance,
   ComplianceAvailableFilters,
@@ -63,83 +63,88 @@ export class ComplianceService {
 
   initCompliance() {
     this.initComplianceDetails();
-    return combineLatest([
-      this.getDomain(),
-      this.getContainer(),
-      this.getHost(),
-      this.getPlatform(),
-      this.getCompliance(),
-      this.getAvailableFilters(),
-    ]).pipe(
-      map(([domain, container, host, platform, compliance, filters]) => {
-        const complianceDist = {
-          error: 0,
-          high: 0,
-          warning: 0,
-          note: 0,
-          pass: 0,
-          manual: 0,
-          info: 0,
-          platform: 0,
-          image: 0,
-          node: 0,
-          container: 0,
-        };
-        compliance.compliances.forEach(compliance => {
-          if (compliance.level === 'WARN') complianceDist.warning += 1;
-          if (compliance.level === 'INFO') complianceDist.info += 1;
-          if (compliance.level === 'PASS') complianceDist.pass += 1;
-          if (compliance.level === 'NOTE') complianceDist.note += 1;
-          if (compliance.level === 'ERROR') complianceDist.error += 1;
-          if (compliance.level === 'HIGH') complianceDist.high += 1;
-          if (compliance.level === 'MANUAL') complianceDist.manual += 1;
-          if (compliance.platforms.length) complianceDist.platform += 1;
-          if (compliance.images.length) complianceDist.image += 1;
-          if (compliance.nodes.length) complianceDist.node += 1;
-          if (compliance.workloads.length) complianceDist.container += 1;
-        });
-        compliance = this.mapWorkloadService(compliance, this.workloadMap);
-        return {
-          domain,
-          container,
-          host,
-          platform,
-          compliance,
-          filters,
-          complianceDist,
-        };
-      }),
-      tap(
-        ({ compliance: { compliances, kubernetes_cis_version }, filters }) => {
-          this.kubeVersion = kubernetes_cis_version;
-          this.complianceFilterService.workloadMap = this.workloadMap;
-          this.complianceFilterService.availableFilters = filters;
-          this.complianceFilterService.advFilter =
-            this.complianceFilterService.initAdvFilter();
-          setRisks(compliances, this.workloadMap);
-          this.assetsViewPdfService.masterData = {
-            workloadMap4Pdf: this.workloadMap4Pdf,
-            hostMap4Pdf: this.hostMap4Pdf,
-            platformMap4Pdf: this.platformMap4Pdf,
-            imageMap4Pdf: this.imageMap4Pdf,
-          };
-          if (this.complianceFilterService.isAdvFilterOn()) {
-            this.complianceFilterService.resetFilter(
-              this.complianceFilterService.advFilter
-            );
-            this.complianceFilterService.filtered = true;
-          } else {
-            this.complianceFilterService.resetFilter();
-            this.complianceFilterService.filtered = false;
-          }
-          this.complianceFilterService.filteredCis = compliances;
-        }
-      ),
-      // finalize(() => {
-      //   this.runWorkers();
-      // }),
-      repeatWhen(() => this.refreshSubject$)
+    return this.refreshSubject$.pipe(
+      startWith(null),
+      switchMap(() =>
+        combineLatest([
+          this.getDomain(),
+          this.getContainer(),
+          this.getHost(),
+          this.getPlatform(),
+          this.getCompliance(),
+          this.getAvailableFilters(),
+        ]).pipe(
+          map(([domain, container, host, platform, compliance, filters]) => {
+            const complianceDist = {
+              error: 0,
+              high: 0,
+              warning: 0,
+              note: 0,
+              pass: 0,
+              manual: 0,
+              info: 0,
+              platform: 0,
+              image: 0,
+              node: 0,
+              container: 0,
+            };
+
+            compliance.compliances.forEach(c => {
+              if (c.level === 'WARN') complianceDist.warning++;
+              if (c.level === 'INFO') complianceDist.info++;
+              if (c.level === 'PASS') complianceDist.pass++;
+              if (c.level === 'NOTE') complianceDist.note++;
+              if (c.level === 'ERROR') complianceDist.error++;
+              if (c.level === 'HIGH') complianceDist.high++;
+              if (c.level === 'MANUAL') complianceDist.manual++;
+              if (c.platforms.length) complianceDist.platform++;
+              if (c.images.length) complianceDist.image++;
+              if (c.nodes.length) complianceDist.node++;
+              if (c.workloads.length) complianceDist.container++;
+            });
+
+            compliance = this.mapWorkloadService(compliance, this.workloadMap);
+
+            return {
+              domain,
+              container,
+              host,
+              platform,
+              compliance,
+              filters,
+              complianceDist,
+            };
+          }),
+          tap(({ compliance: { compliances, kubernetes_cis_version }, filters }) => {
+            this.kubeVersion = kubernetes_cis_version;
+            this.complianceFilterService.workloadMap = this.workloadMap;
+            this.complianceFilterService.availableFilters = filters;
+            this.complianceFilterService.advFilter =
+              this.complianceFilterService.initAdvFilter();
+            setRisks(compliances, this.workloadMap);
+            this.assetsViewPdfService.masterData = {
+              workloadMap4Pdf: this.workloadMap4Pdf,
+              hostMap4Pdf: this.hostMap4Pdf,
+              platformMap4Pdf: this.platformMap4Pdf,
+              imageMap4Pdf: this.imageMap4Pdf,
+            };
+
+            if (this.complianceFilterService.isAdvFilterOn()) {
+              this.complianceFilterService.resetFilter(
+                this.complianceFilterService.advFilter
+              );
+              this.complianceFilterService.filtered = true;
+            } else {
+              this.complianceFilterService.resetFilter();
+              this.complianceFilterService.filtered = false;
+            }
+
+            this.complianceFilterService.filteredCis = compliances;
+          })
+        )
+      )
     );
+
   }
 
   private mapWorkloadService(compliance, workloadMap) {

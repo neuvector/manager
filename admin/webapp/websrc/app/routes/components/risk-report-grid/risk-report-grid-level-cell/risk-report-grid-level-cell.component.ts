@@ -5,6 +5,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-risk-report-grid-level-cell',
   templateUrl: './risk-report-grid-level-cell.component.html',
   styleUrls: ['./risk-report-grid-level-cell.component.scss'],

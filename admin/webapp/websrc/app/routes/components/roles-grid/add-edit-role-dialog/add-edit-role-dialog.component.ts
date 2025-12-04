@@ -28,6 +28,7 @@ export interface AddEditRoleDialog {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-role-dialog',
   templateUrl: './add-edit-role-dialog.component.html',
   styleUrls: ['./add-edit-role-dialog.component.scss'],

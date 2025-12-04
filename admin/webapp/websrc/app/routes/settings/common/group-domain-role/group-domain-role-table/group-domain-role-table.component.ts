@@ -17,21 +17,24 @@ import {
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FormControl } from '@angular/forms';
 import { MatSort, Sort } from '@angular/material/sort';
-import { _MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { map } from 'rxjs/operators';
 
+
 @Component({
+  standalone: false,
   selector: 'app-group-domain-role-table',
   templateUrl: './group-domain-role-table.component.html',
   styleUrls: ['./group-domain-role-table.component.scss'],
+  
 })
 export class GroupDomainRoleTableComponent
   implements OnInit, AfterViewInit, OnChanges
 {
   @Input() activeRole!: string;
-  @Input() dataSource!: _MatTableDataSource<any>;
+  @Input() dataSource!: MatTableDataSource<any>;
   @Input() domains!: string[];
   @Input() global_role!: string;
   @Input() group_roles!: string[];

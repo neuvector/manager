@@ -30,10 +30,13 @@ import {
   RiskReportGridFilterService,
 } from './risk-report-grid.filter.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-risk-report-grid',
   templateUrl: './risk-report-grid.component.html',
   styleUrls: ['./risk-report-grid.component.scss'],
+  
 })
 export class RiskReportGridComponent implements OnInit {
   private readonly $win;

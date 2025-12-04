@@ -7,6 +7,7 @@ import { GridOptions } from 'ag-grid-community';
 import { GraphService } from '@routes/network-activities/graph.service';
 
 @Component({
+  standalone: false,
   selector: 'app-namespace-info',
   templateUrl: './namespace-info.component.html',
   styleUrls: ['./namespace-info.component.scss'],

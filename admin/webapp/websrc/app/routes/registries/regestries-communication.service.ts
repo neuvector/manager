@@ -5,7 +5,7 @@ import {
   filter,
   finalize,
   map,
-  repeatWhen,
+  startWith,
   switchMap,
   tap,
 } from 'rxjs/operators';
@@ -92,24 +92,33 @@ export class RegistriesCommunicationService {
   deleting$ = this.deletingSubject$.asObservable();
   private savingSubject$ = new BehaviorSubject<boolean>(false);
   registryTypes$ = this.registriesService.getRegistryTypes().pipe();
-  registries$ = this.registriesService.getRegistries().pipe(
-    tap(({ summarys }) => {
-      this.scan(summarys.some(summary => summary.status === 'scanning'));
-      if (!summarys.length) {
-        this.refreshingDetailsSubject$.next(false);
-      }
-    }),
-    finalize(() => {
-      if (this.refreshingDetailsSubject$.value) {
-        this.refreshDetails();
-      }
-      this.savingSubject$.next(false);
-      this.stoppingScanSubject$.next(false);
-      this.deletingSubject$.next(false);
-      this.startingScanSubject$.next(false);
-    }),
-    repeatWhen(() => this.refreshRegistriesSubject$)
+  registries$ = this.refreshRegistriesSubject$.pipe(
+    startWith(null),
+
+    switchMap(() =>
+      this.registriesService.getRegistries().pipe(
+        tap(({ summarys }) => {
+          this.scan(summarys.some(summary => summary.status === 'scanning'));
+
+          if (!summarys.length) {
+            this.refreshingDetailsSubject$.next(false);
+          }
+        }),
+
+        finalize(() => {
+          if (this.refreshingDetailsSubject$.value) {
+            this.refreshDetails();
+          }
+
+          this.savingSubject$.next(false);
+          this.stoppingScanSubject$.next(false);
+          this.deletingSubject$.next(false);
+          this.startingScanSubject$.next(false);
+        })
+      )
+    )
   );
+
   saving$ = this.savingSubject$.asObservable();
   get selectedRegistry() {
     return this.selectedRegistrySubject$.value;

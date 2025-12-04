@@ -9,10 +9,13 @@ import { ScoreImprovementModalService } from '@services/score-improvement-modal.
 import { saveAs } from 'file-saver';
 import { tap } from 'rxjs/operators';
 
+
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-run-as-root-containers-view',
   templateUrl: './score-improvement-run-as-root-containers-view.component.html',
   styleUrls: ['./score-improvement-run-as-root-containers-view.component.scss'],
+  
 })
 export class ScoreImprovementRunAsRootContainersViewComponent
   implements OnInit

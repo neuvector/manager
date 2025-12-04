@@ -9,10 +9,13 @@ import {
   StorageService,
 } from 'ngx-webstorage-service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-logout',
   templateUrl: './logout.component.html',
   styleUrls: ['./logout.component.scss'],
+  
 })
 export class LogoutComponent implements OnInit {
   isSUSESSO: boolean;

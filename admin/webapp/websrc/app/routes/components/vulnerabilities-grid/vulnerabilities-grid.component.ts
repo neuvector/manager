@@ -28,6 +28,7 @@ import {
 import { VulnerabilityItemsTableScoreCellComponent } from '@routes/vulnerabilities/vulnerability-items/vulnerability-items-table/vulnerability-items-table-score-cell/vulnerability-items-table-score-cell.component';
 
 @Component({
+  standalone: false,
   selector: 'app-vulnerabilities-grid',
   templateUrl: './vulnerabilities-grid.component.html',
   styleUrls: ['./vulnerabilities-grid.component.scss'],

@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Host } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-enforcer-brief-dialog',
   templateUrl: './enforcer-brief-dialog.component.html',
   styleUrls: ['./enforcer-brief-dialog.component.scss'],

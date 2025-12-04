@@ -24,10 +24,13 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { updateGridData } from '@common/utils/common.utils';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-process-profile-rules',
   templateUrl: './process-profile-rules.component.html',
   styleUrls: ['./process-profile-rules.component.scss'],
+  
 })
 export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   @Input() isScoreImprovement: boolean = false;

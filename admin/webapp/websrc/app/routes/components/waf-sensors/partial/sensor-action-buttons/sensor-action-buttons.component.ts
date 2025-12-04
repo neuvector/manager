@@ -13,10 +13,13 @@ import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { updateGridData } from '@common/utils/common.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-sensor-action-buttons',
   templateUrl: './sensor-action-buttons.component.html',
   styleUrls: ['./sensor-action-buttons.component.scss'],
+  
 })
 export class SensorActionButtonsComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

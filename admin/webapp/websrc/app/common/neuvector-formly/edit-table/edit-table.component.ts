@@ -13,7 +13,9 @@ interface VisibleField {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-edit-table',
+  
   templateUrl: './edit-table.component.html',
   styleUrls: ['./edit-table.component.scss'],
 })
@@ -29,12 +31,17 @@ export class EditTableComponent
   }
 
   ngOnInit(): void {
-    this.field.templateOptions.remove = this.remove.bind(this);
-    this.field.templateOptions.add = this.add.bind(this);
+    if (!this.field.props) {
+        this.field.props = {};
+    }
+    
+    this.field.props.remove = this.remove.bind(this);
+    this.field.props.add = this.add.bind(this);
+    
     this.dataSource.data = this.field.fieldGroup!;
-    this.visibleFields = this.getFields(this.field.fieldArray!);
+    const fieldArray = typeof this.field.fieldArray === 'function' ? this.field.fieldArray(this.field) : this.field.fieldArray!;
+    this.visibleFields = this.getFields(fieldArray);
   }
-
   getFields(fa: FormlyFieldConfig): VisibleField[] {
     const ret: VisibleField[] = [];
     fa.fieldGroup?.forEach(ffg => {

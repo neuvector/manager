@@ -10,6 +10,7 @@ import { NotificationService } from '@services/notification.service';
 import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-process-profile-rule-modal',
   templateUrl: './add-edit-process-profile-rule-modal.component.html',
   styleUrls: ['./add-edit-process-profile-rule-modal.component.scss'],

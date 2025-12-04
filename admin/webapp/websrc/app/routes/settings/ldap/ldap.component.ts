@@ -6,10 +6,13 @@ import { ServerGetResponse } from '@common/types';
 import { catchError, map } from 'rxjs/operators';
 import { pollUntilResult } from '@common/utils/rxjs.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-ldap',
   templateUrl: './ldap.component.html',
   styleUrls: ['./ldap.component.scss'],
+  
 })
 export class LdapComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;

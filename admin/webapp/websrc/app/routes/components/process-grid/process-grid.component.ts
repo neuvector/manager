@@ -21,10 +21,13 @@ import * as $ from 'jquery';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { UtilsService } from '@common/utils/app.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-process-grid',
   templateUrl: './process-grid.component.html',
   styleUrls: ['./process-grid.component.scss'],
+  
 })
 export class ProcessGridComponent implements OnInit, OnChanges {
   private readonly $win;

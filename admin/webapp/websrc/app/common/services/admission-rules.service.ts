@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { BytesPipe } from '@common/pipes/app.pipes';
 import { GridOptions, IsFullWidthRowParams } from 'ag-grid-community';
 import { forkJoin, Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { capitalizeWord, parseDivideStyle } from '@common/utils/common.utils';
 import { AbstractControl } from '@angular/forms';
 import {
@@ -30,6 +30,10 @@ export type AdmissionTestRow = AdmissionTestResult & {
   child_id?: string;
   visible: boolean;
 };
+
+interface AdmissionResponse {
+  rules: Array<AdmissionRule>;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -616,13 +620,13 @@ export class AdmissionRulesService {
       .pipe();
     let rules: Observable<Array<AdmissionRule>> = !!scope
       ? GlobalVariable.http
-          .get<Array<AdmissionRule>>(PathConstant.ADMISSION_URL, {
+          .get<AdmissionResponse>(PathConstant.ADMISSION_URL, {
             params: { scope: scope },
           })
-          .pipe(pluck('rules'))
+          .pipe(map(r => r.rules))
       : GlobalVariable.http
-          .get<Array<AdmissionRule>>(PathConstant.ADMISSION_URL)
-          .pipe(pluck('rules'));
+          .get<AdmissionResponse>(PathConstant.ADMISSION_URL)
+          .pipe(map(r => r.rules));
     let options = GlobalVariable.http
       .get(PathConstant.ADMCTL_CONDITION_OPTION_URL)
       .pipe();

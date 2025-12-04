@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-network-rules-page',
   templateUrl: './network-rules-page.component.html',
   styleUrls: ['./network-rules-page.component.scss'],

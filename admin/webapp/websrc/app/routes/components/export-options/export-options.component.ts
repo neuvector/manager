@@ -5,10 +5,13 @@ import { map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 
+
 @Component({
+  standalone: false,
   selector: 'app-export-options',
   templateUrl: './export-options.component.html',
   styleUrls: ['./export-options.component.scss'],
+  
 })
 export class ExportOptionsComponent implements OnInit {
   @Input() exportOptions: FormGroup | undefined;

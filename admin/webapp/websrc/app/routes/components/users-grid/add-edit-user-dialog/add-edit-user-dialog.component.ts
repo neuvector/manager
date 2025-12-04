@@ -12,7 +12,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   MatTableDataSource,
-  _MatTableDataSource,
 } from '@angular/material/table';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
@@ -25,6 +24,7 @@ import { Subject } from 'rxjs';
 import { UsersGridComponent } from '../users-grid.component';
 import { getNamespaceRoleGridData } from '@common/utils/common.utils';
 
+
 export interface AddEditUserDialog {
   isEdit: boolean;
   globalRoles: string[];
@@ -36,16 +36,18 @@ export interface AddEditUserDialog {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-user-dialog',
   templateUrl: './add-edit-user-dialog.component.html',
   styleUrls: ['./add-edit-user-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  
 })
 export class AddEditUserDialogComponent implements OnInit {
   form!: FormGroup;
   saving$ = new Subject();
   toggleAdvSetting = false;
-  domainTableSource!: _MatTableDataSource<any>;
+  domainTableSource!: MatTableDataSource<any>;
   get showAdvSetting() {
     const role = this.form.controls.role.value;
     return (

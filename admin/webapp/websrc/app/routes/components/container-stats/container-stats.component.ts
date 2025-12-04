@@ -13,6 +13,7 @@ import { Chart, ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
+  standalone: false,
   selector: 'app-container-stats',
   templateUrl: './container-stats.component.html',
   styleUrls: ['./container-stats.component.scss'],

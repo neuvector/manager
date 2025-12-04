@@ -12,10 +12,13 @@ import { saveAs } from 'file-saver';
 import { Subject, timer } from 'rxjs';
 import { filter, finalize, switchMap, take, takeUntil } from 'rxjs/operators';
 
+
 @Component({
+  standalone: false,
   selector: 'app-support-form',
   templateUrl: './support-form.component.html',
   styleUrls: ['./support-form.component.scss'],
+  
 })
 export class SupportFormComponent implements OnDestroy {
   @ViewChild(EnforcersGridComponent) enforcersGrid!: EnforcersGridComponent;

@@ -3,6 +3,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import * as moment from 'moment';
 
 @Component({
+  standalone: false,
   selector: 'app-enforcer-brief',
   templateUrl: './enforcer-brief.component.html',
   styleUrls: ['./enforcer-brief.component.scss'],

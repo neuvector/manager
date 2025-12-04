@@ -32,6 +32,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { catchError } from 'rxjs/operators';
 import { ConfigHttpService } from '@common/api/config-http.service';
 
+
 export const RegistryType = [
   'Amazon ECR Registry',
   'Azure Container Registry',
@@ -46,10 +47,12 @@ export const RegistryType = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-registries-table',
   templateUrl: './registries-table.component.html',
   styleUrls: ['./registries-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  
 })
 export class RegistriesTableComponent implements OnInit, OnChanges {
   @Input() rowData!: Summary[];

@@ -5,10 +5,13 @@ import { ScoreImprovementModalComponent } from '@components/score-improvement-mo
 import { MatDialog } from '@angular/material/dialog';
 import { InternalSystemInfo } from '@common/types';
 
+
 @Component({
+  standalone: false,
   selector: 'app-score-instruction',
   templateUrl: './score-instruction.component.html',
   styleUrls: ['./score-instruction.component.scss'],
+  
 })
 export class ScoreInstructionComponent {
   @Input() scoreInfo!: InternalSystemInfo;

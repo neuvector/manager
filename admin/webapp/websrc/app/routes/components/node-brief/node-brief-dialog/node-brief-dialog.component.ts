@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Host } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-node-brief-dialog',
   templateUrl: './node-brief-dialog.component.html',
   styleUrls: ['./node-brief-dialog.component.scss'],

@@ -6,6 +6,7 @@ import {
 } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-profile-templates',
   templateUrl: './compliance-profile-templates.component.html',
   styleUrls: ['./compliance-profile-templates.component.scss'],

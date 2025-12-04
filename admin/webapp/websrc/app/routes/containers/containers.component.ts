@@ -20,10 +20,13 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { ActivatedRoute } from '@angular/router';
 
+
 @Component({
+  standalone: false,
   selector: 'app-containers',
   templateUrl: './containers.component.html',
   styleUrls: ['./containers.component.scss'],
+  
 })
 export class ContainersComponent implements OnInit, OnDestroy {
   _containersGrid!: ContainersGridComponent;

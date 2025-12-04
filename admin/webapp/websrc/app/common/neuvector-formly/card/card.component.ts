@@ -38,7 +38,9 @@ import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
  * };
  */
 @Component({
+  standalone: false,
   selector: 'app-card',
+  
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
 })

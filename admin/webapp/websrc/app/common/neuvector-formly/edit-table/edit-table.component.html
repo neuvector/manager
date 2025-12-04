@@ -33,7 +33,7 @@
   type="button"
   class="mt-3"
   (click)="add()"
-  [disabled]="field.templateOptions.disabled">
+  [disabled]="field.templateOptions?.disabled">
   <i class="eos-icons mr-2">add_circle</i>
-  {{ field.templateOptions.addButtonText | translate }}
+  {{ field.templateOptions?.addButtonText | translate }}
 </button>

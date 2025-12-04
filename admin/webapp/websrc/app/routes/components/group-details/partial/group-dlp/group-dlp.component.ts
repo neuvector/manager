@@ -19,10 +19,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-group-dlp',
   templateUrl: './group-dlp.component.html',
   styleUrls: ['./group-dlp.component.scss'],
+  
 })
 export class GroupDlpComponent implements OnInit, OnChanges {
   @Input() source: string;

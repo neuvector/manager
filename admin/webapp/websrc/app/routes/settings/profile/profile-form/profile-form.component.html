@@ -1,19 +1,19 @@
 <form (ngSubmit)="submitForm()" [formGroup]="profileForm">
   <mat-card-header>
     <ng-container *ngIf="gravatarEnabled; else altAvatar">
-      <ngx-avatar
+      <ngx-avatars
         [gravatarId]="emailHash"
         [name]="user.username"
         size="80"
         class="userIcon profile__avatar"
-        mat-card-avatar></ngx-avatar>
+        mat-card-avatar></ngx-avatars>
     </ng-container>
     <ng-template #altAvatar>
-      <ngx-avatar
+      <ngx-avatars
         [name]="user.username"
         size="80"
         class="userIcon profile__avatar"
-        mat-card-avatar></ngx-avatar>
+        mat-card-avatar></ngx-avatars>
     </ng-template>
   </mat-card-header>
   <div class="profile__formGroup">

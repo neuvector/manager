@@ -19,6 +19,7 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-modules-table',
   templateUrl: './modules-table.component.html',
   styleUrls: ['./modules-table.component.scss'],

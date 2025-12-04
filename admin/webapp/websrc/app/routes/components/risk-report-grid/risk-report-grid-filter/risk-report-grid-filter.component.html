@@ -21,7 +21,7 @@
       <label class="col-3 font-weight-normal mb-0" for="fromDate">
         {{ 'general.REPORTED_FROM' | translate }}
       </label>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col pl-0">
         <input
           [matDatepicker]="pickerFrom"
           [matDatepickerFilter]="fromFilter"
@@ -44,7 +44,7 @@
       <label class="col-3 font-weight-normal mb-0" for="toDate">
         {{ 'general.REPORTED_TO' | translate }}
       </label>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col pl-0">
         <input
           [matDatepicker]="pickerTo"
           [matDatepickerFilter]="toFilter"
@@ -91,7 +91,7 @@
     <mat-divider></mat-divider>
     <section class="row mx-0 align-items-center">
       <span class="d-block col-3">{{ 'securityEvent.HOST' | translate }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col pl-0">
         <input
           type="text"
           aria-label="Host"
@@ -117,7 +117,7 @@
       <span class="d-block col-3">{{
         'audit.gridHeader.CONTAINER' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col pl-0">
         <input
           type="text"
           aria-label="Container"
@@ -146,7 +146,7 @@
       <span class="d-block col-3">{{
         'audit.gridHeader.IMAGE' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col pl-0">
         <input
           type="text"
           aria-label="Image"
@@ -173,20 +173,20 @@
       <label class="col-3 font-weight-normal mb-0" for="namespaceInput">{{
         'securityEvent.DOMAIN' | translate
       }}</label>
-      <mat-form-field appearance="standard" class="col pl-0">
-        <mat-chip-list
+      <mat-form-field class="col pl-0">
+        <mat-chip-grid
           #chipList
           aria-label="Namespace selection"
           formControlName="selectedDomains"
           id="namespaceInput">
-          <mat-chip
+          <mat-chip-row
             (removed)="remove(domainChip)"
             *ngFor="let domainChip of form.controls.selectedDomains.value">
             {{ domainChip }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
-          </mat-chip>
+          </mat-chip-row>
           <input
             #namespaceInput
             (matChipInputTokenEnd)="add($event)"
@@ -195,7 +195,7 @@
             [matChipInputFor]="chipList"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [placeholder]="'ldap.ADD_DOMAIN' | translate" />
-        </mat-chip-list>
+        </mat-chip-grid>
         <mat-autocomplete
           #auto="matAutocomplete"
           (optionSelected)="selected($event)">
@@ -211,7 +211,7 @@
       <span class="d-block col-3">{{
         'securityEvent.OTHER_KEYWORD' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col pl-0">
         <input
           id="includedKeyword"
           aria-label="Included Keyword"
@@ -223,7 +223,7 @@
       <span class="d-block col-3">{{
         'securityEvent.EXCLUDED_KEYWORD' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col pl-0">
         <input
           id="excludedKeyword"
           aria-label="Excluded Keyword"

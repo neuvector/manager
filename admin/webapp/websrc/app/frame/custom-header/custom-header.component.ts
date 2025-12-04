@@ -8,9 +8,11 @@ import {
 } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-custom-header',
   templateUrl: './custom-header.component.html',
   styleUrls: ['./custom-header.component.scss'],
+  
 })
 export class CustomHeaderComponent implements OnInit, OnDestroy {
   headerText: SafeHtml = '';

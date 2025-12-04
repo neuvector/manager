@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 
+
 export declare type LoadingButtonType =
   | 'mat-button'
   | 'mat-raised-button'
@@ -11,9 +12,11 @@ export declare type LoadingButtonType =
   | 'mat-mini-fab';
 
 @Component({
+  standalone: false,
   selector: 'app-loading-button',
   templateUrl: './loading-button.component.html',
   styleUrls: ['./loading-button.component.scss'],
+  
 })
 export class LoadingButtonComponent {
   @Input() id!: string;

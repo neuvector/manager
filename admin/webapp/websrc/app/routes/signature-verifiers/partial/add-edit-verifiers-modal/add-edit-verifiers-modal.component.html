@@ -20,7 +20,7 @@
   <div mat-dialog-content>
     <form [formGroup]="addEditVerifierForm">
       <div class="d-flex justify-content-start align-items-center mt-2">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>{{ 'signatures.gridHeader.NAME' | translate }}</mat-label>
           <input
             type="text"
@@ -28,14 +28,14 @@
             [readonly]="data.opType === opTypeOptions.EDIT"
             formControlName="name" />
         </mat-form-field>
-        <mat-form-field appearance="standard" class="ml-4 flex-grow-1">
+        <mat-form-field class="ml-4 flex-grow-1">
           <mat-label>{{
             'signatures.gridHeader.COMMENT' | translate
           }}</mat-label>
           <input type="text" matInput formControlName="comment" />
         </mat-form-field>
         <ng-container *ngIf="!isKeypairOnly; else keypairOption">
-          <mat-form-field appearance="standard" class="ml-4">
+          <mat-form-field class="ml-4">
             <mat-label>{{
               'signatures.gridHeader.V_TYPE' | translate
             }}</mat-label>
@@ -50,7 +50,7 @@
           </mat-form-field>
         </ng-container>
         <ng-template #keypairOption>
-          <mat-form-field appearance="standard" class="ml-4">
+          <mat-form-field class="ml-4">
             <mat-label>{{
               'signatures.gridHeader.V_TYPE' | translate
             }}</mat-label>
@@ -79,7 +79,7 @@
       <div
         class="d-flex justify-content-start align-items-center"
         *ngIf="vType === VERIFIER_TYPE.KEYPAIR">
-        <mat-form-field appearance="standard" class="w-100">
+        <mat-form-field class="w-100">
           <mat-label>{{
             'signatures.gridHeader.PUBLIC_KEY' | translate
           }}</mat-label>
@@ -94,13 +94,13 @@
       <div
         class="d-flex justify-content-start align-items-center"
         *ngIf="vType === VERIFIER_TYPE.KEYLESS">
-        <mat-form-field class="mr-4" appearance="standard">
+        <mat-form-field class="mr-4">
           <mat-label>{{
             'signatures.gridHeader.CERT_ISSUER' | translate
           }}</mat-label>
           <input type="text" matInput formControlName="cert_issuer" />
         </mat-form-field>
-        <mat-form-field appearance="standard" class="flex-grow-1">
+        <mat-form-field class="flex-grow-1">
           <mat-label>{{
             'signatures.gridHeader.CERT_SUBJECT' | translate
           }}</mat-label>

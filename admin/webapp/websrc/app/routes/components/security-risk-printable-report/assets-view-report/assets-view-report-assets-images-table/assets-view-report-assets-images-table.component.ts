@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 
+
 @Component({
+  standalone: false,
   selector: 'app-assets-view-report-assets-images-table',
   templateUrl: './assets-view-report-assets-images-table.component.html',
   styleUrls: ['./assets-view-report-assets-images-table.component.scss'],
+  
 })
 export class AssetsViewReportAssetsImagesTableComponent implements OnInit {
   @Input() images: any[];

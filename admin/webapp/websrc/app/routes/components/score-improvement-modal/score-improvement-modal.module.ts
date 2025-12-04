@@ -10,7 +10,7 @@ import { ScoreImprovementRunAsRootContainersViewComponent } from './partial/scor
 import { ScoreImprovementRunAsPrivilegedContainersViewComponent } from './partial/score-improvement-run-as-privileged-containers-view/score-improvement-run-as-privileged-containers-view.component';
 import { ScoreImprovementAdmissionControlStatusViewComponent } from './partial/score-improvement-admission-control-status-view/score-improvement-admission-control-status-view.component';
 import { ScoreImprovementCompletedViewComponent } from './partial/score-improvement-completed-view/score-improvement-completed-view.component';
-import { GaugeModule } from 'angular-gauge';
+import { NgxGaugeModule } from 'ngx-gauge';
 import { ScoreImprovementGeneralHeaderComponent } from './partial/score-improvement-general/score-improvement-general-header/score-improvement-general-header.component';
 import { ScoreImprovementGeneralListItemComponent } from './partial/score-improvement-general/score-improvement-general-list-item/score-improvement-general-list-item.component';
 import { ScoreImprovementModalService } from '@services/score-improvement-modal.service';
@@ -38,7 +38,7 @@ import { ContainerDetailModule } from '@components/container-detail/container-de
   imports: [
     CommonModule,
     NvCommonModule,
-    GaugeModule.forRoot(),
+    NgxGaugeModule,
     GroupsModule,
     GroupDetailsModule,
     ExposureGridModule,

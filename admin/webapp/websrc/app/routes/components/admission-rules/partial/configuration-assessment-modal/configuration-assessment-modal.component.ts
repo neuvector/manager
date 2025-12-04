@@ -14,10 +14,13 @@ import { UtilsService } from '@common/utils/app.utils';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
 
+
 @Component({
+  standalone: false,
   selector: 'app-configuration-assessment-modal',
   templateUrl: './configuration-assessment-modal.component.html',
   styleUrls: ['./configuration-assessment-modal.component.scss'],
+  
 })
 export class ConfigurationAssessmentModalComponent implements OnInit {
   importUrl: string = '';

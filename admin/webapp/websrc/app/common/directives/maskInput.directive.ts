@@ -9,6 +9,7 @@ import { ControlContainer } from '@angular/forms';
 
 @Directive({
   selector: '[appMaskInput]',
+  standalone: false,
 })
 export class MaskInputDirective implements OnInit {
   @Input() maskOnBlur = false;

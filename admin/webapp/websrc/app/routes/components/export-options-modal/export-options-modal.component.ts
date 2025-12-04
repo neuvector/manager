@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
+  standalone: false,
   selector: 'app-export-options-modal',
   templateUrl: './export-options-modal.component.html',
   styleUrls: ['./export-options-modal.component.scss'],

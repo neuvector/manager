@@ -2,10 +2,13 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RuleDetailModalService } from '@components/groups/partial/rule-detail-modal/rule-detail-modal.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-rule-detail-modal',
   templateUrl: './rule-detail-modal.component.html',
   styleUrls: ['./rule-detail-modal.component.scss'],
+  
 })
 export class RuleDetailModalComponent implements OnInit {
   constructor(

@@ -3,7 +3,7 @@ import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { Host } from '@common/types';
 import { Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class NodesService {
@@ -25,7 +25,7 @@ export class NodesService {
   }
 
   getNodes(): Observable<Host[]> {
-    return this.assetsHttpService.getNodeBrief().pipe(pluck('hosts'));
+    return this.assetsHttpService.getNodeBrief().pipe(map(r => r.hosts));
   }
 
   getNodeContainers(id: string) {

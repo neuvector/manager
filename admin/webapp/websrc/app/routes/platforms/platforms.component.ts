@@ -20,10 +20,13 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalVariable } from '@common/variables/global.variable';
 
+
 @Component({
+  standalone: false,
   selector: 'app-platforms',
   templateUrl: './platforms.component.html',
   styleUrls: ['./platforms.component.scss'],
+  
 })
 export class PlatformsComponent implements OnInit, OnDestroy {
   _platformsGrid!: PlatformsGridComponent;

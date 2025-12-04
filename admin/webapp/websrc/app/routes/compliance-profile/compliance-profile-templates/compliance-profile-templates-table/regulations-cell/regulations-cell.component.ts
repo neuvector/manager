@@ -2,10 +2,13 @@ import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
+
 @Component({
+  standalone: false,
   selector: 'app-regulations-cell',
   templateUrl: './regulations-cell.component.html',
   styleUrls: ['./regulations-cell.component.scss'],
+  
 })
 export class RegulationsCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

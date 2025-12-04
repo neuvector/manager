@@ -6,10 +6,13 @@ import { validateIPAddress } from '@common/utils/common.utils';
 import { WorkloadRow } from '@services/containers.service';
 import { RegistriesService } from '@services/registries.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-container-detail',
   templateUrl: './container-detail.component.html',
   styleUrls: ['./container-detail.component.scss'],
+  
 })
 export class ContainerDetailComponent {
   @Input() container!: WorkloadRow;

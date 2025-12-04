@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-apikeys-grid-action-cell',
   templateUrl: './apikeys-grid-action-cell.component.html',
   styleUrls: ['./apikeys-grid-action-cell.component.scss'],

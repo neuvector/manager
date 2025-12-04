@@ -7,10 +7,14 @@ import { MapConstant } from '@common/constants/map.constant';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UtilsService } from '@common/utils/app.utils';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { SensorActionButtonsComponent } from '@components/dlp-sensors/partial/sensor-action-buttons/sensor-action-buttons.component';
 import { RuleActionButtonsComponent } from '@components/dlp-sensors/partial/rule-action-buttons/rule-action-buttons.component';
 import { PatternActionButtonsComponent } from '@components/dlp-sensors/partial/pattern-action-buttons/pattern-action-buttons.component';
+
+interface SensorsResponse {
+  sensors: any[];
+}
 
 @Injectable({
   providedIn: 'root',
@@ -213,8 +217,8 @@ export class DlpSensorsService {
       });
     }
     return GlobalVariable.http
-      .get(PathConstant.DLP_SENSORS_URL, ...options)
-      .pipe(pluck('sensors'));
+      .get<SensorsResponse>(PathConstant.DLP_SENSORS_URL, ...options)
+      .pipe(map(r => r.sensors));
   };
 
   updateDlpSensorData = (payload, opType) => {

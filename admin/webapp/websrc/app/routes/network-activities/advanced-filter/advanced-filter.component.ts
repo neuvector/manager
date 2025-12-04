@@ -27,10 +27,13 @@ import {
   Settings,
 } from '@common/types/network-activities/settings';
 
+
 @Component({
+  standalone: false,
   selector: 'app-advanced-filter',
   templateUrl: './advanced-filter.component.html',
   styleUrls: ['./advanced-filter.component.scss'],
+  
 })
 export class AdvancedFilterComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;

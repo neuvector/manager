@@ -33,6 +33,7 @@ import { VersionInfoService } from '@services/version-info.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+
 export const nodeDetailsTabs = {
   0: 'details',
   1: 'compliance',
@@ -41,9 +42,11 @@ export const nodeDetailsTabs = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-node-details',
   templateUrl: './node-details.component.html',
   styleUrls: ['./node-details.component.scss'],
+  
 })
 export class NodeDetailsComponent implements OnInit {
   private _node!: Host;

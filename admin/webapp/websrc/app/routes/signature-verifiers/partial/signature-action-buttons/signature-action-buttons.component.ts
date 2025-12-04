@@ -14,6 +14,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-signature-action-buttons',
   templateUrl: './signature-action-buttons.component.html',
   styleUrls: ['./signature-action-buttons.component.scss'],

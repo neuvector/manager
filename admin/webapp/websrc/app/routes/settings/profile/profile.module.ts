@@ -16,7 +16,7 @@ import { SettingsService } from '@services/settings.service';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { PasswordPanelModule } from '../common/password-panel/password-panel.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { AvatarModule } from 'ngx-avatar';
+import { AvatarModule } from 'ngx-avatars';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 
 const routes: Routes = [{ path: '', component: ProfileComponent }];

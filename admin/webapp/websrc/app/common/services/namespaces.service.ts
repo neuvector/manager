@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { Domain } from '@common/types';
 import { Observable } from 'rxjs';
-import { map, pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+
+interface DomainsResponse {
+  domains: Domain[];
+}
 
 @Injectable()
 export class NamespacesService {
@@ -22,8 +26,7 @@ export class NamespacesService {
 
   getNamespaces(): Observable<Domain[]> {
     return this.assetsHttpService.getDomain().pipe(
-      pluck('domains'),
-      map(domains => domains.filter(d => d.name.charAt(0) !== '_'))
+      map((r: DomainsResponse) => r.domains.filter(d => d.name.charAt(0) !== '_'))
     );
   }
 }

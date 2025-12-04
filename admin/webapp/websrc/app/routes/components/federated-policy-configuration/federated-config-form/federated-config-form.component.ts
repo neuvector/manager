@@ -22,6 +22,7 @@ import { FormlyFormOptions } from '@ngx-formly/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-federated-config-form',
   templateUrl: './federated-config-form.component.html',
   styleUrls: ['./federated-config-form.component.scss'],

@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'shortenFromMiddle' })
+@Pipe({ 
+  standalone: false,
+  name: 'shortenFromMiddle'
+})
 export class ShortenFromMiddlePipe implements PipeTransform {
   transform(str: string | undefined, len: number = 8): string {
     if (str && str.length > len) {
@@ -13,7 +16,10 @@ export class ShortenFromMiddlePipe implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'capitalizeWord' })
+@Pipe({ 
+  standalone: false,
+  name: 'capitalizeWord'
+})
 export class CapitalizePipe implements PipeTransform {
   transform(word: string | undefined): string {
     return !!word
@@ -22,7 +28,10 @@ export class CapitalizePipe implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'capitalizeWords' })
+@Pipe({ 
+  standalone: false,
+  name: 'capitalizeWords'
+})
 export class CapitalizeWordsPipe implements PipeTransform {
   transform(words: string | undefined): string {
     let capitalizePipe = new CapitalizePipe();
@@ -35,7 +44,10 @@ export class CapitalizeWordsPipe implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'bytes' })
+@Pipe({ 
+  standalone: false,
+  name: 'bytes'
+})
 export class BytesPipe implements PipeTransform {
   transform(
     bytes: string,
@@ -66,6 +78,7 @@ export class BytesPipe implements PipeTransform {
  * Finds an object from given source using the given key - value pairs
  */
 @Pipe({
+  standalone: false,
   name: 'findByKey',
   pure: false,
 })

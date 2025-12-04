@@ -15,10 +15,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
+
 @Component({
+  standalone: false,
   selector: 'app-groups-page',
   templateUrl: './groups-page.component.html',
   styleUrls: ['./groups-page.component.scss'],
+  
 })
 export class GroupsPageComponent implements OnInit, AfterViewInit {
   public navSource!: string;

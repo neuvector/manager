@@ -42,10 +42,13 @@ import { saveAs } from 'file-saver';
 import { ExportOptionsModalComponent } from '@components/export-options-modal/export-options-modal.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+
 @Component({
+  standalone: false,
   selector: 'app-compliance-profile-templates-table',
   templateUrl: './compliance-profile-templates-table.component.html',
   styleUrls: ['./compliance-profile-templates-table.component.scss'],
+  
 })
 export class ComplianceProfileTemplatesTableComponent
   implements OnInit, OnChanges, AfterViewInit

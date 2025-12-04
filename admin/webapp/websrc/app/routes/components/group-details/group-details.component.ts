@@ -6,6 +6,7 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { tap } from 'rxjs/operators';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
+
 export const groupDetailsTabs = [
   'member',
   'custom check',
@@ -18,9 +19,11 @@ export const groupDetailsTabs = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
   styleUrls: ['./group-details.component.scss'],
+  
 })
 export class GroupDetailsComponent implements OnInit, AfterViewInit {
   @Input() resizableHeight!: number;

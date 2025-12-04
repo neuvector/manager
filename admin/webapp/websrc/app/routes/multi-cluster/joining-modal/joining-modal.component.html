@@ -16,7 +16,7 @@
   <div mat-dialog-content class="dialog-content p0 m0">
     <form #clusterForm="ngForm" class="pt-lg">
       <div class="d-flex flex-column flex-grow-1">
-        <mat-form-field appearance="standard" class="flex-grow-1">
+        <mat-form-field class="flex-grow-1">
           <mat-label>{{ 'multiCluster.joining.name' | translate }}</mat-label>
           <input
             matInput
@@ -27,7 +27,7 @@
         </mat-form-field>
       </div>
       <div class="d-flex justify-content-start align-items-center">
-        <mat-form-field appearance="standard" class="flex-grow-1 mr-4">
+        <mat-form-field class="flex-grow-1 mr-4">
           <mat-label>{{ 'multiCluster.joining.server' | translate }}</mat-label>
           <input
             matInput
@@ -36,7 +36,7 @@
             [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             required />
         </mat-form-field>
-        <mat-form-field appearance="standard" class="flex-grow-1">
+        <mat-form-field class="flex-grow-1">
           <mat-label>{{ 'multiCluster.joining.port' | translate }}</mat-label>
           <input
             matInput
@@ -47,7 +47,7 @@
         </mat-form-field>
       </div>
       <div class="d-flex flex-column flex-grow-1">
-        <mat-form-field appearance="standard" class="flex-grow-1">
+        <mat-form-field class="flex-grow-1">
           <mat-label>{{ 'multiCluster.joining.token' | translate }}</mat-label>
           <textarea
             matInput
@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="d-flex justify-content-start align-items-center">
-        <mat-form-field appearance="standard" class="flex-grow-1 mr-4">
+        <mat-form-field class="flex-grow-1 mr-4">
           <mat-label>{{
             'multiCluster.promotion.server' | translate
           }}</mat-label>
@@ -73,7 +73,7 @@
             [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             required />
         </mat-form-field>
-        <mat-form-field appearance="standard" class="flex-grow-1">
+        <mat-form-field class="flex-grow-1">
           <mat-label>{{ 'multiCluster.promotion.port' | translate }}</mat-label>
           <input
             matInput

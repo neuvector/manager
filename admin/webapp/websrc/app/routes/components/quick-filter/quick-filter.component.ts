@@ -11,10 +11,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { GridOptions, IRowNode, GridApi } from 'ag-grid-community';
 import { FormControl } from '@angular/forms';
 
+
 @Component({
+  standalone: false,
   selector: 'app-quick-filter',
   templateUrl: './quick-filter.component.html',
   styleUrls: ['./quick-filter.component.scss'],
+  
 })
 export class QuickFilterComponent implements OnInit, OnChanges {
   @Input() gridOptions!: GridOptions;

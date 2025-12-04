@@ -2,22 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SettingsService } from '@services/settings.service';
-import { combineLatest, of, Subject } from 'rxjs';
+import { combineLatest, of, Subject, throwError } from 'rxjs';
 import {
   catchError,
   map,
-  pluck,
-  repeatWhen,
   switchMap,
   tap,
+  startWith,
 } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 
+
 @Component({
+  standalone: false,
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
+  
 })
 export class UsersComponent implements OnInit {
   private _switchClusterSubscription;
@@ -38,7 +40,7 @@ export class UsersComponent implements OnInit {
         this.globalRoles = [''];
       }
     }),
-    pluck('users')
+    map(r => r.users)
   );
   domain$ = this.settingsService
     .getDomain()
@@ -49,19 +51,20 @@ export class UsersComponent implements OnInit {
           .filter(name => !GlobalConstant.EXCLUDED_DOMAINS.includes(name))
       )
     );
-  userData$ = combineLatest([this.users$, this.domain$]).pipe(
-    map(([users, domains]) => {
-      return {
-        users,
-        domains,
-      };
-    }),
-    catchError(err => {
-      this.error = err;
-      throw err;
-    }),
-    repeatWhen(() => this.refreshUserSubject$)
+  userData$ = this.refreshUserSubject$.pipe(
+    startWith(null),
+
+    switchMap(() =>
+      combineLatest([this.users$, this.domain$]).pipe(
+        map(([users, domains]) => ({ users, domains })),
+        catchError(err => {
+          this.error = err;
+          return throwError(() => err);
+        })
+      )
+    )
   );
+
   apikeyData$ = this.refreshApikeySubject$.pipe(
     switchMap(() =>
       combineLatest([this.settingsService.getApikeys(), this.domain$]).pipe(

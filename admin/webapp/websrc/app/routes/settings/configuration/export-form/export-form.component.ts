@@ -13,10 +13,13 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+
 @Component({
+  standalone: false,
   selector: 'app-export-form',
   templateUrl: './export-form.component.html',
   styleUrls: ['./export-form.component.scss'],
+  
 })
 export class ExportFormComponent implements OnInit {
   @Input() source = GlobalConstant.NAV_SOURCE.SELF;

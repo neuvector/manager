@@ -16,7 +16,9 @@ import { PromotionModalComponent } from '@routes/multi-cluster/promotion-modal/p
 import { MapConstant } from '@common/constants/map.constant';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-multi-cluster-grid-action-cell',
   templateUrl: './multi-cluster-grid-action-cell.component.html',
   styleUrls: ['./multi-cluster-grid-action-cell.component.scss'],

@@ -4,6 +4,7 @@ import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-charts',
   templateUrl: './compliance-charts.component.html',
   styleUrls: ['./compliance-charts.component.scss'],

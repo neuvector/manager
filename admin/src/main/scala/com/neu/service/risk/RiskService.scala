@@ -18,6 +18,8 @@ import org.apache.pekko.http.scaladsl.server.Route
 
 import scala.concurrent.TimeoutException
 import scala.util.control.NonFatal
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
 
@@ -62,7 +64,7 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
           else ""
         }${
           if (qf.isDefined)
-            s"&qf=${qf.get}"
+            s"&qf=${URLEncoder.encode(qf.get, StandardCharsets.UTF_8.toString)}"
           else ""
         }"
     RestClient.httpRequestWithHeader(url, GET, "", tokenId)
@@ -107,7 +109,7 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
           else ""
         }${
           if (qf.isDefined)
-            s"&qf=${qf.get}"
+            s"&qf=${URLEncoder.encode(qf.get, StandardCharsets.UTF_8.toString)}"
           else ""
         }${
           if (scoretype.isDefined)

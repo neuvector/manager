@@ -304,6 +304,10 @@ def showLocalSystemConfig(data, scope):
         conf["allow_ns_user_export_net_policy"] = False
     column_map += (("allow_ns_user_export_net_policy", "Allow namespace user to export all network policies of a group that the user has read permission"),)
 
+    if "enable_tls_verification" not in conf:
+        conf["enable_tls_verification"] = False
+    column_map += (("enable_tls_verification", "Enable TLS verification for communications with external servers"),)
+
     scannerAutoscaleStrategy = "Disabled"
     minScanners = 0
     maxScanners = 0
@@ -992,6 +996,13 @@ def set_system_telemetry(data, status):
 def set_system_allow_ns_user_export_net_policy(data, enable):
     """Allow namespace user to export all network policies of a group that the user has read permission"""
     data.client.config_system(allow_ns_user_export_net_policy=enable)
+
+@set_system.command("enable_tls_verification")
+@click.option("--enable/--disable", default=True, is_flag=True, help="Enable TLS verification for communications with external servers")
+@click.pass_obj
+def set_system_enable_tls_verification(data, enable):
+    """Enable TLS verification for communications with external servers"""
+    data.client.config_system(enable_tls_verification=enable)
 
 @set_system.group("monitor_service_mesh")
 @click.pass_obj

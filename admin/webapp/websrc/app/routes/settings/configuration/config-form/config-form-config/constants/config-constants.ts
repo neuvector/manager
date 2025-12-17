@@ -33,7 +33,7 @@ export const ServiceModeField = {
     items: ServiceModeTypes,
     hintPosition: 'after',
     hint: 'setting.NEW_SERVICE_COMMENT',
-    hintClass: 'ml-4 text-muted',
+    hintClass: 'ms-4 text-muted',
     fieldClass: 'col-md-5',
   },
   expressionProperties: {
@@ -66,7 +66,7 @@ export const ProfileBaselineBoolField = {
     labelPosition: 'before',
     hintPosition: 'after',
     hint: 'setting.ZERODRIFT_COMMENT',
-    hintClass: 'ml-4 text-muted',
+    hintClass: 'ms-4 text-muted',
     fieldClass: 'col-md-4',
   },
   hooks: {
@@ -112,7 +112,7 @@ export const RancherEpField = {
   template: '',
   expressionProperties: {
     template: (_model, formState, field) => {
-      return `<div class="ml-3 d-flex align-items-center">
+      return `<div class="ms-3 d-flex align-items-center">
                 <div class="rancher-bg"></div>
                 <strong class="me-2">${formState.tr.rancher_ep}:</strong>
                 <a href=${field.formControl.value}>${field.formControl.value}</a>
@@ -141,7 +141,7 @@ export const NetworkServiceModeField = {
   templateOptions: {
     items: ServiceModeTypes,
     hintPosition: 'after',
-    hintClass: 'ml-4 text-muted',
+    hintClass: 'ms-4 text-muted',
     fieldClass: 'col-md-4',
   },
   expressionProperties: {

@@ -24,7 +24,7 @@
       <div formArrayName="severity" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let severity of severityFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{ getDisplayName(filterSeverity[i]) }}
           </mat-checkbox>
         </ng-container>
@@ -37,7 +37,7 @@
       <div formArrayName="location" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let location of locationFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{
               'securityEvent.label.' + filterLocation[i].toUpperCase()
                 | translate
@@ -53,7 +53,7 @@
       <div formArrayName="category" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let category of categoryFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{
               'securityEvent.label.' + filterCategory[i].toUpperCase()
                 | translate
@@ -67,7 +67,7 @@
       <div formArrayName="other" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let other of otherFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{ filterOther[i] | translate }}
           </mat-checkbox>
         </ng-container>

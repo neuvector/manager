@@ -1578,3 +1578,13 @@ ngx-avatar.userIcon img.avatar-content {
     display: unset !important;
   }
 }
+
+.clearfix {
+  @include clearfix();
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}

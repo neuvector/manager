@@ -17,7 +17,7 @@
   <div>
     <form [formGroup]="advFilterForm">
       <section class="row mx-0 align-items-center">
-        <label class="col-2 font-weight-normal mb-0 mr-2" for="domainInput">{{
+        <label class="col-2 font-weight-normal mb-0 me-2" for="domainInput">{{
           'ldap.gridHeader.DOMAINS' | translate
         }}</label>
         <mat-form-field class="col pl-0">
@@ -63,7 +63,7 @@
         </mat-form-field>
       </section>
       <section class="row mx-0 align-items-center">
-        <label class="col-2 font-weight-normal mb-0 mr-2" for="groupInput">{{
+        <label class="col-2 font-weight-normal mb-0 me-2" for="groupInput">{{
           'dlp.gridHeader.GROUPS' | translate
         }}</label>
         <mat-form-field class="col pl-0">
@@ -181,7 +181,7 @@
     <button
       (click)="reset()"
       mat-stroked-button
-      class="mr-2"
+      class="me-2"
       aria-label="reset">
       Reset
     </button>

@@ -92,7 +92,7 @@
           mat-mini-fab
           aria-label="Stop sniff"
           color="primary"
-          class="mr-2"
+          class="me-2"
           [disabled]="
             !isPacketCapAuthorized || !sniffer || sniffer.status === 'stopped'
           "
@@ -103,7 +103,7 @@
           mat-mini-fab
           aria-label="Download packet"
           color="primary"
-          class="mr-2"
+          class="me-2"
           [disabled]="!isPacketCapAuthorized || !sniffer"
           (click)="downloadPacket(sniffer.id)">
           <em class="far fa-file-archive"></em>

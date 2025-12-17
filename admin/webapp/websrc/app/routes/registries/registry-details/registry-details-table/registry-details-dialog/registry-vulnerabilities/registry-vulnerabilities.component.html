@@ -1,6 +1,6 @@
 <div class="d-flex flex-row justify-content-between align-items-center">
   <div class="d-flex align-items-center">
-    <span class="d-block font-weight-bold mr-1"
+    <span class="d-block font-weight-bold me-1"
       >{{ 'dashboard.heading.CVE_DB_VERSION' | translate }}
       {{ scannerVersion }}</span
     >
@@ -40,7 +40,7 @@
         *ngIf="acceptedVulnerabilityStatus"
         class="d-flex align-items-center"
         mat-menu-item>
-        <i class="eos-icons mr-2">visibility_off</i
+        <i class="eos-icons me-2">visibility_off</i
         >{{ 'enum.HIDE_ACCEPTED_VULS' | translate }}
       </button>
       <button
@@ -48,7 +48,7 @@
         *ngIf="!acceptedVulnerabilityStatus"
         class="d-flex align-items-center"
         mat-menu-item>
-        <i class="eos-icons mr-2">visibility</i
+        <i class="eos-icons me-2">visibility</i
         >{{ 'enum.SHOW_ACCEPTED_VULS' | translate }}
       </button>
       <ng-container *appDisplayControl="'write_vuls_profile'">
@@ -57,7 +57,7 @@
           (click)="onAcceptVulnerability()"
           class="d-flex align-items-center"
           mat-menu-item>
-          <i class="eos-icons mr-2">check_box</i
+          <i class="eos-icons me-2">check_box</i
           >{{ 'cveProfile.ACCEPT_VUL' | translate }}
         </button>
       </ng-container>
@@ -67,7 +67,7 @@
       (click)="exportCVELayers()"
       class="mx-1 d-flex align-items-center"
       mat-button>
-      <i class="eos-icons icon-18 mr-1">csv_file</i
+      <i class="eos-icons icon-18 me-1">csv_file</i
       >{{ 'registry.CVE_REPORT_BY_LAYER' | translate }}
     </button>
     <button
@@ -79,7 +79,7 @@
       (click)="exportCVE()"
       class="d-flex align-items-center"
       mat-button>
-      <i class="eos-icons icon-18 mr-1">csv_file</i
+      <i class="eos-icons icon-18 me-1">csv_file</i
       >{{ 'registry.CVE_REPORT' | translate }}
     </button>
   </div>
@@ -87,7 +87,7 @@
 <div style="height: 4px; width: 100%">
   <mat-progress-bar *ngIf="refreshing" mode="indeterminate"></mat-progress-bar>
 </div>
-<div class="row registry-vulnerability-row mr-0">
+<div class="row registry-vulnerability-row me-0">
   <div class="col-4">
     <app-layers-table
       (layerSelected)="layerSelected($event)"
@@ -132,7 +132,7 @@
           style="display: block; text-align: left"
           matTooltip="{{ verifier }}"
           matTooltipPosition="above">
-          <i class="eos-icons icon-12 mr-2">verified</i>{{ verifier }}
+          <i class="eos-icons icon-12 me-2">verified</i>{{ verifier }}
         </div>
       </div>
       <div class="vulnerability-verifiers-footer">

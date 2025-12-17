@@ -1,8 +1,8 @@
 <form (ngSubmit)="submitForm()" [formGroup]="openidForm">
   <div class="d-flex align-items-center my-2 flex-wrap">
-    <i class="eos-icons mr-3 text-primary">lightbulb</i>
-    <span class="mr-3">{{ 'openId.CALLBACK_URL' | translate }}</span>
-    <span class="text-muted mr-3">{{ openidRedirectURL }}</span>
+    <i class="eos-icons me-3 text-primary">lightbulb</i>
+    <span class="me-3">{{ 'openId.CALLBACK_URL' | translate }}</span>
+    <span class="text-muted me-3">{{ openidRedirectURL }}</span>
     <button
       [cdkCopyToClipboard]="openidRedirectURL"
       class="d-flex justify-content-center align-items-center"
@@ -14,7 +14,7 @@
   </div>
   <div class="row align-items-center my-0 my-md-4">
     <div class="col-12 col-md-6 d-flex align-items-center my-2">
-      <i class="eos-icons mr-3 text-primary">account_box</i>
+      <i class="eos-icons me-3 text-primary">account_box</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'openId.ISSUER' | translate }}</mat-label>
         <input
@@ -32,7 +32,7 @@
     <div
       class="col-12 col-md-6 d-flex align-items-center my-2"
       *ngIf="isCreated">
-      <i class="eos-icons mr-3 text-primary">assignment_ind</i>
+      <i class="eos-icons me-3 text-primary">assignment_ind</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'openId.AUTHORIZATION_ENDPOINT' | translate }}</mat-label>
         <input
@@ -44,7 +44,7 @@
     <div
       class="col-12 col-md-6 d-flex align-items-center my-2"
       *ngIf="isCreated">
-      <i class="eos-icons mr-3 text-primary">assignment_ind</i>
+      <i class="eos-icons me-3 text-primary">assignment_ind</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'openId.TOKEN_ENDPOINT' | translate }}</mat-label>
         <input
@@ -56,7 +56,7 @@
     <div
       class="col-12 col-md-6 d-flex align-items-center my-2"
       *ngIf="isCreated">
-      <i class="eos-icons mr-3 text-primary">assignment_ind</i>
+      <i class="eos-icons me-3 text-primary">assignment_ind</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'openId.USER_INFO_ENDPOINT' | translate }}</mat-label>
         <input
@@ -66,7 +66,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons mr-3 text-primary">person</i>
+      <i class="eos-icons me-3 text-primary">person</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'openId.CLIENT_ID' | translate }}</mat-label>
         <input
@@ -79,7 +79,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons mr-3 text-primary">vpn_key</i>
+      <i class="eos-icons me-3 text-primary">vpn_key</i>
       <mat-form-field
         class="w-100"
         [floatLabel]="isCreated ? 'always' : 'auto'">
@@ -129,7 +129,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 d-flex align-items-center">
-      <i class="eos-icons mr-3 text-primary">groups</i>
+      <i class="eos-icons me-3 text-primary">groups</i>
       <mat-form-field class="w-100">
         <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
         <input
@@ -167,7 +167,7 @@
       type="submit">
       <mat-spinner
         *ngIf="submittingForm"
-        class="btn__spinner mr-2"
+        class="btn__spinner me-2"
         diameter="20"></mat-spinner>
       {{ 'general.SUBMIT' | translate }}
     </button>

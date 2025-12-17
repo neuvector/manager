@@ -113,7 +113,7 @@
           <h5>
             {{ 'securityEvent.VIOLATED_RULE' | translate }}
             <span
-              class="label {{ ruleTypeClass }} mr-sm"
+              class="label {{ ruleTypeClass }} "
               style="display: inline; font-size: 12px">
               {{ data.networkRule.id }}
             </span>
@@ -126,7 +126,7 @@
           <h5>
             {{ 'securityEvent.VIOLATED_RULE' | translate }}
             <span
-              class="label label-caution mr-sm"
+              class="label label-caution "
               style="display: inline; font-size: 12px">
               Implicit
             </span>
@@ -238,7 +238,7 @@
               <div class="d-flex justify-content-end align-items-center">
                 <button
                   mat-stroked-button
-                  class="mr-2"
+                  class="me-2"
                   aria-label="Cancel"
                   (click)="dialogRef.close()">
                   {{ 'group.editGroup.CANCEL' | translate }}

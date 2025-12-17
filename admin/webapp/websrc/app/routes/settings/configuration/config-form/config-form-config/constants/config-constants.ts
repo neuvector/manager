@@ -114,7 +114,7 @@ export const RancherEpField = {
     template: (_model, formState, field) => {
       return `<div class="ml-3 d-flex align-items-center">
                 <div class="rancher-bg"></div>
-                <strong class="mr-2">${formState.tr.rancher_ep}:</strong>
+                <strong class="me-2">${formState.tr.rancher_ep}:</strong>
                 <a href=${field.formControl.value}>${field.formControl.value}</a>
               </div>`;
     },

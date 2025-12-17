@@ -39,19 +39,19 @@
       mode="indeterminate"></mat-progress-bar>
     <ng-container *ngIf="!submittingForm && !testFinished">
       <span class="d-flex align-items-center my-2">
-        <i class="eos-icons text-info mr-2">assignment</i>
+        <i class="eos-icons text-info me-2">assignment</i>
         {{ 'ldap.test.NOTE' | translate }}
       </span>
     </ng-container>
     <ng-container *ngIf="submittingForm">
       <span class="d-flex align-items-center my-2">
-        <i class="eos-icons text-info mr-2">info</i>
+        <i class="eos-icons text-info me-2">info</i>
         {{ 'ldap.test.INFO' | translate }}
       </span>
     </ng-container>
     <ng-container *ngIf="testFinished && !errorMessage">
       <span class="d-flex align-items-center my-2">
-        <i class="eos-icons text-success mr-2">check</i>
+        <i class="eos-icons text-success me-2">check</i>
         {{
           (connectedGroups.length
             ? 'ldap.test.SUCCEEDED_GROUP'
@@ -67,7 +67,7 @@
     </ng-container>
     <ng-container *ngIf="testFinished && errorMessage">
       <span class="d-flex align-items-center my-2">
-        <i class="eos-icons text-danger mr-2">close</i>
+        <i class="eos-icons text-danger me-2">close</i>
         {{ errorMessage }}
       </span>
     </ng-container>

@@ -94,7 +94,7 @@
       <div
         class="d-flex justify-content-start align-items-center"
         *ngIf="vType === VERIFIER_TYPE.KEYLESS">
-        <mat-form-field class="mr-4">
+        <mat-form-field class="me-4">
           <mat-label>{{
             'signatures.gridHeader.CERT_ISSUER' | translate
           }}</mat-label>
@@ -114,7 +114,7 @@
       <button
         mat-stroked-button
         aria-label="cancel"
-        class="mr-2"
+        class="me-2"
         (click)="onCancel()">
         {{ 'waf.sensorModal.CANCEL' | translate }}
       </button>

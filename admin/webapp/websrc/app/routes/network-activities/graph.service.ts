@@ -1321,7 +1321,7 @@ export class GraphService {
 
             // Append the "Namespace Boundary Enabled" if needed and return the final string
             if (params.data.nbe) {
-              result = `${result} <span class="ml-1 action-label info">${GlobalConstant.Namespace_Boundary_Enabled}</span>`;
+              result = `${result} <span class="ms-1 action-label info">${GlobalConstant.Namespace_Boundary_Enabled}</span>`;
             }
             return result;
           },

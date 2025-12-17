@@ -28,14 +28,14 @@
             [readonly]="data.opType === opTypeOptions.EDIT"
             formControlName="name" />
         </mat-form-field>
-        <mat-form-field class="ml-4 flex-grow-1">
+        <mat-form-field class="ms-4 flex-grow-1">
           <mat-label>{{
             'signatures.gridHeader.COMMENT' | translate
           }}</mat-label>
           <input type="text" matInput formControlName="comment" />
         </mat-form-field>
         <ng-container *ngIf="!isKeypairOnly; else keypairOption">
-          <mat-form-field class="ml-4">
+          <mat-form-field class="ms-4">
             <mat-label>{{
               'signatures.gridHeader.V_TYPE' | translate
             }}</mat-label>
@@ -50,7 +50,7 @@
           </mat-form-field>
         </ng-container>
         <ng-template #keypairOption>
-          <mat-form-field class="ml-4">
+          <mat-form-field class="ms-4">
             <mat-label>{{
               'signatures.gridHeader.V_TYPE' | translate
             }}</mat-label>
@@ -64,13 +64,13 @@
         </ng-template>
 
         <!-- <mat-checkbox
-          class="mt-3 ml-4"
+          class="mt-3 ms-4"
           formControlName="ignore_tlog"
         >
           {{ 'signatures.gridHeader.IGNORE_TLOG' | translate}}
         </mat-checkbox>
         <mat-checkbox
-          class="mt-3 ml-4"
+          class="mt-3 ms-4"
           formControlName="ignore_sct"
         >
           {{ 'signatures.gridHeader.IGNORE_SCT' | translate}}

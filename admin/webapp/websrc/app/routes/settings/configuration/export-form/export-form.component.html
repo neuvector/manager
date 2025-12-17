@@ -1,8 +1,8 @@
 <form (ngSubmit)="submitExport()" [formGroup]="exportForm">
   <ng-container *ngIf="isExportAuthorized">
-    <div class="ml-3 my-md-4">
+    <div class="ms-3 my-md-4">
       <h1 class="h4 font-weight-normal">{{ 'setting.EXPORT' | translate }}</h1>
-      <div class="ml-3 my-md-2 d-flex flex-column">
+      <div class="ms-3 my-md-2 d-flex flex-column">
         <mat-radio-group
           *ngIf="source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']"
           class="mb-3"
@@ -46,7 +46,7 @@
           </app-loading-button>
         </div>
       </div>
-      <div *ngIf="errorMsg" class="ml-4 text-danger">{{ errorMsg }}</div>
+      <div *ngIf="errorMsg" class="ms-4 text-danger">{{ errorMsg }}</div>
     </div>
     <mat-divider class="position-relative"></mat-divider>
   </ng-container>

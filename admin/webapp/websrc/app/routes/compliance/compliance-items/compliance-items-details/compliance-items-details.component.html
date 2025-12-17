@@ -100,7 +100,7 @@
   <span
     [class]="getComplianceTagClass(type)"
     [style]="getComplianceTagStyle(type)"
-    class="border-0 badge ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
+    class="border-0 badge ms-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
     ⋮⋮&nbsp;&nbsp;{{ type }}
   </span>
 </ng-template>
@@ -114,7 +114,7 @@
     (click)="openRegulation(type, content, name)"
     [class]="getComplianceTagClass(type)"
     [style]="getComplianceTagStyle(type)"
-    class="border-0 badge ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
+    class="border-0 badge ms-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
     ⋮⋮&nbsp;&nbsp;{{ type }}
   </button>
 </ng-template>
@@ -125,7 +125,7 @@
       <button
         (click)="openBrief(type, content)"
         *ngSwitchCase="'discover'"
-        class="border-0 badge badge-danger ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-danger ms-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
           *ngTemplateOutlet="
             iconTemplate;
@@ -136,7 +136,7 @@
       <button
         (click)="openBrief(type, content)"
         *ngSwitchDefault
-        class="border-0 badge badge-success ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-success ms-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
           *ngTemplateOutlet="
             iconTemplate;
@@ -149,7 +149,7 @@
   <ng-template #notBeingUsedButton>
     <button
       (click)="openBrief(type, content)"
-      class="border-0 badge badge-warning ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
+      class="border-0 badge badge-warning ms-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
       <ng-template
         *ngTemplateOutlet="iconTemplate; context: { type: type }"></ng-template>
       {{ content.display_name }}
@@ -162,7 +162,7 @@
     <ng-container [ngSwitch]="content.policy_mode.toLowerCase()">
       <span
         *ngSwitchCase="'discover'"
-        class="border-0 badge badge-danger ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-danger ms-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
           *ngTemplateOutlet="
             iconTemplate;
@@ -172,7 +172,7 @@
       >
       <span
         *ngSwitchDefault
-        class="border-0 badge badge-success ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-success ms-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
           *ngTemplateOutlet="
             iconTemplate;
@@ -184,7 +184,7 @@
   </ng-container>
   <ng-template #notBeingUsedSpan>
     <span
-      class="border-0 badge badge-warning ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
+      class="border-0 badge badge-warning ms-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
       <ng-template
         *ngTemplateOutlet="iconTemplate; context: { type: type }"></ng-template>
       {{ content.display_name }}</span

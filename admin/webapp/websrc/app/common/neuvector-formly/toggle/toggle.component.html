@@ -21,7 +21,7 @@
   </mat-slide-toggle>
   <span
     *ngIf="!to.labelPosition || to.labelPosition === 'after'"
-    class="toggle-label ml-3"
+    class="toggle-label ms-3"
     [ngClass]="to.fixed ? 'mat-slide-toggle-fixed-' + to.fixed : ''"
     >{{ field.templateOptions?.label ?? '' | translate }}</span
   >

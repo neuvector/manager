@@ -1,5 +1,5 @@
 <form (ngSubmit)="submitExport()" [formGroup]="cspExportForm">
-  <div class="ml-3 my-md-4">
+  <div class="ms-3 my-md-4">
     <h1 class="h4 font-weight-normal">
       {{ 'setting.CLOUD_BILLING' | translate : { cloud: cspTypeText } }}
     </h1>
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="ml-3 me-4 my-md-2 d-flex align-items-center">
+    <div class="ms-3 me-4 my-md-2 d-flex align-items-center">
       <div *ngIf="errorMsg" class="text-danger">{{ errorMsg }}</div>
       <app-loading-button
         [appearance]="'mat-raised-button'"
@@ -53,7 +53,7 @@
         [loading]="submittingForm"
         [text]="'setting.DOWNLOAD_SUPPORT_FILE' | translate"
         [type]="'submit'"
-        class="ml-auto">
+        class="ms-auto">
       </app-loading-button>
     </div>
   </div>

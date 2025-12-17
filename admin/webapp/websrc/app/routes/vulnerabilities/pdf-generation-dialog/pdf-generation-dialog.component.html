@@ -35,7 +35,7 @@
       </mat-select>
     </mat-form-field>
     <ng-container *ngIf="selectedDateOption === 'custom'">
-      <mat-form-field class="ml-2">
+      <mat-form-field class="ms-2">
         <input matInput [matDatepicker]="picker" formControlName="customDate" />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

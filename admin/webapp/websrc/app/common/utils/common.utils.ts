@@ -115,14 +115,14 @@ export function groupBy<T, K extends keyof T>(arr: T[], key: string) {
 export function getEndPointType(name) {
   if (name) {
     if (name.indexOf('Host:') === 0)
-      return '<em class="fa fa-server text-primary mr-sm"></em>';
+      return '<em class="fa fa-server text-primary "></em>';
     else if (name.indexOf('Workload:') === 0)
-      return '<em class="fa fa-square text-primary mr-sm"></em>';
+      return '<em class="fa fa-square text-primary "></em>';
     else if (name.indexOf('external') === 0)
-      return '<em class="fa fa-cloud text-primary mr-sm"></em>';
+      return '<em class="fa fa-cloud text-primary "></em>';
     else if (name.indexOf('IP-Group:') === 0)
-      return '<em class="fa fa-th-large text-primary mr-sm"></em>';
-    else return '<em class="fa fa-square-o text-primary mr-sm"></em>';
+      return '<em class="fa fa-th-large text-primary "></em>';
+    else return '<em class="fa fa-square-o text-primary "></em>';
   }
   return '';
 }

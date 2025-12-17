@@ -4,7 +4,7 @@
     *ngIf="!useQuickFilterService">
     <div
       role="button"
-      class="hand mr-3"
+      class="hand me-3"
       *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteDlpAuthorized"
       (click)="openEditGroupSensorModal()">
       <em class="eos-icons">edit</em>
@@ -14,7 +14,7 @@
         >{{ 'setting.STATUS' | translate }}:</label
       >
       <mat-slide-toggle
-        class="mr-2"
+        class="me-2"
         id="group-dlp-sensor-status-toggle"
         [disabled]="!isWriteDlpAuthorized || cfgType === CFG_TYPE.GROUND"
         [(ngModel)]="enabled"

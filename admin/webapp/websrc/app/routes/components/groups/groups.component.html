@@ -4,7 +4,7 @@
   <div
     class="d-flex align-items-center justify-content-start"
     *ngIf="!groupsErr">
-    <span class="text-info font-weight-bold mr-2">
+    <span class="text-info font-weight-bold me-2">
       <span *ngIf="filtered">
         {{ 'enum.FOUND' | translate }}
         {{ filteredCount }}&nbsp;/
@@ -13,7 +13,7 @@
       {{ groupsCount }}
     </span>
     <span
-      class="text-success font-weight-bold mr-2"
+      class="text-success font-weight-bold me-2"
       *ngIf="source === navSource['SELF'] && selectedGroups.length">
       {{ 'group.GROUP_LIST' | translate }}:&nbsp;
       {{ selectedGroups.length }}
@@ -33,7 +33,7 @@
       mat-button
       [disabled]="!selectedGroups || selectedGroups.length === 0"
       (click)="exportGroups()"
-      class="mr-3">
+      class="me-3">
       <em class="eos-icons icon-18">download</em>
       {{ 'group.export.TITLE' | translate }}
     </button>
@@ -42,7 +42,7 @@
         isWriteGroupAuthorized && selectedGroups.length > 0 && hasModeCapGroups
       "
       (click)="openSwitchModeModal()"
-      class="d-flex align-items-center justify-content-start px-2 mr-2"
+      class="d-flex align-items-center justify-content-start px-2 me-2"
       id="switch-mode-dialog"
       mat-stroked-button>
       <em class="eos-icons">change_circle</em>
@@ -51,7 +51,7 @@
     <button
       *ngIf="isWriteGroupAuthorized"
       (click)="openAddGroupModal()"
-      class="d-flex align-items-center justify-content-start px-2 mr-2"
+      class="d-flex align-items-center justify-content-start px-2 me-2"
       id="groups-add-dialog"
       mat-stroked-button>
       <em class="eos-icons">add_circle</em>
@@ -70,7 +70,7 @@
       [checked]="allScorable"
       [indeterminate]="someScorable"
       (change)="toggleScorable($event)"
-      class="mr-3 mt-2">
+      class="me-3 mt-2">
       {{ 'group.SWITCH_SCORABLE' | translate }}
     </mat-checkbox>
     <app-quick-filter
@@ -102,7 +102,7 @@
       <button
         mat-button
         [disabled]="isAllProtectMode"
-        class="d-flex align-items-center font-weight-bold pr-1 mr-2"
+        class="d-flex align-items-center font-weight-bold pr-1 me-2"
         aria-label="Switch mode"
         [matMenuTriggerFor]="switchMenu">
         <span [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
@@ -122,28 +122,28 @@
           mat-menu-item
           class="d-flex align-items-center"
           (click)="switchServiceMode('Discover', '')">
-          <em class="fa fa-binoculars fa-fw text-discover mr-2"></em>
+          <em class="fa fa-binoculars fa-fw text-discover me-2"></em>
           {{ 'enum.DISCOVER' | translate }}
         </button>
         <button
           mat-menu-item
           class="d-flex align-items-center"
           (click)="switchServiceMode('Monitor', '')">
-          <em class="fa fa-bell fa-fw text-monitor mr-2"></em>
+          <em class="fa fa-bell fa-fw text-monitor me-2"></em>
           {{ 'enum.MONITOR' | translate }}
         </button>
         <button
           mat-menu-item
           class="d-flex align-items-center"
           (click)="switchServiceMode('Protect', '')">
-          <em class="fa fa-shield-alt fa-fw text-protect mr-2"></em>
+          <em class="fa fa-shield-alt fa-fw text-protect me-2"></em>
           {{ 'enum.PROTECT' | translate }}
         </button>
       </mat-menu>
       <button
         mat-button
         [disabled]="isAllProtectMode"
-        class="d-flex align-items-center font-weight-bold pr-1 mr-2"
+        class="d-flex align-items-center font-weight-bold pr-1 me-2"
         aria-label="Switch profile mode"
         [matMenuTriggerFor]="switchMenu4ProfileModes">
         <span [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
@@ -160,25 +160,25 @@
           mat-menu-item
           class="d-flex align-items-center"
           (click)="switchServiceMode('', 'Discover')">
-          <em class="fa fa-binoculars fa-fw text-discover mr-2"></em>
+          <em class="fa fa-binoculars fa-fw text-discover me-2"></em>
           {{ 'enum.DISCOVER' | translate }}
         </button>
         <button
           mat-menu-item
           class="d-flex align-items-center"
           (click)="switchServiceMode('', 'Monitor')">
-          <em class="fa fa-bell fa-fw text-monitor mr-2"></em>
+          <em class="fa fa-bell fa-fw text-monitor me-2"></em>
           {{ 'enum.MONITOR' | translate }}
         </button>
         <button
           mat-menu-item
           class="d-flex align-items-center"
           (click)="switchServiceMode('', 'Protect')">
-          <em class="fa fa-shield-alt fa-fw text-protect mr-2"></em>
+          <em class="fa fa-shield-alt fa-fw text-protect me-2"></em>
           {{ 'enum.PROTECT' | translate }}
         </button>
       </mat-menu>
-      <span class="mat-small font-weight-bold mr-3">{{
+      <span class="mat-small font-weight-bold me-3">{{
         'group.BASELINE_PROFILE' | translate
       }}</span>
       <mat-radio-group
@@ -186,12 +186,12 @@
         (change)="switchBaselineProfile()"
         aria-label="Baseline profile mode"
         class="d-flex mt-2">
-        <mat-radio-button value="basic" class="mr-3">
+        <mat-radio-button value="basic" class="me-3">
           <span class="mat-small font-weight-bold">
             {{ 'enum.BASIC' | translate }}
           </span>
         </mat-radio-button>
-        <mat-radio-button value="zero-drift" class="mr-3">
+        <mat-radio-button value="zero-drift" class="me-3">
           <span class="mat-small font-weight-bold">
             {{ 'enum.ZERODRIFT' | translate }}
           </span>

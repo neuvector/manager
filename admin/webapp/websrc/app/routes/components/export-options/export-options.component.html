@@ -5,7 +5,7 @@
       page === 'group' && source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']
     ">
     <div class="text-muted text-small mb-2">
-      <em class="eos-icons icon-18 text-info mr-2">info</em
+      <em class="eos-icons icon-18 text-info me-2">info</em
       >{{ 'group.export.INFO' | translate }}
     </div>
     <label class="pull-left text-bold margin-right-m">{{
@@ -49,7 +49,7 @@
     *ngIf="page === 'group'"
     [checked]="useNameRef"
     (change)="toggleNameRef($event)"
-    class="mr-3 my-2">
+    class="me-3 my-2">
     {{ 'group.NAME_REFERRAL' | translate }}
   </mat-checkbox>
   <mat-radio-group formControlName="export_mode" class="d-flex flex-column">
@@ -62,7 +62,7 @@
     <div class="d-flex flex-column flex-md-row">
       <mat-radio-button
         value="remote"
-        class="mr-2"
+        class="me-2"
         [disabled]="!remoteRepoEnabled">
         {{ 'setting.remote_repository.options.destination_remote' | translate }}
       </mat-radio-button>

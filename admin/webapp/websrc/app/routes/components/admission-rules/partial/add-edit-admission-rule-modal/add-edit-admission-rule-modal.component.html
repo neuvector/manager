@@ -435,7 +435,7 @@
             >
               <ng-container *ngFor="let l of containersFormArray.controls; let i = index">
                 <mat-checkbox
-                  class="mr-3"
+                  class="me-3"
                   [formControlName]="i"
                   [disabled]="data.opType === modalOp.VIEW"
                   (change)="updateContainersValidation()"
@@ -524,7 +524,7 @@
           </app-loading-button>
           <button
             mat-stroked-button
-            class="pull-right mr-2"
+            class="pull-right me-2"
             (click)="onCancel()">
             {{ 'policy.addPolicy.CANCEL' | translate }}
           </button>
@@ -617,7 +617,7 @@
     <div class="d-flex justify-content-end align-items-center">
       <button
         mat-stroked-button
-        class="mr-2"
+        class="me-2"
         (click)="onCustomizedViewCancel()">
         {{ 'policy.addPolicy.CANCEL' | translate }}
       </button>

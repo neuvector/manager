@@ -178,7 +178,7 @@
                       [matTooltipDisabled]="isTooltipDisabled(ttSecEventName)"
                       #ttSecEventName>
                       <span
-                        class="pull-left margin-top-xs mr-1"
+                        class="pull-left margin-top-xs me-1"
                         aria-hidden="true"
                         [ngClass]="secEvent.type.cssColor"></span>
                       <strong>{{ secEvent.name }}</strong>
@@ -422,7 +422,7 @@
                         *ngIf="secEvent.details.message.cap_len"
                         class="mat-button btn-sec-event pull-left"
                         (click)="showPacket(secEvent.details.id, $event)">
-                        <em class="icon-envelope-letter mr-sm"></em>
+                        <em class="icon-envelope-letter "></em>
                         {{ 'threat.VIEW_PACKET' | translate }}
                       </button>
                     </div>
@@ -438,7 +438,7 @@
                         class="mat-button btn-sec-event pull-left"
                         style="color: #fff"
                         (click)="reviewRule('violation', secEvent)">
-                        <em class="fa fa-edit fa-lg mr-sm"></em>
+                        <em class="fa fa-edit fa-lg "></em>
                         {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>
@@ -460,7 +460,7 @@
                             .indexOf('process') >= 0
                         "
                         (click)="reviewRule('incident', secEvent)">
-                        <em class="fa fa-edit fa-lg mr-sm"></em>
+                        <em class="fa fa-edit fa-lg "></em>
                         {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>
@@ -573,7 +573,7 @@
                         class="mat-button btn-sec-event pull-left"
                         style="color: #fff"
                         (click)="showPacket(secEvent.details.id, $event)">
-                        <em class="icon-envelope-letter mr-sm"></em>
+                        <em class="icon-envelope-letter "></em>
                         {{ 'threat.VIEW_PACKET' | translate }}
                       </button>
                     </div>
@@ -592,7 +592,7 @@
                         class="mat-button btn-sec-event pull-left"
                         style="color: #fff"
                         (click)="reviewRule('violation', secEvent)">
-                        <em class="fa fa-edit fa-lg mr-sm"></em>
+                        <em class="fa fa-edit fa-lg "></em>
                         {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>
@@ -614,7 +614,7 @@
                             .indexOf('process') >= 0
                         "
                         (click)="reviewRule('incident', secEvent)">
-                        <em class="fa fa-edit fa-lg mr-sm"></em>
+                        <em class="fa fa-edit fa-lg "></em>
                         {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>

@@ -7,7 +7,7 @@
             *ngIf="!complianceEmpty"
             aria-label="Export compliance CSV"
             type="button"
-            class="mr-3"
+            class="me-3"
             (click)="complianceGrid.exportCSV()"
             mat-icon-button>
             <i class="eos-icons icon-18">csv_file</i>
@@ -46,7 +46,7 @@
               attr.aria-label="{{ 'cveProfile.ACCEPT_VUL' | translate }}"
               matTooltip="{{ 'cveProfile.ACCEPT_VUL' | translate }}"
               matTooltipPosition="above"
-              class="mr-3"
+              class="me-3"
               (click)="onAcceptVulnerability(selectedVulnerability)"
               mat-icon-button>
               <mat-icon fontSet="fa" fontIcon="fa-check-square"></mat-icon>
@@ -57,7 +57,7 @@
               [attr.aria-label]="acceptedVulsMsg"
               [matTooltip]="acceptedVulsMsg"
               matTooltipPosition="above"
-              class="mr-3"
+              class="me-3"
               (click)="toggleAcceptedVuls()"
               mat-icon-button>
               <mat-icon
@@ -71,7 +71,7 @@
             *ngIf="!vulEmpty"
             aria-label="Export vulnerabilities CSV"
             type="button"
-            class="mr-3"
+            class="me-3"
             (click)="exportCVE()"
             mat-icon-button>
             <i class="eos-icons icon-18">csv_file</i>
@@ -93,7 +93,7 @@
             [matTooltip]="processHistoryMsg"
             matTooltipPosition="above"
             type="button"
-            class="mr-3"
+            class="me-3"
             (click)="toggleProcessHistory()">
             <mat-icon
               fontSet="fa"

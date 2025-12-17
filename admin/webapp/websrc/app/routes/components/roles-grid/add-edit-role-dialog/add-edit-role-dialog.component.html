@@ -100,7 +100,7 @@
   <div class="d-flex justify-content-end mt-3">
     <button
       (click)="onNoClick()"
-      class="mr-2"
+      class="me-2"
       aria-label="cancel"
       [id]="dialogPrefix + '-role-dialog-cancel'"
       mat-button
@@ -112,7 +112,7 @@
       [loading]="!!(saving$ | async)"
       [text]="(data.isEdit ? 'role.roleModal.UPDATE' : 'role.ADD') | translate"
       appearance="mat-raised-button"
-      buttonClasses="mr-1"
+      buttonClasses="me-1"
       color="primary"
       [id]="dialogPrefix + '-role-dialog-submit'"
       type="submit">

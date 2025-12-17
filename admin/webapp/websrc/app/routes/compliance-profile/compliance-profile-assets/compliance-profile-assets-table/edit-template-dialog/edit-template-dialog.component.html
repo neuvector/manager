@@ -1,7 +1,7 @@
 <div class="d-flex flex-row align-items-center justify-content-between">
   <h1 class="h4">
     {{ 'cis.profile.CUSTOMIZE_TEMPLATE' | translate }}&nbsp;
-    <i class="mr-1 text-info" [class]="getAssetIcon(name)"></i>{{ name }}
+    <i class="me-1 text-info" [class]="getAssetIcon(name)"></i>{{ name }}
   </h1>
   <button (click)="onNoClick()" aria-label="Close dialog" mat-icon-button>
     <i class="eos-icons">close</i>
@@ -15,7 +15,7 @@
     <ng-container [ngSwitch]="tag">
       <span
         *ngSwitchCase="'GDPR'"
-        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        class="me-1 d-inline-flex align-items-center badge text-white ml-0"
         style="padding-left: 3px; background-color: #ff9800"
         >⋮⋮&nbsp;&nbsp;GDPR<i
           (click)="add('GDPR')"
@@ -26,7 +26,7 @@
       >
       <span
         *ngSwitchCase="'HIPAA'"
-        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        class="me-1 d-inline-flex align-items-center badge text-white ml-0"
         style="padding-left: 3px; background-color: #4e39c1"
         >⋮⋮&nbsp;&nbsp;HIPAA<i
           (click)="add('HIPAA')"
@@ -37,7 +37,7 @@
       >
       <span
         *ngSwitchCase="'NIST'"
-        class="mr-1 d-inline-flex align-items-center badge badge-dark ml-0"
+        class="me-1 d-inline-flex align-items-center badge badge-dark ml-0"
         style="padding-left: 3px"
         >⋮⋮&nbsp;&nbsp;NIST<i
           (click)="add('NIST')"
@@ -48,7 +48,7 @@
       >
       <span
         *ngSwitchCase="'PCI'"
-        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        class="me-1 d-inline-flex align-items-center badge text-white ml-0"
         style="padding-left: 3px; background-color: #009688"
         >⋮⋮&nbsp;&nbsp;PCI<i
           (click)="add('PCI')"
@@ -71,7 +71,7 @@
     <ng-container [ngSwitch]="tag">
       <span
         *ngSwitchCase="'GDPR'"
-        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        class="me-1 d-inline-flex align-items-center badge text-white ml-0"
         style="padding-left: 3px; background-color: #ff9800"
         >⋮⋮&nbsp;&nbsp;GDPR]<i
           (click)="remove('GDPR')"
@@ -82,7 +82,7 @@
       >
       <span
         *ngSwitchCase="'HIPAA'"
-        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        class="me-1 d-inline-flex align-items-center badge text-white ml-0"
         style="padding-left: 3px; background-color: #4e39c1"
         >⋮⋮&nbsp;&nbsp;HIPAA<i
           (click)="remove('HIPAA')"
@@ -93,7 +93,7 @@
       >
       <span
         *ngSwitchCase="'NIST'"
-        class="mr-1 d-inline-flex align-items-center badge badge-dark ml-0"
+        class="me-1 d-inline-flex align-items-center badge badge-dark ml-0"
         style="padding-left: 3px"
         >⋮⋮&nbsp;&nbsp;NIST<i
           (click)="remove('NIST')"
@@ -104,7 +104,7 @@
       >
       <span
         *ngSwitchCase="'PCI'"
-        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        class="me-1 d-inline-flex align-items-center badge text-white ml-0"
         style="padding-left: 3px; background-color: #009688"
         >⋮⋮&nbsp;&nbsp;PCI<i
           (click)="remove('PCI')"

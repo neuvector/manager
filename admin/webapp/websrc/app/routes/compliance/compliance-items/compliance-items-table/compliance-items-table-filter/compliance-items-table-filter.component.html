@@ -223,7 +223,7 @@
 <div>
   <ng-container *ngIf="form.controls.serviceName.value">
     <span
-      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
+      class="badge badge-secondary mb-1 me-1 ml-0 d-inline-flex justify-content-center align-items-center"
       >Service
       {{ form.get(['matchTypes', 'Service'])?.value === 'equal' ? '=' : '~' }}
       {{ form.controls.serviceName.value }}
@@ -234,7 +234,7 @@
   </ng-container>
   <ng-container *ngIf="form.controls.imageName.value">
     <span
-      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
+      class="badge badge-secondary mb-1 me-1 ml-0 d-inline-flex justify-content-center align-items-center"
       >Image
       {{ form.get(['matchTypes', 'Image'])?.value === 'equal' ? '=' : '~' }}
       {{ form.controls.imageName.value }}
@@ -245,7 +245,7 @@
   </ng-container>
   <ng-container *ngIf="form.controls.nodeName.value">
     <span
-      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
+      class="badge badge-secondary mb-1 me-1 ml-0 d-inline-flex justify-content-center align-items-center"
       >Node
       {{ form.get(['matchTypes', 'Node'])?.value === 'equal' ? '=' : '~' }}
       {{ form.controls.nodeName.value }}
@@ -256,7 +256,7 @@
   </ng-container>
   <ng-container *ngIf="form.controls.containerName.value">
     <span
-      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
+      class="badge badge-secondary mb-1 me-1 ml-0 d-inline-flex justify-content-center align-items-center"
       >Container
       {{ form.get(['matchTypes', 'Container'])?.value === 'equal' ? '=' : '~' }}
       {{ form.controls.containerName.value }}

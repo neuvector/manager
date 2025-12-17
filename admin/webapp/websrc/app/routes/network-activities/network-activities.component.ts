@@ -285,7 +285,7 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
           if (evt.target && evt.target.isCanvas && evt.target.isCanvas()) {
             return `<ul class="right-menu">
                     <li id='fitView'>
-                      <em class="fa fa-arrows-h text-info mr-sm"></em>${FIT_VIEW}</li>
+                      <em class="fa fa-arrows-h text-info "></em>${FIT_VIEW}</li>
                 </ul>`;
           } else if (item) {
             const itemType = item.getType();
@@ -477,10 +477,10 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
               } else if (itemType === 'combo') {
                 return `<ul class="right-menu">
                         <li id='collapse'>
-                          <em class="fa fa-compress text-info mr-sm"></em>${COLLAPSE}
+                          <em class="fa fa-compress text-info "></em>${COLLAPSE}
                         </li>
                         <li id='hide'>
-                          <em class="fa fa-eye-slash text-info mr-sm"></em>${HIDE_NODE}
+                          <em class="fa fa-eye-slash text-info "></em>${HIDE_NODE}
                         </li>
                       </ul>`;
               }

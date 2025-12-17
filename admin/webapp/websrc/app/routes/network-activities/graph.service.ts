@@ -1301,7 +1301,7 @@ export class GraphService {
 
             if (params.data.severity) {
               if (params.data.to_sidecar)
-                result = `<span><em class="fas fa-bug text-danger mr-1"></em> ${params.data.threat_name}${proxy}</span>`;
+                result = `<span><em class="fas fa-bug text-danger me-1"></em> ${params.data.threat_name}${proxy}</span>`;
               else
                 result = `<span><em class="fas fa-bug text-danger"></em> ${params.data.threat_name}</span>`;
             } else if (
@@ -1309,12 +1309,12 @@ export class GraphService {
               params.data.policy_action === 'deny'
             ) {
               if (params.data.to_sidecar)
-                result = `<span><em class="fas fa-ban text-warning mr-1"></em>${proxy}</span>`;
+                result = `<span><em class="fas fa-ban text-warning me-1"></em>${proxy}</span>`;
               else
                 result = `<span><em class="fas fa-ban text-warning"></em></span>`;
             } else {
               if (params.data.to_sidecar)
-                result = `<span><em class="fas fa-check text-success mr-1"></em>${proxy}</span>`;
+                result = `<span><em class="fas fa-check text-success me-1"></em>${proxy}</span>`;
               else
                 result = `<span><em class="fas fa-check text-success"></em></span>`;
             }
@@ -1465,13 +1465,13 @@ export class GraphService {
         cellRenderer: params => {
           let display = '';
           if (params.value && params.value.high)
-            display += `<span class="badge badge-danger mr-sm">${params.value.high}</span>`;
+            display += `<span class="badge badge-danger ">${params.value.high}</span>`;
           else
-            display += `<span class="badge badge-success mr-sm">${params.value.high}</span>`;
+            display += `<span class="badge badge-success ">${params.value.high}</span>`;
           if (params.value && params.value.medium)
             display += `<span class="badge badge-warning">${params.value.medium}</span>`;
           else
-            display += `<span class="badge badge-success mr-sm">${params.value.medium}</span>`;
+            display += `<span class="badge badge-success ">${params.value.medium}</span>`;
           return this.sanitizer.sanitize(SecurityContext.HTML, display);
         },
         width: 120,

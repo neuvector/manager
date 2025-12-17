@@ -29,7 +29,7 @@
   </div>
   <!-- END navbar header-->
   <!-- START Left navbar-->
-  <ul class="navbar-nav mr-auto flex-row">
+  <ul class="navbar-nav me-auto flex-row">
     <li class="nav-item">
       <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
       <a
@@ -53,7 +53,7 @@
   <!-- END Left navbar-->
   <!-- START Right Navbar-->
   <div class="navbar-nav flex-row">
-    <app-global-notifications class="mr-3 my-auto"></app-global-notifications>
+    <app-global-notifications class="me-3 my-auto"></app-global-notifications>
     <div
       *ngIf="
         !clusterNameError &&
@@ -76,10 +76,10 @@
           [matMenuTriggerData]="clusters"
           class="nav-item nav-white nav-border">
           <i
-            class="fa-lg mr-lg text-gray-light"
+            class="fa-lg  text-gray-light"
             [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
           <label
-            class="selected-cluster-text hand mr-2"
+            class="selected-cluster-text hand me-2"
             style="position: relative; margin-bottom: 0"
             >{{ selectedCluster?.name }}</label
           >
@@ -106,7 +106,7 @@
                     cluster.status === 'pending'
                   ">
                   <i
-                    class="fa-md mr-1"
+                    class="fa-md me-1"
                     [ngClass]="
                       cluster.clusterType === 'master'
                         ? 'fa fa-home'
@@ -117,7 +117,7 @@
               </ng-container>
               <ng-template #incompatibleVersionTemplate>
                 <button mat-menu-item readonly style="cursor: default">
-                  <i class="fa-md mr-1 text-muted" ngClass="fa fa-laptop"></i>
+                  <i class="fa-md me-1 text-muted" ngClass="fa fa-laptop"></i>
                   <span
                     class="text-muted"
                     matTooltip="{{
@@ -135,9 +135,9 @@
       </div>
       <div *ngIf="isMemberRole">
         <button mat-button class="nav-item nav-white nav-border no-pointer">
-          <i class="fa fa-home fa-lg mr-lg text-gray-light brightness-70"></i>
+          <i class="fa fa-home fa-lg  text-gray-light brightness-70"></i>
           <label
-            class="selected-cluster-text mr-lg mb-0 brightness-70"
+            class="selected-cluster-text  mb-0 brightness-70"
             [matTooltip]="primaryMasterName"
             [matTooltipDisabled]="primaryMasterName.length < 20"
             matTooltipPosition="above"
@@ -146,9 +146,9 @@
             }}
             &nbsp;&nbsp;/&nbsp;&nbsp;</label
           >
-          <i class="fa fa-laptop fa-lg mr-lg text-gray-light"></i>
+          <i class="fa fa-laptop fa-lg  text-gray-light"></i>
           <label
-            class="selected-cluster-text mr-lg mb-0"
+            class="selected-cluster-text  mb-0"
             style="position: relative"
             [matTooltip]="managedClusterName"
             [matTooltipDisabled]="managedClusterName.length < 20"
@@ -158,7 +158,7 @@
         </button>
       </div>
     </ng-container>
-    <div class="docURLBase mr-1">
+    <div class="docURLBase me-1">
       <a
         class="far fa-question-circle nv-help"
         href="{{ 'partner.general.DOCUMENT_URL' | translate }}"
@@ -182,7 +182,7 @@
             <ngx-avatars name="{{ username }}"></ngx-avatars>
           </div>
         </ng-template>
-        <div class="info mr-1">
+        <div class="info me-1">
           <div>{{ username }}</div>
           <div>{{ displayRole }}</div>
         </div>

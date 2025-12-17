@@ -16,7 +16,7 @@
       class="d-flex align-items-center justify-content-start pr-2"
       id="roles-add-dialog"
       mat-stroked-button>
-      <i class="eos-icons mr-2">add_circle</i>{{ 'role.ADD' | translate }}
+      <i class="eos-icons me-2">add_circle</i>{{ 'role.ADD' | translate }}
     </button>
     <app-loading-button
       (btnClick)="refresh()"
@@ -29,7 +29,7 @@
       [loading]="!!(refreshing$ | async)"
       [text]="'network.REFRESH' | translate"
       [type]="'button'"
-      class="mr-3">
+      class="me-3">
     </app-loading-button>
     <app-quick-filter
       [gridOptions]="gridOptions"

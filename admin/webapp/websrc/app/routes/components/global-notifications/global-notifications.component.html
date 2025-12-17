@@ -15,7 +15,7 @@
   <ng-container *ngFor="let notification of globalNotifications">
     <div
       *ngIf="!notification.accepted"
-      class="d-flex align-items-center justify-content-between pl-0"
+      class="d-flex align-items-center justify-content-between pl-0 unwrap-menu-item"
       (click)="$event.stopPropagation()"
       mat-menu-item>
       <em

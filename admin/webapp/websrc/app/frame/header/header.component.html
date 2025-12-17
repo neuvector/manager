@@ -75,17 +75,19 @@
           [matMenuTriggerFor]="dropdown_multiCluster"
           [matMenuTriggerData]="clusters"
           class="nav-item nav-white nav-border">
-          <i
-            class="fa-lg  text-gray-light"
-            [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
-          <label
-            class="selected-cluster-text hand me-2"
-            style="position: relative; margin-bottom: 0"
-            >{{ selectedCluster?.name }}</label
-          >
-          <mat-icon>
-            {{ menuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
-          </mat-icon>
+          <div class="d-flex justify-content-between align-items-center">
+            <i
+              class="fa-lg text-gray-light"
+              [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
+            <label
+              class="selected-cluster-text hand me-2"
+              style="position: relative; margin-bottom: 0"
+              >{{ selectedCluster?.name }}</label
+            >
+            <mat-icon>
+              {{ menuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </div>
         </button>
         <mat-menu #dropdown_multiCluster="matMenu">
           <ng-container *ngFor="let cluster of clusters; last as last">
@@ -135,9 +137,9 @@
       </div>
       <div *ngIf="isMemberRole">
         <button mat-button class="nav-item nav-white nav-border no-pointer">
-          <i class="fa fa-home fa-lg  text-gray-light brightness-70"></i>
+          <i class="fa fa-home fa-lg text-gray-light brightness-70"></i>
           <label
-            class="selected-cluster-text  mb-0 brightness-70"
+            class="selected-cluster-text mb-0 brightness-70"
             [matTooltip]="primaryMasterName"
             [matTooltipDisabled]="primaryMasterName.length < 20"
             matTooltipPosition="above"
@@ -146,9 +148,9 @@
             }}
             &nbsp;&nbsp;/&nbsp;&nbsp;</label
           >
-          <i class="fa fa-laptop fa-lg  text-gray-light"></i>
+          <i class="fa fa-laptop fa-lg text-gray-light"></i>
           <label
-            class="selected-cluster-text  mb-0"
+            class="selected-cluster-text mb-0"
             style="position: relative"
             [matTooltip]="managedClusterName"
             [matTooltipDisabled]="managedClusterName.length < 20"

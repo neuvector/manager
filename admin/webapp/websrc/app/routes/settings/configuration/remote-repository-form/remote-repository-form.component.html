@@ -1,4 +1,4 @@
-<div class="my-md-4 ml-3">
+<div class="my-md-4 ms-3">
   <div class="d-flex">
     <h1 class="h4 font-weight-normal" id="remote-repository-title">
       {{ 'setting.remote_repository.title' | translate }}
@@ -9,7 +9,7 @@
       }}</span>
     </div>
   </div>
-  <div class="my-md-2 ml-3">
+  <div class="my-md-2 ms-3">
     <form [formGroup]="remoteRepoForm" (ngSubmit)="submit()">
       <div class="me-3">
         <formly-form
@@ -30,7 +30,7 @@
         <!--        ></app-loading-button>-->
         <app-loading-button
           *appDisplayControl="'write_config'"
-          [buttonClasses]="'ml-3'"
+          [buttonClasses]="'ms-3'"
           [appearance]="'mat-raised-button'"
           [color]="'primary'"
           [disabled]="

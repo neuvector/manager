@@ -69,10 +69,10 @@
           </mat-select>
         </mat-form-field>
         <ng-container *ngIf="selectedExpiration === 'hours'">
-          <mat-form-field class="w-10 ml-2">
+          <mat-form-field class="w-10 ms-2">
             <input matInput formControlName="expiration_hours" />
           </mat-form-field>
-          <mat-form-field class="w-15 ml-2">
+          <mat-form-field class="w-15 ms-2">
             <mat-select
               [(ngModel)]="customExpUnit"
               [ngModelOptions]="{ standalone: true }"

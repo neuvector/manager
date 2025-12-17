@@ -2,7 +2,7 @@
   <ng-container [ngSwitch]="activeTab">
     <ng-container *ngSwitchCase="'compliance'">
       <div class="filter" [class.filter-csv]="!complianceEmpty">
-        <div class="mr-3 filter-actions">
+        <div class="me-3 filter-actions">
           <button
             mat-button
             aria-label="Export compliance CSV"
@@ -24,7 +24,7 @@
         [class.filter-csv]="!isVulsAuthorized && !vulEmpty"
         [class.filter-view-csv]="isVulsAuthorized && !vulEmpty"
         [class.filter-view]="isVulsAuthorized && vulEmpty">
-        <div class="mr-3 filter-actions">
+        <div class="me-3 filter-actions">
           <button
             [matMenuTriggerFor]="menu"
             class="mx-2 d-flex align-items-center justify-content-center"
@@ -61,7 +61,7 @@
                 mat-menu-item
                 class="d-flex align-items-center"
                 (click)="toggleAcceptedVuls()">
-                <i class="eos-icons mr-2">
+                <i class="eos-icons me-2">
                   {{ showAcceptedVuls ? 'visibility_off' : 'visibility' }}
                 </i>
                 {{
@@ -80,7 +80,7 @@
                 "
                 class="d-flex align-items-center"
                 (click)="onAcceptVulnerability(selectedVulnerability)">
-                <i class="eos-icons mr-2">check_box</i>
+                <i class="eos-icons me-2">check_box</i>
                 {{ 'cveProfile.ACCEPT_VUL' | translate }}
               </button>
             </mat-menu>
@@ -94,7 +94,7 @@
     </ng-container>
     <ng-container *ngSwitchCase="'containers'">
       <div class="filter" [class.filter-container]="true">
-        <div class="mr-3 filter-actions">
+        <div class="me-3 filter-actions">
           <button
             mat-icon-button
             [attr.aria-label]="sysContainersMsg"

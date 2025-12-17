@@ -18,13 +18,13 @@
   <div class="d-flex justify-content-end align-items-center mt-2">
     <button
       [disabled]="!renewLicenseForm.valid || submittingForm"
-      class="mr-1"
+      class="me-1"
       color="primary"
       mat-raised-button
       type="submit">
       <mat-spinner
         *ngIf="submittingForm"
-        class="btn__spinner mr-2"
+        class="btn__spinner me-2"
         diameter="20"></mat-spinner>
       {{ 'securityEvent.APPLY' | translate }}
     </button>

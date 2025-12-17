@@ -77,7 +77,7 @@
       <button
         (click)="openBrief(type, content)"
         *ngSwitchCase="'discover'"
-        class="border-0 badge badge-danger ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-danger ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
           *ngTemplateOutlet="
             iconTemplate;
@@ -88,7 +88,7 @@
       <button
         (click)="openBrief(type, content)"
         *ngSwitchDefault
-        class="border-0 badge badge-success ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-success ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
           *ngTemplateOutlet="
             iconTemplate;
@@ -101,7 +101,7 @@
   <ng-template #notBeingUsedButton>
     <button
       (click)="openBrief(type, content)"
-      class="border-0 badge badge-warning ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
+      class="border-0 badge badge-warning ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
       <ng-template
         *ngTemplateOutlet="iconTemplate; context: { type: type }"></ng-template>
       {{ content.display_name }}
@@ -114,7 +114,7 @@
     <ng-container [ngSwitch]="content.policy_mode.toLowerCase()">
       <span
         *ngSwitchCase="'discover'"
-        class="border-0 badge badge-danger ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-danger ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
           *ngTemplateOutlet="
             iconTemplate;
@@ -124,7 +124,7 @@
       >
       <span
         *ngSwitchDefault
-        class="border-0 badge badge-success ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-success ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
           *ngTemplateOutlet="
             iconTemplate;
@@ -136,7 +136,7 @@
   </ng-container>
   <ng-template #notBeingUsedSpan>
     <span
-      class="border-0 badge badge-warning ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
+      class="border-0 badge badge-warning ml-0 me-2 mb-2 d-inline-flex justify-content-center align-items-center">
       <ng-template
         *ngTemplateOutlet="iconTemplate; context: { type: type }"></ng-template>
       {{ content.display_name }}</span
@@ -146,21 +146,21 @@
 
 <ng-template #iconTemplate let-type="type">
   <ng-container [ngSwitch]="type">
-    <i *ngSwitchCase="'image'" class="eos-icons mr-2" style="font-size: 15px">
+    <i *ngSwitchCase="'image'" class="eos-icons me-2" style="font-size: 15px">
       system_image
     </i>
     <i
       *ngSwitchCase="'workload'"
-      class="eos-icons mr-2"
+      class="eos-icons me-2"
       style="font-size: 15px">
       check_box_blank
     </i>
-    <i *ngSwitchCase="'node'" class="eos-icons mr-2" style="font-size: 15px">
+    <i *ngSwitchCase="'node'" class="eos-icons me-2" style="font-size: 15px">
       storage
     </i>
     <i
       *ngSwitchCase="'platform'"
-      class="eos-icons mr-2"
+      class="eos-icons me-2"
       style="font-size: 15px">
       apartment
     </i>

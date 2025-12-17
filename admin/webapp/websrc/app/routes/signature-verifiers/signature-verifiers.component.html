@@ -9,7 +9,7 @@
         aria-label="export sigstore"
         *appDisplayControl="'review_rule'"
         (click)="exportWafSensors()">
-        <em class="eos-icons icon-18 mr-1">download</em>
+        <em class="eos-icons icon-18 me-1">download</em>
         {{ 'admissionControl.EXPORT' | translate }}
       </button>
       <button
@@ -17,7 +17,7 @@
         aria-label="import sigstore"
         (click)="openImportSigstoreModal()"
         *appDisplayControl="'write_sigstore'">
-        <em class="eos-icons icon-18 mr-1">upload</em>
+        <em class="eos-icons icon-18 me-1">upload</em>
         {{ 'admissionControl.IMPORT' | translate }}
       </button>
     </div> -->
@@ -57,7 +57,7 @@
               <button
                 mat-stroked-button
                 aria-label="add signature"
-                class="mr-4"
+                class="me-4"
                 (click)="openAddEditSignatureModal()"
                 *appDisplayControl="'write_sigstore'">
                 <em class="eos-icons icon-18">add_circle</em>
@@ -98,7 +98,7 @@
               <button
                 mat-stroked-button
                 aria-label="add signature"
-                class="mr-4"
+                class="me-4"
                 [disabled]="!selectedSignature"
                 (click)="openAddEditVerifierModal()"
                 *appDisplayControl="'write_sigstore'">

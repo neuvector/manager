@@ -24,7 +24,7 @@
                 <span
                   class="text-muted text-bold pl-lg"
                   style="display: inline-block">
-                  <em class="fa fa-square-o text-muted mr-2"></em>
+                  <em class="fa fa-square-o text-muted me-2"></em>
                   {{ child.display_name }}
                 </span>
                 <label
@@ -33,7 +33,7 @@
                   *ngIf="child.service_mesh_sidecar">
                   Sidecar
                 </label>
-                <em class="fa fa-archive text-info pl-2 mr-1"></em>
+                <em class="fa fa-archive text-info pl-2 me-1"></em>
                 <span class="text-muted auto-hide" style="margin-top: -2px">
                   {{ child.image }}
                 </span>
@@ -116,7 +116,7 @@
           {{ displayState }}
         </span>
         <span
-          class="text-danger mr-2 auto-hide host-item-value"
+          class="text-danger me-2 auto-hide host-item-value"
           *ngIf="pod.workload.state === 'quarantined'"
           style="display: block; width: 180px">
           {{ pod.workload.quarantine_reason }}
@@ -138,7 +138,7 @@
         <span class="font-weight-bold host-item-key"
           >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
         >
-        <span class="ml mr-lg auto-hide host-item-key">
+        <span class="ml  auto-hide host-item-key">
           {{
             pod.workload.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss'
           }}
@@ -174,7 +174,7 @@
         <div class="d-inline">
           <span
             *ngIf="pod.workload.scan_summary?.high"
-            class="badge badge-danger mr-sm">
+            class="badge badge-danger ">
             {{ pod.workload.scan_summary.high }}</span
           >
           <span
@@ -198,7 +198,7 @@
               pod.workload.scan_summary?.medium === 0
             "
             class="badge badge-success">
-            <em class="fa fa-shield-alt text-protect mr-1"></em> Clean
+            <em class="fa fa-shield-alt text-protect me-1"></em> Clean
           </span>
         </div>
       </div>

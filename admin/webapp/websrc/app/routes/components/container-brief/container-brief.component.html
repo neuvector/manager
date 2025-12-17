@@ -23,7 +23,7 @@
             class="auto-hide"
             style="margin-top: 2px; width: 620px">
             <span class="font-weight-bold pl-lg" style="display: inline-block">
-              <em class="fa fa-square-o mr-sm"></em>
+              <em class="fa fa-square-o "></em>
               {{ child.display_name | slice : 0 : 55
               }}{{ child.display_name.length > 35 ? '...' : '' }}
             </span>
@@ -33,7 +33,7 @@
               style="display: inline-block">
               Sidecar:
             </label>
-            <em class="fa fa-archive pl-lg mr-sm"></em>
+            <em class="fa fa-archive pl-lg "></em>
             <span class="auto-hide" style="margin-top: -2px">
               {{ child.image }}
             </span>
@@ -121,7 +121,7 @@
         }}</span>
         <span
           *ngIf="container.state === 'quarantined'"
-          class="text-danger mr-lg auto-hide pod-item-value"
+          class="text-danger  auto-hide pod-item-value"
           style="display: block; width: 180px">
           {{ container.quarantine_reason }}
         </span>
@@ -144,7 +144,7 @@
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.SCANNED_AT' | translate }}:
         </span>
-        <span class="ml mr-lg auto-hide pod-item-value" style="width: 150px">
+        <span class="ml  auto-hide pod-item-value" style="width: 150px">
           {{ container.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
@@ -152,7 +152,7 @@
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.PRIVILEGED' | translate }}:
         </span>
-        <span class="ml mr-lg auto-hide pod-item-value">
+        <span class="ml  auto-hide pod-item-value">
           {{ container.privileged }}
         </span>
       </div>
@@ -164,7 +164,7 @@
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.RUN_AS_ROOT' | translate }}:
         </span>
-        <span class="ml mr-lg auto-hide pod-item-value">
+        <span class="ml  auto-hide pod-item-value">
           {{ container.run_as_root }}
         </span>
       </div>
@@ -175,7 +175,7 @@
         <div class="pod-item-value d-inline">
           <span
             *ngIf="container.scan_summary.high"
-            class="badge badge-danger mr-sm">
+            class="badge badge-danger ">
             {{ container.scan_summary.high }}</span
           >
           <span
@@ -196,7 +196,7 @@
               container.scan_summary.medium === 0
             "
             class="badge badge-success">
-            <em class="fa fa-shield-alt text-protect mr-1"></em> Clean
+            <em class="fa fa-shield-alt text-protect me-1"></em> Clean
           </span>
 
           <button
@@ -214,7 +214,7 @@
 
           <div *ngIf="isScanStarted4Pod" class="ml mt-sm pull-left">
             <label class="mt-sm label label-info-tran">
-              <em class="fa fa-cog fa-spin mr-sm"></em> Scanning...
+              <em class="fa fa-cog fa-spin "></em> Scanning...
             </label>
           </div>
         </div>

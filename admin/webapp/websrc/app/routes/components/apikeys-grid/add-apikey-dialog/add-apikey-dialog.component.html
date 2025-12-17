@@ -20,7 +20,7 @@
         <mat-icon
           aria-hidden="false"
           aria-label="API key name icon"
-          class="mr-3 mb-3 apikey__icon"
+          class="me-3 mb-3 apikey__icon"
           >key
         </mat-icon>
         <mat-form-field class="w-100">
@@ -38,7 +38,7 @@
         <mat-icon
           aria-hidden="false"
           aria-label="Description icon"
-          class="mr-3 mb-3 apikey__icon"
+          class="me-3 mb-3 apikey__icon"
           >person
         </mat-icon>
         <mat-form-field class="w-100">
@@ -52,7 +52,7 @@
         <mat-icon
           aria-hidden="false"
           aria-label="Expiration icon"
-          class="mr-3 mb-3 apikey__icon"
+          class="me-3 mb-3 apikey__icon"
           fontSet="fa"
           fontIcon="fa-calendar-times">
         </mat-icon>
@@ -91,7 +91,7 @@
         <mat-icon
           aria-hidden="false"
           aria-label="Role icon"
-          class="mr-3 mb-3 apikey__icon"
+          class="me-3 mb-3 apikey__icon"
           fontSet="fa"
           fontIcon="fa-user-secret">
         </mat-icon>
@@ -114,7 +114,7 @@
     </div>
     <button
       (click)="toggleAdvSetting = !toggleAdvSetting"
-      class="mr-2 my-2"
+      class="me-2 my-2"
       id="add-apikey-dialog-adv-setting"
       mat-stroked-button
       type="button"
@@ -137,7 +137,7 @@
     <div class="d-flex justify-content-end" *ngIf="!data.isReadOnly">
       <button
         (click)="onNoClick()"
-        class="mr-2"
+        class="me-2"
         id="add-apikey-dialog-cancel"
         mat-button
         type="button">
@@ -152,7 +152,7 @@
         [loading]="!!(saving$ | async)"
         [text]="'apikey.addApikey.ADD' | translate"
         appearance="mat-raised-button"
-        buttonClasses="mr-1"
+        buttonClasses="me-1"
         color="primary"
         id="add-apikey-dialog-submit"
         type="submit">
@@ -169,7 +169,7 @@
       <mat-icon
         aria-hidden="false"
         aria-label="API key name icon"
-        class="mr-3 mb-3 apikey__icon"
+        class="me-3 mb-3 apikey__icon"
         >key
       </mat-icon>
       <mat-form-field class="w-75" appearance="outline">
@@ -194,7 +194,7 @@
       <mat-icon
         aria-hidden="false"
         aria-label="Secret Key icon"
-        class="mr-3 mb-3 apikey__icon"
+        class="me-3 mb-3 apikey__icon"
         >key
       </mat-icon>
       <mat-form-field class="w-75" appearance="outline">
@@ -225,7 +225,7 @@
       <mat-icon
         aria-hidden="false"
         aria-label="Bearer Token icon"
-        class="mr-3 mb-3 apikey__icon"
+        class="me-3 mb-3 apikey__icon"
         >key
       </mat-icon>
       <mat-form-field class="w-75" appearance="outline">
@@ -255,7 +255,7 @@
   <div class="d-flex justify-content-end">
     <button
       (click)="onNoClick(true)"
-      class="mr-1"
+      class="me-1"
       id="add-apikey-dialog-done"
       mat-raised-button
       color="primary"

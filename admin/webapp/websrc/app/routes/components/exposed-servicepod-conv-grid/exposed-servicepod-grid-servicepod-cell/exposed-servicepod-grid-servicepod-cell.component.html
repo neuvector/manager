@@ -1,9 +1,9 @@
 <div class="d-flex">
-  <div *ngIf="isParent && isIpMapReady" class="mr-1" (click)="toggleVisible()">
+  <div *ngIf="isParent && isIpMapReady" class="me-1" (click)="toggleVisible()">
     <i class="fa fa-minus-circle" *ngIf="isChildVisible"></i>
     <i class="fa fa-plus-circle" *ngIf="!isChildVisible"></i>
   </div>
-  <div *ngIf="!isParent" class="mr-3"></div>
+  <div *ngIf="!isParent" class="me-3"></div>
   <div class="{{ rowStyle.color }}" [class.pl-2]="!!params.data.parent_id">
     <em class="{{ rowStyle.actionIcon }}"></em>
     {{ name }}

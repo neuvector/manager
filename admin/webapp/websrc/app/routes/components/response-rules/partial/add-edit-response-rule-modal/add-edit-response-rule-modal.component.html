@@ -18,7 +18,7 @@
   <div mat-dialog-content class="dialog-content p0 m0">
     <form>
       <div class="d-flex justify-content-between align-items-center mt-2">
-        <mat-form-field appearance="fill" class="mr-4" *ngIf="type === 'edit'">
+        <mat-form-field appearance="fill" class="me-4" *ngIf="type === 'edit'">
           <mat-label>{{
             'responsePolicy.gridHeader.ID' | translate
           }}</mat-label>
@@ -29,7 +29,7 @@
           appearance="fill"
           class="flex-grow-1"
           [ngClass]="{
-            'mr-4': !EVENT_WITHOUT_GROUP.includes(responseRule.event)
+            'me-4': !EVENT_WITHOUT_GROUP.includes(responseRule.event)
           }">
           <mat-select
             name="event"
@@ -133,7 +133,7 @@
       </div>
       <div class="d-flex justify-content-start align-items-start mt-4">
         <div class="flex-grow-1">
-          <label class="nv-modal-item-title control-label mr-5"
+          <label class="nv-modal-item-title control-label me-5"
             >{{ 'responsePolicy.gridHeader.ACTION' | translate }}*</label
           >
           <mat-checkbox
@@ -142,7 +142,7 @@
             [attr.data-index]="i"
             [disabled]="data.isReadonly"
             [(ngModel)]="responseRule.actions[i]"
-            class="mr-2"
+            class="me-2"
             (change)="onActionsSelected(responseRule.actions)"
             >{{
               'responsePolicy.actions.' + action.toUpperCase() | translate
@@ -158,12 +158,12 @@
           !shouldHideWebhookList
         ">
         <div class="flex-grow-1">
-          <label class="nv-modal-item-title control-label mr-4"
+          <label class="nv-modal-item-title control-label me-4"
             >{{ 'setting.WEBHOOKS' | translate }}
           </label>
           <mat-checkbox
             *ngFor="let webhook of webhookOptions; let i = index"
-            class="mr-2"
+            class="me-2"
             [attr.data-index]="i"
             [disabled]="data.isReadonly"
             [(ngModel)]="responseRule.webhooks[i]"
@@ -174,7 +174,7 @@
       </div>
       <div class="d-flex justify-content-start align-items-start">
         <div class="flex-grow-1">
-          <label class="nv-modal-item-title control-label mr-5"
+          <label class="nv-modal-item-title control-label me-5"
             >{{ 'responsePolicy.gridHeader.STATUS' | translate }}*</label
           >
           <mat-slide-toggle
@@ -206,7 +206,7 @@
     <button
       mat-stroked-button
       aria-label="cancel"
-      class="mr-2"
+      class="me-2"
       (click)="onCancel()">
       {{ 'policy.addPolicy.CANCEL' | translate }}
     </button>

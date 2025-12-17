@@ -3,14 +3,14 @@
   [formlyAttributes]="field"
   aria-label="Select an option"
   class="d-flex">
-  <label class="mr-2" *ngIf="field.templateOptions?.label">{{
+  <label class="me-2" *ngIf="field.templateOptions?.label">{{
     field.templateOptions?.label ?? '' | translate
   }}</label>
   <mat-radio-button
     *ngFor="let item of field.templateOptions?.items"
     [formlyAttributes]="field"
     [value]="item.value"
-    class="mr-3">
+    class="me-3">
     {{ item.viewValue | translate }}
   </mat-radio-button>
 </mat-radio-group>

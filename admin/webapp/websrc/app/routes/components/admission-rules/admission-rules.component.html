@@ -22,7 +22,7 @@
           class="policy-top-button"
           *appDisplayControl="'write_admission'"
           (click)="openConfigAssessmentDialog()">
-          <em class="eos-icons icon-18 mr-1">flask</em>
+          <em class="eos-icons icon-18 me-1">flask</em>
           {{ 'admissionControl.MATCHING_TEST' | translate }}
         </button>
       </div>
@@ -39,7 +39,7 @@
                 class="d-flex align-items-center"
                 (click)="showAdvancedSetting()"
                 *ngIf="globalStatus && isWriteAdmissionRuleAuthorized">
-                <em class="eos-icons mr-2">config_map</em>
+                <em class="eos-icons me-2">config_map</em>
                 {{ 'admissionControl.GLOBAL_OPS' | translate }}
               </button>
             </div>
@@ -51,7 +51,7 @@
                   !selectedAdmissionRules || selectedAdmissionRules.length === 0
                 "
                 (click)="openExportPopup()">
-                <em class="eos-icons mr-2">download</em>
+                <em class="eos-icons me-2">download</em>
                 {{ 'admissionControl.EXPORT' | translate }}
               </button>
             </div>
@@ -60,7 +60,7 @@
               mat-menu-item
               class="d-flex align-items-center"
               (click)="openImportPopup()">
-              <em class="eos-icons mr-2">upload</em>
+              <em class="eos-icons me-2">upload</em>
               {{ 'admissionControl.IMPORT' | translate }}
             </button>
           </mat-menu>
@@ -106,7 +106,7 @@
         <div class="d-flex justify-content-end align-items-center">
           <div
             *ngIf="source === navSource['FED_POLICY']"
-            class="d-flex justify-content-end align-items-center mr-2">
+            class="d-flex justify-content-end align-items-center me-2">
             <button
               mat-menu-item
               class="d-flex align-items-center"
@@ -114,7 +114,7 @@
                 !selectedAdmissionRules || selectedAdmissionRules.length === 0
               "
               (click)="openExportPopup()">
-              <em class="eos-icons mr-2">download</em>
+              <em class="eos-icons me-2">download</em>
               {{ 'admissionControl.EXPORT' | translate }}
             </button>
             <button
@@ -122,7 +122,7 @@
               mat-menu-item
               class="d-flex align-items-center"
               (click)="openImportPopup()">
-              <em class="eos-icons mr-2">upload</em>
+              <em class="eos-icons me-2">upload</em>
               {{ 'admissionControl.IMPORT' | translate }}
             </button>
           </div>
@@ -133,7 +133,7 @@
               selectedAdmissionRules.length > 0 &&
               !hasSelectedDefaultRule
             "
-            class="mr-2">
+            class="me-2">
             <button
               mat-stroked-button
               aria-label="prompt rule"
@@ -147,7 +147,7 @@
             <button
               mat-stroked-button
               aria-label="Add rule"
-              class="mr-3"
+              class="me-3"
               *ngIf="isWriteAdmissionRuleAuthorized"
               (click)="openAddEditAdmissionRuleModal()">
               <em class="eos-icons icon-18">add_circle</em>

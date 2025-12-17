@@ -1588,3 +1588,48 @@ ngx-avatar.userIcon img.avatar-content {
 .pull-left {
   float: left !important;
 }
+
+.mat-icon-button {
+  padding: 0;
+  min-width: 0;
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0;
+  line-height: 40px;
+  border-radius: 50%;
+}
+
+.navbar-brand {
+  display: block;
+}
+
+.mat-badge-content {
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  font-family: Roboto, Helvetica Neue, sans-serif !important;
+  line-height: 22px !important;
+}
+
+.mat-badge-medium.mat-badge-overlap.mat-badge-after .mat-badge-content {
+  right: -11px;
+}
+
+.mat-badge-medium.mat-badge-above .mat-badge-content {
+  top: 5px;
+}
+
+.unwrap-menu-item {
+  padding-left: 0 !important;
+}
+
+.unwrap-menu-item > span {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.mdc-button {
+  padding: 0 16px !important;
+}
+

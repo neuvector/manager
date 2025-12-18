@@ -79,7 +79,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="col pl-0">
+      <mat-form-field class="col ps-0">
         <mat-chip-grid
           #chipList
           aria-label="Namespace selection"
@@ -145,7 +145,7 @@
               'admissionControl.names.SERVICE' | translate
             }}</label>
             <label class="sr-only" for="serviceMatch">Match</label>
-            <mat-form-field class="col-2 pr-0 match" formGroupName="matchTypes">
+            <mat-form-field class="col-2 pe-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Service" id="serviceMatch">
                 <mat-option
                   *ngFor="let matchType of matchTypes"
@@ -163,7 +163,7 @@
               'admissionControl.names.IMAGE' | translate
             }}</label>
             <label class="sr-only" for="imageMatch">Match</label>
-            <mat-form-field class="col-2 pr-0 match" formGroupName="matchTypes">
+            <mat-form-field class="col-2 pe-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Image" id="imageMatch">
                 <mat-option
                   *ngFor="let matchType of matchTypes"
@@ -181,7 +181,7 @@
               'admissionControl.names.NODE' | translate
             }}</label>
             <label class="sr-only" for="nodeMatch">Match</label>
-            <mat-form-field class="col-2 pr-0 match" formGroupName="matchTypes">
+            <mat-form-field class="col-2 pe-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Node" id="nodeMatch">
                 <mat-option
                   *ngFor="let matchType of matchTypes"
@@ -199,7 +199,7 @@
               'admissionControl.names.CONTAINER' | translate
             }}</label>
             <label class="sr-only" for="containerMatch">Match</label>
-            <mat-form-field class="col-2 pr-0 match" formGroupName="matchTypes">
+            <mat-form-field class="col-2 pe-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Container" id="containerMatch">
                 <mat-option
                   *ngFor="let matchType of matchTypes"

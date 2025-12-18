@@ -82,7 +82,7 @@
           <span>{{ noModeGroupMsg }}</span>
           <a
             role="button"
-            class="pl-2"
+            class="ps-2"
             (click)="isExpandingGroupList = !isExpandingGroupList">
             {{
               (isExpandingGroupList ? 'enum.HIDE_DETAILS' : 'enum.SHOW_DETAILS')
@@ -92,7 +92,7 @@
         </div>
         <div
           *ngIf="isExpandingGroupList"
-          class="pt-1 pb-1 pl-2 pr-2"
+          class="pt-1 pb-1 ps-2 pe-2"
           style="max-height: 150px; overflow-y: scroll; background-color: #eee">
           <div *ngFor="let noModeGroup of noModeGroupList">
             {{ noModeGroup.name }}

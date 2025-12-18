@@ -1579,6 +1579,28 @@ ngx-avatar.userIcon img.avatar-content {
   }
 }
 
+// Angular Material 14 to 20 compatibility styles
+
+:root {
+
+  --mat-card-title-text-font: Poppins, sans-serif;
+  --mat-card-title-text-size: 24px;
+  --mat-card-title-text-weight: 500;
+
+  --mat-button-text-label-text-font: Roboto, Helvetica Neue, sans-serif;
+  --mat-button-text-label-text-size: 14px;
+  --mat-button-text-label-text-weight: 500;
+
+  --mat-badge-line-height: 22px;
+  --mat-badge-text-size: 12px;
+  --mat-badge-text-font: Roboto, Helvetica Neue, sans-serif;
+  --mat-badge-font-weight: 600;
+
+  --mat-card-elevated-container-color: #ffffff;
+
+  --bs-info-rgb: 33, 150, 243;
+}
+
 .clearfix {
   @include clearfix();
 }
@@ -1603,13 +1625,6 @@ ngx-avatar.userIcon img.avatar-content {
   display: block;
 }
 
-.mat-badge-content {
-  font-weight: 600 !important;
-  font-size: 12px !important;
-  font-family: Roboto, Helvetica Neue, sans-serif !important;
-  line-height: 22px !important;
-}
-
 .mat-badge-medium.mat-badge-overlap.mat-badge-after .mat-badge-content {
   right: -11px;
 }
@@ -1632,4 +1647,47 @@ ngx-avatar.userIcon img.avatar-content {
 .mdc-button {
   padding: 0 16px !important;
 }
+
+.mat-mdc-card {
+  padding: 16px;
+}
+
+.has-feedback {
+  position: relative;
+}
+
+.form-control-feedback {
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  z-index: 2;
+  display: block;
+  width: 3.75rem;
+  height: 3.75rem;
+  line-height: 3.75rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+.text-muted {
+  color: #909fa7 !important;
+}
+
+.font-weight-light {
+  font-weight: 300 !important;
+}
+
+.mat-mdc-card {
+  color: #000000de;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
 

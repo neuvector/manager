@@ -14,7 +14,7 @@
     style="border-bottom: 1px solid #999"
     *ngFor="let item of testResult.data; let i = index"
     [attr.data-index]="i">
-    <div class="col-2 pl-0">
+    <div class="col-2 ps-0">
       <span class="text-bold"><{{ item.index }}></span>
       <em
         class="fa mx-1"
@@ -33,7 +33,7 @@
       >
       <span *ngIf="item.name">{{ item.name }}</span>
     </div>
-    <div class="col-8 pr-0">
+    <div class="col-8 pe-0">
       <span class="text-bold me-1"
         >{{ 'admissionControl.matchingTestGrid.MSG' | translate }}:</span
       >

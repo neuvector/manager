@@ -49,7 +49,7 @@
                   style="margin-top: 2px; width: 620px; display: block"
                   class="auto-hide">
                   <span
-                    class="text-muted text-bold pl-lg"
+                    class="text-muted text-bold"
                     style="display: inline-block">
                     <em class="fa fa-square-o text-muted me-2"></em>
                     {{ child.display_name }}
@@ -60,7 +60,7 @@
                     *ngIf="child.service_mesh_sidecar">
                     Sidecar
                   </label>
-                  <em class="fa fa-archive text-info pl-2 me-1"></em>
+                  <em class="fa fa-archive text-info ps-2 me-1"></em>
                   <span
                     class="text-muted auto-hide"
                     style="margin-top: -2px; display: block">
@@ -266,7 +266,7 @@
             *ngFor="let item of pod.workload.interfaces | keyvalue"
             class="row pl"
             style="width: 380px">
-            <div class="col-sm-2 text-right pr-0 text-muted">
+            <div class="col-sm-2 text-right pe-0 text-muted">
               {{ item.key }}
             </div>
             <div class="col-sm-1"></div>

@@ -22,8 +22,8 @@
             *ngIf="child"
             class="auto-hide"
             style="margin-top: 2px; width: 620px">
-            <span class="font-weight-bold pl-lg" style="display: inline-block">
-              <em class="fa fa-square-o "></em>
+            <span class="font-weight-bold" style="display: inline-block">
+              <em class="fa fa-square-o"></em>
               {{ child.display_name | slice : 0 : 55
               }}{{ child.display_name.length > 35 ? '...' : '' }}
             </span>
@@ -33,7 +33,7 @@
               style="display: inline-block">
               Sidecar:
             </label>
-            <em class="fa fa-archive pl-lg "></em>
+            <em class="fa fa-archive"></em>
             <span class="auto-hide" style="margin-top: -2px">
               {{ child.image }}
             </span>
@@ -60,7 +60,7 @@
   </li>
   <li class="col-sm-12 p-1" style="height: 29px">
     <div class="row" style="margin-left: 1px">
-      <div class="col-sm-6 pl-0 pb-0 pt-sm">
+      <div class="col-sm-6 ps-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.ENFORCER' | translate }}:
         </span>
@@ -68,7 +68,7 @@
           {{ container.enforcer_name }}
         </span>
       </div>
-      <div class="col-sm-6 pl-0 pb-0 pt-sm" *ngIf="container.service_group">
+      <div class="col-sm-6 ps-0 pb-0 pt-sm" *ngIf="container.service_group">
         <div>
           <span class="font-weight-bold pod-item-key">
             {{ 'network.legend.GROUP' | translate }}:
@@ -92,7 +92,7 @@
   </li>
   <li class="col-sm-12 p-1">
     <div class="row" style="margin-left: 1px">
-      <div class="col-sm-6 pl-0 pb-0 pt-sm">
+      <div class="col-sm-6 ps-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'group.gridHeader.DOMAIN' | translate }}:
         </span>
@@ -100,7 +100,7 @@
           {{ container.domain }}
         </span>
       </div>
-      <div class="col-sm-6 pl-0 pb-0 pt-sm">
+      <div class="col-sm-6 ps-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.LOCATION' | translate }}:
         </span>
@@ -112,7 +112,7 @@
   </li>
   <li class="col-sm-12 p-1">
     <div class="row" style="margin-left: 1px">
-      <div class="col-sm-6 pl-0 pb-0 pt-sm">
+      <div class="col-sm-6 ps-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.STATE' | translate }}:
         </span>
@@ -126,7 +126,7 @@
           {{ container.quarantine_reason }}
         </span>
       </div>
-      <div class="col-sm-6 pl-0 pb-0 pt-sm">
+      <div class="col-sm-6 ps-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.CREATED_AT' | translate }}:
         </span>
@@ -140,7 +140,7 @@
     <div class="row" style="margin-left: 1px">
       <div
         *ngIf="!!container.scan_summary.scanned_at"
-        class="col-sm-6 pl-0 pb-0 pt-sm">
+        class="col-sm-6 ps-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.SCANNED_AT' | translate }}:
         </span>
@@ -148,7 +148,7 @@
           {{ container.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
-      <div class="col-sm-6 pl-0 mda-list-item-text pb-0 pt-sm">
+      <div class="col-sm-6 ps-0 mda-list-item-text pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.PRIVILEGED' | translate }}:
         </span>
@@ -160,7 +160,7 @@
   </li>
   <li class="col-sm-12 p-1">
     <div class="row" style="margin-left: 1px">
-      <div class="col-sm-6 pl-0 mda-list-item-text pb-0 pt-sm">
+      <div class="col-sm-6 ps-0 mda-list-item-text pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.RUN_AS_ROOT' | translate }}:
         </span>
@@ -168,7 +168,7 @@
           {{ container.run_as_root }}
         </span>
       </div>
-      <div class="col-sm-6 pl-0 mda-list-item-text pb-0 pt-sm">
+      <div class="col-sm-6 ps-0 mda-list-item-text pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'group.gridHeader.VULNERABILITIES' | translate }}:
         </span>
@@ -260,7 +260,7 @@
           <span>{{ item.key }}</span>
         </div>
         <div class="col-sm-1"></div>
-        <div class="col-sm-9 pl-0">
+        <div class="col-sm-9 ps-0">
           <div *ngFor="let net of item.value">
             <div class="col-sm-12">
               <div class="col-sm-6">IP:{{ net.ip }}/{{ net.ip_prefix }}</div>

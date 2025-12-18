@@ -4,7 +4,7 @@
     <i class="fa fa-plus-circle" *ngIf="!isChildVisible"></i>
   </div>
   <div *ngIf="!isParent" class="me-3"></div>
-  <div class="{{ rowStyle.color }}" [class.pl-2]="!!params.data.parent_id">
+  <div class="{{ rowStyle.color }}" [class.ps-2]="!!params.data.parent_id">
     <em class="{{ rowStyle.actionIcon }}"></em>
     {{ name }}
   </div>

@@ -7,12 +7,14 @@
     [animate]="true"
     [duration]="1"
     [foregroundColor]="gaugeColor"
-    [size]="40">
+    [thick]="10"
+    cap="round"
+    [size]="120">
   </ngx-gauge>
   <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
     {{ gaugeLabel }}
   </div>
-  <table style="margin: -20px auto 0 auto">
+  <table style="margin: -10px auto 0 auto">
     <tr class="mb-sm text-sm text-center dashboard-summary-title">
       <td>{{ 'dashboard.heading.NODES' | translate }}</td>
       <td>{{ 'dashboard.heading.PODS' | translate }}</td>

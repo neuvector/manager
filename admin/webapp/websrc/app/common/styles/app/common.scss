@@ -1690,4 +1690,16 @@ label {
   font-weight: 700 !important;
 }
 
+.mat-mdc-card-content:last-child {
+  padding-bottom: 0 !important;
+}
+
+.mat-mdc-card-content {
+  padding: 0 !important;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: #999
+}
+
 

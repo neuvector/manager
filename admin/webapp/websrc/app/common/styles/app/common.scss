@@ -1599,6 +1599,21 @@ ngx-avatar.userIcon img.avatar-content {
   --mat-card-elevated-container-color: #ffffff;
 
   --bs-info-rgb: 33, 150, 243;
+
+  --mat-dialog-subhead-font: Roboto, Helvetica Neue, sans-serif;
+  --mat-dialog-subhead-size: 20px;
+  --mat-dialog-subhead-weight: 500;
+  --mat-dialog-subhead-line-height: 32px;
+
+  --mat-dialog-supporting-text-font: Roboto, Helvetica Neue, sans-serif;
+  --mat-dialog-supporting-text-size: 15px;
+  --mat-dialog-supporting-text-weight: 400;
+  --mat-dialog-supporting-text-line-height: 24px;
+
+  --mat-form-field-filled-with-label-container-padding-top: 16px;
+  --mat-form-field-container-text-line-height: 16px;
+  --mat-form-field-container-text-size: 14px;
+
 }
 
 .clearfix {
@@ -1702,4 +1717,56 @@ label {
   background-color: #999
 }
 
+.mat-mdc-dialog-surface {
+  padding: 24px;
+}
 
+.mat-mdc-dialog-title,
+.mat-mdc-dialog-container-with-actions .mat-mdc-dialog-content {
+  padding: 0 !important;
+}
+
+.mat-mdc-dialog-title::before {
+  height: unset !important;
+  content: unset !important;
+}
+
+.mat-small, .mat-caption, .mat-typography .mat-small, .mat-typography .mat-caption {
+  font: 400 12px / 24px Roboto, Helvetica Neue, sans-serif !important;
+  letter-spacing: normal !important;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.mat-mdc-button {
+  letter-spacing: normal ! important;
+}
+
+.mat-mdc-radio-button .mdc-radio {
+  padding: 0 !important;
+}
+
+.mb-0-sub-label > .mdc-form-field > label {
+  margin-bottom: 0 !important;
+}
+
+.no-warp-menu-btn-icon {
+  white-space: nowrap;
+}
+
+.mat-mdc-form-field-infix {
+  min-height: 0 !important;
+}
+
+.quick-filter {
+  margin: 18px 0;
+  label {
+    margin-top: -8px;
+  }
+}
+
+.quick-filter > .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}

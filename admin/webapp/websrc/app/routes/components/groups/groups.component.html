@@ -105,7 +105,9 @@
         class="d-flex align-items-center font-weight-bold pe-1 me-2"
         aria-label="Switch mode"
         [matMenuTriggerFor]="switchMenu">
-        <span [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
+        <span
+          class="no-warp-menu-btn-icon"
+          [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
           {{
             (isAllProtectMode
               ? 'dashboard.improveScoreModal.ALL_PROTECT_MODE_DECLARE'
@@ -146,7 +148,9 @@
         class="d-flex align-items-center font-weight-bold pe-1 me-2"
         aria-label="Switch profile mode"
         [matMenuTriggerFor]="switchMenu4ProfileModes">
-        <span [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
+        <span
+          class="no-warp-menu-btn-icon"
+          [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
           {{
             (isAllProtectMode ? '' : 'service.SWITCH_PROFILE_MODE') | translate
           }}
@@ -185,13 +189,13 @@
         [(ngModel)]="baselineProfile"
         (change)="switchBaselineProfile()"
         aria-label="Baseline profile mode"
-        class="d-flex mt-2">
-        <mat-radio-button value="basic" class="me-3">
+        class="d-flex">
+        <mat-radio-button value="basic" class="me-3 mb-0-sub-label">
           <span class="mat-small font-weight-bold">
             {{ 'enum.BASIC' | translate }}
           </span>
         </mat-radio-button>
-        <mat-radio-button value="zero-drift" class="me-3">
+        <mat-radio-button value="zero-drift" class="me-3 mb-0-sub-label">
           <span class="mat-small font-weight-bold">
             {{ 'enum.ZERODRIFT' | translate }}
           </span>

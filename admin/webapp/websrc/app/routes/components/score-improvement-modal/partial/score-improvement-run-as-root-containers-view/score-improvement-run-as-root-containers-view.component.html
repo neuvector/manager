@@ -16,7 +16,7 @@
       (click)="exportCSV()">
       <i class="eos-icons icon-18">csv_file</i>
     </button>
-    <mat-form-field>
+    <mat-form-field class="quick-filter" style="margin: 8px 0">
       <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
       <input [formControl]="filter" matInput />
     </mat-form-field>

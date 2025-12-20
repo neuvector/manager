@@ -1,6 +1,8 @@
 <div>
-  <mat-form-field class="example-full-width pull-left">
-    <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+  <mat-form-field class="example-full-width pull-left" class="quick-filter">
+    <mat-label>
+      {{ 'enum.FILTER' | translate }}
+    </mat-label>
     <input
       (keyup)="onFilterChange(filter.value || '')"
       [formControl]="filter"

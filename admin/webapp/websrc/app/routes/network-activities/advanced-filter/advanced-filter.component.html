@@ -17,7 +17,7 @@
   <div>
     <form [formGroup]="advFilterForm">
       <section class="row mx-0 align-items-center">
-        <label class="col-2 font-weight-normal mb-0 me-2" for="domainInput">{{
+        <label class="col-2 font-weight-normal mb-3 me-2" for="domainInput">{{
           'ldap.gridHeader.DOMAINS' | translate
         }}</label>
         <mat-form-field class="col ps-0">
@@ -63,7 +63,7 @@
         </mat-form-field>
       </section>
       <section class="row mx-0 align-items-center">
-        <label class="col-2 font-weight-normal mb-0 me-2" for="groupInput">{{
+        <label class="col-2 font-weight-normal mb-3 me-2" for="groupInput">{{
           'dlp.gridHeader.GROUPS' | translate
         }}</label>
         <mat-form-field class="col ps-0">
@@ -141,35 +141,35 @@
         </mat-radio-group>
       </section>
       <section class="row mx-0" formGroupName="protocols">
-        <span class="d-block col-2">{{
+        <span class="d-block col-2 mt-1">{{
           'dashboard.body.panel_title.PROTOCOLS' | translate
         }}</span>
-        <mat-checkbox class="col" formControlName="tcp">TCP</mat-checkbox>
+        <mat-checkbox class="col ps-0" formControlName="tcp">TCP</mat-checkbox>
         <mat-checkbox class="col" formControlName="udp">UDP</mat-checkbox>
         <mat-checkbox class="col" formControlName="icmp">ICMP</mat-checkbox>
       </section>
       <hr class="fancy my-2 mx-0" />
       <section class="row mx-0 my-2" formGroupName="settings">
         <mat-checkbox
-          class="col"
+          class="col col-6"
           formControlName="showSysNode"
           aria-label="show system nodes">
           {{ 'network.protocolFilter.SYSTEM_NODE' | translate }}
         </mat-checkbox>
         <mat-checkbox
-          class="col"
+          class="col col-6"
           aria-label="show system application"
           formControlName="showSysApp"
           >{{ 'network.protocolFilter.SYSTEM' | translate }}</mat-checkbox
         >
         <mat-checkbox
-          class="col"
+          class="col col-6"
           aria-label="save results"
           formControlName="persistent"
           >{{ 'network.protocolFilter.PERSISTENT' | translate }}</mat-checkbox
         >
         <mat-checkbox
-          class="col"
+          class="col col-6"
           aria-label="enable GPU"
           formControlName="gpuEnabled"
           >{{ 'network.protocolFilter.GPU_ENABLED' | translate }}</mat-checkbox

@@ -135,6 +135,7 @@
               aria-label="External link button"
               (click)="showPodGroup()"
               class="external-link text-info"
+              style="top: 8px"
               *ngIf="pod.workload.service_group">
               <mat-icon style="font-size: 24px; width: 24px; height: 24px"
                 >open_in_new</mat-icon
@@ -229,7 +230,8 @@
               mat-icon-button
               aria-label="External link button"
               (click)="showCve()"
-              class="external-link text-info">
+              class="external-link text-info ms-2"
+              style="top: 8px">
               <mat-icon style="font-size: 24px; width: 24px; height: 24px"
                 >open_in_new</mat-icon
               >

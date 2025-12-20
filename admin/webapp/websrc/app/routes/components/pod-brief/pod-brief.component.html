@@ -138,7 +138,7 @@
         <span class="font-weight-bold host-item-key"
           >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
         >
-        <span class="ml  auto-hide host-item-key">
+        <span class="ml auto-hide host-item-key">
           {{
             pod.workload.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss'
           }}
@@ -174,7 +174,7 @@
         <div class="d-inline">
           <span
             *ngIf="pod.workload.scan_summary?.high"
-            class="badge badge-danger ">
+            class="badge badge-danger">
             {{ pod.workload.scan_summary.high }}</span
           >
           <span

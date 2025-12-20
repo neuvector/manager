@@ -1614,6 +1614,10 @@ ngx-avatar.userIcon img.avatar-content {
   --mat-form-field-container-text-line-height: 16px;
   --mat-form-field-container-text-size: 14px;
 
+  --mat-form-field-container-vertical-padding: 8px;
+
+  --mat-checkbox-selected-checkmark-color: #fff;
+
 }
 
 .clearfix {
@@ -1769,4 +1773,34 @@ label {
 
 .quick-filter > .mat-mdc-form-field-subscript-wrapper {
   display: none !important;
+}
+
+// .mat-mdc-icon-button.mat-mdc-button-base {
+//   --mdc-icon-button-state-layer-size: 24px !important;
+//   --mat-icon-button-state-layer-size: 24px !important;
+//   width: var(--mat-icon-button-state-layer-size);
+//   height: var(--mat-icon-button-state-layer-size);
+//   padding: 0 !important;
+// }
+
+.mat-mdc-form-field  {
+  margin-top: 8px;
+}
+
+mat-radio-button {
+  .mdc-radio {
+    top: -4px;
+  }
+}
+
+.service-risk-radio-label {
+  .mdc-radio {
+    top: 0;
+  }
+}
+
+mat-checkbox {
+  .mdc-checkbox {
+    top: -4px;
+  }
 }

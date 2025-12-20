@@ -20,7 +20,7 @@
       <mat-radio-button
         *ngFor="let type of serviceModes"
         [value]="type.value"
-        class="me-3 mb-0-sub-label">
+        class="me-3 mb-0-sub-label service-risk-radio-label">
         <span class="mat-small font-weight-bold">
           {{ type.viewValue | translate }}
         </span>
@@ -37,24 +37,26 @@
       <mat-radio-button
         *ngFor="let type of serviceModes"
         [value]="type.value"
-        class="me-3 mb-0-sub-label">
+        class="me-3 mb-0-sub-label service-risk-radio-label">
         <span class="mat-small font-weight-bold">
           {{ type.viewValue | translate }}
         </span>
       </mat-radio-button>
     </mat-radio-group>
   </div>
-  <app-groups
-    [height]="210"
-    [isScoreImprovement]="true"
-    (selectedGroup)="setSelectedGroup($event)"></app-groups>
-  <app-group-details
-    *ngIf="selectedGroup"
-    [resizableHeight]="120"
-    [isScoreImprovement]="true"
-    [selectedGroupName]="selectedGroup.name"
-    [members]="selectedGroup.members"
-    [baselineProfile]="selectedGroup.baseline_profile"
-    [kind]="selectedGroup.kind">
-  </app-group-details>
+  <div class="mt-2">
+    <app-groups
+      [height]="210"
+      [isScoreImprovement]="true"
+      (selectedGroup)="setSelectedGroup($event)"></app-groups>
+    <app-group-details
+      *ngIf="selectedGroup"
+      [resizableHeight]="120"
+      [isScoreImprovement]="true"
+      [selectedGroupName]="selectedGroup.name"
+      [members]="selectedGroup.members"
+      [baselineProfile]="selectedGroup.baseline_profile"
+      [kind]="selectedGroup.kind">
+    </app-group-details>
+  </div>
 </section>

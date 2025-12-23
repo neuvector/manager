@@ -1,6 +1,7 @@
 <mat-tab-group
   (selectedTabChange)="activateTab($event)"
   [(selectedIndex)]="activeTabIndex"
+  class="system-components-tab-group"
   #detailsTabGroup>
   <mat-tab label="{{ 'enforcers.detail.TAB_TITLE' | translate }}">
     <div class="row w-100 mx-0" *ngIf="currentEnforcer">

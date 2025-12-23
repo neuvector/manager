@@ -12,7 +12,7 @@
             <i class="eos-icons icon-18">csv_file</i>
           </button>
         </div>
-        <mat-form-field>
+        <mat-form-field class="quick-filter">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -86,7 +86,7 @@
             </mat-menu>
           </ng-container>
         </div>
-        <mat-form-field>
+        <mat-form-field class="quick-filter">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -97,19 +97,21 @@
         <div class="me-3 filter-actions">
           <button
             mat-icon-button
+            style="top: 12px"
             [attr.aria-label]="sysContainersMsg"
             [matTooltip]="sysContainersMsg"
             matTooltipPosition="above"
             type="button"
             (click)="toggleSysContainers()">
             <mat-icon
+              style="font-size: 14px"
               fontSet="fa"
               [fontIcon]="
                 !showSysContainers ? 'fa-eye' : 'fa-eye-slash'
               "></mat-icon>
           </button>
         </div>
-        <mat-form-field>
+        <mat-form-field class="quick-filter">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -117,7 +119,7 @@
     </ng-container>
     <ng-container *ngSwitchDefault>
       <div class="filter" [style.visibility]="'hidden'">
-        <mat-form-field>
+        <mat-form-field class="quick-filter">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input matInput disabled />
         </mat-form-field>

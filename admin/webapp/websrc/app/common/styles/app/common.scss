@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 $nv-desktop-width-lg: 1200px;
 $nv-desktop-width: 992px;
 $nv-tablet-width: 768px;
@@ -1583,6 +1585,10 @@ ngx-avatar.userIcon img.avatar-content {
 
 :root {
 
+  @include mat.form-field-overrides((
+    filled-container-color: #fff,
+  ));
+
   --mat-card-title-text-font: Poppins, sans-serif;
   --mat-card-title-text-size: 24px;
   --mat-card-title-text-weight: 500;
@@ -1618,6 +1624,14 @@ ngx-avatar.userIcon img.avatar-content {
 
   --mat-checkbox-selected-checkmark-color: #fff;
 
+}
+
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
 }
 
 .clearfix {
@@ -1764,10 +1778,15 @@ label {
   min-height: 0 !important;
 }
 
-.quick-filter {
+.quick-filter,
+mat-form-field
+{
   margin: 18px 0;
   label {
     margin-top: -8px;
+  }
+  .mdc-text-field {
+    padding: 0 !important;
   }
 }
 
@@ -1802,5 +1821,14 @@ mat-radio-button {
 mat-checkbox {
   .mdc-checkbox {
     top: -4px;
+  }
+}
+
+.node-detail-tab-group,
+.container-detail-tab-group,
+.registry-detail-tab-group,
+.system-components-tab-group {
+  .mat-mdc-tab-label-container {
+    flex-grow: 0 !important;
   }
 }

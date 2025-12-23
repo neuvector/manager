@@ -35,7 +35,7 @@
           [matMenuTriggerFor]="view_menu"
           aria-label="View menu"
           type="menu">
-          <i class="eos-icons">settings</i>
+          <i class="eos-icons" style="font-size: 16px">settings</i>
           {{ 'network.SETTING' | translate }}
         </button>
         <mat-menu #view_menu="matMenu">
@@ -80,6 +80,7 @@
       <ng-container *appContainerTwo="let height">
         <mat-card
           *ngIf="selectedContainer"
+          style="display: block"
           [ngStyle]="{ height: height + 'px' }"
           class="pt-0">
           <app-container-details

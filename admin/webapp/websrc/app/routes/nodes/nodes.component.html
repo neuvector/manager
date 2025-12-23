@@ -46,6 +46,7 @@
       <ng-container *appContainerTwo="let height">
         <mat-card
           *ngIf="selectedNode"
+          style="display: block"
           [ngStyle]="{ height: height + 'px' }"
           class="pt-0">
           <app-node-details [gridHeight]="height - 80" [node]="selectedNode">

@@ -1442,6 +1442,8 @@ ngx-avatar.userIcon img.avatar-content {
   color: #fff !important;
   font-size: 10px !important;
   line-height: 12px !important;
+  white-space: nowrap;
+  max-height: 18px;
 }
 
 .dashboard-panel-instruction-content {
@@ -1875,4 +1877,25 @@ mat-checkbox {
       height: 100%;
     }
   }
+}
+
+.text-primary {
+  color: #fe7c3f !important;
+}
+
+.q-filter-sec-event {
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+.adv-filter-date-picker {
+  .mat-datepicker-toggle-default-icon {
+    font-size: 14px !important;
+
+  }
+}
+
+.badge-primary, .badge-success {
+  background-color: #30ba78 !important;
 }

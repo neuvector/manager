@@ -1867,3 +1867,12 @@ mat-checkbox {
   max-width: calc(100vw - 600px);
   white-space: nowrap;
 }
+
+#compliance-profile {
+  .mat-mdc-tab-body-wrapper {
+    height: 100%;
+    .mat-mdc-tab-body {
+      height: 100%;
+    }
+  }
+}

@@ -18,10 +18,10 @@
 <div mat-dialog-content>
   <form [formGroup]="form">
     <section class="row mx-0 align-items-center">
-      <label class="col-3 font-weight-normal mb-0" for="fromDate">
+      <span class="col-3 font-weight-normal mb-0" for="fromDate">
         {{ 'general.REPORTED_FROM' | translate }}
-      </label>
-      <mat-form-field class="col ps-0">
+      </span>
+      <mat-form-field class="col ps-0 mb-0">
         <input
           [matDatepicker]="pickerFrom"
           [matDatepickerFilter]="fromFilter"
@@ -41,10 +41,10 @@
       </mat-form-field>
     </section>
     <section class="row mx-0 align-items-center">
-      <label class="col-3 font-weight-normal mb-0" for="toDate">
+      <span class="col-3 font-weight-normal mb-0" for="toDate">
         {{ 'general.REPORTED_TO' | translate }}
-      </label>
-      <mat-form-field class="col ps-0">
+      </span>
+      <mat-form-field class="col ps-0 mb-0">
         <input
           [matDatepicker]="pickerTo"
           [matDatepickerFilter]="toFilter"
@@ -80,7 +80,7 @@
       <span class="d-block col-3">{{
         'event.gridHeader.NAME' | translate
       }}</span>
-      <mat-form-field class="col ps-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Name"
@@ -106,7 +106,7 @@
       <span class="d-block col-3">{{
         'event.gridHeader.USER_NAME' | translate
       }}</span>
-      <mat-form-field class="col ps-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="User name"
@@ -133,7 +133,7 @@
     </section>
     <section class="row mx-0 align-items-center">
       <span class="d-block col-3">{{ 'securityEvent.HOST' | translate }}</span>
-      <mat-form-field class="col ps-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Host"
@@ -159,7 +159,7 @@
       <span class="d-block col-3">{{
         'event.gridHeader.CONTAINER' | translate
       }}</span>
-      <mat-form-field class="col ps-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Container"
@@ -188,7 +188,7 @@
       <span class="d-block col-3">{{
         'event.gridHeader.IMAGE' | translate
       }}</span>
-      <mat-form-field class="col ps-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Image"
@@ -212,10 +212,10 @@
       </mat-form-field>
     </section>
     <section class="row mx-0 align-items-center">
-      <label class="col-3 font-weight-normal mb-0" for="namespaceInput">{{
+      <span class="col-3 font-weight-normal mb-0" for="namespaceInput">{{
         'securityEvent.DOMAIN' | translate
-      }}</label>
-      <mat-form-field class="col ps-0">
+      }}</span>
+      <mat-form-field class="col ps-0 mb-0">
         <mat-chip-grid
           #chipList
           aria-label="Namespace selection"
@@ -253,7 +253,7 @@
       <span class="d-block col-3">{{
         'securityEvent.OTHER_KEYWORD' | translate
       }}</span>
-      <mat-form-field class="col ps-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           id="includedKeyword"
           aria-label="Included Keyword"
@@ -265,7 +265,7 @@
       <span class="d-block col-3">{{
         'securityEvent.EXCLUDED_KEYWORD' | translate
       }}</span>
-      <mat-form-field class="col ps-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           id="excludedKeyword"
           aria-label="Excluded Keyword"
@@ -275,7 +275,7 @@
     </section>
   </form>
 </div>
-<div class="float-right" mat-dialog-actions>
+<div style="justify-content: flex-end" mat-dialog-actions>
   <button (click)="reset()" mat-button>{{ 'enum.RESET' | translate }}</button>
   <button
     [mat-dialog-close]="form.value"

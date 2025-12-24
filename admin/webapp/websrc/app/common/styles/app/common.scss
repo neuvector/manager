@@ -1586,7 +1586,7 @@ ngx-avatar.userIcon img.avatar-content {
 :root {
 
   @include mat.form-field-overrides((
-    filled-container-color: #fff,
+    filled-container-color: transparent,
   ));
 
   --mat-card-title-text-font: Poppins, sans-serif;
@@ -1612,7 +1612,7 @@ ngx-avatar.userIcon img.avatar-content {
   --mat-dialog-subhead-line-height: 32px;
 
   --mat-dialog-supporting-text-font: Roboto, Helvetica Neue, sans-serif;
-  --mat-dialog-supporting-text-size: 15px;
+  --mat-dialog-supporting-text-size: 14px;
   --mat-dialog-supporting-text-weight: 400;
   --mat-dialog-supporting-text-line-height: 24px;
 
@@ -1827,8 +1827,43 @@ mat-checkbox {
 .node-detail-tab-group,
 .container-detail-tab-group,
 .registry-detail-tab-group,
-.system-components-tab-group {
+.registry-dialog-tab-group,
+.system-components-tab-group,
+#group-details {
   .mat-mdc-tab-label-container {
     flex-grow: 0 !important;
   }
+}
+
+.mat-mdc-select-arrow-wrapper {
+  margin-right: 8px;
+}
+
+.mat-mdc-chip-set .mdc-evolution-chip-set__chips {
+  margin-left: 0 !important;
+}
+
+.mat-mdc-slide-toggle {
+  .mdc-label {
+    margin-bottom: 0 !important;
+  }
+}
+
+.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+  background-color: #30ba78 !important;
+}
+
+#adm-more-opt {
+  .mat-mdc-menu-item-text {
+    white-space: nowrap !important;
+  }
+}
+
+.eos-icons {
+  font-size: 18px !important;
+}
+
+#group-details .mat-mdc-tab-header {
+  max-width: calc(100vw - 600px);
+  white-space: nowrap;
 }

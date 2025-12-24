@@ -9,7 +9,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="'custom check'">
     <div class="filter" style="position: absolute; right: 20px; top: 5px">
-      <mat-form-field >
+      <mat-form-field>
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
       </mat-form-field>
@@ -22,7 +22,7 @@
       <button
         *ngIf="isWriteGroupAuthorized && cfgType !== CFG_TYPE.FED"
         mat-button
-        class="me-2 mt-1"
+        class="me-2 mt-1 mb-3"
         [matMenuTriggerFor]="menu"
         aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
@@ -86,7 +86,7 @@
       <button
         *ngIf="isWriteFileAccessRuleAuthorized || cfgType === CFG_TYPE.GROUND"
         mat-button
-        class="me-2 mt-1"
+        class="me-2 mt-1 mb-3"
         [matMenuTriggerFor]="menu"
         aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
@@ -171,7 +171,7 @@
       class="d-flex align-items-center justify-content-end">
       <button
         mat-button
-        class="me-2 mt-1"
+        class="me-2 mt-1 mb-3"
         [matMenuTriggerFor]="menu"
         aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
@@ -202,7 +202,7 @@
       class="d-flex align-items-center justify-content-end">
       <button
         mat-button
-        class="me-2 mt-1"
+        class="me-2 mt-1 mb-3"
         [matMenuTriggerFor]="menu"
         aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>

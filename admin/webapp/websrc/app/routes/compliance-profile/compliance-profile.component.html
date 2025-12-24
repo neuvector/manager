@@ -1,6 +1,9 @@
-<mat-card style="height: calc(100vh - 115px)">
+<mat-card style="height: calc(100vh - 115px); display: block">
   <div *ngIf="loaded; else loadingTemplate" class="h-100">
-    <mat-tab-group (selectedTabChange)="resize()" class="h-100">
+    <mat-tab-group
+      id="compliance-profile"
+      (selectedTabChange)="resize()"
+      class="h-100">
       <mat-tab [label]="'cis.profile.TEMPLATES' | translate" class="h-100">
         <ng-container *ngIf="!refreshingProfile">
           <app-compliance-profile-templates

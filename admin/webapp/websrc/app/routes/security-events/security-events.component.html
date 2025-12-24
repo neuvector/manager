@@ -76,11 +76,12 @@
       <button
         (click)="openAdvancedFilterDialog()"
         *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
-        class="mx-2 d-flex justify-content-end align-items-center"
+        class="mx-2 mt-2 d-flex justify-content-end align-items-center"
         mat-button>
         <i class="eos-icons">search</i>{{ 'general.ADV_FILTER' | translate }}
       </button>
-      <mat-form-field class="example-full-width pull-right">
+      <mat-form-field
+        class="example-full-width pull-right mb-0 q-filter-sec-event">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input
           (keyup)="onQuickFilterChange(filter.value || '')"
@@ -419,10 +420,11 @@
                       class="margin-top-xs col-sm-2 padding-0"
                       *ngIf="secEvent.type.name === 'threat'">
                       <button
+                        mat-raised-button
                         *ngIf="secEvent.details.message.cap_len"
                         class="mat-button btn-sec-event pull-left"
                         (click)="showPacket(secEvent.details.id, $event)">
-                        <em class="icon-envelope-letter "></em>
+                        <em class="icon-envelope-letter"></em>
                         {{ 'threat.VIEW_PACKET' | translate }}
                       </button>
                     </div>
@@ -435,10 +437,11 @@
                         canShowReviewRule(secEvent)
                       ">
                       <button
+                        mat-raised-button
                         class="mat-button btn-sec-event pull-left"
                         style="color: #fff"
                         (click)="reviewRule('violation', secEvent)">
-                        <em class="fa fa-edit fa-lg "></em>
+                        <em class="fa fa-edit fa-lg"></em>
                         {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>
@@ -452,6 +455,7 @@
                         secEvent.reviewRulePermission
                       ">
                       <button
+                        mat-raised-button
                         class="mat-button btn-sec-event pull-left"
                         style="color: #fff"
                         *ngIf="
@@ -460,7 +464,7 @@
                             .indexOf('process') >= 0
                         "
                         (click)="reviewRule('incident', secEvent)">
-                        <em class="fa fa-edit fa-lg "></em>
+                        <em class="fa fa-edit fa-lg"></em>
                         {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>
@@ -569,6 +573,7 @@
                       class="margin-top-xs col-sm-2 padding-0"
                       *ngIf="secEvent.type.name === 'threat'">
                       <button
+                        mat-raised-button
                         *ngIf="secEvent.details.message.cap_len"
                         class="mat-button btn-sec-event pull-left"
                         style="color: #fff"
@@ -589,6 +594,7 @@
                         secEvent.reviewRulePermission
                       ">
                       <button
+                        mat-raised-button
                         class="mat-button btn-sec-event pull-left"
                         style="color: #fff"
                         (click)="reviewRule('violation', secEvent)">
@@ -606,6 +612,7 @@
                         secEvent.reviewRulePermission
                       ">
                       <button
+                        mat-raised-button
                         class="mat-button btn-sec-event pull-left"
                         style="color: #fff"
                         *ngIf="

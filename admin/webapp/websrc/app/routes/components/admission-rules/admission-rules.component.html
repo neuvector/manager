@@ -32,14 +32,14 @@
             {{ 'admissionControl.MORE' | translate }}
             <em class="eos-icons">arrow_drop_down</em>
           </button>
-          <mat-menu #menu="matMenu">
+          <mat-menu #menu="matMenu" id="adm-more-opt">
             <div class="menu-width-medium">
               <button
                 mat-menu-item
                 class="d-flex align-items-center"
                 (click)="showAdvancedSetting()"
                 *ngIf="globalStatus && isWriteAdmissionRuleAuthorized">
-                <em class="eos-icons me-2">config_map</em>
+                <em class="eos-icons">config_map</em>
                 {{ 'admissionControl.GLOBAL_OPS' | translate }}
               </button>
             </div>
@@ -51,7 +51,7 @@
                   !selectedAdmissionRules || selectedAdmissionRules.length === 0
                 "
                 (click)="openExportPopup()">
-                <em class="eos-icons me-2">download</em>
+                <em class="eos-icons">download</em>
                 {{ 'admissionControl.EXPORT' | translate }}
               </button>
             </div>
@@ -60,7 +60,7 @@
               mat-menu-item
               class="d-flex align-items-center"
               (click)="openImportPopup()">
-              <em class="eos-icons me-2">upload</em>
+              <em class="eos-icons">upload</em>
               {{ 'admissionControl.IMPORT' | translate }}
             </button>
           </mat-menu>

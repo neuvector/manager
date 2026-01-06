@@ -25,7 +25,7 @@
           class="me-3 mb-3 profile__icon">
           person
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'profile.USER_NAME' | translate }}</mat-label>
           <input matInput formControlName="username" />
         </mat-form-field>
@@ -37,7 +37,7 @@
           class="me-3 mb-3 profile__icon">
           email
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'profile.EMAIL' | translate }}</mat-label>
           <input
             matInput
@@ -53,7 +53,7 @@
           fontSet="fa"
           fontIcon="fa-user-secret">
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'profile.ROLE' | translate }}</mat-label>
           <input matInput formControlName="role" />
         </mat-form-field>
@@ -65,7 +65,7 @@
           class="me-3 mb-3 profile__icon"
           >hourglass_empty
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'profile.TIMEOUT' | translate }}</mat-label>
           <input
             matInput
@@ -87,7 +87,7 @@
           class="me-3 mb-3 profile__icon"
           >language
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'profile.LOCALE' | translate }}</mat-label>
           <mat-select formControlName="locale">
             <mat-option *ngFor="let lang of getLanguages()" [value]="lang.code">

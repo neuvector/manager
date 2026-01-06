@@ -14,7 +14,7 @@
   </div>
   <div class="row align-items-center my-0 my-md-4">
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons me-3 text-primary">organization</i>
+      <i class="eos-icons me-3 text-primary mb-4">organization</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'okta.IDP_URL' | translate }}</mat-label>
         <input
@@ -30,7 +30,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons me-3 text-primary">account_box</i>
+      <i class="eos-icons me-3 text-primary mb-4">account_box</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'okta.IDP_ISSUER' | translate }}</mat-label>
         <input
@@ -46,12 +46,14 @@
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons me-3 text-primary">logout</i>
-      <span class="me-3">{{ 'okta.SAML_SLO' | translate }}</span>
-      <mat-slide-toggle formControlName="slo_enabled"></mat-slide-toggle>
+      <i class="eos-icons me-3 text-primary mb-4">logout</i>
+      <span class="me-3 mb-4">{{ 'okta.SAML_SLO' | translate }}</span>
+      <mat-slide-toggle
+        class="mb-4"
+        formControlName="slo_enabled"></mat-slide-toggle>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons me-3 text-primary">organization</i>
+      <i class="eos-icons me-3 text-primary mb-4">organization</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'okta.SLO_URL' | translate }}</mat-label>
         <input
@@ -67,7 +69,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons me-3 text-primary">verified</i>
+      <i class="eos-icons me-3 text-primary mb-4">verified</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'okta.SLO_CERT' | translate }}</mat-label>
         <textarea
@@ -77,7 +79,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons me-3 text-primary">vpn_key</i>
+      <i class="eos-icons me-3 text-primary mb-4">vpn_key</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'okta.SLO_KEY' | translate }}</mat-label>
         <textarea
@@ -98,7 +100,7 @@
         *ngFor="let _ of x509_certs.controls; let i = index"
         class="col-12 d-flex align-items-center">
         <ng-container *ngIf="i === 0; else extraCertTemplate">
-          <i class="eos-icons me-3 text-primary">verified</i>
+          <i class="eos-icons me-3 text-primary mb-4">verified</i>
           <mat-form-field class="w-100">
             <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
             <textarea
@@ -111,7 +113,7 @@
           </mat-form-field>
         </ng-container>
         <ng-template #extraCertTemplate>
-          <i class="eos-icons me-3 text-primary invisible">verified</i>
+          <i class="eos-icons me-3 text-primary invisible mb-4">verified</i>
           <mat-form-field class="w-100">
             <mat-label>{{ 'okta.EXTRA_CERT' | translate }}</mat-label>
             <textarea
@@ -123,6 +125,7 @@
             (click)="removeExtraCert(i)"
             aria-label="Remove extra X509_cert"
             type="button"
+            class="mb-4"
             mat-icon-button>
             <mat-icon>delete_forever</mat-icon>
           </button>
@@ -138,7 +141,7 @@
       </button>
     </div>
     <div class="col-12 d-flex align-items-center">
-      <i class="eos-icons me-3 text-primary">groups</i>
+      <i class="eos-icons me-3 text-primary mb-4">groups</i>
       <mat-form-field class="w-100">
         <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
         <input
@@ -148,7 +151,7 @@
       </mat-form-field>
     </div>
   </div>
-  <mat-form-field>
+  <mat-form-field style="width: 200px">
     <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
     <mat-select formControlName="default_role">
       <mat-option

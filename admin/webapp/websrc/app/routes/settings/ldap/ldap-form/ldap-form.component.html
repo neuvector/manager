@@ -12,7 +12,7 @@
         <mat-radio-button value="OpenLDAP">{{
           'setting.directory_type.OPEN_LDAP' | translate
         }}</mat-radio-button>
-        <mat-radio-button value="MicrosoftAD">{{
+        <mat-radio-button value="MicrosoftAD" class="ms-3">{{
           'setting.directory_type.MS_AD' | translate
         }}</mat-radio-button>
       </mat-radio-group>
@@ -20,7 +20,7 @@
   </div>
   <div class="row align-items-center my-0 my-md-4">
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons me-3 text-primary">cluster</i>
+      <i class="eos-icons me-3 text-primary mb-4">cluster</i>
       <mat-form-field class="w-100">
         <mat-label>{{ 'ldap.HOST' | translate }}</mat-label>
         <input
@@ -36,7 +36,7 @@
       <mat-icon
         aria-hidden="false"
         aria-label="License icon"
-        class="me-3 text-primary"
+        class="me-3 text-primary mb-4"
         >adjust
       </mat-icon>
       <mat-form-field class="w-100">
@@ -56,7 +56,7 @@
       <mat-icon
         aria-hidden="false"
         aria-label="License icon"
-        class="me-3 text-primary"
+        class="me-3 text-primary mb-4"
         >person_outline
       </mat-icon>
       <mat-form-field class="w-100">
@@ -71,7 +71,7 @@
       <mat-icon
         aria-hidden="false"
         aria-label="License icon"
-        class="me-3 text-primary"
+        class="me-3 text-primary mb-4"
         >vpn_key
       </mat-icon>
       <mat-form-field
@@ -88,6 +88,7 @@
         (click)="passwordVisible = !passwordVisible"
         *ngIf="ldapForm.controls.bind_password.value"
         aria-label="Visibility icon to toggle password visibility"
+        class="mb-4"
         mat-icon-button
         type="button">
         <i class="eos-icons">{{
@@ -97,7 +98,7 @@
     </div>
   </div>
   <div class="d-flex align-items-center my-2 my-md-4">
-    <i class="eos-icons me-3 text-primary">organization</i>
+    <i class="eos-icons me-3 text-primary mb-4">organization</i>
     <mat-form-field class="w-100">
       <mat-label>{{ 'ldap.BASE_DN' | translate }}</mat-label>
       <input
@@ -111,7 +112,7 @@
     </mat-form-field>
   </div>
   <div class="d-flex align-items-center my-2 my-md-4">
-    <i class="eos-icons me-3 text-primary">organization</i>
+    <i class="eos-icons me-3 text-primary mb-4">organization</i>
     <mat-form-field class="w-100">
       <mat-label>{{ 'ldap.GROUP_DN' | translate }}</mat-label>
       <input
@@ -125,7 +126,7 @@
     <mat-icon
       aria-hidden="false"
       aria-label="License icon"
-      class="me-3 text-primary"
+      class="me-3 text-primary mb-4"
       >portrait
     </mat-icon>
     <mat-form-field class="w-100">
@@ -139,7 +140,7 @@
     </mat-form-field>
   </div>
   <div class="d-flex align-items-center my-2 my-md-4">
-    <i class="eos-icons me-3 text-primary">recent_actors</i>
+    <i class="eos-icons me-3 text-primary mb-4">recent_actors</i>
     <mat-form-field class="w-100">
       <mat-label>{{ 'group.GROUP_MEMBER' | translate }}</mat-label>
       <input
@@ -159,7 +160,7 @@
     type="button">
     {{ 'ldap.TEST_CONNECTION' | translate }}
   </button>
-  <mat-form-field>
+  <mat-form-field style="width: 200px">
     <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
     <mat-select formControlName="default_role">
       <mat-option

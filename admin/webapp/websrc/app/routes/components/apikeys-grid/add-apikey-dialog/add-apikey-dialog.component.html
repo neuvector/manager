@@ -23,7 +23,7 @@
           class="me-3 mb-3 apikey__icon"
           >key
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'apikey.gridHeader.NAME' | translate }}</mat-label>
           <input matInput formControlName="apikey_name" />
           <mat-error *ngIf="form.controls.apikey_name.hasError('required')">
@@ -41,7 +41,7 @@
           class="me-3 mb-3 apikey__icon"
           >person
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{
             'apikey.gridHeader.DESCRIPTION' | translate
           }}</mat-label>
@@ -56,7 +56,9 @@
           fontSet="fa"
           fontIcon="fa-calendar-times">
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field
+          [ngClass]="selectedExpiration === 'hours' ? 'w-75' : 'w-100'"
+          class="mb-0">
           <mat-label>{{ 'apikey.addApikey.EXPIRE' | translate }}</mat-label>
           <mat-select
             formControlName="expiration_type"
@@ -69,10 +71,10 @@
           </mat-select>
         </mat-form-field>
         <ng-container *ngIf="selectedExpiration === 'hours'">
-          <mat-form-field class="w-10 ms-2">
+          <mat-form-field class="w-10 ms-2 mb-0 mt-4">
             <input matInput formControlName="expiration_hours" />
           </mat-form-field>
-          <mat-form-field class="w-15 ms-2">
+          <mat-form-field class="w-15 ms-2 mb-0 mt-3">
             <mat-select
               [(ngModel)]="customExpUnit"
               [ngModelOptions]="{ standalone: true }"
@@ -87,7 +89,7 @@
           </mat-form-field>
         </ng-container>
       </div>
-      <div class="apikey__field">
+      <div class="apikey__field ms-3">
         <mat-icon
           aria-hidden="false"
           aria-label="Role icon"
@@ -95,7 +97,7 @@
           fontSet="fa"
           fontIcon="fa-user-secret">
         </mat-icon>
-        <mat-form-field class="w-25">
+        <mat-form-field class="w-25 mb-0">
           <mat-label>{{ 'apikey.gridHeader.ROLE' | translate }}</mat-label>
           <mat-select formControlName="role">
             <mat-option *ngFor="let role of data.globalRoles" [value]="role">

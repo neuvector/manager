@@ -23,14 +23,14 @@
 <ng-container *ngIf="!data.isReset; else resetTemplate">
   <form (ngSubmit)="submit()" [formGroup]="form">
     <div class="user__container">
-      <div class="user__field">
+      <div class="user__field me-3">
         <mat-icon
           aria-hidden="false"
           aria-label="User icon"
           class="me-3 mb-3 user__icon"
           >person
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'user.addUser.USER_NAME' | translate }}</mat-label>
           <input
             matInput
@@ -41,14 +41,14 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="user__field">
+      <div class="user__field ms-3">
         <mat-icon
           aria-hidden="false"
           aria-label="Email icon"
           class="me-3 mb-3 user__icon"
           >email
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'user.addUser.EMAIL' | translate }}</mat-label>
           <input
             matInput
@@ -60,7 +60,7 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="user__field">
+      <div class="user__field me-3">
         <mat-icon
           aria-hidden="false"
           aria-label="Role icon"
@@ -68,7 +68,7 @@
           fontSet="fa"
           fontIcon="fa-user-secret">
         </mat-icon>
-        <mat-form-field class="w-25">
+        <mat-form-field class="w-25 mb-0">
           <mat-label>{{
             'user.addUser.ROLE_PLACEHOLDER' | translate
           }}</mat-label>
@@ -79,14 +79,14 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="user__field" *ngIf="!data.isEdit">
+      <div class="user__field ms-3" *ngIf="!data.isEdit">
         <mat-icon
           aria-hidden="false"
           aria-label="Language icon"
           class="me-3 mb-3 user__icon"
           >language
         </mat-icon>
-        <mat-form-field class="w-25">
+        <mat-form-field class="w-25 mb-0">
           <mat-label>{{ 'profile.LOCALE' | translate }}</mat-label>
           <mat-select
             (selectionChange)="updateTable()"

@@ -30,7 +30,7 @@
   <div class="d-flex">
     <button
       (click)="onNoClick()"
-      class="mr-2"
+      class="me-2"
       id="test-connection-cancel-button"
       mat-stroked-button
       type="button">
@@ -39,7 +39,7 @@
     <button
       *ngIf="options.formState.filtersChanged"
       (click)="onNoClick(true)"
-      class="mr-2"
+      class="me-2"
       id="test-connection-copy-filters-button"
       mat-stroked-button
       type="button">
@@ -48,22 +48,22 @@
     <button
       (click)="testConnection()"
       *ngIf="!testingSwitch"
-      class="mr-1 d-flex justify-content-center align-items-center"
+      class="me-1 d-flex justify-content-center align-items-center"
       color="primary"
       id="test-connection-start-test-button"
       mat-raised-button
       type="button">
-      <i class="eos-icons mr-2">flask</i>{{ 'registry.START_TEST' | translate }}
+      <i class="eos-icons me-2">flask</i>{{ 'registry.START_TEST' | translate }}
     </button>
     <button
       (click)="stopTest()"
       *ngIf="testingSwitch"
-      class="mr-1 d-flex justify-content-center align-items-center"
+      class="me-1 d-flex justify-content-center align-items-center"
       color="primary"
       id="test-connection-stop-test-button"
       mat-raised-button
       type="button">
-      <i class="eos-icons mr-2">block</i>{{ 'registry.STOP_TEST' | translate }}
+      <i class="eos-icons me-2">block</i>{{ 'registry.STOP_TEST' | translate }}
     </button>
   </div>
 </div>

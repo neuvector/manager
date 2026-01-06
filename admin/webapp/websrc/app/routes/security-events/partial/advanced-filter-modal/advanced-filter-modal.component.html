@@ -24,7 +24,7 @@
       <div formArrayName="severity" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let severity of severityFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{ getDisplayName(filterSeverity[i]) }}
           </mat-checkbox>
         </ng-container>
@@ -37,7 +37,7 @@
       <div formArrayName="location" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let location of locationFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{
               'securityEvent.label.' + filterLocation[i].toUpperCase()
                 | translate
@@ -53,7 +53,7 @@
       <div formArrayName="category" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let category of categoryFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{
               'securityEvent.label.' + filterCategory[i].toUpperCase()
                 | translate
@@ -67,7 +67,7 @@
       <div formArrayName="other" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let other of otherFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{ filterOther[i] | translate }}
           </mat-checkbox>
         </ng-container>
@@ -76,7 +76,7 @@
     <mat-divider></mat-divider>
     <section class="row mx-0 align-items-center">
       <span class="d-block col-3">{{ 'securityEvent.HOST' | translate }}</span>
-      <mat-form-field class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Host"
@@ -102,7 +102,7 @@
       <span class="d-block col-3">{{
         'securityEvent.SOURCE' | translate
       }}</span>
-      <mat-form-field class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Source"
@@ -130,7 +130,7 @@
       <span class="d-block col-3">{{
         'securityEvent.DESTINATION' | translate
       }}</span>
-      <mat-form-field class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Destination"
@@ -157,10 +157,10 @@
       </mat-form-field>
     </section>
     <section class="row mx-0 align-items-center">
-      <label class="col-3 font-weight-normal mb-0" for="namespaceInput">{{
+      <span class="col-3 mb-0" for="namespaceInput">{{
         'securityEvent.DOMAIN' | translate
-      }}</label>
-      <mat-form-field class="col pl-0">
+      }}</span>
+      <mat-form-field class="col ps-0 mb-0">
         <mat-chip-grid
           #chipList
           aria-label="Namespace selection"
@@ -198,7 +198,7 @@
       <span class="d-block col-3">{{
         'securityEvent.OTHER_KEYWORD' | translate
       }}</span>
-      <mat-form-field class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           formControlName="includedKeyword"
           id="includedKeyword"
@@ -209,7 +209,7 @@
       <span class="d-block col-3">{{
         'securityEvent.EXCLUDED_KEYWORD' | translate
       }}</span>
-      <mat-form-field class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           formControlName="excludedKeyword"
           id="excludedKeyword"
@@ -218,7 +218,7 @@
     </section>
   </form>
 </div>
-<div class="float-right" mat-dialog-actions>
+<div mat-dialog-actions style="justify-content: flex-end">
   <button (click)="reset()" mat-button>Reset</button>
   <button
     [mat-dialog-close]="form.value"

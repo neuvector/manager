@@ -51,7 +51,7 @@ export class ProcessGridComponent implements OnInit, OnChanges {
       headerValueGetter: () => this.tr.instant('containers.process.USER'),
       cellRenderer: params =>
         params.value === 'root'
-          ? `<em class="fa fa-exclamation text-danger mr-1"></em>${params.value}`
+          ? `<em class="fa fa-exclamation text-danger me-1"></em>${params.value}`
           : params.value,
       width: 80,
     },

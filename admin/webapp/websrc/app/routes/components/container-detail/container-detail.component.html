@@ -8,7 +8,7 @@
         fontSet="fa"
         fontIcon="fa-credit-card">
       </mat-icon>
-      <div class="ml-3 overflow-hidden">
+      <div class="ms-3 overflow-hidden">
         {{ 'controllers.detail.ID' | translate }}
         <div class="text-muted text-truncate">
           {{ container.brief.id }}
@@ -25,7 +25,7 @@
         fontSet="fa"
         fontIcon="fa-cogs">
       </mat-icon>
-      <div class="ml-3 overflow-hidden">
+      <div class="ms-3 overflow-hidden">
         {{ 'network.gridHeader.SERVICE' | translate }}
         <div class="text-muted text-truncate">
           {{ container.brief.service || '&nbsp;' }}
@@ -43,7 +43,7 @@
       fontSet="fa"
       fontIcon="fa-credit-card">
     </mat-icon>
-    <div class="ml-3 overflow-hidden">
+    <div class="ms-3 overflow-hidden">
       {{ 'network.gridHeader.SERVICE_ACCOUNT' | translate }}
       <div class="text-muted text-truncate">
         {{ container.rt_attributes.service_account }}
@@ -60,7 +60,7 @@
       fontSet="fa"
       fontIcon="fa-globe">
     </mat-icon>
-    <div class="ml-3 overflow-hidden">
+    <div class="ms-3 overflow-hidden">
       {{ 'containers.detail.NETWORK_MODE' | translate }}
       <div class="text-muted text-truncate">
         {{ container.rt_attributes.network_mode }}
@@ -75,7 +75,7 @@
       fontSet="fa"
       fontIcon="fa-archive">
     </mat-icon>
-    <div class="ml-3 overflow-hidden">
+    <div class="ms-3 overflow-hidden">
       {{ 'containers.detail.IMAGE' | translate }}
       <div class="d-flex align-items-baseline">
         <ng-container *ngIf="container.brief.image_reg_scanned; else Unscanned">
@@ -109,7 +109,7 @@
       fontSet="fa"
       fontIcon="fa-calendar">
     </mat-icon>
-    <div class="ml-3 overflow-hidden">
+    <div class="ms-3 overflow-hidden">
       {{ 'containers.detail.IMAGE_CREATED_AT' | translate }}
       <div class="text-muted text-truncate">
         {{
@@ -129,7 +129,7 @@
       fontSet="fa"
       fontIcon="fa-archive">
     </mat-icon>
-    <div class="ml-3 overflow-hidden">
+    <div class="ms-3 overflow-hidden">
       {{ 'containers.detail.BASE_OS' | translate }}
       <div class="text-muted text-truncate">
         {{ container.security.scan_summary.base_os }}
@@ -146,7 +146,7 @@
         container.rt_attributes.privileged ? 'fa-user-times' : 'fa-user-check'
       ">
     </mat-icon>
-    <div class="ml-3 overflow-hidden">
+    <div class="ms-3 overflow-hidden">
       {{ 'containers.detail.ROOT_PRIVILEGED' | translate }}
       <div class="text-muted text-truncate">
         {{ container.rt_attributes.privileged }}
@@ -161,7 +161,7 @@
       fontSet="fa"
       fontIcon="fa-shield-alt">
     </mat-icon>
-    <div class="ml-3 overflow-hidden">
+    <div class="ms-3 overflow-hidden">
       {{ 'containers.detail.ENFORCER' | translate }}
       <div class="text-muted text-truncate">
         {{ container.enforcer_name }}
@@ -178,7 +178,7 @@
       fontSet="fa"
       fontIcon="fa-calendar">
     </mat-icon>
-    <div class="ml-3 overflow-hidden">
+    <div class="ms-3 overflow-hidden">
       {{ 'enforcers.detail.DISCONNECTED_AT' | translate }}
       <div class="text-muted text-truncate">
         {{ container.finished_at | date : 'MMM dd, y HH:mm:ss' }}

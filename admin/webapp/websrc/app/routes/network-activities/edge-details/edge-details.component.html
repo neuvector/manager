@@ -40,7 +40,7 @@
     "
     class="pv-lg">
     <div class="text-info" style="font-size: 16px">
-      <em class="fa fa-info-circle mr-2" aria-hidden="true"></em>
+      <em class="fa fa-info-circle me-2" aria-hidden="true"></em>
       {{ 'general.NO_CONVERSATIONS' | translate }}
     </div>
   </div>
@@ -54,16 +54,16 @@
           conversationDetail.entries &&
           conversationDetail.entries.length > 0
         "
-        class="text-muted mr-2"
+        class="text-muted me-2"
         >{{ 'network.edgeDetails.SESSIONS' | translate }}
         {{ sessionCount }}</span
       >
       <span class="action-label warning px-1" *ngIf="onViolation"
-        ><em class="fa fa-ban mr-1"></em>
+        ><em class="fa fa-ban me-1"></em>
         {{ 'network.edgeDetails.VIOLATION' | translate }}
       </span>
       <span class="action-label danger px-1" *ngIf="onThreat"
-        ><em class="fas fa-bug mr-1"></em>
+        ><em class="fas fa-bug me-1"></em>
         {{ 'network.edgeDetails.THREAT' | translate }}
       </span>
     </div>
@@ -81,8 +81,8 @@
         color="primary"
         aria-label="review rule"
         (click)="overrideRule(traffic, edgeDetails)"
-        class="mt-1 mr-1">
-        <em class="far fa-edit mr-1"></em>
+        class="mt-1 me-1">
+        <em class="far fa-edit me-1"></em>
         {{ 'network.edgeDetails.OVERRIDE_RULE' | translate }}
       </button>
       <button
@@ -97,7 +97,7 @@
         *ngIf="
           conversationDetail.entries && conversationDetail.entries.length > 0
         ">
-        <em class="fa fa-magic mr-1"></em
+        <em class="fa fa-magic me-1"></em
         >{{ 'network.edgeDetails.CLEAR' | translate }}
       </button>
     </div>
@@ -107,7 +107,7 @@
     <h4 *ngIf="rule.id !== 0">
       {{ 'policy.RULE_DETAILS' | translate }}
       <em class="far fa-hand-point-right mx-1 text-primary"></em>
-      <small class="text-muted mr-4">{{ rule.id }}</small>
+      <small class="text-muted me-4">{{ rule.id }}</small>
       <div
         *ngIf="rule.learned"
         class="action-label px-1 learn-rule"
@@ -124,7 +124,7 @@
     <div>
       <form name="ruleForm">
         <div class="d-flex justify-content-between align-items-center">
-          <div class="full-width mr-2">
+          <div class="full-width me-2">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>{{ 'policy.editPolicy.FROM' | translate }}</mat-label>
               <input
@@ -134,7 +134,7 @@
                 aria-label="From" />
             </mat-form-field>
           </div>
-          <div class="full-width mr-2">
+          <div class="full-width me-2">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>{{ 'policy.editPolicy.TO' | translate }}</mat-label>
               <input matInput value="{{ rule.to }}" disabled aria-label="To" />
@@ -152,7 +152,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-          <div class="full-width mr-2">
+          <div class="full-width me-2">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>{{ 'policy.editPolicy.PORT' | translate }}</mat-label>
               <input
@@ -162,7 +162,7 @@
                 aria-label="Port" />
             </mat-form-field>
           </div>
-          <div class="full-width mr-2">
+          <div class="full-width me-2">
             <ng-container *ngIf="rule.created_timestamp">
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{
@@ -209,17 +209,17 @@
                 color="primary"
                 class="mt-1"
                 (click)="closeRuleDetail()">
-                <em class="far fa-window-close mr-1"></em
+                <em class="far fa-window-close me-1"></em
                 >{{ 'policy.portlet.CLOSE' | translate }}
               </button>
               <button
                 mat-raised-button
                 *ngIf="isWriteNetworkAuthorized"
-                class="mt-1 mr-2"
+                class="mt-1 me-2"
                 color="primary"
                 aria-label="Deploy rule"
                 (click)="updateRule(rule)">
-                <em class="fa fa-save mr-2"></em
+                <em class="fa fa-save me-2"></em
                 >{{ 'policy.portlet.SUBMIT' | translate }}
               </button>
             </div>

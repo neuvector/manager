@@ -7,6 +7,7 @@
   ">
   <button
     mat-icon-button
+    style="line-height: 24px; margin-top: -8px"
     [style.visibility]="
       params.data.blocked_for_failed_login ? 'visible' : 'hidden'
     "
@@ -17,6 +18,7 @@
   </button>
   <button
     mat-icon-button
+    style="line-height: 24px; margin-top: -8px"
     [style.visibility]="params.data.password_resettable ? 'visible' : 'hidden'"
     matTooltip="{{ 'user.tooltips.RESET_PASSWORD' | translate }}"
     matTooltipPosition="above"
@@ -25,6 +27,7 @@
   </button>
   <button
     mat-icon-button
+    style="line-height: 24px; margin-top: -8px"
     matTooltip="{{ 'user.tooltips.EDIT' | translate }}"
     matTooltipPosition="above"
     (click)="edit()">
@@ -32,6 +35,7 @@
   </button>
   <button
     mat-icon-button
+    style="line-height: 24px; margin-top: -8px"
     [style.visibility]="params.data.fullname !== 'admin' ? 'visible' : 'hidden'"
     matTooltip="{{ 'user.tooltips.REMOVE' | translate }}"
     matTooltipPosition="above"
@@ -42,6 +46,7 @@
 <ng-template #viewTemplate>
   <button
     mat-icon-button
+    style="line-height: 24px; margin-top: -8px"
     matTooltip="{{ 'user.tooltips.VIEW' | translate }}"
     matTooltipPosition="above"
     (click)="view()">

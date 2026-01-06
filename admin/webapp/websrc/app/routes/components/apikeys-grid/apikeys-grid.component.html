@@ -13,10 +13,10 @@
     <button
       *ngIf="isWriteUserAuthorized"
       (click)="addApikey()"
-      class="d-flex align-items-center justify-content-start px-2 my-3 mr-3"
+      class="d-flex align-items-center justify-content-start px-2 my-3 me-3"
       id="apikeys-add-dialog"
       mat-stroked-button>
-      <i class="eos-icons mr-2">add_circle</i>{{ 'apikey.ADD' | translate }}
+      <i class="eos-icons me-2">add_circle</i>{{ 'apikey.ADD' | translate }}
     </button>
     <app-quick-filter
       [gridOptions]="gridOptions"

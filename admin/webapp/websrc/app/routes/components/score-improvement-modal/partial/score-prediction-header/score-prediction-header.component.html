@@ -1,5 +1,5 @@
 <div class="d-flex align-items-center justify-content-end score-header">
-  <div class="flex-grow-1 text-muted mat-h4 pl-4">{{ message }}</div>
+  <div class="flex-grow-1 text-muted mat-h4 ps-4">{{ message }}</div>
   <div class="score-container score-container-flex">
     <ngx-gauge
       class="score"
@@ -9,7 +9,9 @@
       [animate]="true"
       [duration]="1"
       [foregroundColor]="gaugeColor"
-      [size]="40">
+      [thick]="10"
+      cap="round"
+      [size]="120">
     </ngx-gauge>
     <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
       {{ gaugeLabel }}
@@ -24,7 +26,7 @@
         class="fa fa-long-arrow-alt-right fa-2x text-success score-improvement-arrow"></em>
     </div>
   </div>
-  <div class="score-container score-container-flex mr-3">
+  <div class="score-container score-container-flex me-3">
     <ngx-gauge
       class="score"
       type="arch"
@@ -32,8 +34,10 @@
       [value]="projectedScore || 0"
       [animate]="true"
       [duration]="1"
-      [foregroundColor]="gaugeColor"
-      [size]="40">
+      [foregroundColor]="gaugeLabelColorProj"
+      [thick]="10"
+      cap="round"
+      [size]="120">
     </ngx-gauge>
     <div class="score-label" [ngStyle]="{ color: gaugeLabelColorProj }">
       {{ gaugeLabelProj }}

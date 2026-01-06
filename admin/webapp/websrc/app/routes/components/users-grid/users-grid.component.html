@@ -12,19 +12,19 @@
   <div class="d-flex align-items-center justify-content-end">
     <button
       (click)="deleteUser()"
-      class="d-flex align-items-center justify-content-start mr-2"
+      class="d-flex align-items-center justify-content-start me-2"
       id="users-remove-dialog"
       mat-stroked-button
       *ngIf="removable && isWriteUserAuthorized">
-      <i class="eos-icons mr-2">delete</i>{{ 'role.REMOVE' | translate }}
+      <i class="eos-icons me-2">delete</i>{{ 'role.REMOVE' | translate }}
     </button>
     <button
       (click)="addUser()"
       *appDisplayControl="'write_users'"
-      class="d-flex align-items-center justify-content-start px-2 mr-2"
+      class="d-flex align-items-center justify-content-start px-2 me-2"
       id="users-add-dialog"
       mat-stroked-button>
-      <i class="eos-icons mr-2">add_circle</i>{{ 'role.ADD' | translate }}
+      <i class="eos-icons me-2">add_circle</i>{{ 'role.ADD' | translate }}
     </button>
 
     <app-loading-button
@@ -38,7 +38,7 @@
       [loading]="!!(refreshing$ | async)"
       [text]="'network.REFRESH' | translate"
       [type]="'button'"
-      class="mr-3">
+      class="me-3">
     </app-loading-button>
     <app-quick-filter
       [gridOptions]="gridOptions"

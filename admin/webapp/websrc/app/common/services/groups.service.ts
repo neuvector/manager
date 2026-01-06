@@ -401,7 +401,7 @@ export class GroupsService {
         cellRenderer: params => {
           let display = '';
           if (params.value && params.value.high)
-            display += `<span class="action-label px-1 danger mr-sm">${params.value.high}</span>`;
+            display += `<span class="action-label px-1 danger ">${params.value.high}</span>`;
           if (params.value && params.value.medium)
             display += `<span class="action-label px-1 warning">${params.value.medium}</span>`;
           return display;

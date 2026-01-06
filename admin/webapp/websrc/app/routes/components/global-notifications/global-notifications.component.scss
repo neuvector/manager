@@ -6,6 +6,7 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-size: 12px;
   &.clamped {
     -webkit-line-clamp: 2;
   }
@@ -13,3 +14,4 @@
     -webkit-line-clamp: none;
   }
 }
+

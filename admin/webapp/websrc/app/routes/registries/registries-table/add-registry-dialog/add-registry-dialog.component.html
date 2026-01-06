@@ -13,7 +13,7 @@
     (click)="openTestConnectionDialog()"
     *ngIf="canTestConnection"
     [disabled]="form.invalid || submittingForm"
-    class="mr-1"
+    class="me-1"
     color="primary"
     id="add-registry-dialog-test-setting"
     mat-raised-button
@@ -30,7 +30,7 @@
   <div class="d-flex justify-content-end">
     <button
       (click)="onNoClick()"
-      class="mr-2"
+      class="me-2"
       id="add-registry-dialog-cancel"
       mat-stroked-button
       type="button">
@@ -42,7 +42,7 @@
       [loading]="submittingForm || !!(saving$ | async)"
       [text]="'general.SUBMIT' | translate"
       appearance="mat-raised-button"
-      buttonClasses="mr-1"
+      buttonClasses="me-1"
       color="primary"
       id="add-registry-dialog-submit"
       type="submit">

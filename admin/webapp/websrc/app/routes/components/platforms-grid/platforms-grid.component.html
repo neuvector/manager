@@ -16,7 +16,7 @@
           mat-stroked-button
           aria-label="Scan action"
           type="button"
-          class="mr-3"
+          class="me-3"
           (click)="scan.emit(selectedPlatform)"
           [disabled]="!selectedPlatform">
           {{ 'scan.SCAN' | translate }}
@@ -27,7 +27,8 @@
       [gridOptions]="gridOptions"
       [gridApi]="gridApi"
       (filterCountChange)="filterCountChanged($event)"
-      [showCount]="false">
+      [showCount]="false"
+      class="mt-1">
     </app-quick-filter>
   </div>
 </div>

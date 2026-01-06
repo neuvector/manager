@@ -1,6 +1,7 @@
 <mat-card
   [ngClass]="[this.to.severity?.toLowerCase() ?? '']"
   [ngStyle]="to.isPlainOutfitMode && { 'box-shadow': 'none' }"
+  style="border: none"
   appearance="outlined">
   <mat-card-header *ngIf="to.header" style="margin-bottom: 1rem">{{
     to.header | translate

@@ -3,7 +3,7 @@
     (click)="onToggleSafeModules()"
     class="d-flex align-items-center"
     mat-button>
-    <i class="eos-icons mr-2">{{
+    <i class="eos-icons me-2">{{
       hideSafeModules ? 'visibility' : 'visibility_off'
     }}</i
     >{{
@@ -16,7 +16,7 @@
     <i class="eos-icons icon-18">csv_file</i>
   </button>
 </div>
-<div class="row registry-modules-row mr-0">
+<div class="row registry-modules-row me-0">
   <div class="col-12">
     <app-modules-charts [modules]="modules"></app-modules-charts>
   </div>

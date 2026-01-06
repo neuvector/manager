@@ -27,7 +27,7 @@
       {{ params.node.data.status | titlecase }}
     </span>
   </ng-template>
-  <span *ngSwitchCase="'scanning'" class="badge badge-primary text-white">
+  <span *ngSwitchCase="'scanning'" class="badge badge-success text-white">
     {{ params.node.data.status | titlecase }}
   </span>
   <span *ngSwitchDefault>{{ params.node.data.status | titlecase }}</span>

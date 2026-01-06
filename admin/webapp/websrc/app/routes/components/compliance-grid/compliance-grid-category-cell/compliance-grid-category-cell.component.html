@@ -1,11 +1,11 @@
 <div class="d-flex align-items-center">
   <span
     class="badge ag-badge text-white"
-    [class.ml-2]="!!params.data.parent_id"
+    [class.ms-2]="!!params.data.parent_id"
     style="background-color: #1154a2">
     {{ category }}
   </span>
-  <div *ngIf="isParent" class="ml-1" (click)="toggleVisible()">
+  <div *ngIf="isParent" class="ms-1" (click)="toggleVisible()">
     <i class="fa fa-minus-circle" *ngIf="isChildVisible"></i>
     <i class="fa fa-plus-circle" *ngIf="!isChildVisible"></i>
   </div>

@@ -1,0 +1,123 @@
+// Base class
+//
+// Requires one of the contextual, color modifier classes for `color` and
+// `background-color`.
+$badge-border-radius: .25rem !default;
+$badge-transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
+$badge-pill-padding-x:              .6em !default;
+$badge-pill-border-radius:          10rem !default;
+$badge-focus-width: .2rem !default;
+$yiq-contrasted-threshold:  150 !default;
+
+@mixin hover-focus() {
+  &:hover,
+  &:focus {
+    @content;
+  }
+}
+
+@mixin badge-variant($bg) {
+  color: color-yiq($bg) !important;
+  background-color: $bg;
+
+  @at-root a#{&} {
+    @include hover-focus() {
+      color: color-yiq($bg);
+      background-color: darken($bg, 10%);
+    }
+
+    &:focus,
+    &.focus {
+      outline: 0;
+      box-shadow: 0 0 0 $badge-focus-width rgba($bg, 0.5);
+    }
+  }
+}
+
+// Color contrast
+@function color-yiq($color) {
+  $r: red($color);
+  $g: green($color);
+  $b: blue($color);
+
+  $yiq: (($r * 299) + ($g * 587) + ($b * 114)) * 0.001;
+
+  @if ($yiq >= $yiq-contrasted-threshold) {
+    @return #141823;
+  } @else {
+    @return #fff;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: $badge-padding-y $badge-padding-x;
+  @include font-size($badge-font-size);
+  font-weight: $badge-font-weight;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  @include border-radius($badge-border-radius);
+  @include transition($badge-transition);
+
+  @at-root a#{&} {
+    @include hover-focus() {
+      text-decoration: none;
+    }
+  }
+
+  // Empty badges collapse automatically
+  &:empty {
+    display: none;
+  }
+}
+
+// Sizing fix for badge in AG Grid cell renderer
+.ag-badge {
+  margin-left: 0 !important; // needed for conflicting .badge rules in eos-style.css & badges.component.scss
+}
+
+.ag-badge-60 {
+  width: 60px;
+}
+
+.ag-badge-80 {
+  width: 80px;
+}
+
+.ag-full {
+  width: 100%;
+}
+
+// Quick fix for badges in buttons
+.btn .badge {
+  position: relative;
+  top: -1px;
+}
+
+// Pill badges
+//
+// Make them extra rounded with a modifier to replace v3's badges.
+
+.badge-pill {
+  padding-right: $badge-pill-padding-x;
+  padding-left: $badge-pill-padding-x;
+  @include border-radius($badge-pill-border-radius);
+}
+
+// Colors
+//
+// Contextual variations (linked badges get darker on :hover).
+
+@each $color, $value in $theme-colors {
+  .badge-#{$color} {
+    @include badge-variant($value);
+  }
+}
+
+@each $color, $value in $nv-colors {
+  .badge-#{$color} {
+    @include badge-variant($value);
+  }
+}

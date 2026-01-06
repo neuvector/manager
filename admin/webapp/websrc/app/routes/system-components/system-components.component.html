@@ -1,7 +1,7 @@
 <mat-card>
   <mat-tab-group
     (selectedTabChange)="activateTab($event)"
-    class="component-tabs">
+    class="component-tabs system-components-tab-group">
     <mat-tab label="{{ 'sidebar.nav.CONTROLLERS' | translate }}">
       <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
         <ng-container *appContainerOne="let height">
@@ -13,7 +13,7 @@
           </div>
         </ng-container>
         <ng-container *appContainerTwo="let height">
-          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+          <div [ngStyle]="{ height: height - 24 + 'px' }" class="pt-0">
             <app-controller-details></app-controller-details>
           </div>
         </ng-container>
@@ -30,7 +30,7 @@
           </div>
         </ng-container>
         <ng-container *appContainerTwo="let height">
-          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+          <div [ngStyle]="{ height: height - 24 + 'px' }" class="pt-0">
             <app-scanner-details></app-scanner-details>
           </div>
         </ng-container>
@@ -47,7 +47,7 @@
           </div>
         </ng-container>
         <ng-container *appContainerTwo="let height">
-          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+          <div [ngStyle]="{ height: height - 24 + 'px' }" class="pt-0">
             <app-enforcer-details></app-enforcer-details>
           </div>
         </ng-container>

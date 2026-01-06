@@ -13,7 +13,7 @@
   </div>
   <div class="d-flex align-items-center justify-content-end">
     <ng-container [ngSwitch]="versionInfoService.template">
-      <div class="mr-3" *ngSwitchCase="'compliance'">
+      <div class="me-3" *ngSwitchCase="'compliance'">
         <span *ngIf="versionInfoService.infoData.docker_cis_version">
           Docker &nbsp;{{ 'containers.CIS_VERSION' | translate }}:&nbsp;
           {{ versionInfoService.infoData.docker_cis_version }}&nbsp;&nbsp;
@@ -29,7 +29,7 @@
           }}">
         </em>
       </div>
-      <div class="mr-3" *ngSwitchCase="'vulnerabilities'">
+      <div class="me-3" *ngSwitchCase="'vulnerabilities'">
         <span *ngIf="versionInfoService.infoData.scan_summary.scanner_version">
           {{ 'audit.gridHeader.CVE_DB_VERSION' | translate }}:&nbsp;
           {{
@@ -53,7 +53,7 @@
           mat-stroked-button
           aria-label="Scan action"
           type="button"
-          class="mr-3"
+          class="me-3"
           (click)="scan.emit(selectedNode)"
           [disabled]="!selectedNode">
           {{ 'scan.SCAN' | translate }}

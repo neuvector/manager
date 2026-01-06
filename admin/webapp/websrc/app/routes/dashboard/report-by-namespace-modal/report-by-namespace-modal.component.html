@@ -24,14 +24,14 @@
       (btnClick)="data.printDashboardReport()"
       appearance="mat-button"
       [text]="'dashboard.ALL_NAMESPACE' | translate"
-      buttonClasses="mr-1 d-flex justify-content-center align-items-center">
+      buttonClasses="me-1 d-flex justify-content-center align-items-center">
     </app-loading-button>
     <app-loading-button
       (btnClick)="printDashboardReportByDomain(domain)"
       *ngFor="let domain of data.domainList"
       [text]="domain"
       appearance="mat-button"
-      buttonClasses="mr-1 d-flex justify-content-center align-items-center">
+      buttonClasses="me-1 d-flex justify-content-center align-items-center">
     </app-loading-button>
   </div>
 </div>

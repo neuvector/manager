@@ -5,7 +5,7 @@
     </h1>
     <div class="d-flex align-items-center justify-content-end">
       <ng-container *ngIf="!error">
-        <div class="mr-3" *ngIf="autoScanAuthorized && nodes.length > 0">
+        <div class="me-3" *ngIf="autoScanAuthorized && nodes.length > 0">
           <mat-slide-toggle
             [formControl]="autoScan"
             (change)="configAutoScan(auto_scan || false)">
@@ -46,6 +46,7 @@
       <ng-container *appContainerTwo="let height">
         <mat-card
           *ngIf="selectedNode"
+          style="display: block"
           [ngStyle]="{ height: height + 'px' }"
           class="pt-0">
           <app-node-details [gridHeight]="height - 80" [node]="selectedNode">

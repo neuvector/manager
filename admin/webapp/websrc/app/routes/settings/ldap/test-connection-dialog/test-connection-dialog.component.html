@@ -3,7 +3,7 @@
   <div mat-dialog-content>
     <div class="row">
       <div class="col-6 d-flex align-items-center">
-        <mat-form-field class="w-inherit">
+        <mat-form-field class="w-inherit mb-0">
           <mat-label>{{ 'ldap.USERNAME' | translate }}</mat-label>
           <input
             formControlName="username"
@@ -13,7 +13,7 @@
         </mat-form-field>
       </div>
       <div class="col-6 d-flex align-items-center">
-        <mat-form-field class="w-inherit">
+        <mat-form-field class="w-inherit mb-0">
           <mat-label>{{ 'ldap.PASSWORD' | translate }}</mat-label>
           <input
             [type]="passwordVisible ? 'text' : 'password'"
@@ -26,6 +26,7 @@
           (click)="passwordVisible = !passwordVisible"
           *ngIf="testForm.controls.password.value"
           aria-label="Visibility icon to toggle password visibility"
+          class="mb-3"
           mat-icon-button
           type="button">
           <i class="eos-icons">{{

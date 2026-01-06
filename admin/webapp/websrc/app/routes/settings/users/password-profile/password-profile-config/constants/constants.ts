@@ -7,7 +7,7 @@ export const MinLengthField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.passwordFormat.MIN_LEN',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -27,7 +27,7 @@ export const MinUppercaseField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.passwordFormat.MIN_UPPER',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -47,7 +47,7 @@ export const MinLowercaseField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.passwordFormat.MIN_LOWER',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -67,7 +67,7 @@ export const MinNumericField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.passwordFormat.MIN_DIGIT',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -87,7 +87,7 @@ export const MinSpecialField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.passwordFormat.MIN_SP_CHAR',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -135,7 +135,7 @@ export const FailedLoginAttemptsField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.loginFailureAllowance.CNT_ALLOW_FAIL',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -156,7 +156,7 @@ export const FailedLoginAccessField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.loginFailureAllowance.BLOCK_TIME',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -188,7 +188,7 @@ export const ExpiredPasswordAgeField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.passwordExpiring.PASSWORD_EXPIRED_DAYS',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -220,7 +220,7 @@ export const PasswordHistoryKeptField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.passwordHistory.NUM_PASSWORD_HISTORY',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,
@@ -241,7 +241,7 @@ export const DefaultSessionTimeoutField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: 'passwordProfile.globalPolicy.SESSION_TIMEOUT',
-    hintClass: 'font-weight-bold text-muted col-md-6',
+    hintClass: 'font-weight-bold text-muted col-md-6 mb-4',
     wrapperClass: 'align-items-center',
     noInputHint: true,
     hideRequiredMarker: true,

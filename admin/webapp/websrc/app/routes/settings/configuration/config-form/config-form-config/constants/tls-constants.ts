@@ -109,8 +109,9 @@ export const TlsTableField: FormlyFieldConfig = {
         type: FormlyComponents.EDIT_TABLE_CONTROLS,
         defaultValue: true,
         templateOptions: {
-          flexWidth: '5%',
+          flexWidth: '10%',
           showDeleteButtonOnly: true,
+          fieldClass: 'justify-content-center',
         },
         expressionProperties: {
           'templateOptions.disabled': (model, formState, _field) => {

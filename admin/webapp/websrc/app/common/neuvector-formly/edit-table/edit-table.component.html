@@ -19,7 +19,9 @@
       [ngStyle]="{
         flex: currField.flexWidth ? '0 0 ' + currField.flexWidth : '1'
       }">
-      <formly-field [field]="element.fieldGroup[i]"></formly-field>
+      <formly-field
+        [field]="element.fieldGroup[i]"
+        style="flex: 1"></formly-field>
     </mat-cell>
   </ng-container>
   <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>

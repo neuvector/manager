@@ -73,7 +73,7 @@
           *ngIf="row.country_code !== '-'"
           src="{{
             './assets/img/country-flag/' +
-              row.country_code.toUpperCase() +
+              row.country_code.toLowerCase() +
               '.svg'
           }}"
           width="16px"

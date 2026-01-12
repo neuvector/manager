@@ -122,7 +122,7 @@ export class AuthUtilsService {
     let dPermissions = GlobalVariable.user.domain_permissions;
     let result = '';
 
-    if (GlobalVariable.isRemote) {
+    if (GlobalVariable.isRemote && GlobalVariable.isSUSESSO) {
       for (let rgPermission of rgPermissions) {
         if (neededPermission === rgPermission.id) {
           result = rgPermission.write ? 'w' : 'r';
@@ -155,6 +155,7 @@ export class AuthUtilsService {
 
       if (
         !GlobalVariable.isRemote ||
+        !GlobalVariable.isSUSESSO ||
         this.isFedRole(GlobalVariable.user.token?.role)
       ) {
         ownedPermissions = this.getCacheUserPermission().ownedPermissions;
@@ -201,6 +202,7 @@ export class AuthUtilsService {
 
       if (
         !GlobalVariable.isRemote ||
+        !GlobalVariable.isSUSESSO ||
         this.isFedRole(GlobalVariable.user.token?.role)
       ) {
         ownedPermissions = isWithDomainPermission

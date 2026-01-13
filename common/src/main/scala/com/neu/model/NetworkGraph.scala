@@ -108,4 +108,9 @@ case class Edge(
   bytes: Long
 )
 
-case class NetworkGraph(nodes: Array[Node], edges: Array[Edge], blacklist: Option[Blacklist] = None)
+case class NetworkGraph(
+  nodes: Array[Node],
+  edges: Array[Edge],
+  blacklist: Option[Blacklist] = None,
+  enableGPU: Boolean = false
+)

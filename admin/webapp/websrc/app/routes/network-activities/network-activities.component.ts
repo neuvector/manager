@@ -219,12 +219,13 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
     }
   }
 
-  private useGpu() {
+  private useGpu(): boolean {
     let gpuEnabled;
     if (this.localStorage.get('_gpuEnabled')) {
       gpuEnabled = JSON.parse(this.localStorage.get('_gpuEnabled'));
       if (gpuEnabled !== null) return gpuEnabled;
-    } else return false;
+    }
+    return false
   }
 
   private prepareGraphics(
@@ -872,7 +873,7 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
         gravity: 6,
         clusterGravity: 4,
         clustering: true,
-        maxIteration: 1000,
+        maxIteration: this.useGpu() ? 10 : 1000,
       },
       animate: true,
       enabledStack: true,
@@ -1792,6 +1793,13 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
         `${this.user}-blacklist`,
         JSON.stringify(this.blacklist)
       );
+
+      this.localStorage.set(
+        '_gpuEnabled',
+        JSON.stringify(response.enableGPU || false)
+      );
+
+      this.gpuEnabled = this.useGpu();
 
       this.data.nodes = this.filterHiddenNodes(response.nodes);
       this.data.edges = this.filterHiddenEdges(response.edges);

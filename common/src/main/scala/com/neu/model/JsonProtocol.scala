@@ -42,7 +42,7 @@ object JsonProtocol extends DefaultJsonProtocol {
   given userGraphLayoutFormat: RootJsonFormat[UserGraphLayout] = jsonFormat2(UserGraphLayout.apply)
 
   given edgeFormat: RootJsonFormat[Edge]                 = jsonFormat14(Edge.apply)
-  given networkGraphFormat: RootJsonFormat[NetworkGraph] = jsonFormat3(NetworkGraph.apply)
+  given networkGraphFormat: RootJsonFormat[NetworkGraph] = jsonFormat4(NetworkGraph.apply)
 
   def layoutToJson(layout: UserGraphLayout): String = layout.toJson.compactPrint
 }

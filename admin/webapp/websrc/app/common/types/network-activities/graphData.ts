@@ -6,6 +6,7 @@ export interface GraphData {
   nodes: Node[];
   edges: Edge[];
   blacklist?: Blacklist;
+  enableGPU: boolean;
 }
 
 export interface GraphDataSet {

@@ -65,7 +65,7 @@ export class GraphService {
     Discover: '#EFF4FF',
   };
   private readonly $win;
-  private _dataSet: GraphData = { edges: [], nodes: [] };
+  private _dataSet: GraphData = { edges: [], nodes: [], enableGPU: false };
   private readonly oneMillion = 1000 * 1000;
   private readonly cveColors = {
     high: { fill: '#fa184a', stroke: '#f76987' },

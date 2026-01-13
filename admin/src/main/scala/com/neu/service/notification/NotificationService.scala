@@ -362,7 +362,9 @@ class NotificationService()(implicit
   def getNetworkGraph(tokenId: String, user: String): Route = complete {
     try {
 
-      val dataSet =
+      val enableGPU: String = sys.env.getOrElse("ENABLE_GPU", "false")
+      logger.info("ENABLE_GPU: {}", enableGPU)
+      val dataSet           =
         RestClient.requestWithHeaderDecode(
           s"${baseClusterUri(tokenId)}/conversation",
           GET,
@@ -385,7 +387,8 @@ class NotificationService()(implicit
       NetworkGraph(
         markedNodes,
         edges,
-        BlacklistCacheManager.getBlacklist(user)
+        BlacklistCacheManager.getBlacklist(user),
+        enableGPU == "true"
       )
 
     } catch {

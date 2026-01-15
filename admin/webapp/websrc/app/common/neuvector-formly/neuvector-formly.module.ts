@@ -132,13 +132,7 @@ export enum CardSeverity {
     ReactiveFormsModule,
     MatChipsModule,
     MatInputModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient],
-      },
-    }),
+    TranslateModule.forChild(),
     MatIconModule,
     MatSliderModule,
     MatButtonModule,

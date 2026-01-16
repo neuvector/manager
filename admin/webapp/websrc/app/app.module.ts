@@ -15,6 +15,7 @@ import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from '@core/interceptor/auth.interceptor';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -52,6 +53,7 @@ export function getWindow() {
       useClass: AuthInterceptor,
       multi: true, // This is mandatory
     },
+    provideAnimations(),
   ],
   bootstrap: [AppComponent],
 })

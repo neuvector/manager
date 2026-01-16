@@ -131,7 +131,12 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
     TooltipModule.forRoot(),
     PopoverModule.forRoot(),
     TypeaheadModule.forRoot(),
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+      closeButton: true
+    }),
     // Material Modules
     MatAutocompleteModule,
     MatButtonModule,

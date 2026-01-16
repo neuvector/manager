@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NotifierService } from 'angular-notifier';
+import { ToastrService } from 'ngx-toastr';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class NotificationService {
   constructor(
-    private notifier: NotifierService,
+    private toastr: ToastrService,
     private utils: UtilsService,
     private http: HttpClient
   ) {}
@@ -19,12 +19,12 @@ export class NotificationService {
   open = (
     message: string,
     type: string = GlobalConstant.NOTIFICATION_TYPE.SUCCESS,
-    id: string = ''
+    title: string = ''
   ): void => {
-    if (id) {
-      this.notifier.notify(type, message, id);
+    if (title) {
+      this.toastr[type](message, title, {timeOut: 8000, closeButton: true});
     } else {
-      this.notifier.notify(type, message);
+      this.toastr[type](message, null, {timeOut: 8000, closeButton: true});
     }
   };
 
@@ -35,14 +35,6 @@ export class NotificationService {
         GlobalConstant.NOTIFICATION_TYPE.ERROR
       );
     }
-  };
-
-  openHtmlError = (messageHtmlStr, htmlTemplate, id = ''): void => {
-    this.notifier.show({
-      message: messageHtmlStr,
-      type: GlobalConstant.NOTIFICATION_TYPE.ERROR,
-      template: htmlTemplate,
-    });
   };
 
   acceptNotification(payload: GlobalNotificationPayLoad): Observable<any> {

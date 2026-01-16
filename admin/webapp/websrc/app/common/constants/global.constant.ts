@@ -248,7 +248,6 @@ export class GlobalConstant {
   };
 
   public static NOTIFICATION_TYPE = {
-    DEFAULT: 'default',
     INFO: 'info',
     SUCCESS: 'success',
     WARNING: 'warning',

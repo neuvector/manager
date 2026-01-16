@@ -373,6 +373,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               }
             });
           }
+          this.multiClusterService.dispatchGetClustersFinishEvent();
         },
         error: error => {
           this.clustersError = true;

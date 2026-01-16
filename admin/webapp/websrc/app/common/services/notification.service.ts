@@ -22,9 +22,9 @@ export class NotificationService {
     title: string = ''
   ): void => {
     if (title) {
-      this.toastr[type](message, title, {timeOut: 8000, closeButton: true});
+      this.toastr[type](message, title);
     } else {
-      this.toastr[type](message, null, {timeOut: 8000, closeButton: true});
+      this.toastr[type](message, null);
     }
   };
 

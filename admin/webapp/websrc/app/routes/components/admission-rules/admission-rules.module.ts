@@ -22,7 +22,7 @@ import { MatchedRuleListComponent } from './partial/configuration-assessment-mod
 import { IndexCellComponent } from './partial/configuration-assessment-modal/index-cell/index-cell.component';
 import { ExportOptionsModule } from '@components/export-options/export-options.module';
 import { AgGridModule } from 'ag-grid-angular';
-import { JsonEditorComponent } from 'ang-jsoneditor';
+import { NgJsonEditorComponent } from './partial/ng-json-editor/ng-json-editor.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +37,7 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
     ConfigurationAssessmentResultPrintableReportComponent,
     MatchedRuleListComponent,
     IndexCellComponent,
+    NgJsonEditorComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +53,6 @@ import { JsonEditorComponent } from 'ang-jsoneditor';
     AgGridModule,
     // AgGridModule.withComponents([ActionButtonsComponent]),
     ExportOptionsModule,
-    JsonEditorComponent,
   ],
   exports: [AdmissionRulesComponent],
 })

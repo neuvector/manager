@@ -18,10 +18,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { BytesPipe } from '@common/pipes/app.pipes';
 import { TranslateService } from '@ngx-translate/core';
 import {
-  JsonEditorComponent,
-  JsonEditorOptions,
-} from 'ang-jsoneditor';
-import {
   getValueType4Text,
   groupBy,
   updateGridData,
@@ -29,6 +25,7 @@ import {
 import { NotificationService } from '@services/notification.service';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { UtilsService } from '@common/utils/app.utils';
+import { NgJsonEditorComponent } from '../ng-json-editor/ng-json-editor.component';
 
 
 @Component({
@@ -69,9 +66,9 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   isPSSBaseline: boolean = false;
   isPSSRestricted: boolean = false;
   isMainView: boolean = true;
-  @ViewChild(JsonEditorComponent, { static: false })
-  editor: JsonEditorComponent;
-  jsonEditorOptions: JsonEditorOptions;
+  @ViewChild(NgJsonEditorComponent, { static: false })
+  editor: NgJsonEditorComponent;
+  jsonEditorOptions: any;
   podTemplateData: any;
   podTemplateTreeData: any;
   nodeValueType: string = '';
@@ -112,7 +109,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     private utils: UtilsService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.jsonEditorOptions = new JsonEditorOptions();
+    this.jsonEditorOptions = {};
   }
 
   ngOnInit(): void {

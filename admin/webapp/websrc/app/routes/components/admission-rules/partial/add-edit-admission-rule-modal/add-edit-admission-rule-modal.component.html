@@ -536,14 +536,14 @@
 
 <ng-template #customizedCriterionView>
   <div class="row margin-top-s" style="min-height: 500px">
-    <json-editor
+    <app-ng-json-editor
       id="template-editor"
       class="col-md-6 margin-top-m"
       style="max-height: 450px; overflow-y: auto"
       [options]="jsonEditorOptions"
       [data]="podTemplateTreeData"
       (click)="clickEditor($event)">
-    </json-editor>
+    </app-ng-json-editor>
     <div class="col-md-6">
       <mat-form-field *ngIf="customCriterion.name" style="width: 100%">
         <input

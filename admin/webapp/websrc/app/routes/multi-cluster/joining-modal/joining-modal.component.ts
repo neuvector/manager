@@ -106,7 +106,9 @@ export class JoiningModalComponent implements OnInit {
           return timer(0, 2000).pipe(
             switchMap(() => this.clustersService.getClusters()),
             filter((response: any) => {
-              return response && response.fed_role && response.fed_role !== '';
+              return (
+                response && response.fed_role && response.fed_role === 'joint'
+              );
             }),
             take(1),
             timeout(20000)

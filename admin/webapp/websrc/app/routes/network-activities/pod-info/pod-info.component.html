@@ -14,10 +14,11 @@
     </div>
     <button
       id="closePodInfo"
+      (click)="popupState.leave()"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
-      <i (click)="popupState.leave()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
 
@@ -129,7 +130,7 @@
             matTooltip="{{ pod.workload.service_group }}"
             matTooltipPosition="above"
             [matTooltipDisabled]="pod.workload.service_group.length < 30">
-            {{ pod.workload.service_group | shortenFromMiddle : 30 }}
+            {{ pod.workload.service_group | shortenFromMiddle: 30 }}
             <a
               mat-icon-button
               aria-label="External link button"
@@ -176,7 +177,7 @@
             {{ 'network.nodeDetails.CREATED_AT' | translate }}:
           </span>
           <span class="ml auto-hide host-item-value" style="display: block">
-            {{ pod.workload.started_at | date : 'MMM dd, y HH:mm:ss' }}
+            {{ pod.workload.started_at | date: 'MMM dd, y HH:mm:ss' }}
           </span>
         </div>
       </li>
@@ -185,9 +186,9 @@
           <span class="font-weight-bold host-item-key"
             >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
           >
-          <span class="ml  auto-hide host-item-key" style="display: block">
+          <span class="ml auto-hide host-item-key" style="display: block">
             {{
-              pod.workload.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss'
+              pod.workload.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss'
             }}
           </span>
         </div>
@@ -219,7 +220,7 @@
             >{{ 'group.gridHeader.VULNERABILITIES' | translate }}:</span
           >
           <div class="d-inline">
-            <span *ngIf="pod.risk?.high" class="badge badge-danger ">
+            <span *ngIf="pod.risk?.high" class="badge badge-danger">
               {{ pod.risk.high }}</span
             >
             <span *ngIf="pod.risk?.medium" class="badge badge-warning">

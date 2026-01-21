@@ -28,19 +28,18 @@
         <span
           [ngClass]="{
             'text-muted': !autoRefresh,
-            'text-success': autoRefresh
+            'text-success': autoRefresh,
           }">
           {{ 'network.AUTO_REFRESH' | translate }}
         </span>
       </mat-slide-toggle>
       <button
         id="closeActiveSessions"
+        (click)="stopRefreshSession(); popupState.leave()"
         aria-label="Close icon button"
         class="d-flex align-items-center justify-content-center ms-2"
         mat-icon-button>
-        <i (click)="stopRefreshSession(); popupState.leave()" class="eos-icons"
-          >close</i
-        >
+        <i class="eos-icons">close</i>
       </button>
     </div>
   </div>

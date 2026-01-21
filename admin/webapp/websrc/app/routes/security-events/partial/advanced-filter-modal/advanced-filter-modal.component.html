@@ -8,10 +8,11 @@
     {{ 'general.FILTER_MATCH_ALL' | translate }}
   </h1>
   <button
+    mat-dialog-close
     aria-label="Close icon button"
     class="d-flex align-items-center justify-content-center"
     mat-icon-button>
-    <i (click)="dialogRef.close()" class="eos-icons">close</i>
+    <i class="eos-icons">close</i>
   </button>
 </div>
 <hr class="fancy mt-1 mb-4 mx-0" />
@@ -93,7 +94,7 @@
           *ngIf="form.controls.host.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate : { field: ('securityEvent.HOST' | translate) }
+              | translate: { field: ('securityEvent.HOST' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -121,7 +122,7 @@
           *ngIf="form.controls.source.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate : { field: ('securityEvent.SOURCE' | translate) }
+              | translate: { field: ('securityEvent.SOURCE' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -151,7 +152,7 @@
           ">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate : { field: ('securityEvent.DESTINATION' | translate) }
+              | translate: { field: ('securityEvent.DESTINATION' | translate) }
           }}
         </mat-error>
       </mat-form-field>

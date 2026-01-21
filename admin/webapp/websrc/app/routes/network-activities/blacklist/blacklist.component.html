@@ -7,10 +7,11 @@
     </h4>
     <button
       id="closeBlackList"
+      (click)="popupState.leave()"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
-      <i (click)="popupState.leave()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
   <hr class="fancy mt-1 mb-1 mx-0" />

@@ -41,15 +41,12 @@
               "screenfull",
               "@antv/algorithm/lib/asyncIndex",
               "color",
-              "insert-css",
+              "insert-css"
             ],
-            "assets": [
-              "websrc/favicon.ico",
-              "websrc/assets"
-            ],
+            "assets": ["websrc/favicon.ico", "websrc/assets"],
             "styles": [
               "websrc/app/core/systemPrepare/systemPrepare.scss",
-              "websrc/styles.scss",
+              "websrc/styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": ["websrc/app/common/styles"]
@@ -125,10 +122,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "websrc/favicon.ico",
-              "websrc/assets"
-            ],
+            "assets": ["websrc/favicon.ico", "websrc/assets"],
             "styles": [
               "websrc/app/core/systemPrepare/systemPrepare.scss",
               "websrc/styles.scss"
@@ -146,16 +140,12 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "websrc/app/**/*.ts",
-              "websrc/app/**/*.html"
-            ]
+            "lintFilePatterns": ["websrc/app/**/*.ts", "websrc/app/**/*.html"]
           }
         }
       }
     }
   },
-  "defaultProject": "neuvector",
   "cli": {
     "analytics": false,
     "defaultCollection": "@angular-eslint/schematics",

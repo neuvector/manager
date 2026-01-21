@@ -1,4 +1,4 @@
-@import 'app/material/colors';
+@use 'app/material/colors';
 
 .permission-container {
   overflow-y: scroll;
@@ -10,7 +10,7 @@
   margin: 10px 20px;
   list-style-type: none;
   li:nth-child(even) {
-    background: $neuvector-grey-50;
+    background: colors.$neuvector-grey-50;
   }
   li:nth-child(odd) {
     background: #ffffff;

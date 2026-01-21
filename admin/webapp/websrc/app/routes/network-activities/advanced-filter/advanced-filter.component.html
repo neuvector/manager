@@ -23,20 +23,21 @@
         }}</label>
         <mat-form-field class="col ps-0">
           <mat-chip-grid
-            #domainChips
+            #domainChipsElement
             aria-label="Namespace selection"
-            formControlName="domains"
             id="domainInput">
             <mat-chip-row
               (mouseover)="showButton[i] = true"
               (mouseleave)="showButton[i] = false"
               (removed)="remove(domainChip, i)"
               *ngFor="
-                let domainChip of advFilterForm.controls.domains.value;
+                let domainChip of domainChips;
                 let i = index
               ">
               <img
                 src="assets/img/icons/graph/domain.svg"
+                width="20"
+                height="20"
                 alt="Icon of domain" />
               {{ domainChip.name }}
               <button matChipRemove *ngIf="showButton[i]">
@@ -48,7 +49,7 @@
               (matChipInputTokenEnd)="add($event)"
               [formControl]="namespaceCtrl"
               [matAutocomplete]="auto"
-              [matChipInputFor]="domainChips"
+              [matChipInputFor]="domainChipsElement"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_DOMAIN' | translate" />
           </mat-chip-grid>
@@ -71,18 +72,19 @@
           <mat-chip-grid
             #groupChipList
             aria-label="Group selection"
-            formControlName="selectedGroups"
             id="groupInput">
             <mat-chip-row
               (mouseover)="showGrpButton[i] = true"
               (mouseleave)="showGrpButton[i] = false"
               (removed)="removeGroup(groupChip, i)"
               *ngFor="
-                let groupChip of advFilterForm.controls.selectedGroups.value;
+                let groupChip of groupChips;
                 let i = index
               ">
               <img
                 src="assets/img/icons/graph/cluster.svg"
+                width="20"
+                height="20"
                 alt="Icon of group" />
               {{ groupChip.displayName }}
               <button matChipRemove *ngIf="showGrpButton[i]">

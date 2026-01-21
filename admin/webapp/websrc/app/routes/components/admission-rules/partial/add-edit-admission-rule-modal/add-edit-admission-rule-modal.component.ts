@@ -79,6 +79,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   sigVerifierOptions: string[] = [];
   valuechips: string[] = [];
   valuechipsModel: any;
+  ruleCriteria: any[] = [];
   @ViewChild('valueChipsInput') valueChipsInput: ElementRef<HTMLInputElement>;
   get containers() {
     return this.CONTAINER_TYPES;
@@ -171,11 +172,12 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.isContainersValid = this.validateContainers();
     this.getCriteriaOptions();
     if (this.data.opType !== GlobalConstant.MODAL_OP.ADD) {
-      let criteria = JSON.parse(
+      this.ruleCriteria = JSON.parse(
         JSON.stringify(this.addEditAdmissionRuleForm.controls.criteria.value)
       );
+
       this.addEditAdmissionRuleForm.controls.criteria.setValue([]);
-      this.renderCriteriaTag(criteria);
+      this.renderCriteriaTag(this.ruleCriteria);
     }
     this.addEditAdmissionRuleForm
       .get('criteria')!
@@ -446,15 +448,14 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       criterion,
       isCustomized
     );
-    this.addEditAdmissionRuleForm.controls.criteria.setValue(
+    this.ruleCriteria = 
       this.admissionRulesService.checkAndAppendCriteria(
         tag.tagName,
         criterion,
-        this.addEditAdmissionRuleForm.controls.criteria,
+        this.ruleCriteria,
         isCustomized,
         this.nodeValueType
-      )
-    );
+      );
     if (isCustomized) {
       this.clearCustomizedCriterion();
     } else {
@@ -463,19 +464,18 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   };
 
   removeCriterionFromChip = criterion => {
-    this.addEditAdmissionRuleForm.controls.criteria.setValue(
+    this.ruleCriteria = 
       this.admissionRulesService.removeCriterionFromChip(
         criterion,
-        this.addEditAdmissionRuleForm.controls.criteria
-      )
-    );
+        this.ruleCriteria
+      );
     this.clearCriterionDetail();
     if (
       !this.getCriterionNameList(this.criteriaOptions).includes(
-        criterion.value.name
+        criterion.name
       )
     ) {
-      this.removeUnexistingCriterionName(criterion.value.name);
+      this.removeUnexistingCriterionName(criterion.name);
     }
   };
 
@@ -528,10 +528,11 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       this.criterionValueList = [this.mainCriterion.name];
       this.subOptions = null;
     }
+    // this.ruleCriteria = JSON.parse(JSON.stringify(criterion));
   };
 
   isInvalidCriteriaComb = (): boolean => {
-    let criteriaNameList = this.addEditAdmissionRuleForm.value.criteria.map(
+    let criteriaNameList = this.ruleCriteria.map(
       criterion => {
         return criterion.value.name;
       }
@@ -548,6 +549,9 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
 
   updateRule = () => {
     let adminRule = this.addEditAdmissionRuleForm.value;
+    adminRule.criteria = JSON.parse(
+      JSON.stringify(this.ruleCriteria)
+    );
     adminRule.criteria = adminRule.criteria.map(criterion => {
       if (
         criterion.value.sub_criteria &&

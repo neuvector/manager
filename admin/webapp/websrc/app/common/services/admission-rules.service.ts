@@ -526,25 +526,38 @@ export class AdmissionRulesService {
   checkAndAppendCriteria = (
     tagName,
     criterion: any,
-    currCriteriaControl: AbstractControl,
+    currCriteriaControl: any[],
     isCustomized: boolean,
     nodeValueType: string = ''
   ) => {
     let isDuplicated = false;
-    currCriteriaControl.setValue(
-      currCriteriaControl.value.filter(currCriterion => {
-        if (isCustomized) {
-          currCriterion.value.name = currCriterion.value.path;
+    currCriteriaControl =
+      currCriteriaControl.filter(currCriterion => {
+        let _currCriterion: any = null;
+        let _criterion: any = null;
+        if (currCriterion.value && typeof currCriterion.value === 'object') {
+          _currCriterion = currCriterion.value;
+        } else {
+          _currCriterion = currCriterion;
         }
-        if (currCriterion.value.name === criterion.name) {
+        if (criterion && typeof criterion.value === 'object') {
+          _criterion = criterion.value;
+        } else {
+          _criterion = criterion;
+        }
+
+        if (isCustomized) {
+          _currCriterion.name = _currCriterion.path;
+        }
+        if (_currCriterion.name === _criterion.name) {
           isDuplicated = true;
         }
+
         return (
-          currCriterion.value.name !== criterion.name ||
-          currCriterion.value.op !== criterion.op
+          _currCriterion.name !== _criterion.name ||
+          _currCriterion.op !== _criterion.op
         );
-      })
-    );
+      });
     if (
       !isDuplicated &&
       criterion.sub_criteria &&
@@ -557,7 +570,7 @@ export class AdmissionRulesService {
         });
       }
     }
-    let currCriteria = currCriteriaControl.value;
+    let currCriteria = currCriteriaControl;
     currCriteria.push({
       name: tagName,
       value: {
@@ -582,7 +595,7 @@ export class AdmissionRulesService {
   };
 
   removeCriterionFromChip = (criterion4Remove, criteriaControl) => {
-    let criteria = criteriaControl.value;
+    let criteria = criteriaControl;
     const index = criteria.findIndex(criterion => {
       return criterion4Remove.name === criterion.name;
     });

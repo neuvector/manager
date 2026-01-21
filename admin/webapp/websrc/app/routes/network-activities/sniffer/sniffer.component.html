@@ -13,12 +13,11 @@
     </h4>
     <button
       id="closeSniffer"
+      (click)="stopRefresh(); popupState.leave()"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
-      <i (click)="stopRefresh(); popupState.leave()" class="eos-icons ms-1"
-        >close</i
-      >
+      <i class="eos-icons ms-1">close</i>
     </button>
   </div>
 

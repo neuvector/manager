@@ -357,8 +357,7 @@
               formControlName="criteria">
               <mat-chip-row
                 *ngFor="
-                  let criterion of addEditAdmissionRuleForm.controls.criteria
-                    .value
+                  let criterion of ruleCriteria
                 "
                 [disabled]="data.opType === modalOp.VIEW"
                 [removable]="data.opType !== modalOp.VIEW"

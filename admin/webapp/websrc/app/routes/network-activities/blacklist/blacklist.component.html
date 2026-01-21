@@ -27,18 +27,19 @@
           <mat-chip-grid
             #chipList
             aria-label="Namespace selection"
-            formControlName="selectedDomains"
             id="namespaceInput">
             <mat-chip-row
               (mouseover)="showButton[i] = true"
               (mouseleave)="showButton[i] = false"
               (removed)="remove(domainChip, i)"
               *ngFor="
-                let domainChip of form.controls.selectedDomains.value;
+                let domainChip of domainChips;
                 let i = index
               ">
               <img
                 src="assets/img/icons/graph/domain.svg"
+                width="20"
+                height="20"
                 alt="Icon of domain" />
               {{ domainChip.name }}
               <button matChipRemove *ngIf="showButton[i]">
@@ -73,18 +74,19 @@
           <mat-chip-grid
             #groupChipList
             aria-label="Group selection"
-            formControlName="selectedGroups"
             id="groupInput">
             <mat-chip-row
               (mouseover)="showGrpButton[i] = true"
               (mouseleave)="showGrpButton[i] = false"
               (removed)="removeGroup(groupChip, i)"
               *ngFor="
-                let groupChip of form.controls.selectedGroups.value;
+                let groupChip of groupChips;
                 let i = index
               ">
               <img
                 src="assets/img/icons/graph/cluster.svg"
+                width="20"
+                height="20"
                 alt="Icon of group" />
               {{ groupChip.displayName }}
               <button matChipRemove *ngIf="showGrpButton[i]">
@@ -119,18 +121,19 @@
           <mat-chip-grid
             #nodeChipList
             aria-label="Endpoint selection"
-            formControlName="selectedNodes"
             id="nodeInput">
             <mat-chip-row
               (mouseover)="showEdpButton[i] = true"
               (mouseleave)="showEdpButton[i] = false"
               (removed)="removeNode(nodeChip, i)"
               *ngFor="
-                let nodeChip of form.controls.selectedNodes.value;
+                let nodeChip of nodeChips;
                 let i = index
               ">
               <img
                 src="assets/img/icons/graph/container.svg"
+                width="20"
+                height="20"
                 alt="Icon of endpoint" />
               {{ nodeChip.name }}
               <button matChipRemove *ngIf="showEdpButton[i]">

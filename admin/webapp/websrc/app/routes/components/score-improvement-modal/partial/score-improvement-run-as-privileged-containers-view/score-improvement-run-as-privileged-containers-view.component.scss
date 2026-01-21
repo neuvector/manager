@@ -1,8 +1,8 @@
-@import 'app/material/colors';
+@use 'app/material/colors';
 
 .container-details {
-  border: solid 1px $neuvector-grey-200;
-  background-color: $neuvector-grey-50;
+  border: solid 1px colors.$neuvector-grey-200;
+  background-color: colors.$neuvector-grey-50;
   height: 165px;
   overflow-y: scroll;
 }

@@ -8,6 +8,8 @@ import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { Router } from '@angular/router';
 import { ConfigHttpService } from '@common/api/config-http.service';
+import { timer } from 'rxjs';
+import { switchMap, filter, take, timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'app-joining-modal',
@@ -97,24 +99,36 @@ export class JoiningModalComponent implements OnInit {
 
   onConfirm = () => {
     this.isProcessing = true;
-    this.clustersService.joinCluster(this.cluster, this.useProxy).subscribe(
-      response => {
-        this.notificationService.open(
-          this.translate.instant('multiCluster.joining.success')
-        );
-        setTimeout(() => {
+    this.clustersService
+      .joinCluster(this.cluster, this.useProxy)
+      .pipe(
+        switchMap(() => {
+          return timer(0, 2000).pipe(
+            switchMap(() => this.clustersService.getClusters()),
+            filter((response: any) => {
+              return response && response.fed_role && response.fed_role !== '';
+            }),
+            take(1),
+            timeout(20000)
+          );
+        })
+      )
+      .subscribe({
+        next: validResponse => {
+          this.notificationService.open(
+            this.translate.instant('multiCluster.joining.success')
+          );
           this.clustersService.dispatchRefreshEvent();
-        }, 1000);
-        this.isProcessing = false;
-        this.dialogRef.close();
-      },
-      err => {
-        this.isProcessing = false;
-        this.notificationService.openError(
-          err.error,
-          this.translate.instant('multiCluster.joining.failure')
-        );
-      }
-    );
+          this.isProcessing = false;
+          this.dialogRef.close();
+        },
+        error: err => {
+          this.isProcessing = false;
+          this.notificationService.openError(
+            err.error,
+            this.translate.instant('multiCluster.joining.failure')
+          );
+        },
+      });
   };
 }

@@ -42,6 +42,8 @@ export class AdvancedFilterComponent implements OnInit {
   filteredDomains!: Observable<GraphItem[]>;
   groupCtrl = new FormControl();
   filteredGroups!: Observable<GroupItem[]>;
+  domainChips: any[] = [];
+  groupChips: any[] = [];
 
   advFilterForm!: FormGroup;
   @ViewChild('domainInput') domainInput!: ElementRef<HTMLInputElement>;
@@ -122,9 +124,11 @@ export class AdvancedFilterComponent implements OnInit {
   ngOnInit(): void {
     const filter = this.advFilter;
     const settings = this.settings;
+    this.domainChips = filter.domains;
+    this.groupChips = filter.groups;
     this.advFilterForm = new FormGroup({
-      domains: new FormControl(filter.domains),
-      selectedGroups: new FormControl(filter.groups),
+      // domains: new FormControl(filter.domains),
+      // selectedGroups: new FormControl(filter.groups),
       vulnerabilityType: new FormControl(filter.cve),
       protocols: new FormGroup({
         tcp: new FormControl(filter.protocol.tcp),
@@ -170,8 +174,8 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   apply() {
-    this.advFilter.domains = this.advFilterForm.value.domains;
-    this.advFilter.groups = this.advFilterForm.value.selectedGroups;
+    this.advFilter.domains = this.domainChips;
+    this.advFilter.groups = this.groupChips;
     this.advFilter.cve = this.advFilterForm.value.vulnerabilityType;
     this.advFilter.protocol = this.advFilterForm.value.protocols;
     this.advFilter.risk = this.advFilterForm.value.riskType;
@@ -185,9 +189,9 @@ export class AdvancedFilterComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.domainInput.nativeElement.value = '';
-    if (this.advFilterForm.controls.domains.value.includes(event.option.value))
+    if (this.domainChips.includes(event.option.value))
       return;
-    this.advFilterForm.controls.domains.value.push(event.option.value);
+    this.domainChips.push(event.option.value);
     this.namespaceCtrl.setValue(null);
   }
 
@@ -197,18 +201,18 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   remove(domain: string, index: number): void {
-    this.advFilterForm.controls.domains.value.splice(index, 1);
+    this.domainChips.splice(index, 1);
   }
 
   groupSelected(event: MatAutocompleteSelectedEvent): void {
     this.groupInput.nativeElement.value = '';
     if (
-      this.advFilterForm.controls.selectedGroups.value.includes(
+      this.groupChips.includes(
         event.option.value
       )
     )
       return;
-    this.advFilterForm.controls.selectedGroups.value.push(event.option.value);
+    this.groupChips.push(event.option.value);
     this.groupCtrl.setValue(null);
   }
 
@@ -218,7 +222,7 @@ export class AdvancedFilterComponent implements OnInit {
   }
 
   removeGroup(group: string, index: number) {
-    this.advFilterForm.controls.selectedGroups.value.splice(index, 1);
+    this.groupChips.splice(index, 1);
   }
 
   private _filter(value: any): GraphItem[] {
@@ -228,7 +232,7 @@ export class AdvancedFilterComponent implements OnInit {
     const matches = this._domains.filter(domain =>
       domain.name.toLowerCase().includes(filterValue)
     );
-    const formValue = this.advFilterForm.controls.domains.value;
+    const formValue = this.domainChips;
     return formValue === null
       ? matches
       : matches.filter(x => !formValue.find(y => y.name === x.name));
@@ -241,7 +245,7 @@ export class AdvancedFilterComponent implements OnInit {
     const matches = this.groups.filter(group =>
       group.name.toLowerCase().includes(filterValue)
     );
-    const formValue = this.advFilterForm.controls.selectedGroups.value;
+    const formValue = this.groupChips;
     return formValue === null
       ? matches
       : matches.filter(x => !formValue.find(y => y.name === x.name));
@@ -249,13 +253,13 @@ export class AdvancedFilterComponent implements OnInit {
 
   private addItem(event: MatChipInputEvent, list: any[], type: string): void {
     const selectedItems = {
-      domain: this.advFilterForm.controls.domains,
-      group: this.advFilterForm.controls.selectedGroups,
+      domain: this.domainChips,
+      group: this.groupChips,
     };
     const value = (event.value || '').trim();
 
     const matches = list.filter(item => item.name.toLowerCase() === value);
-    const formValue = selectedItems[type].value;
+    const formValue = selectedItems[type];
     const matchesNotYetSelected =
       formValue === null
         ? matches

@@ -1,3 +1,4 @@
+import { GlobalConstant } from '@common/constants/global.constant';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -107,7 +108,9 @@ export class JoiningModalComponent implements OnInit {
             switchMap(() => this.clustersService.getClusters()),
             filter((response: any) => {
               return (
-                response && response.fed_role && response.fed_role === 'joint'
+                response &&
+                response.fed_role &&
+                response.fed_role === GlobalConstant.CLUSTER_TYPES.MEMBER
               );
             }),
             take(1),

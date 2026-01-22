@@ -25,6 +25,7 @@
           <mat-chip-grid
             #domainChipsElement
             aria-label="Namespace selection"
+            formControlName="domains"
             id="domainInput">
             <mat-chip-row
               (mouseover)="showButton[i] = true"
@@ -72,6 +73,7 @@
           <mat-chip-grid
             #groupChipList
             aria-label="Group selection"
+            formControlName="selectedGroups"
             id="groupInput">
             <mat-chip-row
               (mouseover)="showGrpButton[i] = true"

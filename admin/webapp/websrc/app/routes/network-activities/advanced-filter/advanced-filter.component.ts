@@ -127,8 +127,6 @@ export class AdvancedFilterComponent implements OnInit {
     this.domainChips = filter.domains;
     this.groupChips = filter.groups;
     this.advFilterForm = new FormGroup({
-      // domains: new FormControl(filter.domains),
-      // selectedGroups: new FormControl(filter.groups),
       vulnerabilityType: new FormControl(filter.cve),
       protocols: new FormGroup({
         tcp: new FormControl(filter.protocol.tcp),
@@ -192,6 +190,8 @@ export class AdvancedFilterComponent implements OnInit {
     if (this.domainChips.includes(event.option.value))
       return;
     this.domainChips.push(event.option.value);
+    this.advFilterForm.controls.domains.setValue(this.domainChips);
+    this.advFilterForm.controls.domains.markAsTouched();
     this.namespaceCtrl.setValue(null);
   }
 
@@ -202,6 +202,8 @@ export class AdvancedFilterComponent implements OnInit {
 
   remove(domain: string, index: number): void {
     this.domainChips.splice(index, 1);
+    this.advFilterForm.controls.domains.setValue(this.domainChips);
+    this.advFilterForm.controls.domains.markAsTouched();
   }
 
   groupSelected(event: MatAutocompleteSelectedEvent): void {
@@ -213,6 +215,8 @@ export class AdvancedFilterComponent implements OnInit {
     )
       return;
     this.groupChips.push(event.option.value);
+    this.advFilterForm.controls.selectedGroups.setValue(this.groupChips);
+    this.advFilterForm.controls.selectedGroups.markAsTouched();
     this.groupCtrl.setValue(null);
   }
 
@@ -223,6 +227,8 @@ export class AdvancedFilterComponent implements OnInit {
 
   removeGroup(group: string, index: number) {
     this.groupChips.splice(index, 1);
+    this.advFilterForm.controls.selectedGroups.setValue(this.groupChips);
+    this.advFilterForm.controls.selectedGroups.markAsTouched();
   }
 
   private _filter(value: any): GraphItem[] {

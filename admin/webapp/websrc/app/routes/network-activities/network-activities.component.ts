@@ -712,13 +712,20 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
       this.popupState.leave();
       this.stopRefreshSession();
       this.domains = this.graphService
-        .getDomains()
-        .map(domain => ({ name: domain.name }));
+      .getDomains()
+      .map(domain => ({ name: domain.name }));
       this.groups = this.graphService.getGroups().map(group => ({
         name: group.name,
         displayName: getServiceName(group.name),
       }));
       setTimeout(() => {
+        if (this.domains.length === 0 && this.groups.length === 0) {
+          this.notificationService.open(
+            this.translate.instant('network.NO_FILTER_ITEMS'),
+            GlobalConstant.NOTIFICATION_TYPE.WARNING
+          );
+          return;
+        }
         this.popupState.transitTo(PopupState.onAdvFilter);
       }, 300);
     };
@@ -744,6 +751,13 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
         return { name: node.label, id: node.id };
       });
       setTimeout(() => {
+        if (this.domains.length === 0 && this.groups.length === 0) {
+          this.notificationService.open(
+            this.translate.instant('network.NO_FILTER_ITEMS'),
+            GlobalConstant.NOTIFICATION_TYPE.WARNING
+          );
+          return;
+        }
         this.popupState.transitTo(PopupState.onBlacklist);
       }, 300);
     };

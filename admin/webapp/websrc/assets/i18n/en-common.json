@@ -655,6 +655,7 @@
     "REMOVE_UNMANAGED": "Remove Endpoint",
     "DOWNLOAD": "DOWNLOAD",
     "SCHEDULE_JOB": "Set Capture duration",
+    "NO_FILTER_ITEMS": "Filter items are being prepared...",
     "legend": {
       "TITLE": "Legend",
       "CONTAINER": "Container",

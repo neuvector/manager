@@ -134,9 +134,6 @@ export class BlacklistComponent implements OnInit {
     this.groupChips = list.groups;
     this.nodeChips = list.endpoints;
     this.form = new FormGroup({
-      // selectedDomains: new FormControl(list.domains),
-      // selectedGroups: new FormControl(list.groups),
-      // selectedNodes: new FormControl(list.endpoints),
       hideUnmanaged: new FormControl(list.hideUnmanaged),
     });
   }
@@ -164,6 +161,8 @@ export class BlacklistComponent implements OnInit {
     if (this.domainChips.includes(event.option.value))
       return;
     this.domainChips.push(event.option.value);
+    this.form.controls.selectedDomains.setValue(this.domainChips);
+    this.form.controls.selectedDomains.markAsTouched();
     this.namespaceCtrl.setValue(null);
   }
 
@@ -174,6 +173,8 @@ export class BlacklistComponent implements OnInit {
 
   remove(domain: string, index: number): void {
     this.domainChips.splice(index, 1);
+    this.form.controls.selectedDomains.setValue(this.domainChips);
+    this.form.controls.selectedDomains.markAsTouched();
   }
 
   groupSelected(event: MatAutocompleteSelectedEvent): void {
@@ -181,6 +182,8 @@ export class BlacklistComponent implements OnInit {
     if (this.groupChips.includes(event.option.value))
       return;
     this.groupChips.push(event.option.value);
+    this.form.controls.selectedGroups.setValue(this.groupChips);
+    this.form.controls.selectedGroups.markAsTouched();
     this.groupCtrl.setValue(null);
   }
 
@@ -191,6 +194,8 @@ export class BlacklistComponent implements OnInit {
 
   removeGroup(group: string, index: number) {
     this.groupChips.splice(index, 1);
+    this.form.controls.selectedGroups.setValue(this.groupChips);
+    this.form.controls.selectedGroups.markAsTouched();
   }
 
   nodeSelected(event: MatAutocompleteSelectedEvent): void {
@@ -198,6 +203,8 @@ export class BlacklistComponent implements OnInit {
     if (this.nodeChips.includes(event.option.value))
       return;
     this.nodeChips.push(event.option.value);
+    this.form.controls.selectedNodes.setValue(this.nodeChips);
+    this.form.controls.selectedNodes.markAsTouched();
     this.nodeCtrl.setValue(null);
   }
 
@@ -208,6 +215,8 @@ export class BlacklistComponent implements OnInit {
 
   removeNode(node: GraphEndpoint, index: number): void {
     this.nodeChips.splice(index, 1);
+    this.form.controls.selectedNodes.setValue(this.nodeChips);
+    this.form.controls.selectedNodes.markAsTouched();
   }
 
   private _filter(value: any): GraphItem[] {

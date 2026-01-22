@@ -304,6 +304,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     const index = this.valuechips.indexOf(valueChip);
     if (index >= 0) {
       this.valuechips.splice(index, 1);
+      this.mainCriterion.value = this.valuechips.join(',');
     }
   };
 
@@ -456,6 +457,8 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
         isCustomized,
         this.nodeValueType
       );
+    this.addEditAdmissionRuleForm.controls.criteria.setValue(this.ruleCriteria);
+    this.addEditAdmissionRuleForm.controls.criteria.markAsTouched();
     if (isCustomized) {
       this.clearCustomizedCriterion();
     } else {
@@ -469,6 +472,8 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
         criterion,
         this.ruleCriteria
       );
+    this.addEditAdmissionRuleForm.controls.criteria.setValue(this.ruleCriteria);
+    this.addEditAdmissionRuleForm.controls.criteria.markAsTouched();
     this.clearCriterionDetail();
     if (
       !this.getCriterionNameList(this.criteriaOptions).includes(

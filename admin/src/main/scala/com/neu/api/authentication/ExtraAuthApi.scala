@@ -105,31 +105,33 @@ class ExtraAuthApi(
         }
       } ~
       pathPrefix("user") {
-        get {
-          parameter(Symbol("name").?) { name =>
-            Utils.respondWithWebServerHeaders() {
-              authService.getUser(tokenId, name)
+        pathEnd {
+          get {
+            parameter(Symbol("name").?) { name =>
+              Utils.respondWithWebServerHeaders() {
+                authService.getUser(tokenId, name)
+              }
             }
-          }
-        } ~
-        post {
-          entity(as[User]) { user =>
-            Utils.respondWithWebServerHeaders() {
-              authService.addUser(tokenId, user)
+          } ~
+          post {
+            entity(as[User]) { user =>
+              Utils.respondWithWebServerHeaders() {
+                authService.addUser(tokenId, user)
+              }
             }
-          }
-        } ~
-        patch {
-          entity(as[UserProfile]) { user =>
-            Utils.respondWithWebServerHeaders() {
-              authService.updateUser(tokenId, user)
+          } ~
+          patch {
+            entity(as[UserProfile]) { user =>
+              Utils.respondWithWebServerHeaders() {
+                authService.updateUser(tokenId, user)
+              }
             }
-          }
-        } ~
-        delete {
-          parameter(Symbol("userId")) { userId =>
-            Utils.respondWithWebServerHeaders() {
-              authService.deleteUser(tokenId, userId)
+          } ~
+          delete {
+            parameter(Symbol("userId")) { userId =>
+              Utils.respondWithWebServerHeaders() {
+                authService.deleteUser(tokenId, userId)
+              }
             }
           }
         }

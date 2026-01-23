@@ -132,29 +132,6 @@ class GroupApi(resourceService: GroupService) extends BaseApi {
           }
         } ~
         pathPrefix("service") {
-          get {
-            parameter(Symbol("name").?, Symbol("with_cap").?) { (name, with_cap) =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.getService(tokenId, name, with_cap)
-              }
-            }
-          } ~
-          patch {
-            decodeRequest {
-              entity(as[ServiceConfig]) { serviceConfig =>
-                Utils.respondWithWebServerHeaders() {
-                  resourceService.updateService(tokenId, serviceConfig)
-                }
-              }
-            }
-          } ~
-          post {
-            entity(as[ServiceConfigParam]) { serviceConfigParam =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.createService(tokenId, serviceConfigParam)
-              }
-            }
-          } ~
           path("all") {
             patch {
               entity(as[SystemRequestContent]) { systemRequestContent =>
@@ -163,63 +140,94 @@ class GroupApi(resourceService: GroupService) extends BaseApi {
                 }
               }
             }
+          } ~
+          pathEnd {
+            get {
+              parameter(Symbol("name").?, Symbol("with_cap").?) { (name, with_cap) =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.getService(tokenId, name, with_cap)
+                }
+              }
+            } ~
+            patch {
+              decodeRequest {
+                entity(as[ServiceConfig]) { serviceConfig =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.updateService(tokenId, serviceConfig)
+                  }
+                }
+              }
+            } ~
+            post {
+              entity(as[ServiceConfigParam]) { serviceConfigParam =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.createService(tokenId, serviceConfigParam)
+                }
+              }
+            }
           }
         } ~
         pathPrefix("processProfile") {
-          get {
-            parameter(Symbol("name")) { name =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.getProcessProfileByName(tokenId, name)
-              }
-            }
-          } ~
-          get {
-            parameter(Symbol("scope").?) { scope =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.getProcessProfileByScope(tokenId, scope)
-              }
-            }
-          } ~
-          patch {
-            parameter(Symbol("scope").?) { scope =>
-              entity(as[ProcessProfileConfigData]) { profile =>
+          pathEnd {
+            get {
+              parameter(Symbol("name")) { name =>
                 Utils.respondWithWebServerHeaders() {
-                  resourceService.updateProcessProfile(tokenId, scope, profile)
+                  resourceService.getProcessProfileByName(tokenId, name)
+                }
+              }
+            } ~
+            get {
+              parameter(Symbol("scope").?) { scope =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.getProcessProfileByScope(tokenId, scope)
+                }
+              }
+            } ~
+            patch {
+              parameter(Symbol("scope").?) { scope =>
+                entity(as[ProcessProfileConfigData]) { profile =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.updateProcessProfile(tokenId, scope, profile)
+                  }
                 }
               }
             }
           }
         } ~
         pathPrefix("fileProfile") {
-          get {
-            Utils.respondWithWebServerHeaders() {
-              parameter(Symbol("name")) { name =>
-                resourceService.getFileProfileByName(tokenId, name)
-              }
-            }
-          } ~
-          get {
-            parameter(Symbol("scope").?) { scope =>
+          pathEnd {
+            get {
               Utils.respondWithWebServerHeaders() {
-                resourceService.getFileProfileByScope(tokenId, scope)
+                parameter(Symbol("name")) { name =>
+                  resourceService.getFileProfileByName(tokenId, name)
+                }
               }
-            }
-          } ~
-          patch {
-            parameter(Symbol("scope").?) { scope =>
-              entity(as[FileMonitorConfigDTO]) { profile =>
+            } ~
+            get {
+              parameter(Symbol("scope").?) { scope =>
                 Utils.respondWithWebServerHeaders() {
-                  resourceService.updateFileProfile(tokenId, scope, profile)
+                  resourceService.getFileProfileByScope(tokenId, scope)
+                }
+              }
+            } ~
+            patch {
+              parameter(Symbol("scope").?) { scope =>
+                entity(as[FileMonitorConfigDTO]) { profile =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.updateFileProfile(tokenId, scope, profile)
+                  }
                 }
               }
             }
           }
         } ~
         pathPrefix("filePreProfile") {
-          get {
-            parameter(Symbol("name")) { name =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.getFilePreProfile(tokenId, name)
+          pathEnd {
+            get {
+              parameter(Symbol("name")) { name =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.getFilePreProfile(tokenId, name)
+                }
               }
             }
           }

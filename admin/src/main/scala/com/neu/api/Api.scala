@@ -93,15 +93,17 @@ trait Api extends Directives with CoreActors with Core {
   private val workloadApi       = new WorkloadApi(workloadService)
 
   val routes: Route = handleExceptions(exceptionHandler) {
-    authenticationApi.route ~
-    dashboardApi.route ~
-    clusterApi.route ~
-    deviceApi.route ~
-    groupApi.route ~
-    notificationApi.route ~
-    policyApi.route ~
-    riskApi.route ~
-    sigstoreApi.route ~
-    workloadApi.route
+    rawPathPrefix(sys.env.get("PATH_PREFIX").map(r => Slash ~ r).getOrElse("")) {
+      authenticationApi.route ~
+      dashboardApi.route ~
+      clusterApi.route ~
+      deviceApi.route ~
+      groupApi.route ~
+      notificationApi.route ~
+      policyApi.route ~
+      riskApi.route ~
+      sigstoreApi.route ~
+      workloadApi.route
+    }
   }
 }

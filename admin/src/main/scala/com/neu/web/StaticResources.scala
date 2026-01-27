@@ -29,7 +29,7 @@ trait StaticResources extends Directives with LazyLogging {
     }
   }
 
-  private val managerPathPrefixWithPrependedSlash: String    = _managerPathPrefixWithPrependedSlash
+  private val managerPathPrefixWithPrependedSlash: String = _managerPathPrefixWithPrependedSlash
 
   // # Rewrite redirect-implementation base on "spray/spray-routing/src/main/scala/spray/routing/RequestContext.scala, added strict transport security header"
   private def redirectMe(uri: Uri, redirectionType: StatusCodes.Redirection) =

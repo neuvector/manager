@@ -37,9 +37,10 @@ trait BootedCore
   CisNISTManager
   System.setProperty("net.sf.ehcache.enableShutdownHook", "true")
 
-  private val useSSL: String              = sys.env.getOrElse("MANAGER_SSL", "on")
-  private val httpMaxHeaderLength: String = sys.env.getOrElse("HTTP_MAX_HEADER_LENGTH", "32k")
-  private val config: Config              =
+  private val useSSL: String                    = sys.env.getOrElse("MANAGER_SSL", "on")
+  private val httpMaxHeaderLength: String       = sys.env.getOrElse("HTTP_MAX_HEADER_LENGTH", "32k")
+  private val managerPathPrefix: Option[String] = sys.env.get("PATH_PREFIX")
+  private val config: Config                    =
     load
       .getConfig(if (useSSL == "off") "noneSsl" else "ssl")
       .withFallback(defaultReference(getClass.getClassLoader))
@@ -69,7 +70,9 @@ trait BootedCore
 
   private val bindingFuture: Future[Http.ServerBinding] = useSSL match {
     case "off" =>
-      logger.info("Starting server in HTTP mode (MANAGER_SSL=off).")
+      logger.info(
+        s"Starting server in HTTP mode (MANAGER_SSL=off${managerPathPrefix.map(prefix => s",PATH_PREFIX=$prefix").getOrElse("")})"
+      )
       NoOperationSSLContext.init()
       Http()
         .newServerAt("0.0.0.0", httpPort.toInt)
@@ -78,7 +81,9 @@ trait BootedCore
     case _     =>
       https match {
         case Some(httpsCtx) =>
-          logger.info("Starting server in HTTPS mode (MANAGER_SSL=on).")
+          logger.info(
+            s"Starting server in HTTPS mode (MANAGER_SSL=on${managerPathPrefix.map(prefix => s",PATH_PREFIX=$prefix").getOrElse("")})"
+          )
           Http()
             .newServerAt("0.0.0.0", httpPort.toInt)
             .enableHttps(httpsCtx)

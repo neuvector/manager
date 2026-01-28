@@ -1,24 +1,22 @@
 import { Component } from '@angular/core';
-import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { ICellRendererParams } from 'ag-grid-community';
-import { AddEditRuleModalComponent } from '@components/dlp-sensors/partial/add-edit-rule-modal/add-edit-rule-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
-import { switchMap } from 'rxjs/operators';
-import { DlpSensorsService } from '@services/dlp-sensors.service';
-import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
-
+import { AddEditRuleModalComponent } from '@components/dlp-sensors/partial/add-edit-rule-modal/add-edit-rule-modal.component';
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
+import { DlpSensorsService } from '@services/dlp-sensors.service';
+import { NotificationService } from '@services/notification.service';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { ICellRendererParams } from 'ag-grid-community';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   standalone: false,
-  selector: 'app-rule-action-buttons',
+  selector: 'app-dlp-rule-action-buttons',
   templateUrl: './rule-action-buttons.component.html',
   styleUrls: ['./rule-action-buttons.component.scss'],
-  
 })
 export class RuleActionButtonsComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

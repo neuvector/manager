@@ -1,6 +1,5 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
-import angularDataTestId from 'eslint-plugin-angular-data-test-id';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import path from 'node:path';
@@ -49,12 +48,6 @@ export default defineConfig([
   {
     files: ['**/*.html'],
     extends: [...compat.extends('plugin:@angular-eslint/template/recommended')],
-    plugins: {
-      'angular-data-test-id': angularDataTestId,
-    },
-    rules: {
-      'angular-data-test-id/data-test-id': 'off',
-    },
   },
 
   {

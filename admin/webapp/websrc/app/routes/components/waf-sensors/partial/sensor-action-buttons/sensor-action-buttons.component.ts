@@ -1,25 +1,23 @@
 import { Component } from '@angular/core';
-import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { ICellRendererParams } from 'ag-grid-community';
-import { AddEditSensorModalComponent } from '@components/waf-sensors/partial/add-edit-sensor-modal/add-edit-sensor-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
-import { switchMap } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
-import { WafSensorsService } from '@services/waf-sensors.service';
-import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { updateGridData } from '@common/utils/common.utils';
-
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import { AddEditSensorModalComponent } from '@components/waf-sensors/partial/add-edit-sensor-modal/add-edit-sensor-modal.component';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '@services/notification.service';
+import { WafSensorsService } from '@services/waf-sensors.service';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { ICellRendererParams } from 'ag-grid-community';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   standalone: false,
-  selector: 'app-sensor-action-buttons',
+  selector: 'app-waf-sensor-action-buttons',
   templateUrl: './sensor-action-buttons.component.html',
   styleUrls: ['./sensor-action-buttons.component.scss'],
-  
 })
 export class SensorActionButtonsComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

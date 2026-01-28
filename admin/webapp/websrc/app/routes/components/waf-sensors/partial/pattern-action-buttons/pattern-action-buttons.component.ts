@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
   standalone: false,
-  selector: 'app-pattern-action-buttons',
+  selector: 'app-waf-pattern-action-buttons',
   templateUrl: './pattern-action-buttons.component.html',
   styleUrls: ['./pattern-action-buttons.component.scss'],
 })

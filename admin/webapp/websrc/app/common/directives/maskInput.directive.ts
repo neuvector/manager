@@ -16,7 +16,10 @@ export class MaskInputDirective implements OnInit {
   private value: any;
   private element: HTMLInputElement;
 
-  constructor(private el: ElementRef, private form: ControlContainer) {
+  constructor(
+    private el: ElementRef,
+    private form: ControlContainer
+  ) {
     this.element = el.nativeElement;
   }
 

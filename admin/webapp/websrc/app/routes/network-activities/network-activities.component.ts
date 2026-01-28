@@ -1,56 +1,48 @@
-import {
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  HostBinding,
-} from '@angular/core';
+import { Options } from '@angular-slider/ngx-slider';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import G6, { Graph } from '@antv/g6';
-import { GraphService } from '@routes/network-activities/graph.service';
-import { GraphDataSet } from '@common/types/network-activities/graphData';
-import { GridOptions } from 'ag-grid-community';
-import { GlobalVariable } from '@common/variables/global.variable';
-import { AuthUtilsService } from '@common/utils/auth.utils';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { TranslateService } from '@ngx-translate/core';
+import { AssetsHttpService } from '@common/api/assets-http.service';
+import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
-import {
-  Blacklist,
-  GraphItem,
-} from '@common/types/network-activities/blacklist';
-import { fromEvent, interval, Observable, Subscription } from 'rxjs';
-import {
-  GraphSettings,
-  Settings,
-} from '@common/types/network-activities/settings';
+import { Group } from '@common/types';
 import {
   ActivityState,
   PopupState,
 } from '@common/types/network-activities/activityState';
+import { AdvancedFilter } from '@common/types/network-activities/advancedFilter';
+import {
+  Blacklist,
+  GraphItem,
+} from '@common/types/network-activities/blacklist';
+import { GraphDataSet } from '@common/types/network-activities/graphData';
+import { PodDetails } from '@common/types/network-activities/podDetails';
+import {
+  GraphSettings,
+  Settings,
+} from '@common/types/network-activities/settings';
+import { UtilsService } from '@common/utils/app.utils';
+import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import { SwitchersService } from '@core/switchers/switchers.service';
+import { TranslateService } from '@ngx-translate/core';
+import { GraphService } from '@routes/network-activities/graph.service';
 import { SniffService } from '@routes/network-activities/sniffer/sniff.service';
 import { GroupsService } from '@services/groups.service';
-import { UtilsService } from '@common/utils/app.utils';
-import { Options } from '@angular-slider/ngx-slider';
-import { Group } from '@common/types';
-import { AssetsHttpService } from '@common/api/assets-http.service';
-import { PodDetails } from '@common/types/network-activities/podDetails';
-import { AdvancedFilter } from '@common/types/network-activities/advancedFilter';
-import { NotificationService } from '@services/notification.service';
-import { ConversationPair } from './edge-details/edge-details.component';
-import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
-import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { SwitchersService } from '@core/switchers/switchers.service';
+import { NotificationService } from '@services/notification.service';
+import { GridOptions } from 'ag-grid-community';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { fromEvent, interval, Observable, Subscription } from 'rxjs';
 import { FrameService } from '../../frame/frame.service';
-
+import { ConversationPair } from './edge-details/edge-details.component';
 
 @Component({
   standalone: false,
   selector: 'app-network-activities',
   templateUrl: './network-activities.component.html',
   styleUrls: ['./network-activities.component.scss'],
-  
 })
 export class NetworkActivitiesComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;
@@ -228,7 +220,7 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
       gpuEnabled = JSON.parse(this.localStorage.get('_gpuEnabled'));
       if (gpuEnabled !== null) return gpuEnabled;
     }
-    return false
+    return false;
   }
 
   private prepareGraphics(
@@ -712,8 +704,8 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
       this.popupState.leave();
       this.stopRefreshSession();
       this.domains = this.graphService
-      .getDomains()
-      .map(domain => ({ name: domain.name }));
+        .getDomains()
+        .map(domain => ({ name: domain.name }));
       this.groups = this.graphService.getGroups().map(group => ({
         name: group.name,
         displayName: getServiceName(group.name),

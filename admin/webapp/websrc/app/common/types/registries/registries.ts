@@ -279,7 +279,7 @@ export interface EntryPostBody {
         comment: string;
         images: string[];
         domains: string[];
-      }
+      },
     ];
     name: string;
   };

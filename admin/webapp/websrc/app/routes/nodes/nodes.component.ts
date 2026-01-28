@@ -19,13 +19,11 @@ import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { GlobalVariable } from '@common/variables/global.variable';
 
-
 @Component({
   standalone: false,
   selector: 'app-nodes',
   templateUrl: './nodes.component.html',
   styleUrls: ['./nodes.component.scss'],
-  
 })
 export class NodesComponent implements OnInit, OnDestroy {
   _nodesGrid!: NodesGridComponent;

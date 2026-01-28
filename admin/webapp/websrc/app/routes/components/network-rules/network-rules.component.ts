@@ -37,7 +37,6 @@ import { NotificationService } from '@services/notification.service';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import * as $ from 'jquery';
 
-
 const READONLY_RULE_MODIFIED = 46;
 const UNPROMOTABLE_ENDPOINT_PATTERN = new RegExp(/^Host\:*|^Workload\:*/);
 
@@ -46,7 +45,6 @@ const UNPROMOTABLE_ENDPOINT_PATTERN = new RegExp(/^Host\:*|^Workload\:*/);
   selector: 'app-network-rules',
   templateUrl: './network-rules.component.html',
   styleUrls: ['./network-rules.component.scss'],
-  
 })
 export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isScoreImprovement: boolean = false;

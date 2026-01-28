@@ -20,7 +20,7 @@
         class="fa mx-1"
         [ngClass]="{
           'fa-check text-success': item.allowed,
-          'fa-times text-danger': !item.allowed
+          'fa-times text-danger': !item.allowed,
         }"
         aria-hidden="true"></em>
       <span class="action-label info mx-1" *ngIf="item.kind">{{

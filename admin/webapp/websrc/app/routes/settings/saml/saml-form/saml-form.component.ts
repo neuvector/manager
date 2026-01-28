@@ -25,13 +25,11 @@ import { Observable } from 'rxjs';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-
 @Component({
   standalone: false,
   selector: 'app-saml-form',
   templateUrl: './saml-form.component.html',
   styleUrls: ['./saml-form.component.scss'],
-  
 })
 export class SamlFormComponent implements OnInit, OnChanges {
   @Input() samlData!: { server: ServerGetResponse; domains: string[] };

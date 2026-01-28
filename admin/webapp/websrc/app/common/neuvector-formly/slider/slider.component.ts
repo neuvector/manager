@@ -6,7 +6,6 @@ import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
   selector: 'app-slider',
   templateUrl: './slider.component.html',
   styleUrls: ['./slider.component.scss'],
-  
 })
 export class SliderComponent extends FieldType<FieldTypeConfig> {
   interval;

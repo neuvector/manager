@@ -32,13 +32,11 @@ import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
 import _ from 'lodash';
 
-
 @Component({
   standalone: false,
   selector: 'app-security-events',
   templateUrl: './security-events.component.html',
   styleUrls: ['./security-events.component.scss'],
-  
 })
 export class SecurityEventsComponent
   implements OnInit, AfterViewInit, OnDestroy

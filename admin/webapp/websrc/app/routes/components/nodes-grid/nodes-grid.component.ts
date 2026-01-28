@@ -21,13 +21,11 @@ import { NodesGridStatusCellComponent } from './nodes-grid-status-cell/nodes-gri
 import { NodesGridStateCellComponent } from './nodes-grid-state-cell/nodes-grid-state-cell.component';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-nodes-grid',
   templateUrl: './nodes-grid.component.html',
   styleUrls: ['./nodes-grid.component.scss'],
-  
 })
 export class NodesGridComponent implements OnInit {
   private readonly $win;

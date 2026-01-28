@@ -12,7 +12,6 @@ import {
   selector: 'app-custom-header',
   templateUrl: './custom-header.component.html',
   styleUrls: ['./custom-header.component.scss'],
-  
 })
 export class CustomHeaderComponent implements OnInit, OnDestroy {
   headerText: SafeHtml = '';

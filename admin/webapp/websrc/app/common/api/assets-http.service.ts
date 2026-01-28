@@ -128,13 +128,17 @@ export class AssetsHttpService {
       isShowingAccepted ? { platform, show: 'accepted' } : { platform }
     ) as any;
     return GlobalVariable.http
-      .get<VulnerabilityReportResponse>(PathConstant.SCAN_PLATFORM_URL, { params })
+      .get<VulnerabilityReportResponse>(PathConstant.SCAN_PLATFORM_URL, {
+        params,
+      })
       .pipe(map(r => r.report.vulnerabilities));
   }
 
   getNodeWorkloads(id: string): Observable<Workload[]> {
     return GlobalVariable.http
-      .get<WorkloadResponse>(PathConstant.NODE_WORKLOADS_URL, { params: { id } })
+      .get<WorkloadResponse>(PathConstant.NODE_WORKLOADS_URL, {
+        params: { id },
+      })
       .pipe(map(r => r.workloads));
   }
 

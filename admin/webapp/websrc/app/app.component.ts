@@ -25,7 +25,7 @@ import { MapConstant } from '@common/constants/map.constant';
 @Component({
   standalone: false,
   selector: 'app-root',
-  
+
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
@@ -198,9 +198,12 @@ export class AppComponent implements OnInit {
         fn(...args);
         if (GlobalVariable.user) {
           if (timeout) clearTimeout(timeout);
-          timeout = setTimeout(() => {
-            fn(...args);
-          }, GlobalVariable.user.token.timeout * 1000 + 10000);
+          timeout = setTimeout(
+            () => {
+              fn(...args);
+            },
+            GlobalVariable.user.token.timeout * 1000 + 10000
+          );
         }
         timerId = null;
       }, delay);

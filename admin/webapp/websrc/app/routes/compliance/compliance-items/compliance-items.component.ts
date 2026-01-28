@@ -1,13 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { Compliance } from '@common/types';
 
-
 @Component({
   standalone: false,
   selector: 'app-compliance-items',
   templateUrl: './compliance-items.component.html',
   styleUrls: ['./compliance-items.component.scss'],
-  
 })
 export class ComplianceItemsComponent {
   @Input() compliances!: Compliance[];

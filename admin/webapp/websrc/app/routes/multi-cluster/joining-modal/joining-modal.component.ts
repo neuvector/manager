@@ -12,13 +12,11 @@ import { ConfigHttpService } from '@common/api/config-http.service';
 import { timer } from 'rxjs';
 import { switchMap, filter, take, timeout } from 'rxjs/operators';
 
-
 @Component({
   standalone: false,
   selector: 'app-joining-modal',
   templateUrl: './joining-modal.component.html',
   styleUrls: ['./joining-modal.component.scss'],
-  
 })
 export class JoiningModalComponent implements OnInit {
   public cluster: any;

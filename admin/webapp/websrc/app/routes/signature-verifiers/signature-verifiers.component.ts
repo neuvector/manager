@@ -19,13 +19,11 @@ import {
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import * as $ from 'jquery';
 
-
 @Component({
   standalone: false,
   selector: 'app-signature-verifiers',
   templateUrl: './signature-verifiers.component.html',
   styleUrls: ['./signature-verifiers.component.scss'],
-  
 })
 export class SignatureVerifiersComponent implements OnInit {
   refreshing$ = new Subject();

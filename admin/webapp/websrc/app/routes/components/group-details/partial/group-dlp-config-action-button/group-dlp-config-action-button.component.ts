@@ -8,9 +8,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   templateUrl: './group-dlp-config-action-button.component.html',
   styleUrls: ['./group-dlp-config-action-button.component.scss'],
 })
-export class GroupDlpConfigActionButtonComponent
-  implements ICellRendererAngularComp
-{
+export class GroupDlpConfigActionButtonComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
 
   constructor() {}

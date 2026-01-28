@@ -6,13 +6,11 @@ import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-risk-reports',
   templateUrl: './risk-reports.component.html',
   styleUrls: ['./risk-reports.component.scss'],
-  
 })
 export class RiskReportsComponent implements OnInit, OnDestroy {
   @ViewChild(RiskReportGridComponent) riskReportGrid!: RiskReportGridComponent;

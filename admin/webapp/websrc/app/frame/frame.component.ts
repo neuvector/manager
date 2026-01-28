@@ -6,7 +6,6 @@ import { GlobalVariable } from '@common/variables/global.variable';
   selector: 'app-layout',
   templateUrl: './frame.component.html',
   styleUrls: ['./frame.component.scss'],
-  
 })
 export class FrameComponent implements OnInit {
   customStyle;

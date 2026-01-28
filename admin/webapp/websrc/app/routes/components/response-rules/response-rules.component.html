@@ -45,7 +45,7 @@
   <div
     [ngClass]="{
       panel: source === navSource['SELF'],
-      mb0: source === navSource['SELF']
+      mb0: source === navSource['SELF'],
     }">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
       <div
@@ -128,7 +128,7 @@
           height:
             (source === navSource['GROUP'] || source === navSource['FED_GROUP']
               ? resizableHeight - 90
-              : gridHeight) + 'px'
+              : gridHeight) + 'px',
         }"
         class="ag-theme-balham"
         [gridOptions]="gridOptions"

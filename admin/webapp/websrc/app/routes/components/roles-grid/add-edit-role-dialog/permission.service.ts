@@ -33,7 +33,10 @@ export class PermissionService {
     events: this.defaultPermission(),
   };
 
-  constructor(private fb: FormBuilder, private tr: TranslateService) {}
+  constructor(
+    private fb: FormBuilder,
+    private tr: TranslateService
+  ) {}
 
   loadPermissions(permissionOptions) {
     permissionOptions.forEach(permissionOption => {

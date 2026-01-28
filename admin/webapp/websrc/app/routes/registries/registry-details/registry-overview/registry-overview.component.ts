@@ -9,14 +9,12 @@ import { Image } from '@common/types';
 import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 
-
 @Component({
   standalone: false,
   selector: 'app-registry-overview',
   templateUrl: './registry-overview.component.html',
   styleUrls: ['./registry-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class RegistryOverviewComponent implements OnChanges {
   @Input() registryDetails: Image[];

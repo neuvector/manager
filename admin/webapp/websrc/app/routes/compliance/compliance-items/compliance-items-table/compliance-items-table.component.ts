@@ -28,13 +28,11 @@ import { ComplianceFilterService } from '../../compliance.filter.service';
 import { ComplianceItemsTableFilterComponent } from './compliance-items-table-filter/compliance-items-table-filter.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
-
 @Component({
   standalone: false,
   selector: 'app-compliance-items-table',
   templateUrl: './compliance-items-table.component.html',
   styleUrls: ['./compliance-items-table.component.scss'],
-  
 })
 export class ComplianceItemsTableComponent
   implements OnInit, OnDestroy, OnChanges

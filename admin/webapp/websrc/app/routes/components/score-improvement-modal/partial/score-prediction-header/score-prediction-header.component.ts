@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
@@ -7,7 +7,7 @@ import { UtilsService } from '@common/utils/app.utils';
   templateUrl: './score-prediction-header.component.html',
   styleUrls: ['./score-prediction-header.component.scss'],
 })
-export class ScorePredictionHeaderComponent {
+export class ScorePredictionHeaderComponent implements OnInit {
   private _score!: number;
   private _projectedScore!: number;
   @Input() message!: string;

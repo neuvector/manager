@@ -5,7 +5,6 @@ import { GroupsComponent } from '@components/groups/groups.component';
 import { FederatedConfigurationService } from '@services/federated-configuration.service';
 import { FormControl } from '@angular/forms';
 
-
 export const fedGroupDetailsTabs = [
   'process profile rules',
   'file access rules',
@@ -18,7 +17,6 @@ export const fedGroupDetailsTabs = [
   selector: 'app-federated-policy',
   templateUrl: './federated-policy.component.html',
   styleUrls: ['./federated-policy.component.scss'],
-  
 })
 export class FederatedPolicyComponent implements OnInit {
   public activeTabIndex: number = 0;

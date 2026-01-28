@@ -11,9 +11,7 @@ import { UtilsService } from '@common/utils/app.utils';
   styleUrls: ['./compliance-grid-status-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ComplianceGridStatusCellComponent
-  implements ICellRendererAngularComp
-{
+export class ComplianceGridStatusCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   status!: string;
   labelCode!: string;

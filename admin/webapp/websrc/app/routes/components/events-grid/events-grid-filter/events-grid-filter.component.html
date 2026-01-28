@@ -31,10 +31,8 @@
           matInput />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <div matSuffix class="d-flex align-items-center">
-          <mat-datepicker-toggle
-            [for]="pickerFrom"></mat-datepicker-toggle>
-          <button mat-icon-button
-            (click)="form.get('reportedFrom')?.reset()">
+          <mat-datepicker-toggle [for]="pickerFrom"></mat-datepicker-toggle>
+          <button mat-icon-button (click)="form.get('reportedFrom')?.reset()">
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -54,8 +52,7 @@
           matInput />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <div matSuffix class="d-flex align-items-center">
-          <mat-datepicker-toggle
-            [for]="pickerTo"></mat-datepicker-toggle>
+          <mat-datepicker-toggle [for]="pickerTo"></mat-datepicker-toggle>
           <button mat-icon-button (click)="form.get('reportedTo')?.reset()">
             <mat-icon matDatepickerToggleIcon>close</mat-icon>
           </button>

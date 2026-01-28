@@ -5,7 +5,7 @@ import {
   ContainerChartUpdate,
   Controller,
   Enforcer,
-  Scanner, 
+  Scanner,
 } from '@common/types';
 import { EnforcersService } from '@services/enforcers.service';
 import { delay, map, switchMap } from 'rxjs/operators';
@@ -63,19 +63,19 @@ export class SystemComponentsCommunicationService {
     currentController: Controller
   ): Observable<ChartDataUpdate> {
     return timer(0, 5000).pipe(
-    switchMap(() => 
+      switchMap(() =>
         this.controllersService.getControllerStats(currentController.id)
-    ),
-    map(statsData => this.utils.parseControllerStats(statsData))
-);
+      ),
+      map(statsData => this.utils.parseControllerStats(statsData))
+    );
   }
 
   startEnforcerStats(
     currentEnforcer: Enforcer
   ): Observable<ContainerChartUpdate> {
     return timer(0, 5000).pipe(
-      switchMap(() => 
-          this.enforcersService.getEnforcerStats(currentEnforcer.id)
+      switchMap(() =>
+        this.enforcersService.getEnforcerStats(currentEnforcer.id)
       ),
       map(statsData => this.utils.parseContainerStats(statsData))
     );

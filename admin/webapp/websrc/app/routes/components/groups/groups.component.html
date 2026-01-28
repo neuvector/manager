@@ -190,12 +190,16 @@
         (change)="switchBaselineProfile()"
         aria-label="Baseline profile mode"
         class="d-flex">
-        <mat-radio-button value="basic" class="me-3 mb-0-sub-label service-risk-radio-label">
+        <mat-radio-button
+          value="basic"
+          class="me-3 mb-0-sub-label service-risk-radio-label">
           <span class="mat-small font-weight-bold">
             {{ 'enum.BASIC' | translate }}
           </span>
         </mat-radio-button>
-        <mat-radio-button value="zero-drift" class="me-3 mb-0-sub-label service-risk-radio-label">
+        <mat-radio-button
+          value="zero-drift"
+          class="me-3 mb-0-sub-label service-risk-radio-label">
           <span class="mat-small font-weight-bold">
             {{ 'enum.ZERODRIFT' | translate }}
           </span>

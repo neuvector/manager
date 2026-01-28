@@ -2,7 +2,7 @@
   <div>
     <strong>{{ 'scan.report.data.NODES' | translate }}</strong>
   </div>
-  <div *ngFor="let node of nodes | slice : 0 : 5">
+  <div *ngFor="let node of nodes | slice: 0 : 5">
     {{ node.display_name }}
   </div>
 </div>
@@ -15,7 +15,7 @@
   <div>
     <strong>{{ 'scan.report.data.CONTAINERS' | translate }}</strong>
   </div>
-  <div *ngFor="let container of containers | slice : 0 : 5">
+  <div *ngFor="let container of containers | slice: 0 : 5">
     {{ container.display_name }}
   </div>
 </div>
@@ -28,7 +28,7 @@
   <div>
     <strong>{{ 'scan.report.data.IMAGES' | translate }}</strong>
   </div>
-  <div *ngFor="let image of images | slice : 0 : 5">
+  <div *ngFor="let image of images | slice: 0 : 5">
     {{ image.display_name }}
   </div>
 </div>

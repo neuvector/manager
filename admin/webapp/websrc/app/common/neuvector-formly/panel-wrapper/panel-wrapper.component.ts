@@ -6,7 +6,6 @@ import { FieldWrapper } from '@ngx-formly/core';
   selector: 'app-panel-wrapper',
   templateUrl: './panel-wrapper.component.html',
   styleUrls: ['./panel-wrapper.component.scss'],
-  
 })
 export class PanelWrapperComponent extends FieldWrapper {
   panelOpenState = false;

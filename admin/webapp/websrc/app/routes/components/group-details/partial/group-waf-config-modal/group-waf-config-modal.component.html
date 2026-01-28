@@ -12,7 +12,7 @@
         <span
           [ngClass]="{
             'text-muted': !data.status,
-            'text-success': data.status
+            'text-success': data.status,
           }">
           {{
             (data.status ? 'policy.status.ENABLED' : 'policy.status.DISABLED')

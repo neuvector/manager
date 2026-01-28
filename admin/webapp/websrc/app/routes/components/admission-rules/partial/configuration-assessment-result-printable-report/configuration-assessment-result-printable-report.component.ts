@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 
-
 @Component({
   standalone: false,
   selector: 'app-configuration-assessment-result-printable-report',
@@ -10,11 +9,8 @@ import { MapConstant } from '@common/constants/map.constant';
   styleUrls: [
     './configuration-assessment-result-printable-report.component.scss',
   ],
-  
 })
-export class ConfigurationAssessmentResultPrintableReportComponent
-  implements OnInit
-{
+export class ConfigurationAssessmentResultPrintableReportComponent implements OnInit {
   @Input() testResult: any;
   colourMap: any = MapConstant.colourMap;
   Array = Array;

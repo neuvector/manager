@@ -167,10 +167,10 @@ export class NetworkRulesService {
           let typeClass = params.data.disable
             ? MapConstant.colourMap['disabled-rule']
             : params.data.state
-            ? MapConstant.colourMap[params.data.state]
-            : MapConstant.colourMap[
-                params.data.cfg_type ? params.data.cfg_type : 'customer-rule'
-              ];
+              ? MapConstant.colourMap[params.data.state]
+              : MapConstant.colourMap[
+                  params.data.cfg_type ? params.data.cfg_type : 'customer-rule'
+                ];
           let type = params.data.state
             ? MapConstant.colourMap[params.data.state]
             : MapConstant.colourMap[

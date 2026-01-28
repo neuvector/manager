@@ -8,7 +8,6 @@ import { MatCheckbox } from '@angular/material/checkbox';
   selector: 'app-multicheckbox',
   templateUrl: './multicheckbox.component.html',
   styleUrls: ['./multicheckbox.component.scss'],
-  
 })
 export class MulticheckboxComponent extends FieldType<FieldTypeConfig> {
   @ViewChildren(MatCheckbox) checkboxes!: QueryList<MatCheckbox>;

@@ -29,13 +29,11 @@ import { EnforcersGridStatusCellComponent } from './enforcers-grid-status-cell/e
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { finalize, map } from 'rxjs/operators';
 
-
 @Component({
   standalone: false,
   selector: 'app-enforcers-grid',
   templateUrl: './enforcers-grid.component.html',
   styleUrls: ['./enforcers-grid.component.scss'],
-  
 })
 export class EnforcersGridComponent implements OnInit, OnChanges, OnDestroy {
   private readonly $win;

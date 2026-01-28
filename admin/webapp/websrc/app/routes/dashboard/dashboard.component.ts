@@ -16,13 +16,11 @@ import { ReportByNamespaceModalComponent } from './report-by-namespace-modal/rep
 import { isAuthorized } from '@common/utils/common.utils';
 import { SummaryService } from '@services/summary.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('dashboardReport') printableReport!: ElementRef;

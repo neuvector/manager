@@ -6,7 +6,6 @@ import { Group, HierarchicalExposure } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 import { ScoreImprovementModalService } from '@services/score-improvement-modal.service';
 
-
 interface ExposureData {
   ingress: HierarchicalExposure[];
   egress: HierarchicalExposure[];
@@ -19,7 +18,6 @@ type ExposureFilter = 'threat' | 'violation' | 'normal';
   selector: 'app-score-improvement-exposure-view',
   templateUrl: './score-improvement-exposure-view.component.html',
   styleUrls: ['./score-improvement-exposure-view.component.scss'],
-  
 })
 export class ScoreImprovementExposureViewComponent implements OnInit {
   @ViewChild('stepper', { static: true }) stepper!: MatStepper;

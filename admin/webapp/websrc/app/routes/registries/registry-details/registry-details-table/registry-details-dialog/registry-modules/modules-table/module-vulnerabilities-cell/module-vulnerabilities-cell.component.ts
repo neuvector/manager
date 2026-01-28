@@ -2,17 +2,13 @@ import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
-
 @Component({
   standalone: false,
   selector: 'app-module-vulnerabilities-cell',
   templateUrl: './module-vulnerabilities-cell.component.html',
   styleUrls: ['./module-vulnerabilities-cell.component.scss'],
-  
 })
-export class ModuleVulnerabilitiesCellComponent
-  implements ICellRendererAngularComp
-{
+export class ModuleVulnerabilitiesCellComponent implements ICellRendererAngularComp {
   fixed!: number;
   fixable!: number;
 

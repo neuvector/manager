@@ -29,7 +29,6 @@ import { interval } from 'rxjs';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
 
-
 type Task = {
   index: number;
   rowNode: IRowNode;
@@ -41,7 +40,6 @@ type Task = {
   selector: 'app-multi-cluster-grid',
   templateUrl: './multi-cluster-grid.component.html',
   styleUrls: ['./multi-cluster-grid.component.scss'],
-  
 })
 export class MultiClusterGridComponent implements OnInit, OnDestroy {
   private readonly $win;

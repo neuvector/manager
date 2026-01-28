@@ -507,7 +507,9 @@ export class SecurityEventsService {
 
   getProcessRule = (name: string) => {
     return GlobalVariable.http
-      .get<ProcessProfileResponse>(PathConstant.PROCESS_PROFILE_URL, { params: { name: name } })
+      .get<ProcessProfileResponse>(PathConstant.PROCESS_PROFILE_URL, {
+        params: { name: name },
+      })
       .pipe(map(r => r.process_profile));
   };
 
@@ -519,7 +521,9 @@ export class SecurityEventsService {
 
   getNetworkRule = (ruleId: number) => {
     return GlobalVariable.http
-      .get<PolicyRuleResponse>(PathConstant.POLICY_RULE_URL, { params: { id: ruleId } })
+      .get<PolicyRuleResponse>(PathConstant.POLICY_RULE_URL, {
+        params: { id: ruleId },
+      })
       .pipe(map(r => r.rule));
   };
 
@@ -672,14 +676,14 @@ export class SecurityEventsService {
         return service === MapConstant.securityEventLocation.EXTERNAL
           ? service //external
           : endpointName.startsWith(MapConstant.securityEventLocation.IP_GROUP)
-          ? `nv.ip.${service}`.replace(
-              /\/|\?|\%|\&|\s/g,
-              ':'
-            ) /* Add 'nv.ip.' for IP service */
-          : `nv.${service}`.replace(
-              /\/|\?|\%|\&|\s/g,
-              ':'
-            ); /* Add 'nv.' for learnt service */
+            ? `nv.ip.${service}`.replace(
+                /\/|\?|\%|\&|\s/g,
+                ':'
+              ) /* Add 'nv.ip.' for IP service */
+            : `nv.${service}`.replace(
+                /\/|\?|\%|\&|\s/g,
+                ':'
+              ); /* Add 'nv.' for learnt service */
         // replace(/\/|\?|\%|\&|\s/g, ':') is for resolving irregular symbol in service name
       } else {
         if (

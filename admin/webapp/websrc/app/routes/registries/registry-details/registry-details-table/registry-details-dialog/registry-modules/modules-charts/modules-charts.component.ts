@@ -7,7 +7,6 @@ import {
 import { Module } from '@common/types';
 import { ChartConfiguration } from 'chart.js';
 
-
 enum CVE_ST {
   FIXABLE = 'fix exists',
   UNPATCHED = 'unpatched',
@@ -30,7 +29,6 @@ const Colors = [
   templateUrl: './modules-charts.component.html',
   styleUrls: ['./modules-charts.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class ModulesChartsComponent implements OnInit {
   @Input() modules!: Module[];

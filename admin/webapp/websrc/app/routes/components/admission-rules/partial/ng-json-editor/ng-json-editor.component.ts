@@ -19,7 +19,10 @@ export class NgJsonEditorComponent implements AfterViewInit, OnDestroy {
   @Input() options: any;
   editor: any;
 
-  constructor(private container: ElementRef, private ngZone: NgZone) {}
+  constructor(
+    private container: ElementRef,
+    private ngZone: NgZone
+  ) {}
 
   ngAfterViewInit() {
     this.ngZone.runOutsideAngular(() => {

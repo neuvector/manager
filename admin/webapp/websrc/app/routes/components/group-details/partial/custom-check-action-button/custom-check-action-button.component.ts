@@ -14,9 +14,7 @@ import { updateGridData } from '@common/utils/common.utils';
   templateUrl: './custom-check-action-button.component.html',
   styleUrls: ['./custom-check-action-button.component.scss'],
 })
-export class CustomCheckActionButtonComponent
-  implements ICellRendererAngularComp
-{
+export class CustomCheckActionButtonComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
 
   constructor(

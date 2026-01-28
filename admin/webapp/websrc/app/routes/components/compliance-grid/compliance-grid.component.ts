@@ -34,7 +34,6 @@ import { ComplianceGridNameCellComponent } from './compliance-grid-name-cell/com
 import { GlobalVariable } from '@common/variables/global.variable';
 import * as $ from 'jquery';
 
-
 export type ComplianceRow = Check & {
   id: string;
   parent_id?: string;
@@ -48,7 +47,6 @@ export type ComplianceRow = Check & {
   templateUrl: './compliance-grid.component.html',
   styleUrls: ['./compliance-grid.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class ComplianceGridComponent implements OnInit {
   private readonly $win;

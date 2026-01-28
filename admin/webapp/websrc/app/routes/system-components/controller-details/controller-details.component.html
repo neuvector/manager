@@ -61,7 +61,7 @@
         <div class="ms-3 overflow-hidden">
           {{ 'controllers.detail.CREATED_AT' | translate }}
           <div class="text-muted text-truncate">
-            {{ currentController.created_at | date : 'MMM dd, y HH:mm:ss' }}
+            {{ currentController.created_at | date: 'MMM dd, y HH:mm:ss' }}
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@
         <div class="ms-3 overflow-hidden">
           {{ 'controllers.detail.STARTED_AT' | translate }}
           <div class="text-muted text-truncate">
-            {{ currentController.started_at | date : 'MMM dd, y HH:mm:ss' }}
+            {{ currentController.started_at | date: 'MMM dd, y HH:mm:ss' }}
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@
         <div class="ms-3 overflow-hidden">
           {{ 'controllers.detail.JOIN_AT' | translate }}
           <div class="text-muted text-truncate">
-            {{ currentController.joined_at | date : 'MMM dd, y HH:mm:ss' }}
+            {{ currentController.joined_at | date: 'MMM dd, y HH:mm:ss' }}
           </div>
         </div>
       </div>
@@ -125,9 +125,7 @@
         <div class="ms-3 overflow-hidden">
           {{ 'controllers.detail.DISCONNECTED_AT' | translate }}
           <div class="text-muted text-truncate">
-            {{
-              currentController.disconnected_at | date : 'MMM dd, y HH:mm:ss'
-            }}
+            {{ currentController.disconnected_at | date: 'MMM dd, y HH:mm:ss' }}
           </div>
         </div>
       </div>

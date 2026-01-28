@@ -7,9 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  MatTableDataSource,
-} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { ApikeysGridComponent } from '../apikeys-grid.component';
 import { UtilsService } from '@common/utils/app.utils';
@@ -28,7 +26,6 @@ import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { getNamespaceRoleGridData } from '@common/utils/common.utils';
 
-
 interface AddApikeyDialog {
   globalRoles: string[];
   domainRoles: string[];
@@ -42,7 +39,6 @@ interface AddApikeyDialog {
   selector: 'app-add-apikey-dialog',
   templateUrl: './add-apikey-dialog.component.html',
   styleUrls: ['./add-apikey-dialog.component.scss'],
-  
 })
 export class AddApikeyDialogComponent implements OnInit {
   expirationOptions: ApikeyExpiration[] = [

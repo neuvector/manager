@@ -27,7 +27,6 @@ import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
 
-
 export interface ConversationPair {
   from: string;
   to: string;
@@ -38,7 +37,6 @@ export interface ConversationPair {
   selector: 'app-edge-details',
   templateUrl: './edge-details.component.html',
   styleUrls: ['./edge-details.component.scss'],
-  
 })
 export class EdgeDetailsComponent implements AfterViewInit, OnInit, OnChanges {
   get edgeDetails(): any {

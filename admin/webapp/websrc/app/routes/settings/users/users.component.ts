@@ -3,23 +3,15 @@ import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SettingsService } from '@services/settings.service';
 import { combineLatest, of, Subject, throwError } from 'rxjs';
-import {
-  catchError,
-  map,
-  switchMap,
-  tap,
-  startWith,
-} from 'rxjs/operators';
+import { catchError, map, switchMap, tap, startWith } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalConstant } from '@common/constants/global.constant';
-
 
 @Component({
   standalone: false,
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
-  
 })
 export class UsersComponent implements OnInit {
   private _switchClusterSubscription;

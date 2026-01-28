@@ -12,7 +12,6 @@ import { GlobalConstant } from '@common/constants/global.constant';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   menuItems: Array<any>;

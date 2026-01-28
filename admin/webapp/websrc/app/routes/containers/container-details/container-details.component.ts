@@ -32,7 +32,6 @@ import { VersionInfoService } from '@services/version-info.service';
 import { Observable, of, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-
 export const containerDetailsTabs = {
   0: 'details',
   1: 'compliance',
@@ -46,7 +45,6 @@ export const containerDetailsTabs = {
   selector: 'app-container-details',
   templateUrl: './container-details.component.html',
   styleUrls: ['./container-details.component.scss'],
-  
 })
 export class ContainerDetailsComponent implements OnInit, OnDestroy {
   private _container!: WorkloadRow;

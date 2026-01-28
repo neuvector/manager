@@ -36,7 +36,7 @@ import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { UsersGridUserCellComponent } from './users-grid-user-cell/users-grid-user-cell.component';
 import { updateGridData } from '@common/utils/common.utils';
 
-import  { DisplayControlDirective } from '@common/directives/displayControl.directive';
+import { DisplayControlDirective } from '@common/directives/displayControl.directive';
 
 @Component({
   standalone: false,
@@ -44,7 +44,6 @@ import  { DisplayControlDirective } from '@common/directives/displayControl.dire
   templateUrl: './users-grid.component.html',
   styleUrls: ['./users-grid.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class UsersGridComponent implements OnInit {
   private readonly $win;

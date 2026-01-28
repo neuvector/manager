@@ -7,7 +7,6 @@ import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
   selector: 'app-edit-table-controls',
   templateUrl: './edit-table-controls.component.html',
   styleUrls: ['./edit-table-controls.component.scss'],
-  
 })
 export class EditTableControlsComponent
   extends FieldType<FieldTypeConfig>

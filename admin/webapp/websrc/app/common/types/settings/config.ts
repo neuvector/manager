@@ -6,7 +6,8 @@ import {
 } from '..';
 
 export interface ConfigResponse
-  extends SvcConfig,
+  extends
+    SvcConfig,
     SyslogConfig,
     AuthConfig,
     ProxyConfig,

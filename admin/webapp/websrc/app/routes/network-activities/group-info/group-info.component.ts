@@ -6,13 +6,11 @@ import {
 import { Group } from '@common/types';
 import { GlobalConstant } from '@common/constants/global.constant';
 
-
 @Component({
   standalone: false,
   selector: 'app-group-info',
   templateUrl: './group-info.component.html',
   styleUrls: ['./group-info.component.scss'],
-  
 })
 export class GroupInfoComponent implements OnInit {
   private _group!: Group;

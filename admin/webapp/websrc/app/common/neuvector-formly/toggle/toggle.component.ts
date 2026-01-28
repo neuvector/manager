@@ -7,7 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'app-toggle',
   templateUrl: './toggle.component.html',
   styleUrls: ['./toggle.component.scss'],
-  
 })
 export class ToggleComponent extends FieldType<FieldTypeConfig> {
   constructor(private tr: TranslateService) {

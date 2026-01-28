@@ -8,9 +8,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   templateUrl: './apikeys-grid-action-cell.component.html',
   styleUrls: ['./apikeys-grid-action-cell.component.scss'],
 })
-export class ApikeysGridActionCellComponent
-  implements ICellRendererAngularComp
-{
+export class ApikeysGridActionCellComponent implements ICellRendererAngularComp {
   params: any;
   constructor() {}
 

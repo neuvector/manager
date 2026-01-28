@@ -3,13 +3,13 @@
     class="summary-title"
     [ngClass]="{
       'text-warning': vulHostsCnt > 0,
-      'text-success': vulHostsCnt === 0
+      'text-success': vulHostsCnt === 0,
     }"
     style="font-size: 16px">
     {{
       (reportPage === 'vulnerabilities' ? 'scan' : 'cis') +
         '.report.others.HOST_INS'
-        | translate : { vulHostsCnt: vulHostsCnt, hostCnt: nodes.length || 0 }
+        | translate: { vulHostsCnt: vulHostsCnt, hostCnt: nodes.length || 0 }
     }}
   </span>
 </div>

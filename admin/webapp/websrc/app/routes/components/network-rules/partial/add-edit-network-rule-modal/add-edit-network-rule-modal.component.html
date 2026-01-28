@@ -29,7 +29,7 @@
         <mat-form-field
           [ngClass]="{
             'col-12 col-md-12': data.opType === modalOp.ADD,
-            'col-10 col-md-10': data.opType !== modalOp.ADD
+            'col-10 col-md-10': data.opType !== modalOp.ADD,
           }">
           <mat-label>{{ 'policy.addPolicy.COMMENT' | translate }}</mat-label>
           <input
@@ -110,7 +110,7 @@
         <mat-form-field
           [ngClass]="{
             'col-10 col-md-9': data.opType === modalOp.ADD,
-            'col-8 col-md-6': data.opType !== modalOp.ADD
+            'col-8 col-md-6': data.opType !== modalOp.ADD,
           }">
           <mat-label>{{ 'policy.editPolicy.PORT' | translate }}</mat-label>
           <input
@@ -132,7 +132,7 @@
               <span
                 [ngClass]="{
                   'text-deny': !isAllow,
-                  'text-success': isAllow
+                  'text-success': isAllow,
                 }">
                 {{
                   (isAllow ? 'policy.action.ALLOW' : 'policy.action.DENY')
@@ -154,7 +154,7 @@
               <span
                 [ngClass]="{
                   'text-muted': !enable,
-                  'text-success': enable
+                  'text-success': enable,
                 }">
                 {{
                   (enable ? 'policy.status.ENABLED' : 'policy.status.DISABLED')

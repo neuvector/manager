@@ -27,13 +27,11 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { UtilsService } from '@common/utils/app.utils';
 import { NgJsonEditorComponent } from '../ng-json-editor/ng-json-editor.component';
 
-
 @Component({
   standalone: false,
   selector: 'app-add-edit-admission-rule-modal',
   templateUrl: './add-edit-admission-rule-modal.component.html',
   styleUrls: ['./add-edit-admission-rule-modal.component.scss'],
-  
 })
 export class AddEditAdmissionRuleModalComponent implements OnInit {
   modalOp: any;
@@ -449,14 +447,13 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       criterion,
       isCustomized
     );
-    this.ruleCriteria = 
-      this.admissionRulesService.checkAndAppendCriteria(
-        tag.tagName,
-        criterion,
-        this.ruleCriteria,
-        isCustomized,
-        this.nodeValueType
-      );
+    this.ruleCriteria = this.admissionRulesService.checkAndAppendCriteria(
+      tag.tagName,
+      criterion,
+      this.ruleCriteria,
+      isCustomized,
+      this.nodeValueType
+    );
     this.addEditAdmissionRuleForm.controls.criteria.setValue(this.ruleCriteria);
     this.addEditAdmissionRuleForm.controls.criteria.markAsTouched();
     if (isCustomized) {
@@ -467,18 +464,15 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   };
 
   removeCriterionFromChip = criterion => {
-    this.ruleCriteria = 
-      this.admissionRulesService.removeCriterionFromChip(
-        criterion,
-        this.ruleCriteria
-      );
+    this.ruleCriteria = this.admissionRulesService.removeCriterionFromChip(
+      criterion,
+      this.ruleCriteria
+    );
     this.addEditAdmissionRuleForm.controls.criteria.setValue(this.ruleCriteria);
     this.addEditAdmissionRuleForm.controls.criteria.markAsTouched();
     this.clearCriterionDetail();
     if (
-      !this.getCriterionNameList(this.criteriaOptions).includes(
-        criterion.name
-      )
+      !this.getCriterionNameList(this.criteriaOptions).includes(criterion.name)
     ) {
       this.removeUnexistingCriterionName(criterion.name);
     }
@@ -537,11 +531,9 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   };
 
   isInvalidCriteriaComb = (): boolean => {
-    let criteriaNameList = this.ruleCriteria.map(
-      criterion => {
-        return criterion.value.name;
-      }
-    );
+    let criteriaNameList = this.ruleCriteria.map(criterion => {
+      return criterion.value.name;
+    });
     return (
       (criteriaNameList.includes('storageClassName') &&
         criteriaNameList.length > 1 &&
@@ -554,9 +546,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
 
   updateRule = () => {
     let adminRule = this.addEditAdmissionRuleForm.value;
-    adminRule.criteria = JSON.parse(
-      JSON.stringify(this.ruleCriteria)
-    );
+    adminRule.criteria = JSON.parse(JSON.stringify(this.ruleCriteria));
     adminRule.criteria = adminRule.criteria.map(criterion => {
       if (
         criterion.value.sub_criteria &&
@@ -577,7 +567,8 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       }
       if (criterion.value.name === 'saBindRiskyRole') {
         // For Service account bound risky role
-        (criterion.value.type = 'saBindRiskyRole'), (criterion.value.name = '');
+        ((criterion.value.type = 'saBindRiskyRole'),
+          (criterion.value.name = ''));
         criterion.value.path = '';
       }
       return criterion.value;

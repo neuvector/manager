@@ -23,14 +23,12 @@ import { RegistryDetailsTableStatusCellComponent } from './registry-details-tabl
 import { FormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 
-
 @Component({
   standalone: false,
   selector: 'app-registry-details-table',
   templateUrl: './registry-details-table.component.html',
   styleUrls: ['./registry-details-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class RegistryDetailsTableComponent implements OnInit, OnChanges {
   @Input() gridHeight!: number;

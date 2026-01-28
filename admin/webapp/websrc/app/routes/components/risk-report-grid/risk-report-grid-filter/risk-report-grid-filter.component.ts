@@ -22,13 +22,11 @@ import {
   FilterLevel,
 } from '../risk-report-grid.filter.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-risk-report-grid-filter',
   templateUrl: './risk-report-grid-filter.component.html',
   styleUrls: ['./risk-report-grid-filter.component.scss'],
-  
 })
 export class RiskReportGridFilterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];

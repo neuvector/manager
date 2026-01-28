@@ -154,10 +154,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.displayRole = role
       ? role
       : GlobalVariable.user.token.server
-          .toLowerCase()
-          .includes(MapConstant.SERVER_TYPE.RANCHER)
-      ? 'Rancher User'
-      : 'Namespace User';
+            .toLowerCase()
+            .includes(MapConstant.SERVER_TYPE.RANCHER)
+        ? 'Rancher User'
+        : 'Namespace User';
 
     this._clusterSwitchedSubScription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {

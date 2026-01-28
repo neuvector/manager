@@ -25,8 +25,12 @@ export class NamespacesService {
   }
 
   getNamespaces(): Observable<Domain[]> {
-    return this.assetsHttpService.getDomain().pipe(
-      map((r: DomainsResponse) => r.domains.filter(d => d.name.charAt(0) !== '_'))
-    );
+    return this.assetsHttpService
+      .getDomain()
+      .pipe(
+        map((r: DomainsResponse) =>
+          r.domains.filter(d => d.name.charAt(0) !== '_')
+        )
+      );
   }
 }

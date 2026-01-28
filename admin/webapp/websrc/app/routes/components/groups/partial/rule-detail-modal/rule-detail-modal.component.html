@@ -70,7 +70,7 @@
           >{{ 'controllers.detail.CREATED_AT' | translate }}:</span
         >
         <span>{{
-          data.rule.created_timestamp * 1000 | date : 'MMM dd, y HH:mm:ss'
+          data.rule.created_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'
         }}</span>
       </div>
       <div class="col-sm-4">
@@ -78,7 +78,7 @@
           >{{ 'policy.gridHeader.UPDATE_AT' | translate }}:</span
         >
         <span>{{
-          data.rule.last_modified_timestamp * 1000 | date : 'MMM dd, y HH:mm:ss'
+          data.rule.last_modified_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'
         }}</span>
       </div>
       <div class="col-sm-2">
@@ -87,7 +87,7 @@
           class="type-label"
           [ngClass]="{
             deny: data.rule.action === 'deny',
-            success: data.rule.action === 'allow'
+            success: data.rule.action === 'allow',
           }"
           style="font-size: 14px">
           {{ data.rule.action }}

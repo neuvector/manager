@@ -22,13 +22,11 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { map } from 'rxjs/operators';
 
-
 @Component({
   standalone: false,
   selector: 'app-group-domain-role-table',
   templateUrl: './group-domain-role-table.component.html',
   styleUrls: ['./group-domain-role-table.component.scss'],
-  
 })
 export class GroupDomainRoleTableComponent
   implements OnInit, AfterViewInit, OnChanges

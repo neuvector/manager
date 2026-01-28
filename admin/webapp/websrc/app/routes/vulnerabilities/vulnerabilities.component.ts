@@ -10,13 +10,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { Vulnerability } from '@common/types';
 import { tap } from 'rxjs/operators';
 
-
 @Component({
   standalone: false,
   selector: 'app-vulnerabilities',
   templateUrl: './vulnerabilities.component.html',
   styleUrls: ['./vulnerabilities.component.scss'],
-  
 })
 export class VulnerabilitiesComponent implements OnDestroy {
   @ViewChild(VulnerabilityDetailDialogComponent)

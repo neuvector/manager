@@ -37,7 +37,7 @@ import { NgJsonEditorComponent } from './partial/ng-json-editor/ng-json-editor.c
     ConfigurationAssessmentResultPrintableReportComponent,
     MatchedRuleListComponent,
     IndexCellComponent,
-    NgJsonEditorComponent
+    NgJsonEditorComponent,
   ],
   imports: [
     CommonModule,

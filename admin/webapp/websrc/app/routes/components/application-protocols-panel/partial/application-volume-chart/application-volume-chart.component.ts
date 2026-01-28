@@ -3,13 +3,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { BytesPipe } from '@common/pipes/app.pipes';
 import { Chart, LogarithmicScale } from 'chart.js';
 
-
 @Component({
   standalone: false,
   selector: 'app-application-volume-chart',
   templateUrl: './application-volume-chart.component.html',
   styleUrls: ['./application-volume-chart.component.scss'],
-  
 })
 export class ApplicationVolumeChartComponent implements OnInit, OnDestroy {
   @Input() applications: any;

@@ -30,7 +30,10 @@ export class ContainerStatsComponent
   byteData!: ComponentChartData;
   sessionData!: ComponentChartData;
 
-  constructor(private utils: UtilsService, private tr: TranslateService) {}
+  constructor(
+    private utils: UtilsService,
+    private tr: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.initData();

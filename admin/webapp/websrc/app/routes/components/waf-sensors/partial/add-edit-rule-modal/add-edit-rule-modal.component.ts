@@ -18,13 +18,11 @@ import {
 import { GlobalVariable } from '@common/variables/global.variable';
 import * as $ from 'jquery';
 
-
 @Component({
   standalone: false,
   selector: 'app-add-edit-rule-modal',
   templateUrl: './add-edit-rule-modal.component.html',
   styleUrls: ['./add-edit-rule-modal.component.scss'],
-  
 })
 export class AddEditRuleModalComponent implements OnInit {
   opTypeOptions = GlobalConstant.MODAL_OP;

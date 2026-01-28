@@ -6,6 +6,5 @@ import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
   selector: 'app-radio',
   templateUrl: './radio.component.html',
   styleUrls: ['./radio.component.scss'],
-  
 })
 export class RadioComponent extends FieldType<FieldTypeConfig> {}

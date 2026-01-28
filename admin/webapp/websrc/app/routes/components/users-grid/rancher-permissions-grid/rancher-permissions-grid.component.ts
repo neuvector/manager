@@ -48,7 +48,10 @@ export class RancherPermissionsGridComponent implements OnInit {
     },
   ];
 
-  constructor(private tr: TranslateService, private utils: UtilsService) {
+  constructor(
+    private tr: TranslateService,
+    private utils: UtilsService
+  ) {
     this.$win = $(GlobalVariable.window);
   }
 

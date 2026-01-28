@@ -115,36 +115,40 @@ export class ComplianceService {
               complianceDist,
             };
           }),
-          tap(({ compliance: { compliances, kubernetes_cis_version }, filters }) => {
-            this.kubeVersion = kubernetes_cis_version;
-            this.complianceFilterService.workloadMap = this.workloadMap;
-            this.complianceFilterService.availableFilters = filters;
-            this.complianceFilterService.advFilter =
-              this.complianceFilterService.initAdvFilter();
-            setRisks(compliances, this.workloadMap);
-            this.assetsViewPdfService.masterData = {
-              workloadMap4Pdf: this.workloadMap4Pdf,
-              hostMap4Pdf: this.hostMap4Pdf,
-              platformMap4Pdf: this.platformMap4Pdf,
-              imageMap4Pdf: this.imageMap4Pdf,
-            };
+          tap(
+            ({
+              compliance: { compliances, kubernetes_cis_version },
+              filters,
+            }) => {
+              this.kubeVersion = kubernetes_cis_version;
+              this.complianceFilterService.workloadMap = this.workloadMap;
+              this.complianceFilterService.availableFilters = filters;
+              this.complianceFilterService.advFilter =
+                this.complianceFilterService.initAdvFilter();
+              setRisks(compliances, this.workloadMap);
+              this.assetsViewPdfService.masterData = {
+                workloadMap4Pdf: this.workloadMap4Pdf,
+                hostMap4Pdf: this.hostMap4Pdf,
+                platformMap4Pdf: this.platformMap4Pdf,
+                imageMap4Pdf: this.imageMap4Pdf,
+              };
 
-            if (this.complianceFilterService.isAdvFilterOn()) {
-              this.complianceFilterService.resetFilter(
-                this.complianceFilterService.advFilter
-              );
-              this.complianceFilterService.filtered = true;
-            } else {
-              this.complianceFilterService.resetFilter();
-              this.complianceFilterService.filtered = false;
+              if (this.complianceFilterService.isAdvFilterOn()) {
+                this.complianceFilterService.resetFilter(
+                  this.complianceFilterService.advFilter
+                );
+                this.complianceFilterService.filtered = true;
+              } else {
+                this.complianceFilterService.resetFilter();
+                this.complianceFilterService.filtered = false;
+              }
+
+              this.complianceFilterService.filteredCis = compliances;
             }
-
-            this.complianceFilterService.filteredCis = compliances;
-          })
+          )
         )
       )
     );
-
   }
 
   private mapWorkloadService(compliance, workloadMap) {

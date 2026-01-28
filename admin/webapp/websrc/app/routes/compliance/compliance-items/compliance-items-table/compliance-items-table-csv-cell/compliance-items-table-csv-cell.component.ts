@@ -9,9 +9,7 @@ import { ComplianceCsvService } from '../../../csv-generation/compliance-csv.ser
   templateUrl: './compliance-items-table-csv-cell.component.html',
   styleUrls: ['./compliance-items-table-csv-cell.component.scss'],
 })
-export class ComplianceItemsTableCsvCellComponent
-  implements ICellRendererAngularComp
-{
+export class ComplianceItemsTableCsvCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
 
   constructor(private complianceCsvService: ComplianceCsvService) {}

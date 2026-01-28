@@ -51,7 +51,7 @@
     <div
       [ngClass]="{
         panel: source === navSource['SELF'],
-        mb0: source === navSource['SELF']
+        mb0: source === navSource['SELF'],
       }">
       <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
         <div
@@ -157,9 +157,7 @@
                 <app-loading-button
                   (btnClick)="refresh()"
                   [appearance]="'mat-button'"
-                  [buttonClasses]="
-                    'd-flex justify-content-center align-items-center'
-                  "
+                  [buttonClasses]="'d-flex justify-content-center align-items-center'"
                   [iconClasses]="'eos-icons icon-18'"
                   [iconName]="'refresh'"
                   [id]="'networkRules-refresh-button'"
@@ -188,7 +186,7 @@
             height:
               (source === navSource['GROUP']
                 ? resizableHeight - 90
-                : gridHeight) + 'px'
+                : gridHeight) + 'px',
           }"
           class="ag-theme-balham"
           [gridOptions]="gridOptions"

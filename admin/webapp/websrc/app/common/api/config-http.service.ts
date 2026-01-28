@@ -34,7 +34,7 @@ export class ConfigHttpService {
       options = Object.assign(options, { params: { source: source } });
     return GlobalVariable.http
       .get<ConfigResponse>(PathConstant.CONFIG_V2_URL, options)
-      .pipe(map(r=> r.config));
+      .pipe(map(r => r.config));
   }
 
   getFedConfig(): Observable<any> {

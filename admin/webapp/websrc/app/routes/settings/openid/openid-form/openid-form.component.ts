@@ -26,13 +26,11 @@ import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
-
 @Component({
   standalone: false,
   selector: 'app-openid-form',
   templateUrl: './openid-form.component.html',
   styleUrls: ['./openid-form.component.scss'],
-  
 })
 export class OpenidFormComponent implements OnInit, OnChanges {
   @Input() openidData!: { server: ServerGetResponse; domains: string[] };

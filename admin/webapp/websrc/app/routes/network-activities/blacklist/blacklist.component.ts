@@ -24,13 +24,11 @@ import {
   GroupItem,
 } from '@common/types/network-activities/blacklist';
 
-
 @Component({
   standalone: false,
   selector: 'app-blacklist',
   templateUrl: './blacklist.component.html',
   styleUrls: ['./blacklist.component.scss'],
-  
 })
 export class BlacklistComponent implements OnInit {
   get blacklist(): Blacklist {
@@ -158,8 +156,7 @@ export class BlacklistComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.namespaceInput.nativeElement.value = '';
-    if (this.domainChips.includes(event.option.value))
-      return;
+    if (this.domainChips.includes(event.option.value)) return;
     this.domainChips.push(event.option.value);
     this.form.controls.selectedDomains.setValue(this.domainChips);
     this.form.controls.selectedDomains.markAsTouched();
@@ -179,8 +176,7 @@ export class BlacklistComponent implements OnInit {
 
   groupSelected(event: MatAutocompleteSelectedEvent): void {
     this.groupInput.nativeElement.value = '';
-    if (this.groupChips.includes(event.option.value))
-      return;
+    if (this.groupChips.includes(event.option.value)) return;
     this.groupChips.push(event.option.value);
     this.form.controls.selectedGroups.setValue(this.groupChips);
     this.form.controls.selectedGroups.markAsTouched();
@@ -200,8 +196,7 @@ export class BlacklistComponent implements OnInit {
 
   nodeSelected(event: MatAutocompleteSelectedEvent): void {
     this.nodeInput.nativeElement.value = '';
-    if (this.nodeChips.includes(event.option.value))
-      return;
+    if (this.nodeChips.includes(event.option.value)) return;
     this.nodeChips.push(event.option.value);
     this.form.controls.selectedNodes.setValue(this.nodeChips);
     this.form.controls.selectedNodes.markAsTouched();

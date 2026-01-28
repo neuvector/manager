@@ -10,13 +10,11 @@ import { ScoreImprovementModalComponent } from '@components/score-improvement-mo
 import { MatDialog } from '@angular/material/dialog';
 import { DashboardService } from '@services/dashboard.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-security-risk-panel',
   templateUrl: './security-risk-panel.component.html',
   styleUrls: ['./security-risk-panel.component.scss'],
-  
 })
 export class SecurityRiskPanelComponent implements OnInit {
   @Input() details: any;

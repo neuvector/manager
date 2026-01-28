@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ 
+@Pipe({
   standalone: false,
-  name: 'shortenFromMiddle'
+  name: 'shortenFromMiddle',
 })
 export class ShortenFromMiddlePipe implements PipeTransform {
   transform(str: string | undefined, len: number = 8): string {
@@ -16,9 +16,9 @@ export class ShortenFromMiddlePipe implements PipeTransform {
   }
 }
 
-@Pipe({ 
+@Pipe({
   standalone: false,
-  name: 'capitalizeWord'
+  name: 'capitalizeWord',
 })
 export class CapitalizePipe implements PipeTransform {
   transform(word: string | undefined): string {
@@ -28,9 +28,9 @@ export class CapitalizePipe implements PipeTransform {
   }
 }
 
-@Pipe({ 
+@Pipe({
   standalone: false,
-  name: 'capitalizeWords'
+  name: 'capitalizeWords',
 })
 export class CapitalizeWordsPipe implements PipeTransform {
   transform(words: string | undefined): string {
@@ -44,9 +44,9 @@ export class CapitalizeWordsPipe implements PipeTransform {
   }
 }
 
-@Pipe({ 
+@Pipe({
   standalone: false,
-  name: 'bytes'
+  name: 'bytes',
 })
 export class BytesPipe implements PipeTransform {
   transform(

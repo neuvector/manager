@@ -10,9 +10,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   templateUrl: './risk-report-grid-level-cell.component.html',
   styleUrls: ['./risk-report-grid-level-cell.component.scss'],
 })
-export class RiskReportGridLevelCellComponent
-  implements ICellRendererAngularComp
-{
+export class RiskReportGridLevelCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   levelText!: string;
   labelCode!: string;

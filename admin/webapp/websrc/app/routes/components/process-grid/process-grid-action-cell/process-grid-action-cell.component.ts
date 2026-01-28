@@ -11,9 +11,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   styleUrls: ['./process-grid-action-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProcessGridActionCellComponent
-  implements ICellRendererAngularComp
-{
+export class ProcessGridActionCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   action!: string;
   mode!: string;

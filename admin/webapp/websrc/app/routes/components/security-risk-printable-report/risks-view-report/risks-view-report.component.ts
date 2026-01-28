@@ -1,13 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 
-
 @Component({
   standalone: false,
   selector: 'app-risks-view-report',
   templateUrl: './risks-view-report.component.html',
   styleUrls: ['./risks-view-report.component.scss'],
-  
 })
 export class RisksViewReportComponent implements OnInit {
   @Input() reportPage: string = '';

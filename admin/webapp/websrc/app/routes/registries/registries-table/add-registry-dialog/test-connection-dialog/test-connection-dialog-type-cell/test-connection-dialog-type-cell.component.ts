@@ -8,9 +8,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   templateUrl: './test-connection-dialog-type-cell.component.html',
   styleUrls: ['./test-connection-dialog-type-cell.component.scss'],
 })
-export class TestConnectionDialogTypeCellComponent
-  implements ICellRendererAngularComp
-{
+export class TestConnectionDialogTypeCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   type!: string;
 

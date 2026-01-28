@@ -3,13 +3,11 @@ import { INoRowsOverlayAngularComp } from 'ag-grid-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ICellRendererParams } from 'ag-grid-community';
 
-
 @Component({
   standalone: false,
   selector: 'app-ag-grid-no-row-overlay',
   templateUrl: './ag-grid-no-row-overlay.component.html',
   styleUrls: ['./ag-grid-no-row-overlay.component.scss'],
-  
 })
 export class AgGridNoRowOverlayComponent implements INoRowsOverlayAngularComp {
   noRowsClass: string = '';

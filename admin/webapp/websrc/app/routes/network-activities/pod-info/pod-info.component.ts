@@ -10,13 +10,11 @@ import { PodDetails } from '@common/types/network-activities/podDetails';
 import { Observable, forkJoin } from 'rxjs';
 import { ScanService } from '@services/scan.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-pod-info',
   templateUrl: './pod-info.component.html',
   styleUrls: ['./pod-info.component.scss'],
-  
 })
 export class PodInfoComponent implements OnInit {
   private _pod!: PodDetails;
@@ -49,7 +47,10 @@ export class PodInfoComponent implements OnInit {
     this._popupState = value;
   }
 
-  constructor(private scanService: ScanService, private utils: UtilsService) {
+  constructor(
+    private scanService: ScanService,
+    private utils: UtilsService
+  ) {
     this._popupState = new ActivityState(PopupState.onInit);
   }
 

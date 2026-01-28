@@ -31,13 +31,11 @@ import { ContainersGridStateCellComponent } from './containers-grid-state-cell/c
 import { ContainersGridStatusCellComponent } from './containers-grid-status-cell/containers-grid-status-cell.component';
 import { QuickFilterComponent } from '@components/quick-filter/quick-filter.component';
 
-
 @Component({
   standalone: false,
   selector: 'app-containers-grid',
   templateUrl: './containers-grid.component.html',
   styleUrls: ['./containers-grid.component.scss'],
-  
 })
 export class ContainersGridComponent implements OnInit {
   private readonly $win;

@@ -34,14 +34,12 @@ import { TestConnectionDialogDetailsCellComponent } from './test-connection-dial
 import { TestConnectionDialogTypeCellComponent } from './test-connection-dialog-type-cell/test-connection-dialog-type-cell.component';
 import { FormlyFormOptions } from '@ngx-formly/core';
 
-
 @Component({
   standalone: false,
   selector: 'app-test-settings-dialog',
   templateUrl: './test-settings-dialog.component.html',
   styleUrls: ['./test-settings-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class TestSettingsDialogComponent implements OnInit, OnDestroy {
   form = new FormGroup<any>({});

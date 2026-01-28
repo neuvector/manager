@@ -35,9 +35,7 @@ import { CustomHeaderComponent } from './custom-header/custom-header.component';
       autoDismiss: true,
     }),
   ],
-  providers: [
-    provideHttpClient(),
-  ],
+  providers: [provideHttpClient()],
   declarations: [
     FrameComponent,
     SidebarComponent,

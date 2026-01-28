@@ -6,9 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   templateUrl: './security-events-printable-report-details-col.component.html',
   styleUrls: ['./security-events-printable-report-details-col.component.scss'],
 })
-export class SecurityEventsPrintableReportDetailsColComponent
-  implements OnInit
-{
+export class SecurityEventsPrintableReportDetailsColComponent implements OnInit {
   detailList: string[];
 
   @Input() details: string;

@@ -126,12 +126,12 @@
       activeTab === 'vulnerabilities'
         ? 'filter-icon-' + visibleIcons
         : activeTab === 'compliance'
-        ? !complianceEmpty
-          ? 'filter-icon-1'
-          : 'filter-icon-0'
-        : activeTab === 'process'
-        ? 'filter-icon-1'
-        : ''
+          ? !complianceEmpty
+            ? 'filter-icon-1'
+            : 'filter-icon-0'
+          : activeTab === 'process'
+            ? 'filter-icon-1'
+            : ''
     "
     class="h-100 detail-tabs container-detail-tab-group"
     mat-align-tabs="start"

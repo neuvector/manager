@@ -25,13 +25,11 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { updateGridData } from '@common/utils/common.utils';
 import * as $ from 'jquery';
 
-
 @Component({
   standalone: false,
   selector: 'app-file-access-rules',
   templateUrl: './file-access-rules.component.html',
   styleUrls: ['./file-access-rules.component.scss'],
-  
 })
 export class FileAccessRulesComponent implements OnInit, OnChanges {
   @Input() isScoreImprovement: boolean = false;
@@ -176,8 +174,8 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
             this.source === GlobalConstant.NAV_SOURCE.GROUP
               ? this.w.innerHeight - 572
               : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-              ? this.w.innerHeight - 300
-              : 0;
+                ? this.w.innerHeight - 300
+                : 0;
           setTimeout(() => {
             this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
             if (this.gridApi) {

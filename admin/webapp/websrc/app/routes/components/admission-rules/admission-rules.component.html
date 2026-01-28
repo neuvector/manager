@@ -87,7 +87,7 @@
   <div
     [ngClass]="{
       panel: source === navSource['SELF'],
-      mb0: source === navSource['SELF']
+      mb0: source === navSource['SELF'],
     }">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
       <div class="d-flex justify-content-between align-items-center">
@@ -206,7 +206,7 @@
               <span
                 [ngClass]="{
                   'text-muted': !globalStatus,
-                  'text-success': globalStatus
+                  'text-success': globalStatus,
                 }">
                 {{
                   (globalStatus
@@ -228,9 +228,7 @@
               *ngIf="source !== navSource['SELF']"
               (btnClick)="refresh()"
               [appearance]="'mat-button'"
-              [buttonClasses]="
-                'd-flex justify-content-center align-items-center'
-              "
+              [buttonClasses]="'d-flex justify-content-center align-items-center'"
               [iconClasses]="'eos-icons icon-18'"
               [iconName]="'refresh'"
               [id]="'fed-adm-refresh-button'"

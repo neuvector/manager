@@ -22,13 +22,11 @@ import { NotificationService } from '@services/notification.service';
 import { AddEditRoleDialogComponent } from './add-edit-role-dialog/add-edit-role-dialog.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
-
 @Component({
   standalone: false,
   selector: 'app-roles-grid',
   templateUrl: './roles-grid.component.html',
   styleUrls: ['./roles-grid.component.scss'],
-  
 })
 export class RolesGridComponent implements OnInit {
   private readonly $win;

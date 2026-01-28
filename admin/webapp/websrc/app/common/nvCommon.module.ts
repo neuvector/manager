@@ -135,7 +135,7 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
       timeOut: 10000,
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
-      closeButton: true
+      closeButton: true,
     }),
     // Material Modules
     MatAutocompleteModule,
@@ -172,7 +172,7 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
     MatStepperModule,
     MatBadgeModule,
     EnforcerBriefModule,
-    TimeagoModule.forRoot(), 
+    TimeagoModule.forRoot(),
   ],
   providers: [
     PendingChangesGuard,
@@ -288,7 +288,6 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
     TwoWayInfiniteScrollDirective,
   ],
 })
-
 export class NvCommonModule {
   static forRoot(): ModuleWithProviders<NvCommonModule> {
     return {

@@ -1,13 +1,11 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, Output, EventEmitter } from '@angular/core';
 
-
 @Component({
   standalone: false,
   selector: 'app-confirm-dialog-response-rule',
   templateUrl: './confirm-dialog-response-rule.component.html',
   styleUrls: ['./confirm-dialog-response-rule.component.scss'],
-  
 })
 export class ConfirmDialogResponseRuleComponent {
   loading: boolean = false;

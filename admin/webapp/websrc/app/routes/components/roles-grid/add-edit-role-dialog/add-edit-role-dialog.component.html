@@ -70,9 +70,7 @@
   <div class="permission-container">
     <ul class="permission-list">
       <ng-container
-        *ngFor="
-          let permissionOption of permissionOptions | keyvalue : unsorted
-        ">
+        *ngFor="let permissionOption of permissionOptions | keyvalue: unsorted">
         <li *ngIf="isPermissionOption(permissionOption.value)">
           <div class="d-flex align-items-center">
             <div class="mx-2">

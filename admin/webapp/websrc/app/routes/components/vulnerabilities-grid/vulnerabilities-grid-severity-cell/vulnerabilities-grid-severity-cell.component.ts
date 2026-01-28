@@ -10,9 +10,7 @@ import { UtilsService } from '@common/utils/app.utils';
   styleUrls: ['./vulnerabilities-grid-severity-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VulnerabilitiesGridSeverityCellComponent
-  implements ICellRendererAngularComp
-{
+export class VulnerabilitiesGridSeverityCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   severity!: string;
   severityDisplay!: string;

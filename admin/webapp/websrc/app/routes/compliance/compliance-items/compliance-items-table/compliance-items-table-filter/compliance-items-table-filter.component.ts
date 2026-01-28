@@ -19,7 +19,6 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
-
 enum FilterView {
   SERVICE = 0,
   IMAGE = 1,
@@ -32,7 +31,6 @@ enum FilterView {
   selector: 'app-compliance-items-table-filter',
   templateUrl: './compliance-items-table-filter.component.html',
   styleUrls: ['./compliance-items-table-filter.component.scss'],
-  
 })
 export class ComplianceItemsTableFilterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];

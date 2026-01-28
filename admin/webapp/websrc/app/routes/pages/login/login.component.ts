@@ -35,7 +35,6 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { Cluster, ClusterData } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
 
-
 interface ResetError extends ErrorResponse {
   password_profile_basic: PublicPasswordProfile;
 }
@@ -45,7 +44,6 @@ interface ResetError extends ErrorResponse {
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  
 })
 export class LoginComponent implements OnInit, OnDestroy {
   public loginForm: FormGroup;

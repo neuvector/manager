@@ -5,8 +5,8 @@
         (type === 'add'
           ? 'policy.addPolicy.TITLE'
           : data.isReadonly
-          ? 'policy.editPolicy.VIEW'
-          : 'policy.editPolicy.TITLE'
+            ? 'policy.editPolicy.VIEW'
+            : 'policy.editPolicy.TITLE'
         ) | translate
       }}
     </h4>
@@ -29,7 +29,7 @@
           appearance="fill"
           class="flex-grow-1"
           [ngClass]="{
-            'me-4': !EVENT_WITHOUT_GROUP.includes(responseRule.event)
+            'me-4': !EVENT_WITHOUT_GROUP.includes(responseRule.event),
           }">
           <mat-select
             name="event"
@@ -185,7 +185,7 @@
             <span
               [ngClass]="{
                 'text-muted': !responseRule.enabled,
-                'text-success': responseRule.enabled
+                'text-success': responseRule.enabled,
               }">
               {{
                 (responseRule.enabled

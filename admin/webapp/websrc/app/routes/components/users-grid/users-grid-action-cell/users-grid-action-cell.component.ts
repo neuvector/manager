@@ -4,14 +4,12 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
-
 @Component({
   standalone: false,
   selector: 'app-users-grid-action-cell',
   templateUrl: './users-grid-action-cell.component.html',
   styleUrls: ['./users-grid-action-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class UsersGridActionCellComponent implements ICellRendererAngularComp {
   params: any;

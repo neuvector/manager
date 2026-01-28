@@ -8,7 +8,6 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'app-ngx-slider',
   templateUrl: './ngx-slider.component.html',
   styleUrls: ['./ngx-slider.component.scss'],
-  
 })
 export class NgxSliderComponent
   extends FieldType<FieldTypeConfig>

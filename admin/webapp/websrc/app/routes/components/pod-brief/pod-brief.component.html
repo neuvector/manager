@@ -129,7 +129,7 @@
           {{ 'network.nodeDetails.CREATED_AT' | translate }}:
         </span>
         <span class="ml auto-hide host-item-value">
-          {{ pod.workload.started_at | date : 'MMM dd, y HH:mm:ss' }}
+          {{ pod.workload.started_at | date: 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
     </li>
@@ -140,7 +140,7 @@
         >
         <span class="ml auto-hide host-item-key">
           {{
-            pod.workload.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss'
+            pod.workload.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss'
           }}
         </span>
       </div>

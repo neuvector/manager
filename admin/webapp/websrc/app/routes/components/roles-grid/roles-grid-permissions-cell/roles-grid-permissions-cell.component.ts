@@ -11,9 +11,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   styleUrls: ['./roles-grid-permissions-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RolesGridPermissionsCellComponent
-  implements ICellRendererAngularComp
-{
+export class RolesGridPermissionsCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
 
   constructor(private tr: TranslateService) {}

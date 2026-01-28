@@ -42,7 +42,10 @@ export default defineConfig([
         createDefaultProgram: true,
       },
     },
-    rules: {},
+    rules: {
+      '@angular-eslint/prefer-standalone': 'off',
+      '@angular-eslint/prefer-inject': 'off',
+    },
   },
 
   {

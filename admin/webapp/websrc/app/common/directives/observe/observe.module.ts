@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { ObserveDirective } from '@common/directives/observe/observe.directive';
 
 @NgModule({
-  declarations: [ ObserveDirective ], 
+  declarations: [ObserveDirective],
   imports: [],
-  exports: [ ObserveDirective ],
+  exports: [ObserveDirective],
 })
 export class ObserveModule {}

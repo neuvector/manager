@@ -7,13 +7,11 @@ import { Router } from '@angular/router';
 import { ServerGetResponse } from '@common/types';
 import { pollUntilResult } from '@common/utils/rxjs.utils';
 
-
 @Component({
   standalone: false,
   selector: 'app-openid',
   templateUrl: './openid.component.html',
   styleUrls: ['./openid.component.scss'],
-  
 })
 export class OpenidComponent implements OnInit, OnDestroy {
   openidError!: string;

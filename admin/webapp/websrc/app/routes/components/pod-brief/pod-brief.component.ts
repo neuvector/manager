@@ -8,13 +8,11 @@ import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { PodDetails } from '@common/types/network-activities/podDetails';
 
-
 @Component({
   standalone: false,
   selector: 'app-pod-brief',
   templateUrl: './pod-brief.component.html',
   styleUrls: ['./pod-brief.component.scss'],
-  
 })
 export class PodBriefComponent implements OnInit {
   private _pod!: PodDetails;

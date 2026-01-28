@@ -15,13 +15,11 @@ import { Subject } from 'rxjs';
 import { MultiClusterGridComponent } from '@components/multi-cluster-grid/multi-cluster-grid.component';
 import { ConfigHttpService } from '@common/api/config-http.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-multi-cluster',
   templateUrl: './multi-cluster.component.html',
   styleUrls: ['./multi-cluster.component.scss'],
-  
 })
 export class MultiClusterComponent implements OnInit, OnDestroy {
   public switch: string = '';

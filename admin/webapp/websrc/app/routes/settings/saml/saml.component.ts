@@ -7,13 +7,11 @@ import { Router } from '@angular/router';
 import { ServerGetResponse } from '@common/types';
 import { pollUntilResult } from '@common/utils/rxjs.utils';
 
-
 @Component({
   standalone: false,
   selector: 'app-saml',
   templateUrl: './saml.component.html',
   styleUrls: ['./saml.component.scss'],
-  
 })
 export class SamlComponent implements OnInit, OnDestroy {
   private _getClustersFinishSubscription;

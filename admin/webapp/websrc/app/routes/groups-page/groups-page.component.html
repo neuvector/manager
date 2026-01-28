@@ -15,7 +15,7 @@
             class="text-bold"
             [ngClass]="{
               'text-muted': !netServiceStatus,
-              'text-success': netServiceStatus
+              'text-success': netServiceStatus,
             }">
             {{ netServiceStatus ? '' : 'OFF' }}
           </span>
@@ -30,7 +30,7 @@
               (netServiceStatus
                 ? 'setting.description.ENABLED_NET_POLICY_MODE_GROUP'
                 : 'setting.description.DISABLED_NET_POLICY_MODE'
-              ) | translate : { name: netServicePolicyMode }
+              ) | translate: { name: netServicePolicyMode }
             "
             matTooltipPosition="above">
           </em>

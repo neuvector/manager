@@ -44,7 +44,7 @@
                   'text-deny':
                     !addEditAdmissionRuleForm.controls.isException.value,
                   'text-success':
-                    addEditAdmissionRuleForm.controls.isException.value
+                    addEditAdmissionRuleForm.controls.isException.value,
                 }">
                 {{
                   (addEditAdmissionRuleForm.controls.isException.value
@@ -356,9 +356,7 @@
               aria-label="admisson criteria"
               formControlName="criteria">
               <mat-chip-row
-                *ngFor="
-                  let criterion of ruleCriteria
-                "
+                *ngFor="let criterion of ruleCriteria"
                 [disabled]="data.opType === modalOp.VIEW"
                 [removable]="data.opType !== modalOp.VIEW"
                 (removed)="removeCriterionFromChip(criterion)"
@@ -490,7 +488,7 @@
                   'text-muted':
                     !addEditAdmissionRuleForm.controls.enabled.value,
                   'text-success':
-                    addEditAdmissionRuleForm.controls.enabled.value
+                    addEditAdmissionRuleForm.controls.enabled.value,
                 }">
                 {{
                   (addEditAdmissionRuleForm.controls.enabled.value

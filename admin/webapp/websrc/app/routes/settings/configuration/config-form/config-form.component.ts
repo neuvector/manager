@@ -25,13 +25,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ConfigV2Vo } from '@common/types/settings/config-vo';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-config-form',
   templateUrl: './config-form.component.html',
   styleUrls: ['./config-form.component.scss'],
-  
 })
 export class ConfigFormComponent implements OnInit {
   private _config!: ConfigV2Vo;

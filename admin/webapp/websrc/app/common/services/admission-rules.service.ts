@@ -531,33 +531,32 @@ export class AdmissionRulesService {
     nodeValueType: string = ''
   ) => {
     let isDuplicated = false;
-    currCriteriaControl =
-      currCriteriaControl.filter(currCriterion => {
-        let _currCriterion: any = null;
-        let _criterion: any = null;
-        if (currCriterion.value && typeof currCriterion.value === 'object') {
-          _currCriterion = currCriterion.value;
-        } else {
-          _currCriterion = currCriterion;
-        }
-        if (criterion && typeof criterion.value === 'object') {
-          _criterion = criterion.value;
-        } else {
-          _criterion = criterion;
-        }
+    currCriteriaControl = currCriteriaControl.filter(currCriterion => {
+      let _currCriterion: any = null;
+      let _criterion: any = null;
+      if (currCriterion.value && typeof currCriterion.value === 'object') {
+        _currCriterion = currCriterion.value;
+      } else {
+        _currCriterion = currCriterion;
+      }
+      if (criterion && typeof criterion.value === 'object') {
+        _criterion = criterion.value;
+      } else {
+        _criterion = criterion;
+      }
 
-        if (isCustomized) {
-          _currCriterion.name = _currCriterion.path;
-        }
-        if (_currCriterion.name === _criterion.name) {
-          isDuplicated = true;
-        }
+      if (isCustomized) {
+        _currCriterion.name = _currCriterion.path;
+      }
+      if (_currCriterion.name === _criterion.name) {
+        isDuplicated = true;
+      }
 
-        return (
-          _currCriterion.name !== _criterion.name ||
-          _currCriterion.op !== _criterion.op
-        );
-      });
+      return (
+        _currCriterion.name !== _criterion.name ||
+        _currCriterion.op !== _criterion.op
+      );
+    });
     if (
       !isDuplicated &&
       criterion.sub_criteria &&

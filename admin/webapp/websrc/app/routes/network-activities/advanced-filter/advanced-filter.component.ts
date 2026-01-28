@@ -27,13 +27,11 @@ import {
   Settings,
 } from '@common/types/network-activities/settings';
 
-
 @Component({
   standalone: false,
   selector: 'app-advanced-filter',
   templateUrl: './advanced-filter.component.html',
   styleUrls: ['./advanced-filter.component.scss'],
-  
 })
 export class AdvancedFilterComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -187,8 +185,7 @@ export class AdvancedFilterComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.domainInput.nativeElement.value = '';
-    if (this.domainChips.includes(event.option.value))
-      return;
+    if (this.domainChips.includes(event.option.value)) return;
     this.domainChips.push(event.option.value);
     this.advFilterForm.controls.domains.setValue(this.domainChips);
     this.advFilterForm.controls.domains.markAsTouched();
@@ -208,12 +205,7 @@ export class AdvancedFilterComponent implements OnInit {
 
   groupSelected(event: MatAutocompleteSelectedEvent): void {
     this.groupInput.nativeElement.value = '';
-    if (
-      this.groupChips.includes(
-        event.option.value
-      )
-    )
-      return;
+    if (this.groupChips.includes(event.option.value)) return;
     this.groupChips.push(event.option.value);
     this.advFilterForm.controls.selectedGroups.setValue(this.groupChips);
     this.advFilterForm.controls.selectedGroups.markAsTouched();

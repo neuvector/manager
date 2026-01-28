@@ -115,7 +115,8 @@
               <span
                 [ngClass]="{
                   'text-muted': !addEditGroupForm.controls.monitor_metric.value,
-                  'text-success': addEditGroupForm.controls.monitor_metric.value
+                  'text-success':
+                    addEditGroupForm.controls.monitor_metric.value,
                 }">
                 {{
                   (addEditGroupForm.controls.monitor_metric.value

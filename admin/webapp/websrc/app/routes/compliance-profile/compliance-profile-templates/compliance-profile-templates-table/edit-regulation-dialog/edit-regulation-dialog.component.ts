@@ -1,13 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-
 @Component({
   standalone: false,
   selector: 'app-edit-regulation-dialog',
   templateUrl: './edit-regulation-dialog.component.html',
   styleUrls: ['./edit-regulation-dialog.component.scss'],
-  
 })
 export class EditRegulationDialogComponent implements OnInit {
   regulations: string[] = [];

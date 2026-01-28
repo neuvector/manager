@@ -11,7 +11,6 @@ import { Subject } from 'rxjs';
 import { VulnerabilitiesComponent } from '../vulnerabilities.component';
 import { LastModifiedDateOption } from '@common/types';
 
-
 const today = new Date();
 
 @Component({
@@ -20,7 +19,6 @@ const today = new Date();
   templateUrl: './pdf-generation-dialog.component.html',
   styleUrls: ['./pdf-generation-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class PdfGenerationDialogComponent {
   dateOptions: LastModifiedDateOption[] = [

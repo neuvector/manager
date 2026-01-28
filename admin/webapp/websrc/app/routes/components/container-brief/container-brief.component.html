@@ -24,7 +24,7 @@
             style="margin-top: 2px; width: 620px">
             <span class="font-weight-bold" style="display: inline-block">
               <em class="fa fa-square-o"></em>
-              {{ child.display_name | slice : 0 : 55
+              {{ child.display_name | slice: 0 : 55
               }}{{ child.display_name.length > 35 ? '...' : '' }}
             </span>
             <label
@@ -78,7 +78,7 @@
               matTooltip="{{ container.service_group }}"
               matTooltipPosition="above"
               [matTooltipDisabled]="container.service_group.length < 30"
-              >{{ container.service_group | shortenFromMiddle : 30 }}</span
+              >{{ container.service_group | shortenFromMiddle: 30 }}</span
             >
             <a
               (click)="goToGroup(container.service_group)"
@@ -121,7 +121,7 @@
         }}</span>
         <span
           *ngIf="container.state === 'quarantined'"
-          class="text-danger  auto-hide pod-item-value"
+          class="text-danger auto-hide pod-item-value"
           style="display: block; width: 180px">
           {{ container.quarantine_reason }}
         </span>
@@ -131,7 +131,7 @@
           {{ 'network.nodeDetails.CREATED_AT' | translate }}:
         </span>
         <span class="ml auto-hide pod-item-value">
-          {{ container.started_at | date : 'MMM dd, y HH:mm:ss' }}
+          {{ container.started_at | date: 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
     </div>
@@ -144,15 +144,15 @@
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.SCANNED_AT' | translate }}:
         </span>
-        <span class="ml  auto-hide pod-item-value" style="width: 150px">
-          {{ container.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss' }}
+        <span class="ml auto-hide pod-item-value" style="width: 150px">
+          {{ container.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
       <div class="col-sm-6 ps-0 mda-list-item-text pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.PRIVILEGED' | translate }}:
         </span>
-        <span class="ml  auto-hide pod-item-value">
+        <span class="ml auto-hide pod-item-value">
           {{ container.privileged }}
         </span>
       </div>
@@ -164,7 +164,7 @@
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.RUN_AS_ROOT' | translate }}:
         </span>
-        <span class="ml  auto-hide pod-item-value">
+        <span class="ml auto-hide pod-item-value">
           {{ container.run_as_root }}
         </span>
       </div>
@@ -173,9 +173,7 @@
           {{ 'group.gridHeader.VULNERABILITIES' | translate }}:
         </span>
         <div class="pod-item-value d-inline">
-          <span
-            *ngIf="container.scan_summary.high"
-            class="badge badge-danger ">
+          <span *ngIf="container.scan_summary.high" class="badge badge-danger">
             {{ container.scan_summary.high }}</span
           >
           <span
@@ -214,7 +212,7 @@
 
           <div *ngIf="isScanStarted4Pod" class="ml mt-sm pull-left">
             <label class="mt-sm label label-info-tran">
-              <em class="fa fa-cog fa-spin "></em> Scanning...
+              <em class="fa fa-cog fa-spin"></em> Scanning...
             </label>
           </div>
         </div>

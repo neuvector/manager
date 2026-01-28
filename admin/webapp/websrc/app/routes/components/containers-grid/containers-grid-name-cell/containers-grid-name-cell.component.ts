@@ -2,17 +2,13 @@ import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
-
 @Component({
   standalone: false,
   selector: 'app-containers-grid-name-cell',
   templateUrl: './containers-grid-name-cell.component.html',
   styleUrls: ['./containers-grid-name-cell.component.scss'],
-  
 })
-export class ContainersGridNameCellComponent
-  implements ICellRendererAngularComp
-{
+export class ContainersGridNameCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   name!: string;
   isParent!: boolean;

@@ -12,7 +12,6 @@ import { GlobalConstant } from '@common/constants/global.constant';
   selector: 'app-edit-webhook-table-controls',
   templateUrl: './edit-webhook-table-controls.component.html',
   styleUrls: ['./edit-webhook-table-controls.component.scss'],
-  
 })
 export class EditWebhookTableControlsComponent
   extends FieldType<FieldTypeConfig>

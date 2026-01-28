@@ -44,13 +44,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { FrameService } from '../../frame/frame.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-network-activities',
   templateUrl: './network-activities.component.html',
   styleUrls: ['./network-activities.component.scss'],
-  
 })
 export class NetworkActivitiesComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;
@@ -711,8 +709,8 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
       this.popupState.leave();
       this.stopRefreshSession();
       this.domains = this.graphService
-      .getDomains()
-      .map(domain => ({ name: domain.name }));
+        .getDomains()
+        .map(domain => ({ name: domain.name }));
       this.groups = this.graphService.getGroups().map(group => ({
         name: group.name,
         displayName: getServiceName(group.name),

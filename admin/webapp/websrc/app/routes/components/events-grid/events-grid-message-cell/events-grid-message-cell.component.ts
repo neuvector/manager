@@ -14,9 +14,7 @@ import { MIN_UNIT64 } from '../events-grid.component';
   templateUrl: './events-grid-message-cell.component.html',
   styleUrls: ['./events-grid-message-cell.component.scss'],
 })
-export class EventsGridMessageCellComponent
-  implements ICellRendererAngularComp
-{
+export class EventsGridMessageCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   labelCode!: string;
   iconCode!: string;
@@ -25,7 +23,10 @@ export class EventsGridMessageCellComponent
     return this.params.data;
   }
 
-  constructor(private tr: TranslateService, private bytesPipe: BytesPipe) {}
+  constructor(
+    private tr: TranslateService,
+    private bytesPipe: BytesPipe
+  ) {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
@@ -114,26 +115,23 @@ export class EventsGridMessageCellComponent
         description = `<div class="col-sm-12 text-warning">${v}</div>`;
       } else {
         if (k !== 'Level' && k !== 'Failcnt' && k !== 'PageFaults') {
-          itemMap[
-            k
-          ] = `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
-            `event.msg.${parseDivideStyle(k).toUpperCase()}`
-          )}:</span>&nbsp;<span>${this.bytesPipe.transform(
-            v as any
-          )}</span></div>`;
+          itemMap[k] =
+            `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
+              `event.msg.${parseDivideStyle(k).toUpperCase()}`
+            )}:</span>&nbsp;<span>${this.bytesPipe.transform(
+              v as any
+            )}</span></div>`;
         } else {
-          itemMap[
-            k
-          ] = `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
-            `event.msg.${parseDivideStyle(k).toUpperCase()}`
-          )}:</span>&nbsp;<span>${numberWithCommas(v)}</span></div>`;
+          itemMap[k] =
+            `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
+              `event.msg.${parseDivideStyle(k).toUpperCase()}`
+            )}:</span>&nbsp;<span>${numberWithCommas(v)}</span></div>`;
         }
         if (k === 'UsageLimit' && v === MIN_UNIT64) {
-          itemMap[
-            k
-          ] = `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
-            'event.msg.NOT_SET_LIMIT'
-          )}</span></div>`;
+          itemMap[k] =
+            `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
+              'event.msg.NOT_SET_LIMIT'
+            )}</span></div>`;
         }
       }
     });
@@ -150,19 +148,17 @@ export class EventsGridMessageCellComponent
     };
     Object.entries(msg).forEach(([k, v]) => {
       if (k === 'Percentage') {
-        itemMap[
-          k
-        ] = `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
-          `event.msg.${parseDivideStyle(k).toUpperCase()}`
-        )}:</span>&nbsp;<span>${v}%</span></div>`;
+        itemMap[k] =
+          `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
+            `event.msg.${parseDivideStyle(k).toUpperCase()}`
+          )}:</span>&nbsp;<span>${v}%</span></div>`;
       } else {
-        itemMap[
-          k
-        ] = `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
-          `event.msg.${parseDivideStyle(k).toUpperCase()}`
-        )}:</span>&nbsp;<span>${this.bytesPipe.transform(
-          v as any
-        )}</span></div>`;
+        itemMap[k] =
+          `<div class="col-sm-6"><span class="text-bold">${this.tr.instant(
+            `event.msg.${parseDivideStyle(k).toUpperCase()}`
+          )}:</span>&nbsp;<span>${this.bytesPipe.transform(
+            v as any
+          )}</span></div>`;
       }
     });
     return Object.values(itemMap).join('');

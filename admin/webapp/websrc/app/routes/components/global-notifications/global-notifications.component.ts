@@ -24,13 +24,11 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 
-
 @Component({
   standalone: false,
   selector: 'app-global-notifications',
   templateUrl: './global-notifications.component.html',
   styleUrls: ['./global-notifications.component.scss'],
-  
 })
 export class GlobalNotificationsComponent implements OnInit {
   @ViewChild('notificationMenuTrigger')

@@ -4,13 +4,11 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-license',
   templateUrl: './license.component.html',
   styleUrls: ['./license.component.scss'],
-  
 })
 export class LicenseComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;

@@ -4,10 +4,10 @@
       (data.isReadOnly
         ? 'user.tooltips.VIEW'
         : data.isEdit
-        ? 'user.editUser.TITLE'
-        : data.isReset
-        ? 'user.tooltips.RESET_PASSWORD'
-        : 'user.addUser.TITLE'
+          ? 'user.editUser.TITLE'
+          : data.isReset
+            ? 'user.tooltips.RESET_PASSWORD'
+            : 'user.addUser.TITLE'
       ) | translate
     }}
   </h4>

@@ -16,14 +16,12 @@ import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 import { VulnerabilitiesGridComponent } from '@components/vulnerabilities-grid/vulnerabilities-grid.component';
 
-
 @Component({
   standalone: false,
   selector: 'app-registry-vulnerabilities',
   templateUrl: './registry-vulnerabilities.component.html',
   styleUrls: ['./registry-vulnerabilities.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
 })
 export class RegistryVulnerabilitiesComponent {
   @Input() path!: string;

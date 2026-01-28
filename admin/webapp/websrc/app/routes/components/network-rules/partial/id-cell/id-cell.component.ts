@@ -3,13 +3,11 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 import { GlobalConstant } from '@common/constants/global.constant';
 
-
 @Component({
   standalone: false,
   selector: 'app-id-cell',
   templateUrl: './id-cell.component.html',
   styleUrls: ['./id-cell.component.scss'],
-  
 })
 export class IdCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

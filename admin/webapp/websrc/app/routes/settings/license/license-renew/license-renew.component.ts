@@ -1,18 +1,17 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ErrorResponse } from '@common/types';
 import { SettingsService } from '@services/settings.service';
 import { finalize } from 'rxjs/operators';
-import { ErrorResponse } from '@common/types';
-
 
 @Component({
   standalone: false,
   selector: 'app-license-renew',
   templateUrl: './license-renew.component.html',
   styleUrls: ['./license-renew.component.scss'],
-  
 })
 export class LicenseRenewComponent {
+  // eslint-disable-next-line @angular-eslint/no-output-native
   @Output() cancel = new EventEmitter();
   submittingForm = false;
   errorMessage!: string;

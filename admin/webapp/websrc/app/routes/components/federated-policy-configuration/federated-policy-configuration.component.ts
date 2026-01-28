@@ -17,13 +17,11 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
 
-
 @Component({
   standalone: false,
   selector: 'app-federated-policy-configuration',
   templateUrl: './federated-policy-configuration.component.html',
   styleUrls: ['./federated-policy-configuration.component.scss'],
-  
 })
 export class FederatedPolicyConfigurationComponent
   implements OnInit, ComponentCanDeactivate

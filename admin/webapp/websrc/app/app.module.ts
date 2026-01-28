@@ -13,7 +13,10 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { AuthInterceptor } from '@core/interceptor/auth.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
@@ -44,9 +47,7 @@ export function getWindow() {
     }),
   ],
   providers: [
-    provideHttpClient(
-      withInterceptorsFromDi(),
-    ),
+    provideHttpClient(withInterceptorsFromDi()),
     { provide: WindowWrapper, useFactory: getWindow },
     {
       provide: HTTP_INTERCEPTORS,

@@ -2,17 +2,13 @@ import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
-
 @Component({
   standalone: false,
   selector: 'app-risk-report-grid-name-cell',
   templateUrl: './risk-report-grid-name-cell.component.html',
   styleUrls: ['./risk-report-grid-name-cell.component.scss'],
-  
 })
-export class RiskReportGridNameCellComponent
-  implements ICellRendererAngularComp
-{
+export class RiskReportGridNameCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   name!: string;
   isParent!: boolean;

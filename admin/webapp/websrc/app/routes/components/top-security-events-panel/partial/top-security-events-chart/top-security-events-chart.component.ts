@@ -4,13 +4,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CapitalizePipe } from '@common/pipes/app.pipes';
 import { ChartConfiguration } from 'chart.js';
 
-
 @Component({
   standalone: false,
   selector: 'app-top-security-events-chart',
   templateUrl: './top-security-events-chart.component.html',
   styleUrls: ['./top-security-events-chart.component.scss'],
-  
 })
 export class TopSecurityEventsChartComponent implements OnInit {
   @Input() topSecurityEvents: any;

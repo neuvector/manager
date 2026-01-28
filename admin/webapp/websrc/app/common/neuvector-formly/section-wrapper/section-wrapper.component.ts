@@ -6,7 +6,6 @@ import { FieldWrapper } from '@ngx-formly/core';
   selector: 'app-section-wrapper',
   templateUrl: './section-wrapper.component.html',
   styleUrls: ['./section-wrapper.component.scss'],
-  
 })
 export class SectionWrapperComponent extends FieldWrapper {
   Array = Array;

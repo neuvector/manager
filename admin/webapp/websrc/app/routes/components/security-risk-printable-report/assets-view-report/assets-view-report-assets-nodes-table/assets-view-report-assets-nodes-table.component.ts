@@ -2,13 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { BytesPipe } from '@common/pipes/app.pipes';
 
-
 @Component({
   standalone: false,
   selector: 'app-assets-view-report-assets-nodes-table',
   templateUrl: './assets-view-report-assets-nodes-table.component.html',
   styleUrls: ['./assets-view-report-assets-nodes-table.component.scss'],
-  
 })
 export class AssetsViewReportAssetsNodesTableComponent implements OnInit {
   @Input() nodes: any[];

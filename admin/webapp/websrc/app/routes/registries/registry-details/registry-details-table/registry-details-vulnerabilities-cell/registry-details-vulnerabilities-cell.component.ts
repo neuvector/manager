@@ -9,9 +9,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   styleUrls: ['./registry-details-vulnerabilities-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegistryDetailsVulnerabilitiesCellComponent
-  implements ICellRendererAngularComp
-{
+export class RegistryDetailsVulnerabilitiesCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   high!: string;
   medium!: string;

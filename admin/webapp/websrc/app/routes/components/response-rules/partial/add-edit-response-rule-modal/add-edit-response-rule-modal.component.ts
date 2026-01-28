@@ -24,7 +24,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
 import { updateGridData, getCfgType } from '@common/utils/common.utils';
 
-
 export interface AutoCompleteOption {
   name: string;
 }
@@ -34,7 +33,6 @@ export interface AutoCompleteOption {
   selector: 'app-add-edit-response-rule-modal',
   templateUrl: './add-edit-response-rule-modal.component.html',
   styleUrls: ['./add-edit-response-rule-modal.component.scss'],
-  
 })
 export class AddEditResponseRuleModalComponent implements OnInit {
   private selectedRule: any;

@@ -12,13 +12,11 @@ import {
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Subscription } from 'rxjs';
 
-
 @Component({
   standalone: false,
   selector: 'app-compliance-profile',
   templateUrl: './compliance-profile.component.html',
   styleUrls: ['./compliance-profile.component.scss'],
-  
 })
 export class ComplianceProfileComponent implements OnInit, OnDestroy {
   complianceProfileData!: {

@@ -1,13 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
-
 @Component({
   standalone: false,
   selector: 'app-application-protocols-panel',
   templateUrl: './application-protocols-panel.component.html',
   styleUrls: ['./application-protocols-panel.component.scss'],
-  
 })
 export class ApplicationProtocolsPanelComponent implements OnInit {
   @Input() details: any;

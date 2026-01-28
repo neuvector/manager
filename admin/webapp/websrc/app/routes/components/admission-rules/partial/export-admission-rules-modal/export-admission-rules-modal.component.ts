@@ -11,13 +11,11 @@ import { MapConstant } from '@common/constants/map.constant';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-
 @Component({
   standalone: false,
   selector: 'app-export-admission-rules-modal',
   templateUrl: './export-admission-rules-modal.component.html',
   styleUrls: ['./export-admission-rules-modal.component.scss'],
-  
 })
 export class ExportAdmissionRulesModalComponent implements OnInit {
   GlobalConstant = GlobalConstant;

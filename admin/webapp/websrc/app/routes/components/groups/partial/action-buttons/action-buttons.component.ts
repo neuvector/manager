@@ -13,13 +13,11 @@ import { switchMap } from 'rxjs/operators';
 import { GroupsService } from '@services/groups.service';
 import { NotificationService } from '@services/notification.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-action-buttons',
   templateUrl: './action-buttons.component.html',
   styleUrls: ['./action-buttons.component.scss'],
-  
 })
 export class ActionButtonsComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

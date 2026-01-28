@@ -10,14 +10,14 @@
       *matHeaderCellDef
       [id]="currField.viewValue"
       [ngStyle]="{
-        flex: currField.flexWidth ? '0 0 ' + currField.flexWidth : '1'
+        flex: currField.flexWidth ? '0 0 ' + currField.flexWidth : '1',
       }">
       {{ currField.viewValue | translate }}
     </mat-header-cell>
     <mat-cell
       *matCellDef="let element"
       [ngStyle]="{
-        flex: currField.flexWidth ? '0 0 ' + currField.flexWidth : '1'
+        flex: currField.flexWidth ? '0 0 ' + currField.flexWidth : '1',
       }">
       <formly-field
         [field]="element.fieldGroup[i]"

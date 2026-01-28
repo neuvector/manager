@@ -9,7 +9,6 @@ import { ScoreImprovementModalService } from '@services/score-improvement-modal.
 import { saveAs } from 'file-saver';
 import { tap } from 'rxjs/operators';
 
-
 @Component({
   standalone: false,
   selector: 'app-score-improvement-run-as-privileged-containers-view',
@@ -18,11 +17,8 @@ import { tap } from 'rxjs/operators';
   styleUrls: [
     './score-improvement-run-as-privileged-containers-view.component.scss',
   ],
-  
 })
-export class ScoreImprovementRunAsPrivilegedContainersViewComponent
-  implements OnInit
-{
+export class ScoreImprovementRunAsPrivilegedContainersViewComponent implements OnInit {
   _containersGrid!: ContainersGridComponent;
   @ViewChild(ContainersGridComponent) set containersGrid(
     grid: ContainersGridComponent

@@ -6,13 +6,11 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { TranslateService } from '@ngx-translate/core';
 
-
 @Component({
   standalone: false,
   selector: 'app-review-network-rule-modal',
   templateUrl: './review-network-rule-modal.component.html',
   styleUrls: ['./review-network-rule-modal.component.scss'],
-  
 })
 export class ReviewNetworkRuleModalComponent implements OnInit {
   isReadOnlyRule: boolean = false;

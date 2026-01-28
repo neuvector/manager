@@ -5,13 +5,11 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { isEmptyObj } from '@common/utils/common.utils';
 import { SecurityEventsService } from '@common/services/security-events.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-review-process-rule-modal',
   templateUrl: './review-process-rule-modal.component.html',
   styleUrls: ['./review-process-rule-modal.component.scss'],
-  
 })
 export class ReviewProcessRuleModalComponent implements OnInit {
   isReviewRule: boolean;

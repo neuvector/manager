@@ -8,13 +8,11 @@ import { saveAs } from 'file-saver';
 import { NotificationService } from '@services/notification.service';
 import * as moment from 'moment';
 
-
 @Component({
   standalone: false,
   selector: 'app-csp-support-form',
   templateUrl: './csp-support-form.component.html',
   styleUrls: ['./csp-support-form.component.scss'],
-  
 })
 export class CspSupportFormComponent implements OnInit {
   @Input() cspType: string;

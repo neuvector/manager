@@ -19,9 +19,7 @@ import { MapConstant } from '@common/constants/map.constant';
   templateUrl: './verifier-action-buttons.component.html',
   styleUrls: ['./verifier-action-buttons.component.scss'],
 })
-export class VerifierActionButtonsComponent
-  implements ICellRendererAngularComp
-{
+export class VerifierActionButtonsComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
 
   constructor(

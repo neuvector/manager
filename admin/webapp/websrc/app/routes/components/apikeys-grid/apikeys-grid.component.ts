@@ -25,13 +25,11 @@ import { updateGridData } from '@common/utils/common.utils';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
-
 @Component({
   standalone: false,
   selector: 'app-apikeys-grid',
   templateUrl: './apikeys-grid.component.html',
   styleUrls: ['./apikeys-grid.component.scss'],
-  
 })
 export class ApikeysGridComponent implements OnInit {
   private readonly $win;

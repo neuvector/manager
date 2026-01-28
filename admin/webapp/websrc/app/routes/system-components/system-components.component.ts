@@ -7,13 +7,11 @@ import { ControllerDetailsComponent } from './controller-details/controller-deta
 import { EnforcerDetailsComponent } from './enforcer-details/enforcer-details.component';
 import { SystemComponentsCommunicationService } from './system-components-communication.service';
 
-
 @Component({
   standalone: false,
   selector: 'app-system-components',
   templateUrl: './system-components.component.html',
   styleUrls: ['./system-components.component.scss'],
-  
 })
 export class SystemComponentsComponent implements AfterViewInit, OnDestroy {
   @ViewChild(ControllersGridComponent)

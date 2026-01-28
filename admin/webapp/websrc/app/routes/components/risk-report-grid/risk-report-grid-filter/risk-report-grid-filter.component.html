@@ -22,7 +22,8 @@
       <span class="col-3 font-weight-normal mb-0" for="fromDate">
         {{ 'general.REPORTED_FROM' | translate }}
       </span>
-      <mat-form-field class="col ps-0 mb-0 adv-filter-date-picker no-background">
+      <mat-form-field
+        class="col ps-0 mb-0 adv-filter-date-picker no-background">
         <input
           [matDatepicker]="pickerFrom"
           [matDatepickerFilter]="fromFilter"
@@ -31,9 +32,11 @@
           matInput />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <div matSuffix class="d-flex align-items-center">
-          <mat-datepicker-toggle
-            [for]="pickerFrom"></mat-datepicker-toggle>
-          <button mat-icon-button (click)="form.get('reportedFrom')?.reset()" type="button">
+          <mat-datepicker-toggle [for]="pickerFrom"></mat-datepicker-toggle>
+          <button
+            mat-icon-button
+            (click)="form.get('reportedFrom')?.reset()"
+            type="button">
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -53,8 +56,7 @@
           matInput />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <div matSuffix class="d-flex align-items-center">
-          <mat-datepicker-toggle
-            [for]="pickerTo"></mat-datepicker-toggle>
+          <mat-datepicker-toggle [for]="pickerTo"></mat-datepicker-toggle>
           <button mat-icon-button (click)="form.get('reportedTo')?.reset()">
             <mat-icon>close</mat-icon>
           </button>

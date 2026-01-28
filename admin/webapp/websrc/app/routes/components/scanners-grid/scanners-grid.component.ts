@@ -24,13 +24,11 @@ import * as $ from 'jquery';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { finalize } from 'rxjs/operators';
 
-
 @Component({
   standalone: false,
   selector: 'app-scanners-grid',
   templateUrl: './scanners-grid.component.html',
   styleUrls: ['./scanners-grid.component.scss'],
-  
 })
 export class ScannersGridComponent implements OnInit, OnChanges, OnDestroy {
   private readonly $win;

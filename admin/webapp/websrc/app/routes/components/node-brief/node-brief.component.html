@@ -87,8 +87,8 @@
         <span class="font-weight-bold host-item-key"
           >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
         >
-        <span class="ml  auto-hide host-item-key">
-          {{ host.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss' }}
+        <span class="ml auto-hide host-item-key">
+          {{ host.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
     </li>
@@ -98,9 +98,7 @@
           >{{ 'group.gridHeader.VULNERABILITIES' | translate }}:</span
         >
         <div class="d-inline">
-          <span
-            *ngIf="host.scan_summary?.high"
-            class="badge badge-danger">
+          <span *ngIf="host.scan_summary?.high" class="badge badge-danger">
             {{ host.scan_summary.high }}</span
           >
           <span *ngIf="host.scan_summary?.medium" class="badge badge-warning">
@@ -123,7 +121,7 @@
               host.scan_summary?.medium === 0
             "
             class="label label-success-tran">
-            <em class="fa fa-smile-o "></em> Clean
+            <em class="fa fa-smile-o"></em> Clean
           </label>
         </div>
       </div>
@@ -133,7 +131,7 @@
         <span class="font-weight-bold host-item-key"
           >{{ 'network.legend.GROUP' | translate }}:</span
         >
-        <span class="ml  auto-hide host-item-key">
+        <span class="ml auto-hide host-item-key">
           nodes
           <a
             (click)="goToGroup('nodes')"

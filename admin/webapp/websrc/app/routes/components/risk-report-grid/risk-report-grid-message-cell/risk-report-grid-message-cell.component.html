@@ -220,11 +220,9 @@
     <div *ngIf="params.data.aggregation_from" class="mx-1">
       <strong>{{ 'audit.gridHeader.DURATION' | translate }}:</strong>
       <span>
-        {{ params.data.aggregation_from * 1000 | date : 'MMM dd, y HH:mm:ss' }}
+        {{ params.data.aggregation_from * 1000 | date: 'MMM dd, y HH:mm:ss' }}
         ~
-        {{
-          params.data.reported_timestamp * 1000 | date : 'MMM dd, y HH:mm:ss'
-        }}
+        {{ params.data.reported_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss' }}
       </span>
     </div>
   </ng-container>

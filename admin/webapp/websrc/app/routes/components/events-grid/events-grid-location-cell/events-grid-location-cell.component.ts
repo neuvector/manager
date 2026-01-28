@@ -3,17 +3,13 @@ import { getDisplayName } from '@common/utils/common.utils';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
-
 @Component({
   standalone: false,
   selector: 'app-events-grid-location-cell',
   templateUrl: './events-grid-location-cell.component.html',
   styleUrls: ['./events-grid-location-cell.component.scss'],
-  
 })
-export class EventsGridLocationCellComponent
-  implements ICellRendererAngularComp
-{
+export class EventsGridLocationCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   get displayWorkload() {
     return this.params.data.workload_domain

@@ -33,10 +33,7 @@
               (mouseover)="showButton[i] = true"
               (mouseleave)="showButton[i] = false"
               (removed)="remove(domainChip, i)"
-              *ngFor="
-                let domainChip of domainChips;
-                let i = index
-              ">
+              *ngFor="let domainChip of domainChips; let i = index">
               <img
                 src="assets/img/icons/graph/domain.svg"
                 width="20"
@@ -81,10 +78,7 @@
               (mouseover)="showGrpButton[i] = true"
               (mouseleave)="showGrpButton[i] = false"
               (removed)="removeGroup(groupChip, i)"
-              *ngFor="
-                let groupChip of groupChips;
-                let i = index
-              ">
+              *ngFor="let groupChip of groupChips; let i = index">
               <img
                 src="assets/img/icons/graph/cluster.svg"
                 width="20"
@@ -129,10 +123,7 @@
               (mouseover)="showEdpButton[i] = true"
               (mouseleave)="showEdpButton[i] = false"
               (removed)="removeNode(nodeChip, i)"
-              *ngFor="
-                let nodeChip of nodeChips;
-                let i = index
-              ">
+              *ngFor="let nodeChip of nodeChips; let i = index">
               <img
                 src="assets/img/icons/graph/container.svg"
                 width="20"

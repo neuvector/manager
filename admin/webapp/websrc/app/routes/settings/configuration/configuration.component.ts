@@ -19,13 +19,11 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import { ConfigV2Vo } from '@common/types/settings/config-vo';
 
-
 @Component({
   standalone: false,
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
   styleUrls: ['./configuration.component.scss'],
-  
 })
 export class ConfigurationComponent
   implements OnInit, OnDestroy, ComponentCanDeactivate
@@ -82,13 +80,10 @@ export class ConfigurationComponent
           tls: {
             enable_tls_verification:
               value.tls_cfg?.enable_tls_verification ?? true,
-            cacerts: value.tls_cfg?.cacerts?.map(
-              (c, i) =>
-                ({
-                  id: i,
-                  context: c,
-                })
-            ),
+            cacerts: value.tls_cfg?.cacerts?.map((c, i) => ({
+              id: i,
+              context: c,
+            })),
           },
         };
         this.multiClusterService.clusterName = value.misc.cluster_name;

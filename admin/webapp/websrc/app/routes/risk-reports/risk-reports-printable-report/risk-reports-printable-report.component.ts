@@ -32,7 +32,10 @@ export class RiskReportsPrintableReportComponent {
   scanDistribution!: Map<string, number>;
   summaryRangeMsg!: string;
 
-  constructor(private tr: TranslateService, private datePipe: DatePipe) {}
+  constructor(
+    private tr: TranslateService,
+    private datePipe: DatePipe
+  ) {}
 
   textClass(level: string) {
     if (['error', 'critical'].includes(level.toLowerCase())) {

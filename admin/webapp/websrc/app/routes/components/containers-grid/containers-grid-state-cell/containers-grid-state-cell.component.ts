@@ -11,9 +11,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   styleUrls: ['./containers-grid-state-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContainersGridStateCellComponent
-  implements ICellRendererAngularComp
-{
+export class ContainersGridStateCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   state!: string;
   displayState!: string;

@@ -8,7 +8,7 @@
       [matTooltip]="
         ('registry.CVE_DB_DATE' | translate) +
         ': ' +
-        (scannerDate | date : 'medium')
+        (scannerDate | date: 'medium')
       "
       matTooltipPosition="above"
       class="eos-icons icon-18"
@@ -100,7 +100,7 @@
       'p0 col-8':
         !selectedLayer?.verifiers || (selectedLayer?.verifiers)!.length === 0,
       'col-6':
-        selectedLayer?.verifiers && (selectedLayer?.verifiers)!.length > 0
+        selectedLayer?.verifiers && (selectedLayer?.verifiers)!.length > 0,
     }">
     <div class="cmds">
       <ng-container *ngIf="selectedLayer?.cmds">

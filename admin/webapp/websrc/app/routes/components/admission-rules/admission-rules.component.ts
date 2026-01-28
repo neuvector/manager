@@ -25,13 +25,11 @@ import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-di
 import { saveAs } from 'file-saver';
 import * as $ from 'jquery';
 
-
 @Component({
   standalone: false,
   selector: 'app-admission-rules',
   templateUrl: './admission-rules.component.html',
   styleUrls: ['./admission-rules.component.scss'],
-  
 })
 export class AdmissionRulesComponent implements OnInit {
   @Input() source!: string;
@@ -92,8 +90,8 @@ export class AdmissionRulesComponent implements OnInit {
       this.source === GlobalConstant.NAV_SOURCE.SELF
         ? this.w.innerHeight - 238
         : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-        ? this.w.innerHeight - 300
-        : 0;
+          ? this.w.innerHeight - 300
+          : 0;
     this.refresh();
   }
 
@@ -125,7 +123,7 @@ export class AdmissionRulesComponent implements OnInit {
         ([state, rules, options]: [
           AdmissionStateRec,
           Array<AdmissionRule>,
-          any
+          any,
         ]) => {
           this.admissionStateRec = state;
           this.admissionRules = rules;

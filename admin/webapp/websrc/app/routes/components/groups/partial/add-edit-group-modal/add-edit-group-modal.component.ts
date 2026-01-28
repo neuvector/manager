@@ -22,13 +22,11 @@ import { NotificationService } from '@services/notification.service';
 import { InputDialogComponent } from '@components/ui/input-dialog/input-dialog.component';
 import { validTypingOnly } from '@common/utils/common.utils';
 
-
 @Component({
   standalone: false,
   selector: 'app-add-edit-group-modal',
   templateUrl: './add-edit-group-modal.component.html',
   styleUrls: ['./add-edit-group-modal.component.scss'],
-  
 })
 export class AddEditGroupModalComponent implements OnInit {
   modalOp: any;

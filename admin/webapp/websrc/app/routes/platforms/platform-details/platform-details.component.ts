@@ -26,13 +26,11 @@ import { VersionInfoService } from '@services/version-info.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-
 @Component({
   standalone: false,
   selector: 'app-platform-details',
   templateUrl: './platform-details.component.html',
   styleUrls: ['./platform-details.component.scss'],
-  
 })
 export class PlatformDetailsComponent implements OnInit {
   private _platform!: Platform;

@@ -5,7 +5,7 @@ import { FormlyValidators } from '@common/neuvector-formly/neuvector-formly.modu
 @Component({
   standalone: false,
   selector: 'app-formly-errors',
-  
+
   templateUrl: './formly-errors.component.html',
   styleUrls: ['./formly-errors.component.scss'],
 })

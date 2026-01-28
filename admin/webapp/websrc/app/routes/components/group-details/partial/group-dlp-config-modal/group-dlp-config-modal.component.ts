@@ -9,13 +9,11 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import * as $ from 'jquery';
 
-
 @Component({
   standalone: false,
   selector: 'app-group-dlp-config-modal',
   templateUrl: './group-dlp-config-modal.component.html',
   styleUrls: ['./group-dlp-config-modal.component.scss'],
-  
 })
 export class GroupDlpConfigModalComponent implements OnInit {
   gridOptions4DlpSensorOption: GridOptions;

@@ -22,7 +22,6 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-
 interface SsoServerResponse {
   redirect: SsoServer;
 }
@@ -50,7 +49,6 @@ interface ApikeyInitResponse {
 interface PermissionOptionsResponse {
   options: PermissionOptionResponse;
 }
-
 
 @Injectable()
 export class AuthHttpService {
@@ -197,9 +195,10 @@ export class AuthHttpService {
 
   getPwdProfile(): Observable<PasswordProfile> {
     return GlobalVariable.http
-      .get<{ pwd_profiles: PasswordProfile[]; active_profile_name: string }>(
-        PathConstant.PASSWORD_PROFILE
-      )
+      .get<{
+        pwd_profiles: PasswordProfile[];
+        active_profile_name: string;
+      }>(PathConstant.PASSWORD_PROFILE)
       .pipe(
         map(pwdProfileResponse => {
           const active_profile_name =

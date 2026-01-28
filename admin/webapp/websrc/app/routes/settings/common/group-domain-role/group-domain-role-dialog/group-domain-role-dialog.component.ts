@@ -13,7 +13,6 @@ import { GroupDomainRoleComponent } from '../group-domain-role.component';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-
 export interface GroupDomainRoleDialogData {
   isEdit: boolean;
   global_role: string;
@@ -29,7 +28,6 @@ export interface GroupDomainRoleDialogData {
   selector: 'app-group-domain-role-dialog-contents',
   templateUrl: './group-domain-role-dialog.component.html',
   styleUrls: ['./group-domain-role-dialog.component.scss'],
-  
 })
 export class GroupDomainRoleDialogComponent {
   activeRole = this.data.dataSource.data[0].namespaceRole;

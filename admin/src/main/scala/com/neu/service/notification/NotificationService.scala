@@ -5,6 +5,7 @@ import com.neu.cache.GraphCacheManager
 import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
+import com.neu.core.AuthenticationManager
 import com.neu.core.IpGeoManager
 import com.neu.model.AlertJsonProtocol.{ *, given }
 import com.neu.model.DashboardJsonProtocol.{ *, given }
@@ -16,10 +17,9 @@ import com.neu.model.*
 import com.neu.service.BaseService
 import com.neu.utils.EnumUtils
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.HttpEntity
 import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.model.*
 import org.joda.time.DateTime
 import org.json4s.*
 import org.json4s.native.JsonMethods.*
@@ -39,8 +39,9 @@ class NotificationService()(implicit
     with DefaultJsonFormats
     with LazyLogging {
 
-  val topLimit = 5
-  val client   = "client"
+  final val serverErrorStatus = "Status: 503"
+  val topLimit                = 5
+  val client                  = "client"
 
   def getIpLocations(ipList: Array[String]): Route = complete {
     logger.info("Getting ip locations")
@@ -162,27 +163,39 @@ class NotificationService()(implicit
         }
 
         if (start.isDefined && limit.isDefined) {
-          if (elements == null) {
-            elements = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+          try {
+            val resultPromise = AuthenticationManager.validateToken(tokenId)
+            Await.result(resultPromise, RestClient.waitingLimit.seconds)
+            if (elements == null) {
+              elements = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+                .getPagedData(s"$cacheKey-audit")
+                .getOrElse(List[org.json4s.JsonAST.JValue]())
+            }
+            val output        =
+              elements.slice(start.get.toInt, start.get.toInt + limit.get.toInt)
+            if (output.length < limit.get.toInt) {
+              paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+                .removePagedData(s"$cacheKey-audit")
+            }
+            val pagedRes      = compact(render(JArray(output)))
+            val cachedData    = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
               .getPagedData(s"$cacheKey-audit")
               .getOrElse(List[org.json4s.JsonAST.JValue]())
+            logger.info("Cached data size: {}", cachedData.size)
+            logger.info(
+              "Paged response size: {}",
+              compact(render(JArray(output))).length
+            )
+            pagedRes
+          } catch {
+            case NonFatal(e) =>
+              RestClient.handleError(
+                timeOutStatus,
+                authenticationFailedStatus,
+                serverErrorStatus,
+                e
+              )
           }
-          val output     =
-            elements.slice(start.get.toInt, start.get.toInt + limit.get.toInt)
-          if (output.length < limit.get.toInt) {
-            paginationCacheManager[List[org.json4s.JsonAST.JValue]]
-              .removePagedData(s"$cacheKey-audit")
-          }
-          val pagedRes   = compact(render(JArray(output)))
-          val cachedData = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
-            .getPagedData(s"$cacheKey-audit")
-            .getOrElse(List[org.json4s.JsonAST.JValue]())
-          logger.info("Cached data size: {}", cachedData.size)
-          logger.info(
-            "Paged response size: {}",
-            compact(render(JArray(output))).length
-          )
-          pagedRes
         } else {
           auditStr
         }
@@ -400,26 +413,75 @@ class NotificationService()(implicit
     }
   }
 
-  def createNetworkGraph(graphLayout: UserGraphLayout): Route = {
-    logger.info("saving positions for user: {}", graphLayout.user)
-    GraphCacheManager.saveNodeLayout(graphLayout)
-    logger.debug(layoutToJson(graphLayout))
+  def createNetworkGraph(graphLayout: UserGraphLayout, tokenId: String): Route = complete {
+    try {
+      val resultPromise = AuthenticationManager.validateToken(tokenId)
+      Await.result(resultPromise, RestClient.waitingLimit.seconds)
 
-    complete(HttpEntity.Empty)
+      logger.info("saving positions for user: {}", graphLayout.user)
+      GraphCacheManager.saveNodeLayout(graphLayout)
+      logger.debug(layoutToJson(graphLayout))
+
+      HttpEntity.Empty
+    } catch {
+      case NonFatal(e) =>
+        RestClient.handleError(
+          timeOutStatus,
+          authenticationFailedStatus,
+          serverErrorStatus,
+          e
+        )
+    }
   }
 
-  def getNetworkGraphLayout(user: String): Route = complete {
-    UserGraphLayout(user, GraphCacheManager.getNodeLayout(user))
+  def getNetworkGraphLayout(user: String, tokenId: String): Route = complete {
+    try {
+      val resultPromise = AuthenticationManager.validateToken(tokenId)
+      Await.result(resultPromise, RestClient.waitingLimit.seconds)
+      UserGraphLayout(user, GraphCacheManager.getNodeLayout(user))
+    } catch {
+      case NonFatal(e) =>
+        RestClient.handleError(
+          timeOutStatus,
+          authenticationFailedStatus,
+          serverErrorStatus,
+          e
+        )
+    }
   }
 
-  def getNetworkGraphBlacklist(user: String): Route = complete {
-    BlacklistCacheManager.getBlacklist(user)
+  def getNetworkGraphBlacklist(user: String, tokenId: String): Route = complete {
+    try {
+      val resultPromise = AuthenticationManager.validateToken(tokenId)
+      Await.result(resultPromise, RestClient.waitingLimit.seconds)
+      BlacklistCacheManager.getBlacklist(user)
+    } catch {
+      case NonFatal(e) =>
+        RestClient.handleError(
+          timeOutStatus,
+          authenticationFailedStatus,
+          serverErrorStatus,
+          e
+        )
+    }
   }
 
-  def createNetworkGraphBlacklist(userBlacklist: UserBlacklist): Route = {
-    logger.info("saving blacklist for user: {}", userBlacklist.user)
-    BlacklistCacheManager.saveBlacklist(userBlacklist)
-    complete(HttpEntity.Empty)
+  def createNetworkGraphBlacklist(userBlacklist: UserBlacklist, tokenId: String): Route = complete {
+    try {
+      val resultPromise = AuthenticationManager.validateToken(tokenId)
+      Await.result(resultPromise, RestClient.waitingLimit.seconds)
+      logger.info("saving blacklist for user: {}", userBlacklist.user)
+      BlacklistCacheManager.saveBlacklist(userBlacklist)
+      HttpEntity.Empty
+    } catch {
+      case NonFatal(e) =>
+        RestClient.handleError(
+          timeOutStatus,
+          authenticationFailedStatus,
+          serverErrorStatus,
+          e
+        )
+    }
   }
 
   def getSecurityEvents(tokenId: String): Route = complete {

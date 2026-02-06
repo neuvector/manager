@@ -264,7 +264,7 @@ class DeviceApi(resourceService: DeviceService) extends BaseApi {
             path("check") {
               get {
                 Utils.respondWithWebServerHeaders() {
-                  resourceService.checkDebugLog()
+                  resourceService.checkDebugLog(tokenId)
                 }
               }
             }

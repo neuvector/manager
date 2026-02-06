@@ -179,7 +179,7 @@ class NotificationApi(resourceService: NotificationService) extends BaseApi {
               post {
                 entity(as[UserGraphLayout]) { (graphLayout: UserGraphLayout) =>
                   Utils.respondWithWebServerHeaders() {
-                    resourceService.createNetworkGraph(graphLayout)
+                    resourceService.createNetworkGraph(graphLayout, tokenId)
                   }
                 }
               }
@@ -188,7 +188,7 @@ class NotificationApi(resourceService: NotificationService) extends BaseApi {
               get {
                 parameter(Symbol("user")) { user =>
                   Utils.respondWithWebServerHeaders() {
-                    resourceService.getNetworkGraphLayout(user)
+                    resourceService.getNetworkGraphLayout(user, tokenId)
                   }
                 }
               }
@@ -197,14 +197,14 @@ class NotificationApi(resourceService: NotificationService) extends BaseApi {
               get {
                 parameter(Symbol("user")) { user =>
                   Utils.respondWithWebServerHeaders() {
-                    resourceService.getNetworkGraphBlacklist(user)
+                    resourceService.getNetworkGraphBlacklist(user, tokenId)
                   }
                 }
               } ~
               post {
                 entity(as[UserBlacklist]) { (userBlacklist: UserBlacklist) =>
                   Utils.respondWithWebServerHeaders() {
-                    resourceService.createNetworkGraphBlacklist(userBlacklist)
+                    resourceService.createNetworkGraphBlacklist(userBlacklist, tokenId)
                   }
                 }
               }

@@ -105,6 +105,7 @@ export class ApikeysGridComponent implements OnInit {
       sortable: false,
       cellRenderer: 'actionCellRenderer',
       cellRendererParams: {
+        isWriteUserAuthorized: undefined,
         view: event => this.viewApikey(event),
         delete: event => this.deleteApikey(event),
       },
@@ -127,6 +128,9 @@ export class ApikeysGridComponent implements OnInit {
   ngOnInit(): void {
     this.isWriteUserAuthorized =
       this.authUtilsService.getDisplayFlag('write_users');
+    let actionCellParams =
+      this.columnDefs[this.columnDefs.length - 1].cellRendererParams;
+    actionCellParams.isWriteUserAuthorized = this.isWriteUserAuthorized;
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
     this.gridOptions = {
       ...this.gridOptions,
@@ -219,7 +223,7 @@ export class ApikeysGridComponent implements OnInit {
         error: ({ error }: { error: ErrorResponse }) => {
           this.notificationService.openError(
             error,
-            this.tr.instant('apikey.msg.REMOVE_NG')
+            this.tr.instant('apikey.msg.REMOVE_ERR')
           );
         },
       });

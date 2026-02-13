@@ -6,6 +6,7 @@
   <i class="eos-icons text-action">feed</i>
 </button>
 <button
+  *ngIf="params.isWriteUserAuthorized"
   mat-icon-button
   matTooltip="{{ 'apikey.REMOVE' | translate }}"
   matTooltipPosition="above"

@@ -225,7 +225,7 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
       gpuEnabled = JSON.parse(this.localStorage.get('_gpuEnabled'));
       if (gpuEnabled !== null) return gpuEnabled;
     }
-    return false
+    return false;
   }
 
   private prepareGraphics(

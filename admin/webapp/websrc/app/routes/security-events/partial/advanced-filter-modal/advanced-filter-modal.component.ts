@@ -22,6 +22,7 @@ import { autocompleteValidator } from '@common/validators';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-advanced-filter-modal',
   templateUrl: './advanced-filter-modal.component.html',
   styleUrls: ['./advanced-filter-modal.component.scss'],

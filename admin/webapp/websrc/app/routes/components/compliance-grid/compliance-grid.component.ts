@@ -42,6 +42,7 @@ export type ComplianceRow = Check & {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-grid',
   templateUrl: './compliance-grid.component.html',
   styleUrls: ['./compliance-grid.component.scss'],

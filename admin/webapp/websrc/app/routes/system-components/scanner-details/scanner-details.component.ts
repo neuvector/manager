@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { SystemComponentsCommunicationService } from '../system-components-communication.service';
 
 @Component({
+  standalone: false,
   selector: 'app-scanner-details',
   templateUrl: './scanner-details.component.html',
   styleUrls: ['./scanner-details.component.scss'],

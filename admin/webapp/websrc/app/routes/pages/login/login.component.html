@@ -19,7 +19,7 @@
             class="login-logo"
             [ngClass]="{
               'openID-saml-eula':
-                !isEulaAccepted && servers && servers.length === 2
+                !isEulaAccepted && servers && servers.length === 2,
             }"></div>
         </ng-template>
         <div class="panel-body p0">
@@ -41,7 +41,7 @@
               'login-panel-eula': !isEulaAccepted,
               'login-panel-openid-saml': servers && servers.length === 2,
               'login-panel-openid-saml-eula':
-                !isEulaAccepted && servers && servers.length === 2
+                !isEulaAccepted && servers && servers.length === 2,
             }"
             *ngIf="!isFromSSO">
             <p

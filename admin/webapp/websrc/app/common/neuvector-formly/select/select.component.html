@@ -1,14 +1,13 @@
 <mat-form-field
-  appearance="standard"
   [hideRequiredMarker]="to.hideRequiredMarker ?? false"
   class="w-100">
-  <mat-label>{{ field.templateOptions.label || '' | translate }}</mat-label>
+  <mat-label>{{ field.templateOptions?.label ?? '' | translate }}</mat-label>
   <mat-select
     (selectionChange)="change($event)"
-    [attr.disabled]="field.templateOptions.disabled || false"
+    [attr.disabled]="field.templateOptions?.disabled ?? false"
     [formControl]="formControl"
     [formlyAttributes]="field"
-    [required]="field.templateOptions.required || false">
+    [required]="field.templateOptions?.required ?? false">
     <mat-option
       *ngFor="let item of field.templateOptions?.items"
       [value]="item.value">

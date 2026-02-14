@@ -11,6 +11,7 @@ import { Vulnerability } from '@common/types';
 import { tap } from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'app-vulnerabilities',
   templateUrl: './vulnerabilities.component.html',
   styleUrls: ['./vulnerabilities.component.scss'],

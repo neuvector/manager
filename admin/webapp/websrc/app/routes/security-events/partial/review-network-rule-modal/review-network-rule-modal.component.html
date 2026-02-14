@@ -78,7 +78,7 @@
               readonly
               [value]="
                 data.networkRule.last_modified_timestamp * 1000
-                  | date : 'MMM dd, y HH:mm:ss'
+                  | date: 'MMM dd, y HH:mm:ss'
               " />
           </mat-form-field>
         </div>
@@ -93,7 +93,7 @@
               <span
                 [ngClass]="{
                   'text-deny': !data.network.allowed,
-                  'text-success': data.network.allowed
+                  'text-success': data.network.allowed,
                 }">
                 {{
                   (data.network.allowed
@@ -113,12 +113,12 @@
           <h5>
             {{ 'securityEvent.VIOLATED_RULE' | translate }}
             <span
-              class="label {{ ruleTypeClass }} mr-sm"
+              class="label {{ ruleTypeClass }} "
               style="display: inline; font-size: 12px">
               {{ data.networkRule.id }}
             </span>
           </h5>
-          <div class="col-sm-12 pl-sm pr-sm text-muted" style="font-size: 14px">
+          <div class="col-sm-12 text-muted" style="font-size: 14px">
             {{ violatedRuleText }}
           </div>
         </div>
@@ -126,12 +126,12 @@
           <h5>
             {{ 'securityEvent.VIOLATED_RULE' | translate }}
             <span
-              class="label label-caution mr-sm"
+              class="label label-caution"
               style="display: inline; font-size: 12px">
               Implicit
             </span>
           </h5>
-          <div class="col-sm-12 pl-sm pr-sm text-muted" style="font-size: 14px">
+          <div class="col-sm-12 text-muted" style="font-size: 14px">
             {{ violatedImplicitRuleText }}
           </div>
         </div>
@@ -180,7 +180,7 @@
                         data.secEvent.applications ===
                           data.networkRule.applications.join(', ')
                           ? 'none'
-                          : '#fff7f0'
+                          : '#fff7f0',
                     }"
                     formControlName="applications" />
                 </mat-form-field>
@@ -202,7 +202,7 @@
                           data.networkRule.ports
                         )
                           ? 'none'
-                          : '#fff7f0'
+                          : '#fff7f0',
                     }"
                     formControlName="ports" />
                 </mat-form-field>
@@ -218,7 +218,7 @@
                     <span
                       [ngClass]="{
                         'text-deny': !newAction,
-                        'text-success': newAction
+                        'text-success': newAction,
                       }">
                       {{
                         (newAction
@@ -238,7 +238,7 @@
               <div class="d-flex justify-content-end align-items-center">
                 <button
                   mat-stroked-button
-                  class="mr-2"
+                  class="me-2"
                   aria-label="Cancel"
                   (click)="dialogRef.close()">
                   {{ 'group.editGroup.CANCEL' | translate }}

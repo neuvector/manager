@@ -11,6 +11,7 @@ export declare type LoadingButtonType =
   | 'mat-mini-fab';
 
 @Component({
+  standalone: false,
   selector: 'app-loading-button',
   templateUrl: './loading-button.component.html',
   styleUrls: ['./loading-button.component.scss'],

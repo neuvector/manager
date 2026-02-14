@@ -13,6 +13,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { RolesGridPermissionsCellComponent } from '@components/roles-grid/roles-grid-permissions-cell/roles-grid-permissions-cell.component';
 
 @Component({
+  standalone: false,
   selector: 'app-rancher-permissions-grid',
   templateUrl: './rancher-permissions-grid.component.html',
   styleUrls: ['./rancher-permissions-grid.component.scss'],
@@ -47,7 +48,10 @@ export class RancherPermissionsGridComponent implements OnInit {
     },
   ];
 
-  constructor(private tr: TranslateService, private utils: UtilsService) {
+  constructor(
+    private tr: TranslateService,
+    private utils: UtilsService
+  ) {
     this.$win = $(GlobalVariable.window);
   }
 

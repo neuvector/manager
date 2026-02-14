@@ -10,6 +10,7 @@ import {
 } from 'ngx-webstorage-service';
 
 @Component({
+  standalone: false,
   selector: 'app-logout',
   templateUrl: './logout.component.html',
   styleUrls: ['./logout.component.scss'],

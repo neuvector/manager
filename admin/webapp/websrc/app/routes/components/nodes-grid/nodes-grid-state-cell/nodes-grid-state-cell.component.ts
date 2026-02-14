@@ -5,6 +5,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-nodes-grid-state-cell',
   templateUrl: './nodes-grid-state-cell.component.html',
   styleUrls: ['./nodes-grid-state-cell.component.scss'],

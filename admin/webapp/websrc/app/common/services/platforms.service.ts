@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { Platform } from '@common/types';
 import { Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class PlatformsService {
@@ -21,6 +21,6 @@ export class PlatformsService {
   }
 
   getPlatforms(): Observable<Platform[]> {
-    return this.assetsHttpService.getPlatform().pipe(pluck('platforms'));
+    return this.assetsHttpService.getPlatform().pipe(map(r => r.platforms));
   }
 }

@@ -33,6 +33,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import * as $ from 'jquery';
 
 @Component({
+  standalone: false,
   selector: 'app-dlp-sensors',
   templateUrl: './dlp-sensors.component.html',
   styleUrls: ['./dlp-sensors.component.scss'],

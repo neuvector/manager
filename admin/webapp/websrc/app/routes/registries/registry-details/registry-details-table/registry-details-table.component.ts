@@ -24,6 +24,7 @@ import { FormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-registry-details-table',
   templateUrl: './registry-details-table.component.html',
   styleUrls: ['./registry-details-table.component.scss'],

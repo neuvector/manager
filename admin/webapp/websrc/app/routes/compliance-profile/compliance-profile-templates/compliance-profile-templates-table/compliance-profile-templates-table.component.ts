@@ -43,6 +43,7 @@ import { ExportOptionsModalComponent } from '@components/export-options-modal/ex
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-profile-templates-table',
   templateUrl: './compliance-profile-templates-table.component.html',
   styleUrls: ['./compliance-profile-templates-table.component.scss'],

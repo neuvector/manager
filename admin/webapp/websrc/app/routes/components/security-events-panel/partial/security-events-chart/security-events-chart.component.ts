@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { threeWayMerge } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-security-events-chart',
   templateUrl: './security-events-chart.component.html',
   styleUrls: ['./security-events-chart.component.scss'],

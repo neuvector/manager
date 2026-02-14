@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-roles-grid-action-cell',
   templateUrl: './roles-grid-action-cell.component.html',
   styleUrls: ['./roles-grid-action-cell.component.scss'],

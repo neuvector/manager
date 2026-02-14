@@ -12,11 +12,11 @@
       mat-icon-button
       aria-label="Export run-as-privileged containers CSV"
       type="button"
-      class="mr-3"
+      class="me-3"
       (click)="exportCSV()">
       <i class="eos-icons icon-18">csv_file</i>
     </button>
-    <mat-form-field appearance="standard">
+    <mat-form-field class="quick-filter" style="margin: 8px 0">
       <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
       <input [formControl]="filter" matInput />
     </mat-form-field>

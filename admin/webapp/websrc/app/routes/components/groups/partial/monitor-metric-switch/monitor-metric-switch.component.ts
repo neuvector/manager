@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
 
 @Component({
+  standalone: false,
   selector: 'app-monitor-metric-switch',
   templateUrl: './monitor-metric-switch.component.html',
   styleUrls: ['./monitor-metric-switch.component.scss'],

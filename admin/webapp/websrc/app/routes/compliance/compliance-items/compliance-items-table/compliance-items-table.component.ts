@@ -29,6 +29,7 @@ import { ComplianceItemsTableFilterComponent } from './compliance-items-table-fi
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-items-table',
   templateUrl: './compliance-items-table.component.html',
   styleUrls: ['./compliance-items-table.component.scss'],

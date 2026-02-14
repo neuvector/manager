@@ -5,6 +5,7 @@ import { MatchedRule } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-matched-rule-list',
   templateUrl: './matched-rule-list.component.html',
   styleUrls: ['./matched-rule-list.component.scss'],

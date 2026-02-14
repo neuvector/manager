@@ -27,6 +27,7 @@ enum FilterView {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-items-table-filter',
   templateUrl: './compliance-items-table-filter.component.html',
   styleUrls: ['./compliance-items-table-filter.component.scss'],

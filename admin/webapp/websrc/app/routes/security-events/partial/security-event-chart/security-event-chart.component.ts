@@ -7,6 +7,7 @@ import {
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-security-event-chart',
   templateUrl: './security-event-chart.component.html',
   styleUrls: ['./security-event-chart.component.scss'],

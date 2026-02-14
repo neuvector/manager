@@ -29,6 +29,7 @@ export interface AutoCompleteOption {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-response-rule-modal',
   templateUrl: './add-edit-response-rule-modal.component.html',
   styleUrls: ['./add-edit-response-rule-modal.component.scss'],

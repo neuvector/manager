@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { SettingsService } from '@services/settings.service';
 
 @Component({
+  standalone: false,
   selector: 'app-password-panel',
   templateUrl: './password-panel.component.html',
   styleUrls: ['./password-panel.component.scss'],

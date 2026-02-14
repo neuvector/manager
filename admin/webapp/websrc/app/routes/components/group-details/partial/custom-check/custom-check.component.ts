@@ -13,6 +13,7 @@ import { updateGridData } from '@common/utils/common.utils';
 import * as $ from 'jquery';
 
 @Component({
+  standalone: false,
   selector: 'app-custom-check',
   templateUrl: './custom-check.component.html',
   styleUrls: ['./custom-check.component.scss'],

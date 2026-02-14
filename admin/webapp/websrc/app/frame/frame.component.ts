@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
+  standalone: false,
   selector: 'app-layout',
   templateUrl: './frame.component.html',
   styleUrls: ['./frame.component.scss'],

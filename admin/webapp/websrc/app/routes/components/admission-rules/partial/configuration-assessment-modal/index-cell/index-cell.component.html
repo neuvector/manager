@@ -1,10 +1,10 @@
 <div class="d-flex">
-  <div *ngIf="isParent" class="mr-1" (click)="toggleVisible()">
+  <div *ngIf="isParent" class="me-1" (click)="toggleVisible()">
     <i class="fa fa-minus-circle" *ngIf="isChildVisible"></i>
     <i class="fa fa-plus-circle" *ngIf="!isChildVisible"></i>
   </div>
-  <div *ngIf="!isParent" class="mr-3"></div>
-  <div [class.pl-2]="!!params.data.parent_id">
+  <div *ngIf="!isParent" class="me-3"></div>
+  <div [class.ps-2]="!!params.data.parent_id">
     {{ index }}
   </div>
 </div>

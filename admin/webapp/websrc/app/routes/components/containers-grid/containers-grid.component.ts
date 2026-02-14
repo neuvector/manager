@@ -32,6 +32,7 @@ import { ContainersGridStatusCellComponent } from './containers-grid-status-cell
 import { QuickFilterComponent } from '@components/quick-filter/quick-filter.component';
 
 @Component({
+  standalone: false,
   selector: 'app-containers-grid',
   templateUrl: './containers-grid.component.html',
   styleUrls: ['./containers-grid.component.scss'],

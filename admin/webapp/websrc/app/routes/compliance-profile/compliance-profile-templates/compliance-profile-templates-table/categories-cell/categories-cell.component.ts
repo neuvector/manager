@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-categories-cell',
   templateUrl: './categories-cell.component.html',
   styleUrls: ['./categories-cell.component.scss'],

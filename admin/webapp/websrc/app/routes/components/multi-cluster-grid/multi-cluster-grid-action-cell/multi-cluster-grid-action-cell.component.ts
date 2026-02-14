@@ -17,14 +17,13 @@ import { MapConstant } from '@common/constants/map.constant';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 @Component({
+  standalone: false,
   selector: 'app-multi-cluster-grid-action-cell',
   templateUrl: './multi-cluster-grid-action-cell.component.html',
   styleUrls: ['./multi-cluster-grid-action-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MultiClusterGridActionCellComponent
-  implements ICellRendererAngularComp
-{
+export class MultiClusterGridActionCellComponent implements ICellRendererAngularComp {
   public params!: ICellRendererParams;
   buttonDisplayMap: any;
   left_status: string = MapConstant.FED_STATUS.LEFT;

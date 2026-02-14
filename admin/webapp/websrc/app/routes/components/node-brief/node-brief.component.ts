@@ -3,6 +3,7 @@ import { Host } from '@common/types';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-node-brief',
   templateUrl: './node-brief.component.html',
   styleUrls: ['./node-brief.component.scss'],

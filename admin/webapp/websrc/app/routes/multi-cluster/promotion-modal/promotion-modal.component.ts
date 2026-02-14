@@ -30,6 +30,7 @@ export interface EditClusterDialog {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-promotion-modal',
   templateUrl: './promotion-modal.component.html',
   styleUrls: ['./promotion-modal.component.scss'],

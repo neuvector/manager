@@ -3,6 +3,7 @@ import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-security-events-printable-report-chart',
   templateUrl: './security-events-printable-report-chart.component.html',
   styleUrls: ['./security-events-printable-report-chart.component.scss'],

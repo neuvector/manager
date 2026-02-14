@@ -14,6 +14,7 @@ import { LastModifiedDateOption } from '@common/types';
 const today = new Date();
 
 @Component({
+  standalone: false,
   selector: 'app-pdf-generation-dialog',
   templateUrl: './pdf-generation-dialog.component.html',
   styleUrls: ['./pdf-generation-dialog.component.scss'],

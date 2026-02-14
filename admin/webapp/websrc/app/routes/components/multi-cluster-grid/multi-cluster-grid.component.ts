@@ -36,6 +36,7 @@ type Task = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-multi-cluster-grid',
   templateUrl: './multi-cluster-grid.component.html',
   styleUrls: ['./multi-cluster-grid.component.scss'],
@@ -499,7 +500,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
             'dashboard.heading.guideline.MAIN_SCORE_POOR'
           );
         }
-        return `<span style="display: inline-block; width: 45px;" class="ml-sm label label-${scoreColor} badge badge-${scoreColor}">${scoreText}</span><span class="text-${scoreColor} text-bold padding-left-s">${score}</span>`;
+        return `<span style="display: inline-block; width: 45px;" class="label label-${scoreColor} badge badge-${scoreColor}">${scoreText}</span><span class="text-${scoreColor} text-bold padding-left-s">${score}</span>`;
       }
     } else {
       if (typeof params.value === 'undefined') {

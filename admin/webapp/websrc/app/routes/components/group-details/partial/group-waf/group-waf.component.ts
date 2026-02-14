@@ -20,6 +20,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import * as $ from 'jquery';
 
 @Component({
+  standalone: false,
   selector: 'app-group-waf',
   templateUrl: './group-waf.component.html',
   styleUrls: ['./group-waf.component.scss'],

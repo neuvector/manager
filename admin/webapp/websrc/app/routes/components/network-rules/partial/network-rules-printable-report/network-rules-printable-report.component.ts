@@ -5,6 +5,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-network-rules-printable-report',
   templateUrl: './network-rules-printable-report.component.html',
   styleUrls: ['./network-rules-printable-report.component.scss'],

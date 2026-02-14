@@ -78,7 +78,7 @@
               <button
                 mat-stroked-button
                 aria-label="add sensor"
-                class="mr-4"
+                class="me-4"
                 (click)="openAddEditDlpSensorModal()"
                 *appDisplayControl="'write_dlp_rule'">
                 <em class="eos-icons icon-18">add_circle</em>
@@ -112,7 +112,7 @@
         <mat-card [ngStyle]="{ height: height + 'px' }" *ngIf="selectedSensor">
           <div>
             <label class="panel-text-title mt-sm">
-              {{ selectedSensor.name | shortenFromMiddle : 30 }}
+              {{ selectedSensor.name | shortenFromMiddle: 30 }}
             </label>
           </div>
           <div class="row margin-top-m">

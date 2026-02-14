@@ -11,6 +11,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { RegistriesService } from '@services/registries.service';
 
 @Component({
+  standalone: false,
   selector: 'app-registry-details',
   templateUrl: './registry-details.component.html',
   styleUrls: ['./registry-details.component.scss'],

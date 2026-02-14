@@ -27,6 +27,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-openid-form',
   templateUrl: './openid-form.component.html',
   styleUrls: ['./openid-form.component.scss'],

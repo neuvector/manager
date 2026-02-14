@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-navsearch',
   templateUrl: './navsearch.component.html',
   styleUrls: ['./navsearch.component.scss'],

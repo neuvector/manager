@@ -6,13 +6,12 @@ import { ICellRendererParams } from 'ag-grid-community';
 import * as moment from 'moment';
 
 @Component({
+  standalone: false,
   selector: 'app-apikeys-grid-expiration-cell',
   templateUrl: './apikeys-grid-expiration-cell.component.html',
   styleUrls: ['./apikeys-grid-expiration-cell.component.scss'],
 })
-export class ApikeysGridExpirationCellComponent
-  implements ICellRendererAngularComp
-{
+export class ApikeysGridExpirationCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   expiration_type!: ApikeyExpiration;
   expiration_duration!: string;

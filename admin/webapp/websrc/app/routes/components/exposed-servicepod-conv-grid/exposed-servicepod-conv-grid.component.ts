@@ -20,6 +20,7 @@ import { uuid } from '@common/utils/common.utils';
 import { RegistryDetailsVulnerabilitiesCellComponent } from '@routes/registries/registry-details/registry-details-table/registry-details-vulnerabilities-cell/registry-details-vulnerabilities-cell.component';
 
 @Component({
+  standalone: false,
   selector: 'app-exposed-servicepod-conv-grid',
   templateUrl: './exposed-servicepod-conv-grid.component.html',
   styleUrls: ['./exposed-servicepod-conv-grid.component.scss'],

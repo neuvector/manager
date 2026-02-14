@@ -5,14 +5,13 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-grid-status-cell',
   templateUrl: './compliance-grid-status-cell.component.html',
   styleUrls: ['./compliance-grid-status-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ComplianceGridStatusCellComponent
-  implements ICellRendererAngularComp
-{
+export class ComplianceGridStatusCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   status!: string;
   labelCode!: string;

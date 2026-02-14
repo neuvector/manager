@@ -3,14 +3,13 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-grid-category-cell',
   templateUrl: './compliance-grid-category-cell.component.html',
   styleUrls: ['./compliance-grid-category-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ComplianceGridCategoryCellComponent
-  implements ICellRendererAngularComp
-{
+export class ComplianceGridCategoryCellComponent implements ICellRendererAngularComp {
   params: any;
   category!: string;
   isParent!: boolean;

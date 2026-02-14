@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-security-events-panel',
   templateUrl: './security-events-panel.component.html',
   styleUrls: ['./security-events-panel.component.scss'],

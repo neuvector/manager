@@ -16,6 +16,7 @@ import { NotificationService } from '@services/notification.service';
 import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-action-buttons',
   templateUrl: './action-buttons.component.html',
   styleUrls: ['./action-buttons.component.scss'],

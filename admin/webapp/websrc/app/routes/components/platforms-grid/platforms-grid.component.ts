@@ -19,6 +19,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { PlatformsGridStatusCellComponent } from './platforms-grid-status-cell/platforms-grid-status-cell.component';
 
 @Component({
+  standalone: false,
   selector: 'app-platforms-grid',
   templateUrl: './platforms-grid.component.html',
   styleUrls: ['./platforms-grid.component.scss'],

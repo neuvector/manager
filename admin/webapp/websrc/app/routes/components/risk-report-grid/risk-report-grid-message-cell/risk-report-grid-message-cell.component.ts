@@ -11,13 +11,12 @@ interface AdmissionItem {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-risk-report-grid-message-cell',
   templateUrl: './risk-report-grid-message-cell.component.html',
   styleUrls: ['./risk-report-grid-message-cell.component.scss'],
 })
-export class RiskReportGridMessageCellComponent
-  implements ICellRendererAngularComp
-{
+export class RiskReportGridMessageCellComponent implements ICellRendererAngularComp {
   params: any;
   templateType!: TemplateType;
   labelCode!: string;

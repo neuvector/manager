@@ -7,6 +7,7 @@ import { ContainerBriefDialogComponent } from '@components/container-brief/conta
 import { take } from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-item-details',
   templateUrl: './compliance-item-details.component.html',
   styleUrls: ['./compliance-item-details.component.scss'],

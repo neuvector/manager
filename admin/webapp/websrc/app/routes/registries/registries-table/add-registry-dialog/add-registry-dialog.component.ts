@@ -36,6 +36,7 @@ import { ConfigHttpService } from '@common/api/config-http.service';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-add-registry-dialog',
   templateUrl: './add-registry-dialog.component.html',
   styleUrls: ['./add-registry-dialog.component.scss'],

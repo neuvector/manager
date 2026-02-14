@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ChartConfiguration } from 'chart.js';
 
 @Component({
+  standalone: false,
   selector: 'app-top-vulnerable-assets-chart',
   templateUrl: './top-vulnerable-assets-chart.component.html',
   styleUrls: ['./top-vulnerable-assets-chart.component.scss'],

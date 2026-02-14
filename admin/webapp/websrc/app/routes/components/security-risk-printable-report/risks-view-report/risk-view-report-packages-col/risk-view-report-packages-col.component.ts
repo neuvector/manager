@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-risk-view-report-packages-col',
   templateUrl: './risk-view-report-packages-col.component.html',
   styleUrls: ['./risk-view-report-packages-col.component.scss'],

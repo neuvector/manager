@@ -13,12 +13,11 @@
     </h4>
     <button
       id="closeSniffer"
+      (click)="stopRefresh(); popupState.leave()"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
-      <i (click)="stopRefresh(); popupState.leave()" class="eos-icons ml-1"
-        >close</i
-      >
+      <i class="eos-icons ms-1">close</i>
     </button>
   </div>
 
@@ -47,7 +46,7 @@
       </mat-checkbox>
     </div>
 
-    <div class="custom-slider col-8 pl-0">
+    <div class="custom-slider col-8 ps-0">
       <ngx-slider
         [value]="pcap.minValue"
         [options]="pcap.options"
@@ -65,10 +64,10 @@
         (click)="startSniff(containerId)">
         <em class="fa fa-play"></em>
       </button>
-      <div *ngIf="onSnifferErr" class="pull-left mt-2 ml-4">
+      <div *ngIf="onSnifferErr" class="pull-left mt-2 ms-4">
         <span class="text-danger">{{ snifferErrMsg }}</span>
       </div>
-      <div *ngIf="errorMsg" class="pull-left mt-2 ml-4">
+      <div *ngIf="errorMsg" class="pull-left mt-2 ms-4">
         <span class="text-danger">{{ errorMsg }}</span>
       </div>
     </div>
@@ -92,7 +91,7 @@
           mat-mini-fab
           aria-label="Stop sniff"
           color="primary"
-          class="mr-2"
+          class="me-2"
           [disabled]="
             !isPacketCapAuthorized || !sniffer || sniffer.status === 'stopped'
           "
@@ -103,7 +102,7 @@
           mat-mini-fab
           aria-label="Download packet"
           color="primary"
-          class="mr-2"
+          class="me-2"
           [disabled]="!isPacketCapAuthorized || !sniffer"
           (click)="downloadPacket(sniffer.id)">
           <em class="far fa-file-archive"></em>

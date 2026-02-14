@@ -5,6 +5,7 @@ import { decode } from '@common/utils/common.utils';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-packet-modal',
   templateUrl: './packet-modal.component.html',
   styleUrls: ['./packet-modal.component.scss'],

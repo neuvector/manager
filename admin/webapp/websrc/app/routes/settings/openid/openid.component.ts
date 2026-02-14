@@ -8,6 +8,7 @@ import { ServerGetResponse } from '@common/types';
 import { pollUntilResult } from '@common/utils/rxjs.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-openid',
   templateUrl: './openid.component.html',
   styleUrls: ['./openid.component.scss'],

@@ -3,6 +3,7 @@ import { Cluster, ClusterSummary } from '@common/types';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
+  standalone: false,
   selector: 'app-multi-cluster-details',
   templateUrl: './multi-cluster-details.component.html',
   styleUrls: ['./multi-cluster-details.component.scss'],

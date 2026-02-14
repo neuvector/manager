@@ -32,6 +32,7 @@ import {
 export const MIN_UNIT64 = 0;
 
 @Component({
+  standalone: false,
   selector: 'app-events-grid',
   templateUrl: './events-grid.component.html',
   styleUrls: ['./events-grid.component.scss'],

@@ -34,6 +34,7 @@ import {
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-registry-details-table-all-view',
   templateUrl: './registry-details-table-all-view.component.html',
   styleUrls: ['./registry-details-table-all-view.component.scss'],

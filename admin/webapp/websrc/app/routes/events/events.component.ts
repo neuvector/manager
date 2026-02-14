@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
+  standalone: false,
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],

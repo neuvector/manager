@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { uuid } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-exposure-panel',
   templateUrl: './exposure-panel.component.html',
   styleUrls: ['./exposure-panel.component.scss'],

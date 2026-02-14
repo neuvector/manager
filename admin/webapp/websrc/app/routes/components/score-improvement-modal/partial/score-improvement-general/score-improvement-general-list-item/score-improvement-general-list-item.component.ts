@@ -3,7 +3,9 @@ import {
   ScoreImprovementModalService,
   ScoreImprovementModalTemplate,
 } from '@services/score-improvement-modal.service';
+
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-general-list-item',
   templateUrl: './score-improvement-general-list-item.component.html',
   styleUrls: ['./score-improvement-general-list-item.component.scss'],

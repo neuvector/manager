@@ -45,7 +45,7 @@
   <div
     [ngClass]="{
       panel: source === navSource['SELF'],
-      mb0: source === navSource['SELF']
+      mb0: source === navSource['SELF'],
     }">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
       <div
@@ -92,7 +92,7 @@
             <button
               mat-stroked-button
               aria-Label="add rule"
-              class="mr-4"
+              class="me-4"
               (click)="addResponseRule2Top($event)"
               *ngIf="isWriteResponseRuleAuthorized">
               <em class="eos-icons icon-18">add_circle</em>
@@ -128,7 +128,7 @@
           height:
             (source === navSource['GROUP'] || source === navSource['FED_GROUP']
               ? resizableHeight - 90
-              : gridHeight) + 'px'
+              : gridHeight) + 'px',
         }"
         class="ag-theme-balham"
         [gridOptions]="gridOptions"

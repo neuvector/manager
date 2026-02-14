@@ -4,6 +4,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
+  standalone: false,
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],

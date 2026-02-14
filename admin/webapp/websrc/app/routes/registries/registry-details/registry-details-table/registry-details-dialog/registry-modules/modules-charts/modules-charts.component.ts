@@ -24,6 +24,7 @@ const Colors = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-modules-charts',
   templateUrl: './modules-charts.component.html',
   styleUrls: ['./modules-charts.component.scss'],

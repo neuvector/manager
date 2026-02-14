@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-exposure-chart',
   templateUrl: './exposure-chart.component.html',
   styleUrls: ['./exposure-chart.component.scss'],

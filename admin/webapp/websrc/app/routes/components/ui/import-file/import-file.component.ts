@@ -25,6 +25,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-import-file',
   templateUrl: './import-file.component.html',
   styleUrls: ['./import-file.component.scss'],

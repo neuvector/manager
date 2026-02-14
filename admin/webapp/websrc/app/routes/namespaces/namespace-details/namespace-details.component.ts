@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Domain } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-namespace-details',
   templateUrl: './namespace-details.component.html',
   styleUrls: ['./namespace-details.component.scss'],

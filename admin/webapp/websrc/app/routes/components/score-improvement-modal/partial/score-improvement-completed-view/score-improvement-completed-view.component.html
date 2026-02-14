@@ -2,16 +2,20 @@
   <div class="row align-items-center">
     <div class="col-md-5">
       <div class="mx-auto score-container">
-        <mwl-gauge
+        <ngx-gauge
           class="score"
+          type="arch"
           [max]="100"
           [value]="score"
-          [animated]="true"
-          [animationDuration]="1"
-          [color]="getGaugeColor"
-          [showValue]="true"
-          [dialRadius]="40">
-        </mwl-gauge>
+          [animate]="true"
+          [duration]="1"
+          [foregroundColor]="gaugeColor"
+          [thick]="10"
+          cap="round"
+          [thick]="10"
+          cap="round"
+          [size]="120">
+        </ngx-gauge>
         <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
           {{ gaugeLabel }}
         </div>
@@ -23,16 +27,16 @@
     </div>
     <div class="col-md-5">
       <div class="mx-auto score-container">
-        <mwl-gauge
+        <ngx-gauge
           class="score"
+          type="arch"
           [max]="100"
           [value]="fixedScore || 0"
-          [animated]="true"
-          [animationDuration]="1"
-          [color]="getGaugeColor"
-          [showValue]="true"
-          [dialRadius]="40">
-        </mwl-gauge>
+          [animate]="true"
+          [duration]="1"
+          [foregroundColor]="gaugeLabelColorFixed"
+          [size]="40">
+        </ngx-gauge>
         <div class="score-label" [ngStyle]="{ color: gaugeLabelColorFixed }">
           {{ gaugeLabelFixed }}
         </div>

@@ -19,10 +19,10 @@
     <button
       (click)="openDialog()"
       *ngIf="isRegistryScanAuthorized"
-      class="d-flex align-items-center justify-content-start mr-3"
+      class="d-flex align-items-center justify-content-start me-3"
       id="registries-add-dialog"
       mat-stroked-button>
-      <i class="eos-icons mr-2">add_circle</i>{{ 'role.ADD' | translate }}
+      <i class="eos-icons me-2">add_circle</i>{{ 'role.ADD' | translate }}
     </button>
     <app-quick-filter
       [gridOptions]="gridOptions"
@@ -48,7 +48,7 @@
   <app-loading-button
     (btnClick)="startScan()"
     [appearance]="'mat-stroked-button'"
-    [buttonClasses]="'mr-2'"
+    [buttonClasses]="'me-2'"
     *ngIf="
       isRegistryScanAuthorized && !(isFedRegistry && (isRemote || !isFedAdmin))
     "

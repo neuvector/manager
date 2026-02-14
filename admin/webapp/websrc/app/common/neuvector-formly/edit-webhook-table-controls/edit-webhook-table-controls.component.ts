@@ -8,6 +8,7 @@ import { FederatedConfigurationService } from '@services/federated-configuration
 import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-edit-webhook-table-controls',
   templateUrl: './edit-webhook-table-controls.component.html',
   styleUrls: ['./edit-webhook-table-controls.component.scss'],

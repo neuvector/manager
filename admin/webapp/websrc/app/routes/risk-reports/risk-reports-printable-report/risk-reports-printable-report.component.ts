@@ -6,6 +6,7 @@ import { groupBy } from '@common/utils/common.utils';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-risk-reports-printable-report',
   templateUrl: './risk-reports-printable-report.component.html',
   styleUrls: ['./risk-reports-printable-report.component.scss'],
@@ -31,7 +32,10 @@ export class RiskReportsPrintableReportComponent {
   scanDistribution!: Map<string, number>;
   summaryRangeMsg!: string;
 
-  constructor(private tr: TranslateService, private datePipe: DatePipe) {}
+  constructor(
+    private tr: TranslateService,
+    private datePipe: DatePipe
+  ) {}
 
   textClass(level: string) {
     if (['error', 'critical'].includes(level.toLowerCase())) {

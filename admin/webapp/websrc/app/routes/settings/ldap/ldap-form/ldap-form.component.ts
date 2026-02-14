@@ -26,6 +26,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-ldap-form',
   templateUrl: './ldap-form.component.html',
   styleUrls: ['./ldap-form.component.scss'],

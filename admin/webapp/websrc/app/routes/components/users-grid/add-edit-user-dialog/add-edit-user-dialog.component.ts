@@ -10,10 +10,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {
-  MatTableDataSource,
-  _MatTableDataSource,
-} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { User } from '@common/types';
@@ -36,6 +33,7 @@ export interface AddEditUserDialog {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-user-dialog',
   templateUrl: './add-edit-user-dialog.component.html',
   styleUrls: ['./add-edit-user-dialog.component.scss'],
@@ -45,7 +43,7 @@ export class AddEditUserDialogComponent implements OnInit {
   form!: FormGroup;
   saving$ = new Subject();
   toggleAdvSetting = false;
-  domainTableSource!: _MatTableDataSource<any>;
+  domainTableSource!: MatTableDataSource<any>;
   get showAdvSetting() {
     const role = this.form.controls.role.value;
     return (
@@ -80,10 +78,10 @@ export class AddEditUserDialogComponent implements OnInit {
     return this.data.isEdit
       ? 'edit'
       : this.data.isReset
-      ? 'reset'
-      : this.data.isReadOnly
-      ? 'view'
-      : 'add';
+        ? 'reset'
+        : this.data.isReadOnly
+          ? 'view'
+          : 'add';
   }
   get domainTableEmpty(): boolean {
     return !this.domainTableSource.data.filter(

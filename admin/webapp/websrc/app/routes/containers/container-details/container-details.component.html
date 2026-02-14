@@ -7,13 +7,13 @@
             *ngIf="!complianceEmpty"
             aria-label="Export compliance CSV"
             type="button"
-            class="mr-3"
+            class="me-3"
             (click)="complianceGrid.exportCSV()"
             mat-icon-button>
             <i class="eos-icons icon-18">csv_file</i>
           </button>
         </div>
-        <mat-form-field appearance="standard">
+        <mat-form-field class="quick-filter">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -46,7 +46,7 @@
               attr.aria-label="{{ 'cveProfile.ACCEPT_VUL' | translate }}"
               matTooltip="{{ 'cveProfile.ACCEPT_VUL' | translate }}"
               matTooltipPosition="above"
-              class="mr-3"
+              class="me-3"
               (click)="onAcceptVulnerability(selectedVulnerability)"
               mat-icon-button>
               <mat-icon fontSet="fa" fontIcon="fa-check-square"></mat-icon>
@@ -57,10 +57,11 @@
               [attr.aria-label]="acceptedVulsMsg"
               [matTooltip]="acceptedVulsMsg"
               matTooltipPosition="above"
-              class="mr-3"
+              class="me-1"
               (click)="toggleAcceptedVuls()"
               mat-icon-button>
               <mat-icon
+                style="font-size: 14px"
                 fontSet="fa"
                 [fontIcon]="
                   !showAcceptedVuls ? 'fa-eye' : 'fa-eye-slash'
@@ -71,13 +72,13 @@
             *ngIf="!vulEmpty"
             aria-label="Export vulnerabilities CSV"
             type="button"
-            class="mr-3"
+            class="me-3"
             (click)="exportCVE()"
             mat-icon-button>
             <i class="eos-icons icon-18">csv_file</i>
           </button>
         </div>
-        <mat-form-field appearance="standard">
+        <mat-form-field class="quick-filter">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -89,20 +90,22 @@
           <button
             #processHistoryTooltip="matTooltip"
             mat-icon-button
+            style="top: 12px"
             [attr.aria-label]="processHistoryMsg"
             [matTooltip]="processHistoryMsg"
             matTooltipPosition="above"
             type="button"
-            class="mr-3"
+            class="me-3"
             (click)="toggleProcessHistory()">
             <mat-icon
+              style="font-size: 14px"
               fontSet="fa"
               [fontIcon]="
                 !showProcessHistory ? 'fa-eye' : 'fa-eye-slash'
               "></mat-icon>
           </button>
         </div>
-        <mat-form-field appearance="standard">
+        <mat-form-field class="quick-filter">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -110,7 +113,7 @@
     </ng-container>
     <ng-container *ngSwitchDefault>
       <div class="filter" [style.visibility]="'hidden'">
-        <mat-form-field appearance="standard">
+        <mat-form-field class="quick-filter">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input matInput disabled />
         </mat-form-field>
@@ -123,19 +126,19 @@
       activeTab === 'vulnerabilities'
         ? 'filter-icon-' + visibleIcons
         : activeTab === 'compliance'
-        ? !complianceEmpty
-          ? 'filter-icon-1'
-          : 'filter-icon-0'
-        : activeTab === 'process'
-        ? 'filter-icon-1'
-        : ''
+          ? !complianceEmpty
+            ? 'filter-icon-1'
+            : 'filter-icon-0'
+          : activeTab === 'process'
+            ? 'filter-icon-1'
+            : ''
     "
-    class="h-100 detail-tabs"
+    class="h-100 detail-tabs container-detail-tab-group"
     mat-align-tabs="start"
     (selectedTabChange)="activateTab($event)">
     <mat-tab>
       <ng-template mat-tab-label>
-        <em class="fa fa-address-card pr-1"></em>
+        <em class="fa fa-address-card pe-1"></em>
         {{ 'containers.detail.TAB_TITLE' | translate }}
       </ng-template>
       <ng-template matTabContent>
@@ -144,7 +147,7 @@
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label>
-        <em class="fa fa-gavel pr-1"></em>
+        <em class="fa fa-gavel pe-1"></em>
         {{ 'cis.tab.COMPLIANCE' | translate }}
       </ng-template>
       <ng-template matTabContent>
@@ -165,7 +168,7 @@
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label>
-        <em class="fa fa-bug pr-1"></em>
+        <em class="fa fa-bug pe-1"></em>
         {{ 'sidebar.nav.SCAN' | translate }}
       </ng-template>
       <ng-template matTabContent>
@@ -181,7 +184,7 @@
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label>
-        <em class="fa fa-terminal pr-1"></em>
+        <em class="fa fa-terminal pe-1"></em>
         {{ 'containers.process.TAB_TITLE' | translate }}
       </ng-template>
       <ng-template matTabContent>
@@ -195,7 +198,7 @@
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label>
-        <em class="fa fa-chart-line pr-1"></em>
+        <em class="fa fa-chart-line pe-1"></em>
         {{ 'containers.detail.TAB_STATS' | translate }}
       </ng-template>
       <ng-template matTabContent>

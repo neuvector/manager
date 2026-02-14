@@ -25,6 +25,7 @@ import {
 } from '@common/types/network-activities/blacklist';
 
 @Component({
+  standalone: false,
   selector: 'app-blacklist',
   templateUrl: './blacklist.component.html',
   styleUrls: ['./blacklist.component.scss'],
@@ -54,6 +55,10 @@ export class BlacklistComponent implements OnInit {
   showButton = {};
   showGrpButton = {};
   showEdpButton = {};
+
+  domainChips: any[] = [];
+  groupChips: any[] = [];
+  nodeChips: any[] = [];
 
   private _blacklist!: Blacklist;
 
@@ -123,10 +128,10 @@ export class BlacklistComponent implements OnInit {
 
   ngOnInit(): void {
     const list = this.blacklist;
+    this.domainChips = list.domains;
+    this.groupChips = list.groups;
+    this.nodeChips = list.endpoints;
     this.form = new FormGroup({
-      selectedDomains: new FormControl(list.domains),
-      selectedGroups: new FormControl(list.groups),
-      selectedNodes: new FormControl(list.endpoints),
       hideUnmanaged: new FormControl(list.hideUnmanaged),
     });
   }
@@ -142,18 +147,19 @@ export class BlacklistComponent implements OnInit {
   }
 
   apply() {
-    this.blacklist.domains = this.form.value.selectedDomains;
-    this.blacklist.groups = this.form.value.selectedGroups;
-    this.blacklist.endpoints = this.form.value.selectedNodes;
+    this.blacklist.domains = this.domainChips;
+    this.blacklist.groups = this.groupChips;
+    this.blacklist.endpoints = this.nodeChips;
     this.blacklist.hideUnmanaged = this.form.value.hideUnmanaged;
     this.doApply.emit(this.blacklist);
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.namespaceInput.nativeElement.value = '';
-    if (this.form.controls.selectedDomains.value.includes(event.option.value))
-      return;
-    this.form.controls.selectedDomains.value.push(event.option.value);
+    if (this.domainChips.includes(event.option.value)) return;
+    this.domainChips.push(event.option.value);
+    this.form.controls.selectedDomains.setValue(this.domainChips);
+    this.form.controls.selectedDomains.markAsTouched();
     this.namespaceCtrl.setValue(null);
   }
 
@@ -163,14 +169,17 @@ export class BlacklistComponent implements OnInit {
   }
 
   remove(domain: string, index: number): void {
-    this.form.controls.selectedDomains.value.splice(index, 1);
+    this.domainChips.splice(index, 1);
+    this.form.controls.selectedDomains.setValue(this.domainChips);
+    this.form.controls.selectedDomains.markAsTouched();
   }
 
   groupSelected(event: MatAutocompleteSelectedEvent): void {
     this.groupInput.nativeElement.value = '';
-    if (this.form.controls.selectedGroups.value.includes(event.option.value))
-      return;
-    this.form.controls.selectedGroups.value.push(event.option.value);
+    if (this.groupChips.includes(event.option.value)) return;
+    this.groupChips.push(event.option.value);
+    this.form.controls.selectedGroups.setValue(this.groupChips);
+    this.form.controls.selectedGroups.markAsTouched();
     this.groupCtrl.setValue(null);
   }
 
@@ -180,14 +189,17 @@ export class BlacklistComponent implements OnInit {
   }
 
   removeGroup(group: string, index: number) {
-    this.form.controls.selectedGroups.value.splice(index, 1);
+    this.groupChips.splice(index, 1);
+    this.form.controls.selectedGroups.setValue(this.groupChips);
+    this.form.controls.selectedGroups.markAsTouched();
   }
 
   nodeSelected(event: MatAutocompleteSelectedEvent): void {
     this.nodeInput.nativeElement.value = '';
-    if (this.form.controls.selectedNodes.value.includes(event.option.value))
-      return;
-    this.form.controls.selectedNodes.value.push(event.option.value);
+    if (this.nodeChips.includes(event.option.value)) return;
+    this.nodeChips.push(event.option.value);
+    this.form.controls.selectedNodes.setValue(this.nodeChips);
+    this.form.controls.selectedNodes.markAsTouched();
     this.nodeCtrl.setValue(null);
   }
 
@@ -197,7 +209,9 @@ export class BlacklistComponent implements OnInit {
   }
 
   removeNode(node: GraphEndpoint, index: number): void {
-    this.form.controls.selectedNodes.value.splice(index, 1);
+    this.nodeChips.splice(index, 1);
+    this.form.controls.selectedNodes.setValue(this.nodeChips);
+    this.form.controls.selectedNodes.markAsTouched();
   }
 
   private _filter(value: any): GraphItem[] {
@@ -214,9 +228,9 @@ export class BlacklistComponent implements OnInit {
 
   private filter(value: any, list: any[], key: string, type: string): any[] {
     const selectedItems = {
-      domain: this.form.controls.selectedDomains,
-      group: this.form.controls.selectedGroups,
-      endpoint: this.form.controls.selectedNodes,
+      domain: this.domainChips,
+      group: this.groupChips,
+      endpoint: this.nodeChips,
     };
     const filterValue =
       value === null || value instanceof Object ? '' : value.toLowerCase();
@@ -224,7 +238,7 @@ export class BlacklistComponent implements OnInit {
     const matches = list.filter(item =>
       item[key].toLowerCase().includes(filterValue)
     );
-    const formValue = selectedItems[type].value;
+    const formValue = selectedItems[type];
     return formValue === null
       ? matches
       : matches.filter(x => !formValue.find(y => y[key] === x[key]));

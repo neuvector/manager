@@ -13,6 +13,13 @@
 @import 'googleapis/roboto_mono';
 
 
+// eos-ds
+@import "eos-ds/scss/index";
+@import "eos-ds/css/eos-style";
+// eos-icon
+@import "eos-icon/css/eos-icons";
+
+
 // Variables
 @import 'app/variables';
 // Globals
@@ -44,6 +51,7 @@
 
 //Custom
 @import 'app/common';
+@import 'app/badge';
 @import 'app/security-event';
 @import 'app/settings';
 @import 'app/login-legacy';

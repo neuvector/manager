@@ -7,6 +7,7 @@ import { WorkloadRow } from '@services/containers.service';
 import { RegistriesService } from '@services/registries.service';
 
 @Component({
+  standalone: false,
   selector: 'app-container-detail',
   templateUrl: './container-detail.component.html',
   styleUrls: ['./container-detail.component.scss'],

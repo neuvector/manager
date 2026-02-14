@@ -3,6 +3,7 @@ import { SwitchersService } from '../../core/switchers/switchers.service';
 import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
+  standalone: false,
   selector: '[app-footer]',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],

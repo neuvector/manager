@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-score-prediction-header',
   templateUrl: './score-prediction-header.component.html',
   styleUrls: ['./score-prediction-header.component.scss'],
 })
-export class ScorePredictionHeaderComponent {
+export class ScorePredictionHeaderComponent implements OnInit {
   private _score!: number;
   private _projectedScore!: number;
   @Input() message!: string;
@@ -30,17 +31,18 @@ export class ScorePredictionHeaderComponent {
   }
   gaugeLabel = '';
   gaugeLabelColor = '';
+  gaugeColor = '';
   gaugeLabelProj = '';
   gaugeLabelColorProj = '';
 
   constructor(private utils: UtilsService) {}
 
+  ngOnInit(): void {
+    this.gaugeColor = this.getGaugeMetrics(this.score).gaugeLabelColor;
+  }
+
   getGaugeMetrics = (score: number) => {
     let gaugeMetrics = this.utils.getGaugeMetrics(score);
     return gaugeMetrics;
-  };
-
-  getGaugeColor = (score: number) => {
-    return this.getGaugeMetrics(score).gaugeLabelColor;
   };
 }

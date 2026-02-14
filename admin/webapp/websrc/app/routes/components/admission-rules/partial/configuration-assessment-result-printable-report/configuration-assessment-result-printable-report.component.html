@@ -14,13 +14,13 @@
     style="border-bottom: 1px solid #999"
     *ngFor="let item of testResult.data; let i = index"
     [attr.data-index]="i">
-    <div class="col-2 pl-0">
+    <div class="col-2 ps-0">
       <span class="text-bold"><{{ item.index }}></span>
       <em
         class="fa mx-1"
         [ngClass]="{
           'fa-check text-success': item.allowed,
-          'fa-times text-danger': !item.allowed
+          'fa-times text-danger': !item.allowed,
         }"
         aria-hidden="true"></em>
       <span class="action-label info mx-1" *ngIf="item.kind">{{
@@ -28,13 +28,13 @@
       }}</span>
     </div>
     <div class="col-2">
-      <span class="text-bold mr-1" *ngIf="item.name"
+      <span class="text-bold me-1" *ngIf="item.name"
         >{{ 'admissionControl.matchingTestGrid.NAME' | translate }}:</span
       >
       <span *ngIf="item.name">{{ item.name }}</span>
     </div>
-    <div class="col-8 pr-0">
-      <span class="text-bold mr-1"
+    <div class="col-8 pe-0">
+      <span class="text-bold me-1"
         >{{ 'admissionControl.matchingTestGrid.MSG' | translate }}:</span
       >
       <span>{{ item.message }}</span>
@@ -117,7 +117,7 @@
       </table>
     </div>
   </div>
-  <div class="text-muted mt-1 ml-1">
+  <div class="text-muted mt-1 ms-1">
     *&nbsp;{{ testResult.instruction.title }}
   </div>
 </div>

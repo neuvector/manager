@@ -1,16 +1,18 @@
 <div class="d-flex align-items-center justify-content-end score-header">
-  <div class="flex-grow-1 text-muted mat-h4 pl-4">{{ message }}</div>
+  <div class="flex-grow-1 text-muted mat-h4 ps-4">{{ message }}</div>
   <div class="score-container score-container-flex">
-    <mwl-gauge
+    <ngx-gauge
       class="score"
+      type="arch"
       [max]="100"
       [value]="score"
-      [animated]="true"
-      [animationDuration]="1"
-      [color]="getGaugeColor"
-      [showValue]="true"
-      [dialRadius]="40">
-    </mwl-gauge>
+      [animate]="true"
+      [duration]="1"
+      [foregroundColor]="gaugeColor"
+      [thick]="10"
+      cap="round"
+      [size]="120">
+    </ngx-gauge>
     <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
       {{ gaugeLabel }}
     </div>
@@ -24,17 +26,19 @@
         class="fa fa-long-arrow-alt-right fa-2x text-success score-improvement-arrow"></em>
     </div>
   </div>
-  <div class="score-container score-container-flex mr-3">
-    <mwl-gauge
+  <div class="score-container score-container-flex me-3">
+    <ngx-gauge
       class="score"
+      type="arch"
       [max]="100"
       [value]="projectedScore || 0"
-      [animated]="true"
-      [animationDuration]="1"
-      [color]="getGaugeColor"
-      [showValue]="true"
-      [dialRadius]="40">
-    </mwl-gauge>
+      [animate]="true"
+      [duration]="1"
+      [foregroundColor]="gaugeLabelColorProj"
+      [thick]="10"
+      cap="round"
+      [size]="120">
+    </ngx-gauge>
     <div class="score-label" [ngStyle]="{ color: gaugeLabelColorProj }">
       {{ gaugeLabelProj }}
     </div>

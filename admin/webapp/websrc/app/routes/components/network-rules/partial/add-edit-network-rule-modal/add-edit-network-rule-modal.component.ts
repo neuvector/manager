@@ -17,6 +17,7 @@ import { UpdateType } from '@common/types/network-rules/enum';
 import { NetworkRulesService } from '@services/network-rules.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-network-rule-modal',
   templateUrl: './add-edit-network-rule-modal.component.html',
   styleUrls: ['./add-edit-network-rule-modal.component.scss'],

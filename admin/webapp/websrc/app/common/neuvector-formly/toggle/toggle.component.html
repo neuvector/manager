@@ -1,10 +1,10 @@
 <div class="d-flex align-items-end">
   <span
     *ngIf="to.labelPosition === 'before'"
-    class="toggle-label mr-3"
+    class="toggle-label me-3"
     [id]="to.label"
     [ngClass]="to.fixed ? 'mat-slide-toggle-fixed-' + to.fixed : ''"
-    >{{ field.templateOptions.label || '' | translate }}
+    >{{ field.templateOptions?.label ?? '' | translate }}
     <mat-icon
       *ngIf="to.tooltip"
       [matTooltip]="tooltip"
@@ -21,8 +21,8 @@
   </mat-slide-toggle>
   <span
     *ngIf="!to.labelPosition || to.labelPosition === 'after'"
-    class="toggle-label ml-3"
+    class="toggle-label ms-3"
     [ngClass]="to.fixed ? 'mat-slide-toggle-fixed-' + to.fixed : ''"
-    >{{ field.templateOptions.label || '' | translate }}</span
+    >{{ field.templateOptions?.label ?? '' | translate }}</span
   >
 </div>

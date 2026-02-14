@@ -37,27 +37,27 @@
   <div
     class="d-flex flex-row justify-content-center align-items-center"
     *ngIf="!isReadOnly">
-    <div class="mr-4 role-map text-bold d-flex flex-row align-items-center">
+    <div class="me-4 role-map text-bold d-flex flex-row align-items-center">
       <mat-icon
         aria-hidden="false"
         aria-label="Name icon"
-        class="d-flex user__icon mr-2"
+        class="d-flex user__icon me-2"
         fontSet="far"
         fontIcon="fa-id-card">
       </mat-icon>
       {{ activeRole }} {{ 'ldap.GROUP_ADMIN' | translate }}
     </div>
-    <mat-form-field appearance="standard" class="flex-grow-1">
+    <mat-form-field class="flex-grow-1">
       <mat-label>{{ 'ldap.gridHeader.DOMAINS' | translate }}</mat-label>
-      <mat-chip-list #chipList aria-label="Namespace selection">
-        <mat-chip
+      <mat-chip-grid #chipList aria-label="Namespace selection">
+        <mat-chip-row
           (removed)="remove(domainChip)"
           *ngFor="let domainChip of domainChips">
           {{ domainChip }}
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
-        </mat-chip>
+        </mat-chip-row>
         <input
           #namespaceInput
           (matChipInputTokenEnd)="add($event)"
@@ -69,7 +69,7 @@
           placeholder="{{ 'ldap.ADD_DOMAIN' | translate }}&nbsp;{{
             'general.TYPE_PRESS_TXT' | translate
           }}" />
-      </mat-chip-list>
+      </mat-chip-grid>
       <mat-autocomplete
         #auto="matAutocomplete"
         (optionSelected)="selected($event)">

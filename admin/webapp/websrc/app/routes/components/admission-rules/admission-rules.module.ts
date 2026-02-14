@@ -15,7 +15,6 @@ import { ImportTestFileComponent } from '@components/admission-rules/partial/imp
 import { PipeModule } from '@common/pipes/pipe.module';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { CriterionDescriptionIconComponent } from './partial/criterion-description-icon/criterion-description-icon.component';
 import { MultiSelectorDropdownModule } from '@routes/components/ui/multi-selector-dropdown/multi-selector-dropdown.module';
 import { ConfigurationAssessmentResultPrintableReportComponent } from './partial/configuration-assessment-result-printable-report/configuration-assessment-result-printable-report.component';
@@ -23,6 +22,7 @@ import { MatchedRuleListComponent } from './partial/configuration-assessment-mod
 import { IndexCellComponent } from './partial/configuration-assessment-modal/index-cell/index-cell.component';
 import { ExportOptionsModule } from '@components/export-options/export-options.module';
 import { AgGridModule } from 'ag-grid-angular';
+import { NgJsonEditorComponent } from './partial/ng-json-editor/ng-json-editor.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +37,7 @@ import { AgGridModule } from 'ag-grid-angular';
     ConfigurationAssessmentResultPrintableReportComponent,
     MatchedRuleListComponent,
     IndexCellComponent,
+    NgJsonEditorComponent,
   ],
   imports: [
     CommonModule,
@@ -48,7 +49,6 @@ import { AgGridModule } from 'ag-grid-angular';
     PipeModule,
     ClipboardModule,
     MatTooltipModule,
-    NgJsonEditorModule,
     MultiSelectorDropdownModule,
     AgGridModule,
     // AgGridModule.withComponents([ActionButtonsComponent]),

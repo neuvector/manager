@@ -8,10 +8,11 @@
     {{ 'general.FILTER_MATCH_ALL' | translate }}
   </h1>
   <button
+    mat-dialog-close
     aria-label="Close icon button"
     class="d-flex align-items-center justify-content-center"
     mat-icon-button>
-    <i (click)="dialogRef.close()" class="eos-icons">close</i>
+    <i class="eos-icons">close</i>
   </button>
 </div>
 <hr class="fancy mt-1 mb-4 mx-0" />
@@ -24,7 +25,7 @@
       <div formArrayName="severity" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let severity of severityFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{ getDisplayName(filterSeverity[i]) }}
           </mat-checkbox>
         </ng-container>
@@ -37,7 +38,7 @@
       <div formArrayName="location" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let location of locationFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{
               'securityEvent.label.' + filterLocation[i].toUpperCase()
                 | translate
@@ -53,7 +54,7 @@
       <div formArrayName="category" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let category of categoryFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{
               'securityEvent.label.' + filterCategory[i].toUpperCase()
                 | translate
@@ -67,7 +68,7 @@
       <div formArrayName="other" class="mt-2 col-9 row">
         <ng-container
           *ngFor="let other of otherFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
+          <mat-checkbox class="me-3" [formControlName]="i" class="col-sm-3">
             {{ filterOther[i] | translate }}
           </mat-checkbox>
         </ng-container>
@@ -76,7 +77,7 @@
     <mat-divider></mat-divider>
     <section class="row mx-0 align-items-center">
       <span class="d-block col-3">{{ 'securityEvent.HOST' | translate }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Host"
@@ -93,7 +94,7 @@
           *ngIf="form.controls.host.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate : { field: ('securityEvent.HOST' | translate) }
+              | translate: { field: ('securityEvent.HOST' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -102,7 +103,7 @@
       <span class="d-block col-3">{{
         'securityEvent.SOURCE' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Source"
@@ -121,7 +122,7 @@
           *ngIf="form.controls.source.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate : { field: ('securityEvent.SOURCE' | translate) }
+              | translate: { field: ('securityEvent.SOURCE' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -130,7 +131,7 @@
       <span class="d-block col-3">{{
         'securityEvent.DESTINATION' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           type="text"
           aria-label="Destination"
@@ -151,29 +152,29 @@
           ">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate : { field: ('securityEvent.DESTINATION' | translate) }
+              | translate: { field: ('securityEvent.DESTINATION' | translate) }
           }}
         </mat-error>
       </mat-form-field>
     </section>
     <section class="row mx-0 align-items-center">
-      <label class="col-3 font-weight-normal mb-0" for="namespaceInput">{{
+      <span class="col-3 mb-0" for="namespaceInput">{{
         'securityEvent.DOMAIN' | translate
-      }}</label>
-      <mat-form-field appearance="standard" class="col pl-0">
-        <mat-chip-list
+      }}</span>
+      <mat-form-field class="col ps-0 mb-0">
+        <mat-chip-grid
           #chipList
           aria-label="Namespace selection"
           formControlName="selectedDomains"
           id="namespaceInput">
-          <mat-chip
+          <mat-chip-row
             (removed)="remove(domainChip)"
             *ngFor="let domainChip of form.controls.selectedDomains.value">
             {{ domainChip }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
-          </mat-chip>
+          </mat-chip-row>
           <input
             #namespaceInput
             (matChipInputTokenEnd)="add($event)"
@@ -182,7 +183,7 @@
             [matChipInputFor]="chipList"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [placeholder]="'ldap.ADD_DOMAIN' | translate" />
-        </mat-chip-list>
+        </mat-chip-grid>
         <mat-autocomplete
           #auto="matAutocomplete"
           (optionSelected)="selected($event)">
@@ -198,7 +199,7 @@
       <span class="d-block col-3">{{
         'securityEvent.OTHER_KEYWORD' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           formControlName="includedKeyword"
           id="includedKeyword"
@@ -209,7 +210,7 @@
       <span class="d-block col-3">{{
         'securityEvent.EXCLUDED_KEYWORD' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field class="col ps-0 mb-0">
         <input
           formControlName="excludedKeyword"
           id="excludedKeyword"
@@ -218,7 +219,7 @@
     </section>
   </form>
 </div>
-<div class="float-right" mat-dialog-actions>
+<div mat-dialog-actions style="justify-content: flex-end">
   <button (click)="reset()" mat-button>Reset</button>
   <button
     [mat-dialog-close]="form.value"

@@ -8,6 +8,7 @@ import { EnforcerDetailsComponent } from './enforcer-details/enforcer-details.co
 import { SystemComponentsCommunicationService } from './system-components-communication.service';
 
 @Component({
+  standalone: false,
   selector: 'app-system-components',
   templateUrl: './system-components.component.html',
   styleUrls: ['./system-components.component.scss'],

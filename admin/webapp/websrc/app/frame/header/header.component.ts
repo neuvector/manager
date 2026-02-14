@@ -32,6 +32,7 @@ import { switchMap, take } from 'rxjs/operators';
 import { FrameService } from '../frame.service';
 
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
@@ -153,10 +154,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.displayRole = role
       ? role
       : GlobalVariable.user.token.server
-          .toLowerCase()
-          .includes(MapConstant.SERVER_TYPE.RANCHER)
-      ? 'Rancher User'
-      : 'Namespace User';
+            .toLowerCase()
+            .includes(MapConstant.SERVER_TYPE.RANCHER)
+        ? 'Rancher User'
+        : 'Namespace User';
 
     this._clusterSwitchedSubScription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {

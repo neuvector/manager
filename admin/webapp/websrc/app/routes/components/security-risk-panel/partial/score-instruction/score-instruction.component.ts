@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InternalSystemInfo } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-score-instruction',
   templateUrl: './score-instruction.component.html',
   styleUrls: ['./score-instruction.component.scss'],

@@ -4,13 +4,12 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { ComplianceCsvService } from '../../../csv-generation/compliance-csv.service';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-items-table-csv-cell',
   templateUrl: './compliance-items-table-csv-cell.component.html',
   styleUrls: ['./compliance-items-table-csv-cell.component.scss'],
 })
-export class ComplianceItemsTableCsvCellComponent
-  implements ICellRendererAngularComp
-{
+export class ComplianceItemsTableCsvCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
 
   constructor(private complianceCsvService: ComplianceCsvService) {}

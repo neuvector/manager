@@ -8,6 +8,7 @@ import { ScoreImprovementModalService } from '@services/score-improvement-modal.
 import { SettingsService } from '@services/settings.service';
 
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-service-risk-view',
   templateUrl: './score-improvement-service-risk-view.component.html',
   styleUrls: ['./score-improvement-service-risk-view.component.scss'],

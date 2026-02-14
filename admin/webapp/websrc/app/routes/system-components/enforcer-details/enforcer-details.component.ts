@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { SystemComponentsCommunicationService } from '../system-components-communication.service';
 
 @Component({
+  standalone: false,
   selector: 'app-enforcer-details',
   templateUrl: './enforcer-details.component.html',
   styleUrls: ['./enforcer-details.component.scss'],

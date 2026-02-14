@@ -11,6 +11,7 @@ import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-action-buttons',
   templateUrl: './action-buttons.component.html',
   styleUrls: ['./action-buttons.component.scss'],

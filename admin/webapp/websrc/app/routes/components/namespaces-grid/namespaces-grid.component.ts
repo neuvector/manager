@@ -16,6 +16,7 @@ import { DomainNameCellComponent } from '@routes/namespaces/namespace-items/doma
 import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-namespaces-grid',
   templateUrl: './namespaces-grid.component.html',
   styleUrls: ['./namespaces-grid.component.scss'],

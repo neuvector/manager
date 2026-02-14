@@ -7,10 +7,11 @@
     </h4>
     <button
       id="closeBlackList"
+      (click)="popupState.leave()"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
-      <i (click)="popupState.leave()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
   <hr class="fancy mt-1 mb-1 mx-0" />
@@ -18,32 +19,31 @@
     <form [formGroup]="form">
       <section class="row mx-0 align-items-center">
         <label
-          class="col-2 font-weight-normal mb-0 mr-2"
+          class="col-2 font-weight-normal mb-3 me-2"
           for="namespaceInput"
           >{{ 'ldap.gridHeader.DOMAINS' | translate }}</label
         >
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
+        <mat-form-field class="col ps-0">
+          <mat-chip-grid
             #chipList
             aria-label="Namespace selection"
             formControlName="selectedDomains"
             id="namespaceInput">
-            <mat-chip
+            <mat-chip-row
               (mouseover)="showButton[i] = true"
               (mouseleave)="showButton[i] = false"
               (removed)="remove(domainChip, i)"
-              *ngFor="
-                let domainChip of form.controls.selectedDomains.value;
-                let i = index
-              ">
+              *ngFor="let domainChip of domainChips; let i = index">
               <img
                 src="assets/img/icons/graph/domain.svg"
+                width="20"
+                height="20"
                 alt="Icon of domain" />
               {{ domainChip.name }}
               <button matChipRemove *ngIf="showButton[i]">
                 <mat-icon>cancel</mat-icon>
               </button>
-            </mat-chip>
+            </mat-chip-row>
             <input
               #namespaceInput
               (matChipInputTokenEnd)="add($event)"
@@ -52,7 +52,7 @@
               [matChipInputFor]="chipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_DOMAIN' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #auto="matAutocomplete"
             (optionSelected)="selected($event)">
@@ -65,31 +65,30 @@
         </mat-form-field>
       </section>
       <section class="row mx-0 align-items-center">
-        <label class="col-2 font-weight-normal mb-0 mr-2" for="groupInput">{{
+        <label class="col-2 font-weight-normal mb-3 me-2" for="groupInput">{{
           'dlp.gridHeader.GROUPS' | translate
         }}</label>
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
+        <mat-form-field class="col ps-0">
+          <mat-chip-grid
             #groupChipList
             aria-label="Group selection"
             formControlName="selectedGroups"
             id="groupInput">
-            <mat-chip
+            <mat-chip-row
               (mouseover)="showGrpButton[i] = true"
               (mouseleave)="showGrpButton[i] = false"
               (removed)="removeGroup(groupChip, i)"
-              *ngFor="
-                let groupChip of form.controls.selectedGroups.value;
-                let i = index
-              ">
+              *ngFor="let groupChip of groupChips; let i = index">
               <img
                 src="assets/img/icons/graph/cluster.svg"
+                width="20"
+                height="20"
                 alt="Icon of group" />
               {{ groupChip.displayName }}
               <button matChipRemove *ngIf="showGrpButton[i]">
                 <mat-icon>cancel</mat-icon>
               </button>
-            </mat-chip>
+            </mat-chip-row>
             <input
               #groupInput
               (matChipInputTokenEnd)="addGroup($event)"
@@ -98,7 +97,7 @@
               [matChipInputFor]="groupChipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_GROUP' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #groupAuto="matAutocomplete"
             (optionSelected)="groupSelected($event)">
@@ -111,31 +110,30 @@
         </mat-form-field>
       </section>
       <section class="row mx-0 align-items-center">
-        <label class="col-2 font-weight-normal mb-0 mr-2" for="nodeInput">{{
+        <label class="col-2 font-weight-normal mb-3 me-2" for="nodeInput">{{
           'network.groupFilter.ENDPOINTS' | translate
         }}</label>
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
+        <mat-form-field class="col ps-0">
+          <mat-chip-grid
             #nodeChipList
             aria-label="Endpoint selection"
             formControlName="selectedNodes"
             id="nodeInput">
-            <mat-chip
+            <mat-chip-row
               (mouseover)="showEdpButton[i] = true"
               (mouseleave)="showEdpButton[i] = false"
               (removed)="removeNode(nodeChip, i)"
-              *ngFor="
-                let nodeChip of form.controls.selectedNodes.value;
-                let i = index
-              ">
+              *ngFor="let nodeChip of nodeChips; let i = index">
               <img
                 src="assets/img/icons/graph/container.svg"
+                width="20"
+                height="20"
                 alt="Icon of endpoint" />
               {{ nodeChip.name }}
               <button matChipRemove *ngIf="showEdpButton[i]">
                 <mat-icon>cancel</mat-icon>
               </button>
-            </mat-chip>
+            </mat-chip-row>
             <input
               #nodeInput
               (matChipInputTokenEnd)="addNode($event)"
@@ -144,7 +142,7 @@
               [matChipInputFor]="nodeChipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'network.groupFilter.ADD_ENDPOINT' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #nodeAuto="matAutocomplete"
             (optionSelected)="nodeSelected($event)">
@@ -171,7 +169,7 @@
       (click)="reset()"
       id="resetBlacklist"
       mat-stroked-button
-      class="mr-2"
+      class="me-2"
       aria-label="reset">
       {{ 'enum.RESET' | translate }}
     </button>

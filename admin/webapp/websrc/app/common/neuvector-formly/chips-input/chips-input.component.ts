@@ -7,7 +7,9 @@ import { InputDialogComponent } from '@components/ui/input-dialog/input-dialog.c
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-chips-input',
+
   templateUrl: './chips-input.component.html',
   styleUrls: ['./chips-input.component.scss'],
 })
@@ -16,7 +18,10 @@ export class ChipsInputComponent extends FieldType<FieldTypeConfig> {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   chips: string[] = [];
 
-  constructor(private dialog: MatDialog, private tr: TranslateService) {
+  constructor(
+    private dialog: MatDialog,
+    private tr: TranslateService
+  ) {
     super();
   }
 

@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/operators';
 import { pollUntilResult } from '@common/utils/rxjs.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-ldap',
   templateUrl: './ldap.component.html',
   styleUrls: ['./ldap.component.scss'],

@@ -5,6 +5,7 @@ import { ComplianceFilterService } from './compliance.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance',
   templateUrl: './compliance.component.html',
   styleUrls: ['./compliance.component.scss'],

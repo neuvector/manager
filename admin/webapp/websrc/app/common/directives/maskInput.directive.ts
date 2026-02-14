@@ -9,13 +9,17 @@ import { ControlContainer } from '@angular/forms';
 
 @Directive({
   selector: '[appMaskInput]',
+  standalone: false,
 })
 export class MaskInputDirective implements OnInit {
   @Input() maskOnBlur = false;
   private value: any;
   private element: HTMLInputElement;
 
-  constructor(private el: ElementRef, private form: ControlContainer) {
+  constructor(
+    private el: ElementRef,
+    private form: ControlContainer
+  ) {
     this.element = el.nativeElement;
   }
 

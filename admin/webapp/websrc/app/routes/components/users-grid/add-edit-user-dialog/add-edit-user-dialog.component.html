@@ -4,10 +4,10 @@
       (data.isReadOnly
         ? 'user.tooltips.VIEW'
         : data.isEdit
-        ? 'user.editUser.TITLE'
-        : data.isReset
-        ? 'user.tooltips.RESET_PASSWORD'
-        : 'user.addUser.TITLE'
+          ? 'user.editUser.TITLE'
+          : data.isReset
+            ? 'user.tooltips.RESET_PASSWORD'
+            : 'user.addUser.TITLE'
       ) | translate
     }}
   </h4>
@@ -23,14 +23,14 @@
 <ng-container *ngIf="!data.isReset; else resetTemplate">
   <form (ngSubmit)="submit()" [formGroup]="form">
     <div class="user__container">
-      <div class="user__field">
+      <div class="user__field me-3">
         <mat-icon
           aria-hidden="false"
           aria-label="User icon"
-          class="mr-3 mb-3 user__icon"
+          class="me-3 mb-3 user__icon"
           >person
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'user.addUser.USER_NAME' | translate }}</mat-label>
           <input
             matInput
@@ -41,14 +41,14 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="user__field">
+      <div class="user__field ms-3">
         <mat-icon
           aria-hidden="false"
           aria-label="Email icon"
-          class="mr-3 mb-3 user__icon"
+          class="me-3 mb-3 user__icon"
           >email
         </mat-icon>
-        <mat-form-field class="w-100">
+        <mat-form-field class="w-100 mb-0">
           <mat-label>{{ 'user.addUser.EMAIL' | translate }}</mat-label>
           <input
             matInput
@@ -60,15 +60,15 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="user__field">
+      <div class="user__field me-3">
         <mat-icon
           aria-hidden="false"
           aria-label="Role icon"
-          class="mr-3 mb-3 user__icon"
+          class="me-3 mb-3 user__icon"
           fontSet="fa"
           fontIcon="fa-user-secret">
         </mat-icon>
-        <mat-form-field class="w-25">
+        <mat-form-field class="w-25 mb-0">
           <mat-label>{{
             'user.addUser.ROLE_PLACEHOLDER' | translate
           }}</mat-label>
@@ -79,14 +79,14 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="user__field" *ngIf="!data.isEdit">
+      <div class="user__field ms-3" *ngIf="!data.isEdit">
         <mat-icon
           aria-hidden="false"
           aria-label="Language icon"
-          class="mr-3 mb-3 user__icon"
+          class="me-3 mb-3 user__icon"
           >language
         </mat-icon>
-        <mat-form-field class="w-25">
+        <mat-form-field class="w-25 mb-0">
           <mat-label>{{ 'profile.LOCALE' | translate }}</mat-label>
           <mat-select
             (selectionChange)="updateTable()"
@@ -103,7 +103,7 @@
     </div>
     <button
       (click)="toggleAdvSetting = !toggleAdvSetting"
-      class="mr-2 my-2"
+      class="me-2 my-2"
       [id]="dialogPrefix + '-user-dialog-adv-setting'"
       mat-stroked-button
       type="button"
@@ -140,7 +140,7 @@
       ">
       <div class="clearfix">
         <div class="rancher-bg pull-left"></div>
-        <div class="text-bold ml-2" style="line-height: 38px">
+        <div class="text-bold ms-2" style="line-height: 38px">
           {{ 'user.RANCHER_PERMISSIONS' | translate }}
         </div>
       </div>
@@ -153,7 +153,7 @@
     <div class="d-flex justify-content-end" *ngIf="!data.isReadOnly">
       <button
         (click)="onNoClick()"
-        class="mr-2"
+        class="me-2"
         [id]="dialogPrefix + '-user-dialog-cancel'"
         mat-button
         type="button">
@@ -171,7 +171,7 @@
           (data.isEdit ? 'user.editUser.EDIT' : 'user.addUser.ADD') | translate
         "
         appearance="mat-raised-button"
-        buttonClasses="mr-1"
+        buttonClasses="me-1"
         color="primary"
         [id]="dialogPrefix + '-user-dialog-submit'"
         type="submit">
@@ -187,7 +187,7 @@
         <mat-icon
           aria-hidden="false"
           aria-label="User icon"
-          class="mr-3 mb-3 user__icon"
+          class="me-3 mb-3 user__icon"
           >person
         </mat-icon>
         <mat-form-field class="w-100">
@@ -213,7 +213,7 @@
     <div class="d-flex justify-content-end">
       <button
         (click)="onNoClick()"
-        class="mr-2"
+        class="me-2"
         [id]="dialogPrefix + '-user-dialog-cancel'"
         mat-button
         type="button">
@@ -224,7 +224,7 @@
         [loading]="!!(saving$ | async)"
         [text]="'setting.SUBMIT' | translate"
         appearance="mat-raised-button"
-        buttonClasses="mr-1"
+        buttonClasses="me-1"
         color="primary"
         [id]="dialogPrefix + '-user-dialog-submit'"
         type="submit">

@@ -22,10 +22,6 @@ import { OperationCellComponent } from './partial/predefined-file-access-rules-m
     AgGridModule,
     // AgGridModule.withComponents([]),
   ],
-  entryComponents: [
-    AddEditFileAccessRuleModalComponent,
-    PredefinedFileAccessRulesModalComponent,
-  ],
   exports: [FileAccessRulesComponent],
 })
 export class FileAccessRulesModule {}

@@ -20,6 +20,7 @@ import { GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-active-session',
   templateUrl: './active-session.component.html',
   styleUrls: ['./active-session.component.scss'],

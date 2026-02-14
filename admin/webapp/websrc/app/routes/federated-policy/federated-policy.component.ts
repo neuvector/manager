@@ -13,6 +13,7 @@ export const fedGroupDetailsTabs = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-federated-policy',
   templateUrl: './federated-policy.component.html',
   styleUrls: ['./federated-policy.component.scss'],

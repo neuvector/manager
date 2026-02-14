@@ -21,6 +21,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-containers',
   templateUrl: './containers.component.html',
   styleUrls: ['./containers.component.scss'],

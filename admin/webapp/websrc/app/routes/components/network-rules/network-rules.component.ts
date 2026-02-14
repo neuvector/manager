@@ -41,6 +41,7 @@ const READONLY_RULE_MODIFIED = 46;
 const UNPROMOTABLE_ENDPOINT_PATTERN = new RegExp(/^Host\:*|^Workload\:*/);
 
 @Component({
+  standalone: false,
   selector: 'app-network-rules',
   templateUrl: './network-rules.component.html',
   styleUrls: ['./network-rules.component.scss'],

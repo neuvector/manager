@@ -3,6 +3,7 @@ import { Workload } from '@common/types';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-container-brief',
   templateUrl: './container-brief.component.html',
   styleUrls: ['./container-brief.component.scss'],

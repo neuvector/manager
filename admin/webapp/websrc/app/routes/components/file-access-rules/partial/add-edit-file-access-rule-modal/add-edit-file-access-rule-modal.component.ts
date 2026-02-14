@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-file-access-rule-modal',
   templateUrl: './add-edit-file-access-rule-modal.component.html',
   styleUrls: ['./add-edit-file-access-rule-modal.component.scss'],

@@ -41,6 +41,7 @@ export const nodeDetailsTabs = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-node-details',
   templateUrl: './node-details.component.html',
   styleUrls: ['./node-details.component.scss'],

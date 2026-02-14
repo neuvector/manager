@@ -3,9 +3,11 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-layers-table-cves-cell',
   templateUrl: './layers-table-cves-cell.component.html',
   styleUrls: ['./layers-table-cves-cell.component.scss'],
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayersTableCvesCellComponent implements ICellRendererAngularComp {

@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DashboardService } from '@services/dashboard.service';
 
 @Component({
+  standalone: false,
   selector: 'app-security-risk-panel',
   templateUrl: './security-risk-panel.component.html',
   styleUrls: ['./security-risk-panel.component.scss'],

@@ -106,23 +106,26 @@ export function _groupBy(array, key) {
 }
 
 export function groupBy<T, K extends keyof T>(arr: T[], key: string) {
-  return arr.reduce((groups, item) => {
-    (groups[item[key]] ||= []).push(item);
-    return groups;
-  }, {} as Record<K, T[]>);
+  return arr.reduce(
+    (groups, item) => {
+      (groups[item[key]] ||= []).push(item);
+      return groups;
+    },
+    {} as Record<K, T[]>
+  );
 }
 
 export function getEndPointType(name) {
   if (name) {
     if (name.indexOf('Host:') === 0)
-      return '<em class="fa fa-server text-primary mr-sm"></em>';
+      return '<em class="fa fa-server text-primary "></em>';
     else if (name.indexOf('Workload:') === 0)
-      return '<em class="fa fa-square text-primary mr-sm"></em>';
+      return '<em class="fa fa-square text-primary "></em>';
     else if (name.indexOf('external') === 0)
-      return '<em class="fa fa-cloud text-primary mr-sm"></em>';
+      return '<em class="fa fa-cloud text-primary "></em>';
     else if (name.indexOf('IP-Group:') === 0)
-      return '<em class="fa fa-th-large text-primary mr-sm"></em>';
-    else return '<em class="fa fa-square-o text-primary mr-sm"></em>';
+      return '<em class="fa fa-th-large text-primary "></em>';
+    else return '<em class="fa fa-square-o text-primary "></em>';
   }
   return '';
 }
@@ -569,8 +572,8 @@ export function getEntityName(count, entityName) {
   return count > 1
     ? entityName
     : MapConstant.singularMap[entityName]
-    ? MapConstant.singularMap[entityName]
-    : entityName;
+      ? MapConstant.singularMap[entityName]
+      : entityName;
 }
 
 export function getDuration(date1, date2) {
@@ -1021,7 +1024,10 @@ export function getNamespaceRoleGridData(
   }
 }
 
-export function sortByOrder<T>(array: T[], order: string[]): T[] {
+export function sortByOrder<T extends Record<string, any>>(
+  array: T[],
+  order: string[]
+): T[] {
   return array.map(item => {
     const sortedKeys = Object.keys(item).sort((a, b) => {
       const indexA = order.indexOf(a);

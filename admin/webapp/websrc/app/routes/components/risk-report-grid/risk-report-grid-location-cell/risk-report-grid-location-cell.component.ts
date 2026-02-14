@@ -4,13 +4,12 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-risk-report-grid-location-cell',
   templateUrl: './risk-report-grid-location-cell.component.html',
   styleUrls: ['./risk-report-grid-location-cell.component.scss'],
 })
-export class RiskReportGridLocationCellComponent
-  implements ICellRendererAngularComp
-{
+export class RiskReportGridLocationCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   index!: number;
   get displayWorkload() {

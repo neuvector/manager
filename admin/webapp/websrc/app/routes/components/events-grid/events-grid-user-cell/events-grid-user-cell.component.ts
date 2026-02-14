@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-events-grid-user-cell',
   templateUrl: './events-grid-user-cell.component.html',
   styleUrls: ['./events-grid-user-cell.component.scss'],

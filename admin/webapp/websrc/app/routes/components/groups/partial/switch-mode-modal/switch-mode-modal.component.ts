@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
 
 @Component({
+  standalone: false,
   selector: 'app-switch-mode-modal',
   templateUrl: './switch-mode-modal.component.html',
   styleUrls: ['./switch-mode-modal.component.scss'],

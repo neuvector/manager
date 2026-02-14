@@ -26,6 +26,7 @@ import { ExportOptionsModalComponent } from '@components/export-options-modal/ex
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-waf-sensors',
   templateUrl: './waf-sensors.component.html',
   styleUrls: ['./waf-sensors.component.scss'],

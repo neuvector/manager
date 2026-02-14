@@ -9,6 +9,7 @@ import { NotificationService } from '@services/notification.service';
 import * as moment from 'moment';
 
 @Component({
+  standalone: false,
   selector: 'app-csp-support-form',
   templateUrl: './csp-support-form.component.html',
   styleUrls: ['./csp-support-form.component.scss'],

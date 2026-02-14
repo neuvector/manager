@@ -26,6 +26,7 @@ import { ConfigV2Vo } from '@common/types/settings/config-vo';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
+  standalone: false,
   selector: 'app-config-form',
   templateUrl: './config-form.component.html',
   styleUrls: ['./config-form.component.scss'],

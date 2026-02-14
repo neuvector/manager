@@ -6,6 +6,7 @@ import { SettingsService } from '@services/settings.service';
 import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
+  standalone: false,
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],

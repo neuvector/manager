@@ -4,13 +4,12 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { accumulateActionLevel } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-exposed-servicepod-grid-servicepod-cell',
   templateUrl: './exposed-servicepod-grid-servicepod-cell.component.html',
   styleUrls: ['./exposed-servicepod-grid-servicepod-cell.component.scss'],
 })
-export class ExposedServicepodGridServicepodCellComponent
-  implements ICellRendererAngularComp
-{
+export class ExposedServicepodGridServicepodCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   name!: string;
   isParent!: boolean;

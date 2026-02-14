@@ -46,6 +46,7 @@ export const RegistryType = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-registries-table',
   templateUrl: './registries-table.component.html',
   styleUrls: ['./registries-table.component.scss'],

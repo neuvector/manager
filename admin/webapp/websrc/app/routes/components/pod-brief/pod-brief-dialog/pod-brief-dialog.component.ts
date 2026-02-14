@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Workload } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-pod-brief-dialog',
   templateUrl: './pod-brief-dialog.component.html',
   styleUrls: ['./pod-brief-dialog.component.scss'],

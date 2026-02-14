@@ -10,7 +10,7 @@
         class="fa fa-info-circle"
         matTooltip="{{ 'registry.CVE_DB_DATE' | translate }}: {{
           versionInfoService.infoData.cvedb_create_time
-            | date : 'MMM dd, y HH:mm:ss'
+            | date: 'MMM dd, y HH:mm:ss'
         }}"
         matTooltipPosition="above">
       </em>
@@ -30,7 +30,7 @@
           {{ 'scan.gridHeader.SCORE_V3' | translate }}
         </button>
       </mat-menu>
-      <div class="mr-3 d-flex">
+      <div class="me-3 d-flex">
         <button
           mat-button
           aria-label="Export vulnerabilities CSV"
@@ -53,7 +53,7 @@
               mat-menu-item
               class="d-flex align-items-center"
               (click)="toggleAcceptedVuls()">
-              <i class="eos-icons mr-2">
+              <i class="eos-icons me-2">
                 {{ showAcceptedVuls ? 'visibility_off' : 'visibility' }}
               </i>
               {{
@@ -72,13 +72,13 @@
               "
               class="d-flex align-items-center"
               (click)="onAcceptVulnerability(selectedVulnerability)">
-              <i class="eos-icons mr-2">check_box</i>
+              <i class="eos-icons me-2">check_box</i>
               {{ 'cveProfile.ACCEPT_VUL' | translate }}
             </button>
           </mat-menu>
         </ng-container>
       </div>
-      <mat-form-field appearance="standard">
+      <mat-form-field class="quick-filter">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
       </mat-form-field>

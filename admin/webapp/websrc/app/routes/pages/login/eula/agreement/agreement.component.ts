@@ -4,6 +4,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-agreement',
   templateUrl: './agreement.component.html',
   styleUrls: ['./agreement.component.scss'],

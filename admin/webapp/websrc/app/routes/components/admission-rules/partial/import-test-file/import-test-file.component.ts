@@ -20,6 +20,7 @@ import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-import-test-file',
   templateUrl: './import-test-file.component.html',
   styleUrls: ['./import-test-file.component.scss'],

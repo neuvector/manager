@@ -51,7 +51,7 @@
     <div
       [ngClass]="{
         panel: source === navSource['SELF'],
-        mb0: source === navSource['SELF']
+        mb0: source === navSource['SELF'],
       }">
       <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
         <div
@@ -80,7 +80,7 @@
                   !isIncludingCRD &&
                   !isIncludingFed
                 "
-                class="mr-2"
+                class="me-2"
                 mat-stroked-button
                 (click)="removeNetworkRules()">
                 <em class="eos-icons icon-18">delete</em>
@@ -93,7 +93,7 @@
                   !isIncludingCRD &&
                   !isIncludingFed
                 "
-                class="mr-2"
+                class="me-2"
                 mat-stroked-button
                 (click)="openMoveNetworkRulesModal()">
                 <em class="eos-icons icon-18">move</em>
@@ -108,7 +108,7 @@
                     source !== navSource['FED_POLICY'] &&
                     !isIncludingFed
                   "
-                  class="mr-2"
+                  class="me-2"
                   mat-stroked-button
                   (click)="promoteRuleOnTop()">
                   <em class="eos-icons icon-18">navigation</em>
@@ -117,7 +117,7 @@
               </ng-container>
               <button
                 *ngIf="isNetworkRuleDirty() && isWriteGlobalRulesAuthorized"
-                class="mr-2"
+                class="me-2"
                 mat-stroked-button
                 (click)="refresh()">
                 <em class="eos-icons icon-18">replay</em>
@@ -125,7 +125,7 @@
               </button>
               <button
                 *ngIf="isNetworkRuleDirty() && isWriteGlobalRulesAuthorized"
-                class="mr-2"
+                class="me-2"
                 mat-raised-button
                 color="primary"
                 (click)="submit()">
@@ -133,7 +133,7 @@
                 {{ 'policy.toolBar.SAVE' | translate }}
               </button>
               <button
-                class="mr-3"
+                class="me-3"
                 mat-stroked-button
                 *ngIf="isWriteNetworkRuleAuthorized"
                 (click)="addNetworkRuleToTop()">
@@ -157,9 +157,7 @@
                 <app-loading-button
                   (btnClick)="refresh()"
                   [appearance]="'mat-button'"
-                  [buttonClasses]="
-                    'd-flex justify-content-center align-items-center'
-                  "
+                  [buttonClasses]="'d-flex justify-content-center align-items-center'"
                   [iconClasses]="'eos-icons icon-18'"
                   [iconName]="'refresh'"
                   [id]="'networkRules-refresh-button'"
@@ -188,7 +186,7 @@
             height:
               (source === navSource['GROUP']
                 ? resizableHeight - 90
-                : gridHeight) + 'px'
+                : gridHeight) + 'px',
           }"
           class="ag-theme-balham"
           [gridOptions]="gridOptions"

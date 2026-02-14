@@ -14,6 +14,7 @@ interface ExposureData {
 type ExposureFilter = 'threat' | 'violation' | 'normal';
 
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-exposure-view',
   templateUrl: './score-improvement-exposure-view.component.html',
   styleUrls: ['./score-improvement-exposure-view.component.scss'],

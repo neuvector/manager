@@ -30,6 +30,7 @@ export const iconMap = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-profile-assets-table',
   templateUrl: './compliance-profile-assets-table.component.html',
   styleUrls: ['./compliance-profile-assets-table.component.scss'],

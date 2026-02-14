@@ -9,6 +9,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-advance-setting-modal',
   templateUrl: './advance-setting-modal.component.html',
   styleUrls: ['./advance-setting-modal.component.scss'],

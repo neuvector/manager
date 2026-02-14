@@ -10,6 +10,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-risk-score',
   templateUrl: './risk-score.component.html',
   styleUrls: ['./risk-score.component.scss'],
@@ -20,6 +21,7 @@ export class RiskScoreComponent implements OnInit, AfterViewInit {
   @Input() podsCnt;
   gaugeLabel = '';
   gaugeLabelColor = '';
+  gaugeColor = '';
 
   constructor(
     private translate: TranslateService,
@@ -28,17 +30,13 @@ export class RiskScoreComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('nodesCnt, podsCnt', this.nodesCnt, this.podsCnt);
+    let gaugeMetrics = this.utils.getGaugeMetrics(this.score);
+    this.gaugeLabel = gaugeMetrics.gaugeLabel;
+    this.gaugeLabelColor = gaugeMetrics.gaugeLabelColor;
+    this.gaugeColor = gaugeMetrics.gaugeLabelColor;
   }
 
   ngAfterViewInit(): void {
     this.cd.detectChanges();
   }
-
-  getGaugeColor = (score: number) => {
-    let gaugeMetrics = this.utils.getGaugeMetrics(score);
-    this.gaugeLabel = gaugeMetrics.gaugeLabel;
-    this.gaugeLabelColor = gaugeMetrics.gaugeLabelColor;
-    return gaugeMetrics.gaugeLabelColor;
-  };
 }

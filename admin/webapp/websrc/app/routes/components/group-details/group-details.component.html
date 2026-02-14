@@ -1,7 +1,7 @@
 <ng-container [ngSwitch]="activeTab" *ngIf="!isScoreImprovement">
   <ng-container *ngSwitchCase="'member'">
     <div class="filter" style="position: absolute; right: 20px; top: 5px">
-      <mat-form-field appearance="standard">
+      <mat-form-field>
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
       </mat-form-field>
@@ -9,7 +9,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="'custom check'">
     <div class="filter" style="position: absolute; right: 20px; top: 5px">
-      <mat-form-field appearance="standard">
+      <mat-form-field>
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
       </mat-form-field>
@@ -22,7 +22,7 @@
       <button
         *ngIf="isWriteGroupAuthorized && cfgType !== CFG_TYPE.FED"
         mat-button
-        class="mr-2 mt-1"
+        class="me-2 mt-1 mb-3"
         [matMenuTriggerFor]="menu"
         aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
@@ -72,7 +72,7 @@
         </div>
       </mat-menu>
       <div class="filter">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -86,7 +86,7 @@
       <button
         *ngIf="isWriteFileAccessRuleAuthorized || cfgType === CFG_TYPE.GROUND"
         mat-button
-        class="mr-2 mt-1"
+        class="me-2 mt-1 mb-3"
         [matMenuTriggerFor]="menu"
         aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
@@ -141,7 +141,7 @@
         </div>
       </mat-menu>
       <div class="filter">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -150,7 +150,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="'network rules'">
     <div class="filter" style="position: absolute; right: 20px; top: 5px">
-      <mat-form-field appearance="standard">
+      <mat-form-field>
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
       </mat-form-field>
@@ -158,7 +158,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="'response rules'">
     <div class="filter" style="position: absolute; right: 20px; top: 5px">
-      <mat-form-field appearance="standard">
+      <mat-form-field>
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
       </mat-form-field>
@@ -171,7 +171,7 @@
       class="d-flex align-items-center justify-content-end">
       <button
         mat-button
-        class="mr-2 mt-1"
+        class="me-2 mt-1 mb-3"
         [matMenuTriggerFor]="menu"
         aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
@@ -188,7 +188,7 @@
         </button>
       </mat-menu>
       <div class="filter">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>
@@ -202,7 +202,7 @@
       class="d-flex align-items-center justify-content-end">
       <button
         mat-button
-        class="mr-2 mt-1"
+        class="me-2 mt-1 mb-3"
         [matMenuTriggerFor]="menu"
         aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
@@ -219,7 +219,7 @@
         </button>
       </mat-menu>
       <div class="filter">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
           <input [formControl]="filter" matInput />
         </mat-form-field>

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SecurityEventsService } from '@services/security-events.service';
 
 @Component({
+  standalone: false,
   selector: 'app-incident-details',
   templateUrl: './incident-details.component.html',
   styleUrls: ['./incident-details.component.scss'],

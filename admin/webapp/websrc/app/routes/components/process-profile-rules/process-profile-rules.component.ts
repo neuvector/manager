@@ -25,6 +25,7 @@ import { updateGridData } from '@common/utils/common.utils';
 import * as $ from 'jquery';
 
 @Component({
+  standalone: false,
   selector: 'app-process-profile-rules',
   templateUrl: './process-profile-rules.component.html',
   styleUrls: ['./process-profile-rules.component.scss'],
@@ -181,8 +182,8 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
               this.source === GlobalConstant.NAV_SOURCE.GROUP
                 ? this.w.innerHeight - 572
                 : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-                ? this.w.innerHeight - 300
-                : 0;
+                  ? this.w.innerHeight - 300
+                  : 0;
             setTimeout(() => {
               if (this.gridApi) {
                 this.gridApi.sizeColumnsToFit();

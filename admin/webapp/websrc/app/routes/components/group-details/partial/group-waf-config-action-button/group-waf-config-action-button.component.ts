@@ -3,13 +3,12 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-group-waf-config-action-button',
   templateUrl: './group-waf-config-action-button.component.html',
   styleUrls: ['./group-waf-config-action-button.component.scss'],
 })
-export class GroupWafConfigActionButtonComponent
-  implements ICellRendererAngularComp
-{
+export class GroupWafConfigActionButtonComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
 
   constructor() {}

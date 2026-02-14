@@ -40,6 +40,7 @@ interface ResetError extends ErrorResponse {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],

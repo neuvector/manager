@@ -25,7 +25,7 @@ export class VulnerabilitiesService {
   sortModel: SortModelItem[];
   activeSummary!: VulnerabilitiesQuerySummary;
   status: string;
-  private activeSummarySubject$ = new Subject();
+  private activeSummarySubject$ = new Subject<void>();
   activeSummary$ = this.activeSummarySubject$.asObservable();
   vulnerabilitiesData$ = this.vulnerabilitiesFilterService.vulQuery$.pipe(
     switchMap(vulQuery =>
@@ -88,7 +88,7 @@ export class VulnerabilitiesService {
     node: number;
     container: number;
   };
-  private countDistributionSubject$ = new Subject();
+  private countDistributionSubject$ = new Subject<void>();
   countDistribution$ = this.countDistributionSubject$.asObservable();
   workloadMap4Pdf!: {};
   imageMap4Pdf!: {};

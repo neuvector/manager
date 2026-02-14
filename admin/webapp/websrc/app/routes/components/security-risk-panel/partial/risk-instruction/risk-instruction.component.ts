@@ -10,6 +10,7 @@ import { InternalSystemInfo, RiskInstruction, RiskType } from '@common/types';
 import { DashboardService } from '@common/services/dashboard.service';
 
 @Component({
+  standalone: false,
   selector: 'app-risk-instruction',
   templateUrl: './risk-instruction.component.html',
   styleUrls: ['./risk-instruction.component.scss'],

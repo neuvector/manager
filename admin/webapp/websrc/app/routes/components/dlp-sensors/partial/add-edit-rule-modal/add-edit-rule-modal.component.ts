@@ -18,6 +18,7 @@ import {
 import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-rule-modal',
   templateUrl: './add-edit-rule-modal.component.html',
   styleUrls: ['./add-edit-rule-modal.component.scss'],

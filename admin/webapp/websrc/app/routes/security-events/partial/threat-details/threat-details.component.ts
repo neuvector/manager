@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { SecurityEventsService } from '@services/security-events.service';
 
 @Component({
+  standalone: false,
   selector: 'app-threat-details',
   templateUrl: './threat-details.component.html',
   styleUrls: ['./threat-details.component.scss'],

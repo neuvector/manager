@@ -24,6 +24,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-response-rules',
   templateUrl: './response-rules.component.html',
   styleUrls: ['./response-rules.component.scss'],
@@ -160,8 +161,8 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
             this.source === GlobalConstant.NAV_SOURCE.SELF
               ? this.w.innerHeight - 180 - 70
               : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-              ? this.w.innerHeight - 298
-              : 0;
+                ? this.w.innerHeight - 298
+                : 0;
         },
         err => {
           this.responsePolicyErr = true;

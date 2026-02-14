@@ -26,6 +26,7 @@ export const fedGroupDetailsTabs = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-fed-group-details',
   templateUrl: './fed-group-details.component.html',
   styleUrls: ['./fed-group-details.component.scss'],

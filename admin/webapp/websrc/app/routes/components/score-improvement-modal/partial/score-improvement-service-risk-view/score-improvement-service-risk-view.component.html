@@ -8,10 +8,10 @@
 <mat-divider class="mt-2 mb-3"></mat-divider>
 <section id="service-risk-groups-section" class="mx-2">
   <div class="d-flex">
-    <span class="mat-small font-weight-bold mr-3"
+    <span class="mat-small font-weight-bold me-3"
       >{{ 'setting.NEW_SERVICE' | translate }}:&nbsp;</span
     >
-    <span class="mat-small mr-3">{{ 'group.POLICY_MODE' | translate }}</span>
+    <span class="mat-small me-3">{{ 'group.POLICY_MODE' | translate }}</span>
     <mat-radio-group
       [(ngModel)]="newServiceMode"
       (change)="switchNewServiceMode('network')"
@@ -20,13 +20,13 @@
       <mat-radio-button
         *ngFor="let type of serviceModes"
         [value]="type.value"
-        class="mr-3">
+        class="me-3 mb-0-sub-label service-risk-radio-label">
         <span class="mat-small font-weight-bold">
           {{ type.viewValue | translate }}
         </span>
       </mat-radio-button>
     </mat-radio-group>
-    <span style="margin-left: 50px" class="mat-small mr-3">{{
+    <span style="margin-left: 50px" class="mat-small me-3">{{
       'group.PROFILE_MODE' | translate
     }}</span>
     <mat-radio-group
@@ -37,24 +37,26 @@
       <mat-radio-button
         *ngFor="let type of serviceModes"
         [value]="type.value"
-        class="mr-3">
+        class="me-3 mb-0-sub-label service-risk-radio-label">
         <span class="mat-small font-weight-bold">
           {{ type.viewValue | translate }}
         </span>
       </mat-radio-button>
     </mat-radio-group>
   </div>
-  <app-groups
-    [height]="210"
-    [isScoreImprovement]="true"
-    (selectedGroup)="setSelectedGroup($event)"></app-groups>
-  <app-group-details
-    *ngIf="selectedGroup"
-    [resizableHeight]="120"
-    [isScoreImprovement]="true"
-    [selectedGroupName]="selectedGroup.name"
-    [members]="selectedGroup.members"
-    [baselineProfile]="selectedGroup.baseline_profile"
-    [kind]="selectedGroup.kind">
-  </app-group-details>
+  <div class="mt-2">
+    <app-groups
+      [height]="210"
+      [isScoreImprovement]="true"
+      (selectedGroup)="setSelectedGroup($event)"></app-groups>
+    <app-group-details
+      *ngIf="selectedGroup"
+      [resizableHeight]="120"
+      [isScoreImprovement]="true"
+      [selectedGroupName]="selectedGroup.name"
+      [members]="selectedGroup.members"
+      [baselineProfile]="selectedGroup.baseline_profile"
+      [kind]="selectedGroup.kind">
+    </app-group-details>
+  </div>
 </section>

@@ -32,28 +32,28 @@
       </div>
     </div>
     <div class="d-flex flex-row align-items-center cis-filter mx-3">
-      <span class="d-block mr-4">{{
+      <span class="d-block me-4">{{
         'cis.profile.COMPLIANCE_TEMPLATE' | translate
       }}</span>
-      <div class="d-flex flex-row align-items-center mr-2">
+      <div class="d-flex flex-row align-items-center me-2">
         <mat-checkbox
           (change)="filterChange('ALL')"
           [(ngModel)]="all"
           [disabled]="all"
           aria-label="All"
-          class="mr-2"></mat-checkbox>
+          class="me-2"></mat-checkbox>
         <span class="d-block" style="font-size: 28px; font-weight: bold"
           >ALL</span
         >
       </div>
       <div
         *ngFor="let filter of filterForm | keyvalue"
-        class="d-flex flex-row align-items-center mr-2">
+        class="d-flex flex-row align-items-center me-2">
         <mat-checkbox
           (change)="filterChange(filter.key)"
           [(ngModel)]="filterForm[filter.key]"
           [aria-label]="filter.key"
-          class="mr-2"></mat-checkbox>
+          class="me-2"></mat-checkbox>
         <ng-container *ngIf="filter.key !== 'PCIv4'; else pciv4">
           <img
             [alt]="filter.key"
@@ -68,7 +68,7 @@
   </ng-container>
   <div class="d-flex flex-row justify-content-between align-items-center">
     <span class="d-block font-weight-bold text-info">
-      <div class="type-label px-1 mr-2" [class]="cfgTypeClass">
+      <div class="type-label px-1 me-2" [class]="cfgTypeClass">
         {{
           (cfgType === 'ground'
             ? 'cveProfile.type.GROUND'
@@ -102,7 +102,7 @@
         (click)="openImportProfileModal()"
         *appDisplayControl="'write_compliance_profile'"
         aria-label="Import Compliance Profile"
-        class="mr-2"
+        class="me-2"
         mat-button>
         <em class="eos-icons icon-18">upload</em>
         {{ 'setting.IMPORT' | translate }}

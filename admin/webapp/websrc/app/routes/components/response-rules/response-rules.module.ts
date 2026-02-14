@@ -28,7 +28,6 @@ import { ConfirmDialogResponseRuleComponent } from './partial/confirm-dialog-res
     // ]),
     LoadingButtonModule,
   ],
-  entryComponents: [AddEditResponseRuleModalComponent],
   exports: [ResponseRulesComponent],
 })
 export class ResponseRulesModule {}

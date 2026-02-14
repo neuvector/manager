@@ -1,6 +1,6 @@
-@import '../node_modules/@angular/material/theming';
+@use '@angular/material' as mat;
 
-@include mat-core();
+@include mat.core();
 
 $mat-myapp-primary: (
   50 : #deeded,
@@ -18,20 +18,20 @@ $mat-myapp-primary: (
   A400 : #3b8964,
   A700 : #1f5b3a,
   contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $light-primary-text,
-    400: $light-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $light-primary-text,
-    A400: $light-primary-text,
-    A700: $light-primary-text,
+    50: black,
+    100: black,
+    200: black,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: black,
+    A200: white,
+    A400: white,
+    A700: white,
   )
 );
 
@@ -68,9 +68,9 @@ $mat-myapp-accent: (
   )
 );
 
-$primary: mat-palette($mat-myapp-primary);
-$accent: mat-palette($mat-myapp-accent);
+$primary: mat.m2-define-palette($mat-myapp-primary);
+$accent: mat.m2-define-palette($mat-myapp-accent);
 
-$theme: mat-light-theme($primary, $accent);
+$theme: mat.m2-define-light-theme($primary, $accent);
 
-@include angular-material-theme($theme);
+@include mat.all-component-themes($theme);

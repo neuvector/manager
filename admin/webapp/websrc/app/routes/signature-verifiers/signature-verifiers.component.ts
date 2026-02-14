@@ -20,6 +20,7 @@ import { ImportFileModalComponent } from '@components/ui/import-file-modal/impor
 import * as $ from 'jquery';
 
 @Component({
+  standalone: false,
   selector: 'app-signature-verifiers',
   templateUrl: './signature-verifiers.component.html',
   styleUrls: ['./signature-verifiers.component.scss'],
@@ -265,7 +266,7 @@ export class SignatureVerifiersComponent implements OnInit {
     return Object.entries(response).map(([k, v]) => {
       let keyDestructoredRes = k.split('/');
       let name = keyDestructoredRes[keyDestructoredRes.length - 1];
-      return Object.assign(v, { name: name }) as any;
+      return { ...(v as any), name } as any;
     });
   };
 }

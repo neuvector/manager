@@ -48,31 +48,29 @@
     </div>
     <div class="col-md-11">
       <mat-form-field class="w-100">
-        <mat-chip-list #chipList aria-label="Permissions selection">
-          <mat-chip
+        <mat-chip-grid #chipList aria-label="Permissions selection">
+          <mat-chip-row
             (removed)="remove(permissionChip.value)"
             *ngFor="let permissionChip of permissionChips">
             {{ permissionChip.name }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
-          </mat-chip>
+          </mat-chip-row>
           <input
             #permissionInput
             [formControl]="permissionCtrl"
             [matChipInputFor]="chipList"
             [matChipInputSeparatorKeyCodes]="[]"
             [placeholder]="'role.roleModal.PERMISSION_HINT' | translate" />
-        </mat-chip-list>
+        </mat-chip-grid>
       </mat-form-field>
     </div>
   </div>
   <div class="permission-container">
     <ul class="permission-list">
       <ng-container
-        *ngFor="
-          let permissionOption of permissionOptions | keyvalue : unsorted
-        ">
+        *ngFor="let permissionOption of permissionOptions | keyvalue: unsorted">
         <li *ngIf="isPermissionOption(permissionOption.value)">
           <div class="d-flex align-items-center">
             <div class="mx-2">
@@ -83,7 +81,7 @@
                 </small>
               </span>
             </div>
-            <div class="ml-auto permission-checkbox">
+            <div class="ms-auto permission-checkbox">
               <app-permission-checkbox
                 [permissionForm]="getPermissionForm(permissionOption.value.id)"
                 [permissionOption]="permissionOption.value"
@@ -100,7 +98,7 @@
   <div class="d-flex justify-content-end mt-3">
     <button
       (click)="onNoClick()"
-      class="mr-2"
+      class="me-2"
       aria-label="cancel"
       [id]="dialogPrefix + '-role-dialog-cancel'"
       mat-button
@@ -112,7 +110,7 @@
       [loading]="!!(saving$ | async)"
       [text]="(data.isEdit ? 'role.roleModal.UPDATE' : 'role.ADD') | translate"
       appearance="mat-raised-button"
-      buttonClasses="mr-1"
+      buttonClasses="me-1"
       color="primary"
       [id]="dialogPrefix + '-role-dialog-submit'"
       type="submit">

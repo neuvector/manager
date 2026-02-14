@@ -14,6 +14,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-export-form',
   templateUrl: './export-form.component.html',
   styleUrls: ['./export-form.component.scss'],

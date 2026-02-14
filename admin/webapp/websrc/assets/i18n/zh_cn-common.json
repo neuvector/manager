@@ -654,6 +654,7 @@
     "REMOVE_UNMANAGED": "清除节点",
     "DOWNLOAD": "下载",
     "SCHEDULE_JOB": "设置持续时间",
+    "NO_FILTER_ITEMS": "正在准备过滤项...",
     "legend": {
       "TITLE": "图例",
       "CONTAINER": "容器",

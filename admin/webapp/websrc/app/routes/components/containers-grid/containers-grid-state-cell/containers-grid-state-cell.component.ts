@@ -5,14 +5,13 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-containers-grid-state-cell',
   templateUrl: './containers-grid-state-cell.component.html',
   styleUrls: ['./containers-grid-state-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContainersGridStateCellComponent
-  implements ICellRendererAngularComp
-{
+export class ContainersGridStateCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   state!: string;
   displayState!: string;

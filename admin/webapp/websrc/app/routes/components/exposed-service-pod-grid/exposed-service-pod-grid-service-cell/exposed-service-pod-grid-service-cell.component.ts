@@ -3,13 +3,12 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-exposed-service-pod-grid-service-cell',
   templateUrl: './exposed-service-pod-grid-service-cell.component.html',
   styleUrls: ['./exposed-service-pod-grid-service-cell.component.scss'],
 })
-export class ExposedServicePodGridServiceCellComponent
-  implements ICellRendererAngularComp
-{
+export class ExposedServicePodGridServiceCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   name!: string;
   isParent!: boolean;

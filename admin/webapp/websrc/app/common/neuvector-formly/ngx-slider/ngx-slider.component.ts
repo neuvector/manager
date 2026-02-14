@@ -4,6 +4,7 @@ import { Options } from '@angular-slider/ngx-slider';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-ngx-slider',
   templateUrl: './ngx-slider.component.html',
   styleUrls: ['./ngx-slider.component.scss'],

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ScoreImprovementModalService } from '@services/score-improvement-modal.service';
 
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-admission-control-status-view',
   templateUrl:
     './score-improvement-admission-control-status-view.component.html',
@@ -9,9 +10,7 @@ import { ScoreImprovementModalService } from '@services/score-improvement-modal.
     './score-improvement-admission-control-status-view.component.scss',
   ],
 })
-export class ScoreImprovementAdmissionControlStatusViewComponent
-  implements OnInit
-{
+export class ScoreImprovementAdmissionControlStatusViewComponent implements OnInit {
   @Input() isGlobalUser!: boolean;
   get score() {
     return this.scoreImprovementModalService.score;

@@ -241,12 +241,12 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
           },
           {
             hideExpression: `!model.syslog.syslog_status`,
-            className: 'col-12 ml-3',
+            className: 'col-12 ms-3',
             ...SyslogProtocolField,
           },
           {
             hideExpression: `!model.syslog.syslog_status || model.syslog.syslog_ip_proto != 66`,
-            className: 'col-12 ml-3',
+            className: 'col-12 ms-3',
             ...SyslogTLSCertificate,
           },
           {
@@ -259,11 +259,11 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
             ...EventReportLoggingToggleField,
           },
           {
-            className: 'col-12 col-md-4 mt-3 ml-3',
+            className: 'col-12 col-md-4 mt-3 ms-3',
             ...SyslogLevelField,
           },
           {
-            className: 'col-12 col-md-8 ml-3',
+            className: 'col-12 col-md-8 ms-3',
             ...SyslogCategoriesField,
           },
           {
@@ -351,7 +351,7 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
                 template: '',
                 expressionProperties: {
                   template: (_model, formState, _field) => {
-                    return `<div class="ml-3"><strong>${formState.tr.min_max}</strong></div>`;
+                    return `<div class="ms-3"><strong>${formState.tr.min_max}</strong></div>`;
                   },
                 },
               },

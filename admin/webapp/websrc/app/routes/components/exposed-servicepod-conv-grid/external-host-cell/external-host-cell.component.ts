@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-external-host-cell',
   templateUrl: './external-host-cell.component.html',
   styleUrls: ['./external-host-cell.component.scss'],

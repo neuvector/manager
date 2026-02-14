@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-multi-selector-dropdown',
   templateUrl: './multi-selector-dropdown.component.html',
   styleUrls: ['./multi-selector-dropdown.component.scss'],

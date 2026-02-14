@@ -13,6 +13,7 @@ import { Chart, ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
+  standalone: false,
   selector: 'app-container-stats',
   templateUrl: './container-stats.component.html',
   styleUrls: ['./container-stats.component.scss'],
@@ -29,7 +30,10 @@ export class ContainerStatsComponent
   byteData!: ComponentChartData;
   sessionData!: ComponentChartData;
 
-  constructor(private utils: UtilsService, private tr: TranslateService) {}
+  constructor(
+    private utils: UtilsService,
+    private tr: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.initData();

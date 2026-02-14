@@ -4,6 +4,7 @@ import { FieldType } from '@ngx-formly/material/form-field';
 import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
+  standalone: false,
   selector: 'app-multicheckbox',
   templateUrl: './multicheckbox.component.html',
   styleUrls: ['./multicheckbox.component.scss'],

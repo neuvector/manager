@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
 
 @Component({
+  standalone: false,
   selector: 'app-eula',
   templateUrl: './eula.component.html',
   styleUrls: ['./eula.component.scss'],

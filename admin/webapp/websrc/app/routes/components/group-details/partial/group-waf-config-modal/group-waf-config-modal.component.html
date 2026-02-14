@@ -3,16 +3,16 @@
     <h4 mat-dialog-title class="mb-1">
       {{ 'group.waf.setting.TITLE' | translate }}
     </h4>
-    <section class="ml-4 status-section">
+    <section class="ms-4 status-section">
       <mat-slide-toggle
-        class="mr-2"
+        class="me-2"
         id="group-waf-sensor-status-toggle"
         [(ngModel)]="data.status"
         [ngModelOptions]="{ standalone: true }">
         <span
           [ngClass]="{
             'text-muted': !data.status,
-            'text-success': data.status
+            'text-success': data.status,
           }">
           {{
             (data.status ? 'policy.status.ENABLED' : 'policy.status.DISABLED')
@@ -21,7 +21,7 @@
         </span>
       </mat-slide-toggle>
     </section>
-    <div class="ml-auto align-items-center mb-1">
+    <div class="ms-auto align-items-center mb-1">
       <button mat-icon-button aria-label="close">
         <i class="eos-icons" (click)="onCancel()">close</i>
       </button>

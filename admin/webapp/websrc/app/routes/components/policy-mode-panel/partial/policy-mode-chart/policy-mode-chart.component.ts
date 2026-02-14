@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { InternalSystemInfo } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-policy-mode-chart',
   templateUrl: './policy-mode-chart.component.html',
   styleUrls: ['./policy-mode-chart.component.scss'],

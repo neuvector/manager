@@ -20,6 +20,7 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import * as $ from 'jquery';
 
 @Component({
+  standalone: false,
   selector: 'app-group-dlp',
   templateUrl: './group-dlp.component.html',
   styleUrls: ['./group-dlp.component.scss'],

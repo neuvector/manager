@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'app-namespaces',
   templateUrl: './namespaces.component.html',
   styleUrls: ['./namespaces.component.scss'],

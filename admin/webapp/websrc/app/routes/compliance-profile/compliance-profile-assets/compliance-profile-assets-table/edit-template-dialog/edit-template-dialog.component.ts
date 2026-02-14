@@ -4,6 +4,7 @@ import { ComplianceProfileService } from '@routes/compliance-profile/compliance-
 import { iconMap } from '../compliance-profile-assets-table.component';
 
 @Component({
+  standalone: false,
   selector: 'app-edit-template-dialog',
   templateUrl: './edit-template-dialog.component.html',
   styleUrls: ['./edit-template-dialog.component.scss'],

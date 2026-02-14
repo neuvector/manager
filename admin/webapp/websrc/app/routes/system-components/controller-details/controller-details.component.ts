@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { SystemComponentsCommunicationService } from '../system-components-communication.service';
 
 @Component({
+  standalone: false,
   selector: 'app-controller-details',
   templateUrl: './controller-details.component.html',
   styleUrls: ['./controller-details.component.scss'],

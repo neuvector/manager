@@ -22,18 +22,18 @@
             <div class="row" *ngIf="child.state !== 'exit'">
               <div style="margin-top: 2px; width: 620px" class="auto-hide">
                 <span
-                  class="text-muted text-bold pl-lg"
+                  class="text-muted text-bold"
                   style="display: inline-block">
-                  <em class="fa fa-square-o text-muted mr-2"></em>
+                  <em class="fa fa-square-o text-muted me-2"></em>
                   {{ child.display_name }}
                 </span>
                 <label
                   style="display: inline-block"
-                  class="label label-info-tran ml-2 mt-1"
+                  class="label label-info-tran ms-2 mt-1"
                   *ngIf="child.service_mesh_sidecar">
                   Sidecar
                 </label>
-                <em class="fa fa-archive text-info pl-2 mr-1"></em>
+                <em class="fa fa-archive text-info ps-2 me-1"></em>
                 <span class="text-muted auto-hide" style="margin-top: -2px">
                   {{ child.image }}
                 </span>
@@ -116,7 +116,7 @@
           {{ displayState }}
         </span>
         <span
-          class="text-danger mr-2 auto-hide host-item-value"
+          class="text-danger me-2 auto-hide host-item-value"
           *ngIf="pod.workload.state === 'quarantined'"
           style="display: block; width: 180px">
           {{ pod.workload.quarantine_reason }}
@@ -129,7 +129,7 @@
           {{ 'network.nodeDetails.CREATED_AT' | translate }}:
         </span>
         <span class="ml auto-hide host-item-value">
-          {{ pod.workload.started_at | date : 'MMM dd, y HH:mm:ss' }}
+          {{ pod.workload.started_at | date: 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
     </li>
@@ -138,9 +138,9 @@
         <span class="font-weight-bold host-item-key"
           >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
         >
-        <span class="ml mr-lg auto-hide host-item-key">
+        <span class="ml auto-hide host-item-key">
           {{
-            pod.workload.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss'
+            pod.workload.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss'
           }}
         </span>
       </div>
@@ -174,7 +174,7 @@
         <div class="d-inline">
           <span
             *ngIf="pod.workload.scan_summary?.high"
-            class="badge badge-danger mr-sm">
+            class="badge badge-danger">
             {{ pod.workload.scan_summary.high }}</span
           >
           <span
@@ -188,7 +188,7 @@
               pod.workload.scan_summary?.medium
             "
             style="display: table-cell; font-size: 11px; line-height: 15px">
-            <em class="fa fa-external-link ml-lg"></em>
+            <em class="fa fa-external-link"></em>
           </a>
 
           <span
@@ -198,7 +198,7 @@
               pod.workload.scan_summary?.medium === 0
             "
             class="badge badge-success">
-            <em class="fa fa-shield-alt text-protect mr-1"></em> Clean
+            <em class="fa fa-shield-alt text-protect me-1"></em> Clean
           </span>
         </div>
       </div>
@@ -222,7 +222,7 @@
           *ngFor="let item of pod.workload.interfaces | keyvalue"
           class="row pl"
           style="width: 380px">
-          <div class="col-sm-2 text-right pr-0 text-muted">
+          <div class="col-sm-2 text-right pe-0 text-muted">
             {{ item.key }}
           </div>
           <div class="col-sm-1"></div>

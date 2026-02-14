@@ -22,6 +22,7 @@ import { NodesGridStateCellComponent } from './nodes-grid-state-cell/nodes-grid-
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 @Component({
+  standalone: false,
   selector: 'app-nodes-grid',
   templateUrl: './nodes-grid.component.html',
   styleUrls: ['./nodes-grid.component.scss'],

@@ -41,6 +41,7 @@ export const containerDetailsTabs = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-container-details',
   templateUrl: './container-details.component.html',
   styleUrls: ['./container-details.component.scss'],

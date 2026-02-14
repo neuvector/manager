@@ -3,7 +3,7 @@
   <div mat-dialog-content>
     <div class="row">
       <div class="col-6 d-flex align-items-center">
-        <mat-form-field appearance="standard" class="w-inherit">
+        <mat-form-field class="w-inherit mb-0">
           <mat-label>{{ 'ldap.USERNAME' | translate }}</mat-label>
           <input
             formControlName="username"
@@ -13,7 +13,7 @@
         </mat-form-field>
       </div>
       <div class="col-6 d-flex align-items-center">
-        <mat-form-field appearance="standard" class="w-inherit">
+        <mat-form-field class="w-inherit mb-0">
           <mat-label>{{ 'ldap.PASSWORD' | translate }}</mat-label>
           <input
             [type]="passwordVisible ? 'text' : 'password'"
@@ -26,6 +26,7 @@
           (click)="passwordVisible = !passwordVisible"
           *ngIf="testForm.controls.password.value"
           aria-label="Visibility icon to toggle password visibility"
+          class="mb-3"
           mat-icon-button
           type="button">
           <i class="eos-icons">{{
@@ -39,19 +40,19 @@
       mode="indeterminate"></mat-progress-bar>
     <ng-container *ngIf="!submittingForm && !testFinished">
       <span class="d-flex align-items-center my-2">
-        <i class="eos-icons text-info mr-2">assignment</i>
+        <i class="eos-icons text-info me-2">assignment</i>
         {{ 'ldap.test.NOTE' | translate }}
       </span>
     </ng-container>
     <ng-container *ngIf="submittingForm">
       <span class="d-flex align-items-center my-2">
-        <i class="eos-icons text-info mr-2">info</i>
+        <i class="eos-icons text-info me-2">info</i>
         {{ 'ldap.test.INFO' | translate }}
       </span>
     </ng-container>
     <ng-container *ngIf="testFinished && !errorMessage">
       <span class="d-flex align-items-center my-2">
-        <i class="eos-icons text-success mr-2">check</i>
+        <i class="eos-icons text-success me-2">check</i>
         {{
           (connectedGroups.length
             ? 'ldap.test.SUCCEEDED_GROUP'
@@ -59,15 +60,15 @@
           ) | translate
         }}
       </span>
-      <mat-chip-list>
-        <mat-chip *ngFor="let group of connectedGroups">
+      <mat-chip-grid>
+        <mat-chip-row *ngFor="let group of connectedGroups">
           {{ group }}
-        </mat-chip>
-      </mat-chip-list>
+        </mat-chip-row>
+      </mat-chip-grid>
     </ng-container>
     <ng-container *ngIf="testFinished && errorMessage">
       <span class="d-flex align-items-center my-2">
-        <i class="eos-icons text-danger mr-2">close</i>
+        <i class="eos-icons text-danger me-2">close</i>
         {{ errorMessage }}
       </span>
     </ng-container>
@@ -78,7 +79,7 @@
     </button>
     <app-loading-button
       [appearance]="'mat-raised-button'"
-      [buttonClasses]="'ml-2'"
+      [buttonClasses]="'ms-2'"
       [color]="'primary'"
       [disabled]="!testForm.valid || submittingForm"
       [loading]="submittingForm"

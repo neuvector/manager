@@ -3,7 +3,7 @@
     class="summary-title"
     [ngClass]="{
       'text-warning': vulPodsCnt > 0,
-      'text-success': vulPodsCnt === 0
+      'text-success': vulPodsCnt === 0,
     }"
     style="font-size: 16px">
     {{
@@ -12,7 +12,7 @@
         | translate
           : {
               vulPodsCnt: vulPodsCnt,
-              containerCnt: pods.length || 0
+              containerCnt: pods.length || 0,
             }
     }}
   </span>

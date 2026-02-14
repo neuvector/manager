@@ -7,10 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  MatTableDataSource,
-  _MatTableDataSource,
-} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { ApikeysGridComponent } from '../apikeys-grid.component';
 import { UtilsService } from '@common/utils/app.utils';
@@ -38,6 +35,7 @@ interface AddApikeyDialog {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-apikey-dialog',
   templateUrl: './add-apikey-dialog.component.html',
   styleUrls: ['./add-apikey-dialog.component.scss'],
@@ -70,7 +68,7 @@ export class AddApikeyDialogComponent implements OnInit {
       )
     );
   }
-  domainTableSource!: _MatTableDataSource<any>;
+  domainTableSource!: MatTableDataSource<any>;
   activeRole!: string;
   get isKube() {
     return GlobalVariable.summary

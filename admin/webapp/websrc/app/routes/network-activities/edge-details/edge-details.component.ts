@@ -33,6 +33,7 @@ export interface ConversationPair {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-edge-details',
   templateUrl: './edge-details.component.html',
   styleUrls: ['./edge-details.component.scss'],

@@ -13,6 +13,7 @@ import { Verifier } from '@common/types/signatures/signature';
 import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-verifiers-modal',
   templateUrl: './add-edit-verifiers-modal.component.html',
   styleUrls: ['./add-edit-verifiers-modal.component.scss'],

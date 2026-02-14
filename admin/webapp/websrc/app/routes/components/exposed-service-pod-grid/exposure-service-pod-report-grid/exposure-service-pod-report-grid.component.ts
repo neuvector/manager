@@ -4,6 +4,7 @@ import { groupBy } from '@common/utils/common.utils';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-exposure-service-pod-report-grid',
   templateUrl: './exposure-service-pod-report-grid.component.html',
   styleUrls: ['./exposure-service-pod-report-grid.component.scss'],

@@ -16,6 +16,7 @@ import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-groups-page',
   templateUrl: './groups-page.component.html',
   styleUrls: ['./groups-page.component.scss'],

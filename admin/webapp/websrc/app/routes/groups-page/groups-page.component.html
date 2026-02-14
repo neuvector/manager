@@ -15,7 +15,7 @@
             class="text-bold"
             [ngClass]="{
               'text-muted': !netServiceStatus,
-              'text-success': netServiceStatus
+              'text-success': netServiceStatus,
             }">
             {{ netServiceStatus ? '' : 'OFF' }}
           </span>
@@ -30,7 +30,7 @@
               (netServiceStatus
                 ? 'setting.description.ENABLED_NET_POLICY_MODE_GROUP'
                 : 'setting.description.DISABLED_NET_POLICY_MODE'
-              ) | translate : { name: netServicePolicyMode }
+              ) | translate: { name: netServicePolicyMode }
             "
             matTooltipPosition="above">
           </em>
@@ -52,7 +52,7 @@
       </button>
       <button
         mat-button
-        class="pull-right margin-top-s margin-left-xl"
+        class="pull-right margin-left-xl"
         (click)="toggleSystemGroup()">
         <em class="eos-icons icon-18">{{
           isShowingSystemGroups ? 'visibility_off' : 'visibility'
@@ -110,7 +110,7 @@
           *ngIf="groupsView && groupsView.selectedGroups.length === 0">
           <mat-card-content>
             <div class="hint-info">
-              <em class="eos-icons hint-info-signal mr-2" aria-hidden="true"
+              <em class="eos-icons hint-info-signal me-2" aria-hidden="true"
                 >info</em
               >
               <div class="hint-info-text">

@@ -18,11 +18,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { BytesPipe } from '@common/pipes/app.pipes';
 import { TranslateService } from '@ngx-translate/core';
 import {
-  JsonEditorComponent,
-  JsonEditorOptions,
-  JsonEditorTreeNode,
-} from 'ang-jsoneditor';
-import {
   getValueType4Text,
   groupBy,
   updateGridData,
@@ -30,8 +25,10 @@ import {
 import { NotificationService } from '@services/notification.service';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { UtilsService } from '@common/utils/app.utils';
+import { NgJsonEditorComponent } from '../ng-json-editor/ng-json-editor.component';
 
 @Component({
+  standalone: false,
   selector: 'app-add-edit-admission-rule-modal',
   templateUrl: './add-edit-admission-rule-modal.component.html',
   styleUrls: ['./add-edit-admission-rule-modal.component.scss'],
@@ -67,9 +64,9 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   isPSSBaseline: boolean = false;
   isPSSRestricted: boolean = false;
   isMainView: boolean = true;
-  @ViewChild(JsonEditorComponent, { static: false })
-  editor: JsonEditorComponent;
-  jsonEditorOptions: JsonEditorOptions;
+  @ViewChild(NgJsonEditorComponent, { static: false })
+  editor: NgJsonEditorComponent;
+  jsonEditorOptions: any;
   podTemplateData: any;
   podTemplateTreeData: any;
   nodeValueType: string = '';
@@ -80,6 +77,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   sigVerifierOptions: string[] = [];
   valuechips: string[] = [];
   valuechipsModel: any;
+  ruleCriteria: any[] = [];
   @ViewChild('valueChipsInput') valueChipsInput: ElementRef<HTMLInputElement>;
   get containers() {
     return this.CONTAINER_TYPES;
@@ -110,7 +108,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     private utils: UtilsService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.jsonEditorOptions = new JsonEditorOptions();
+    this.jsonEditorOptions = {};
   }
 
   ngOnInit(): void {
@@ -172,11 +170,12 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.isContainersValid = this.validateContainers();
     this.getCriteriaOptions();
     if (this.data.opType !== GlobalConstant.MODAL_OP.ADD) {
-      let criteria = JSON.parse(
+      this.ruleCriteria = JSON.parse(
         JSON.stringify(this.addEditAdmissionRuleForm.controls.criteria.value)
       );
+
       this.addEditAdmissionRuleForm.controls.criteria.setValue([]);
-      this.renderCriteriaTag(criteria);
+      this.renderCriteriaTag(this.ruleCriteria);
     }
     this.addEditAdmissionRuleForm
       .get('criteria')!
@@ -303,6 +302,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     const index = this.valuechips.indexOf(valueChip);
     if (index >= 0) {
       this.valuechips.splice(index, 1);
+      this.mainCriterion.value = this.valuechips.join(',');
     }
   };
 
@@ -447,15 +447,15 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       criterion,
       isCustomized
     );
-    this.addEditAdmissionRuleForm.controls.criteria.setValue(
-      this.admissionRulesService.checkAndAppendCriteria(
-        tag.tagName,
-        criterion,
-        this.addEditAdmissionRuleForm.controls.criteria,
-        isCustomized,
-        this.nodeValueType
-      )
+    this.ruleCriteria = this.admissionRulesService.checkAndAppendCriteria(
+      tag.tagName,
+      criterion,
+      this.ruleCriteria,
+      isCustomized,
+      this.nodeValueType
     );
+    this.addEditAdmissionRuleForm.controls.criteria.setValue(this.ruleCriteria);
+    this.addEditAdmissionRuleForm.controls.criteria.markAsTouched();
     if (isCustomized) {
       this.clearCustomizedCriterion();
     } else {
@@ -464,19 +464,17 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   };
 
   removeCriterionFromChip = criterion => {
-    this.addEditAdmissionRuleForm.controls.criteria.setValue(
-      this.admissionRulesService.removeCriterionFromChip(
-        criterion,
-        this.addEditAdmissionRuleForm.controls.criteria
-      )
+    this.ruleCriteria = this.admissionRulesService.removeCriterionFromChip(
+      criterion,
+      this.ruleCriteria
     );
+    this.addEditAdmissionRuleForm.controls.criteria.setValue(this.ruleCriteria);
+    this.addEditAdmissionRuleForm.controls.criteria.markAsTouched();
     this.clearCriterionDetail();
     if (
-      !this.getCriterionNameList(this.criteriaOptions).includes(
-        criterion.value.name
-      )
+      !this.getCriterionNameList(this.criteriaOptions).includes(criterion.name)
     ) {
-      this.removeUnexistingCriterionName(criterion.value.name);
+      this.removeUnexistingCriterionName(criterion.name);
     }
   };
 
@@ -529,14 +527,13 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       this.criterionValueList = [this.mainCriterion.name];
       this.subOptions = null;
     }
+    // this.ruleCriteria = JSON.parse(JSON.stringify(criterion));
   };
 
   isInvalidCriteriaComb = (): boolean => {
-    let criteriaNameList = this.addEditAdmissionRuleForm.value.criteria.map(
-      criterion => {
-        return criterion.value.name;
-      }
-    );
+    let criteriaNameList = this.ruleCriteria.map(criterion => {
+      return criterion.value.name;
+    });
     return (
       (criteriaNameList.includes('storageClassName') &&
         criteriaNameList.length > 1 &&
@@ -549,6 +546,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
 
   updateRule = () => {
     let adminRule = this.addEditAdmissionRuleForm.value;
+    adminRule.criteria = JSON.parse(JSON.stringify(this.ruleCriteria));
     adminRule.criteria = adminRule.criteria.map(criterion => {
       if (
         criterion.value.sub_criteria &&
@@ -569,7 +567,8 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       }
       if (criterion.value.name === 'saBindRiskyRole') {
         // For Service account bound risky role
-        (criterion.value.type = 'saBindRiskyRole'), (criterion.value.name = '');
+        ((criterion.value.type = 'saBindRiskyRole'),
+          (criterion.value.name = ''));
         criterion.value.path = '';
       }
       return criterion.value;

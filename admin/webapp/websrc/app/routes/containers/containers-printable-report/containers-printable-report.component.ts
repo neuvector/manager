@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { WorkloadV2 } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-containers-printable-report',
   templateUrl: './containers-printable-report.component.html',
   styleUrls: ['./containers-printable-report.component.scss'],

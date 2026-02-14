@@ -87,8 +87,8 @@
         <span class="font-weight-bold host-item-key"
           >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
         >
-        <span class="ml mr-lg auto-hide host-item-key">
-          {{ host.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss' }}
+        <span class="ml auto-hide host-item-key">
+          {{ host.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
     </li>
@@ -98,9 +98,7 @@
           >{{ 'group.gridHeader.VULNERABILITIES' | translate }}:</span
         >
         <div class="d-inline">
-          <span
-            *ngIf="host.scan_summary?.high"
-            class="badge badge-danger mr-sm">
+          <span *ngIf="host.scan_summary?.high" class="badge badge-danger">
             {{ host.scan_summary.high }}</span
           >
           <span *ngIf="host.scan_summary?.medium" class="badge badge-warning">
@@ -113,7 +111,7 @@
             *ngIf="host.scan_summary?.high || host.scan_summary?.medium"
             [routerLink]="['/hosts']"
             style="display: table-cell; font-size: 11px; line-height: 15px">
-            <em class="eos-icons icon-12 ml-2">launch</em>
+            <em class="eos-icons icon-12 ms-2">launch</em>
           </a>
 
           <label
@@ -123,7 +121,7 @@
               host.scan_summary?.medium === 0
             "
             class="label label-success-tran">
-            <em class="fa fa-smile-o mr-sm"></em> Clean
+            <em class="fa fa-smile-o"></em> Clean
           </label>
         </div>
       </div>
@@ -133,12 +131,12 @@
         <span class="font-weight-bold host-item-key"
           >{{ 'network.legend.GROUP' | translate }}:</span
         >
-        <span class="ml mr-lg auto-hide host-item-key">
+        <span class="ml auto-hide host-item-key">
           nodes
           <a
             (click)="goToGroup('nodes')"
             style="display: table-cell; font-size: 11px; line-height: 15px">
-            <em class="eos-icons icon-12 ml-2">launch</em>
+            <em class="eos-icons icon-12 ms-2">launch</em>
           </a>
         </span>
       </div>
@@ -152,7 +150,7 @@
           *ngFor="let item of host.interfaces | keyvalue"
           class="row pl"
           style="width: 380px">
-          <div class="col-sm-2 text-right pr-0 text-muted">
+          <div class="col-sm-2 text-right pe-0 text-muted">
             {{ item.key }}
           </div>
           <div class="col-sm-1"></div>

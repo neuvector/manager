@@ -4,6 +4,7 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-id-cell',
   templateUrl: './id-cell.component.html',
   styleUrls: ['./id-cell.component.scss'],

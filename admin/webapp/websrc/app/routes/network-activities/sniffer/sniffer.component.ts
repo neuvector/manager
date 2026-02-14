@@ -24,6 +24,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import * as $ from 'jquery';
 
 @Component({
+  standalone: false,
   selector: 'app-sniffer',
   templateUrl: './sniffer.component.html',
   styleUrls: ['./sniffer.component.scss'],

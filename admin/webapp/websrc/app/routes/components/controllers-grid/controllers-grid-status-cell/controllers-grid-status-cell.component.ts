@@ -5,14 +5,13 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-controllers-grid-status-cell',
   templateUrl: './controllers-grid-status-cell.component.html',
   styleUrls: ['./controllers-grid-status-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControllersGridStatusCellComponent
-  implements ICellRendererAngularComp
-{
+export class ControllersGridStatusCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   status!: string;
   statusText!: string;

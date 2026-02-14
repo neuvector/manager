@@ -3,7 +3,7 @@
     [ngClass]="{ 'col-sm-4 padding-vertical-0': isInAppendix }"
     *ngFor="
       let package of displayedPackages
-        | slice : 0 : (isInAppendix ? displayedPackages.length : 3)
+        | slice: 0 : (isInAppendix ? displayedPackages.length : 3)
     ">
     <div>{{ package[0] }}</div>
     <app-risk-view-report-package-table [packageVersions]="package[1]">

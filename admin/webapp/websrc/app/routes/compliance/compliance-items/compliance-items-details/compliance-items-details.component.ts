@@ -8,6 +8,7 @@ import { ComplianceService } from '@routes/compliance/compliance.service';
 import { take } from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-items-details',
   templateUrl: './compliance-items-details.component.html',
   styleUrls: ['./compliance-items-details.component.scss'],

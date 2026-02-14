@@ -16,6 +16,7 @@ import {
 import { filter } from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'app-group-domain-role',
   templateUrl: './group-domain-role.component.html',
   styleUrls: ['./group-domain-role.component.scss'],

@@ -18,6 +18,7 @@ export const groupDetailsTabs = [
 ];
 
 @Component({
+  standalone: false,
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
   styleUrls: ['./group-details.component.scss'],

@@ -35,6 +35,7 @@ import { TestConnectionDialogTypeCellComponent } from './test-connection-dialog-
 import { FormlyFormOptions } from '@ngx-formly/core';
 
 @Component({
+  standalone: false,
   selector: 'app-test-settings-dialog',
   templateUrl: './test-settings-dialog.component.html',
   styleUrls: ['./test-settings-dialog.component.scss'],

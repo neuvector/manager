@@ -43,6 +43,7 @@ import { ImportFileModalComponent } from '@components/ui/import-file-modal/impor
 import * as $ from 'jquery';
 
 @Component({
+  standalone: false,
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss'],

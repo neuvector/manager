@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
+  standalone: false,
   selector: 'app-license',
   templateUrl: './license.component.html',
   styleUrls: ['./license.component.scss'],

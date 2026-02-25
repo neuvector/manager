@@ -635,7 +635,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       val isFileReady   = Files.exists(Paths.get(logFile)) && Files.isReadable(
         Paths.get(logFile)
       )
-      logger.info(s"Log file $logFile  is ready: $isFileReady")
+      logger.info(s"Log file $logFile is ready: $isFileReady")
       if (isFileReady) {
         HttpResponse(StatusCodes.OK, entity = "Ready")
       } else {

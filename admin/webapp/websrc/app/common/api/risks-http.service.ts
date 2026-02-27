@@ -16,6 +16,7 @@ import {
   OrderByOption,
   VulQueryScoreTypeOption,
   ComplianceAvailableFilters,
+  VulnerabilitiesQuery,
 } from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
 import { Observable } from 'rxjs';
@@ -149,6 +150,20 @@ export class RisksHttpService {
       PathConstant.ASSETS_VULS_URL,
       { last_modified_timestamp: lastModifiedTime },
       { params: { queryToken: queryToken } }
+    );
+  }
+
+  getNodesVulnerabilities(payload: VulnerabilitiesQuery) {
+    return GlobalVariable.http.post<any>(
+      PathConstant.NODES_VULNERABILITIES_URL,
+      payload
+    );
+  }
+
+  getWorkloadsVulnerabilities(payload: VulnerabilitiesQuery) {
+    return GlobalVariable.http.post<any>(
+      PathConstant.WORKLOADS_VULNERABILITIES_URL,
+      payload
     );
   }
 }

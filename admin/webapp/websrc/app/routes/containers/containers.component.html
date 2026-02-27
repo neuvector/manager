@@ -21,6 +21,8 @@
             </em>
           </mat-slide-toggle>
         </div>
+        <app-assets-scan-report-button [assetType]="'container'">
+        </app-assets-scan-report-button>
         <button
           *ngIf="quarantinedContainers.length > 0"
           aria-label="Print quarantined container report PDF"

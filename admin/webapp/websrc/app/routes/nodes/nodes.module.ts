@@ -13,6 +13,7 @@ import { PipeModule } from '@common/pipes/pipe.module';
 import { ComplianceGridModule } from '@components/compliance-grid/compliance-grid.module';
 import { VulnerabilitiesGridModule } from '@components/vulnerabilities-grid/vulnerabilities-grid.module';
 import { ContainersGridModule } from '@components/containers-grid/containers-grid.module';
+import { AssetsScanReportButtonModule } from '@components/ui/assets-scan-report-button/assets-scan-report-button-module';
 
 const routes: Routes = [{ path: '', component: NodesComponent }];
 
@@ -30,6 +31,7 @@ const routes: Routes = [{ path: '', component: NodesComponent }];
     ComplianceGridModule,
     VulnerabilitiesGridModule,
     ContainersGridModule,
+    AssetsScanReportButtonModule,
   ],
 })
 export class NodesModule {}

@@ -3,7 +3,12 @@ import { Injectable } from '@angular/core';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { MapConstant } from '@common/constants/map.constant';
-import { Workload, WorkloadChildV2, WorkloadV2 } from '@common/types';
+import {
+  VulnerabilitiesQuery,
+  Workload,
+  WorkloadChildV2,
+  WorkloadV2,
+} from '@common/types';
 import { WorkloadBrief } from '@common/types/compliance/workloadBrief';
 import { UtilsService } from '@common/utils/app.utils';
 import {
@@ -200,6 +205,10 @@ export class ContainersService {
     return workloadsCsvData;
   }
 
+  getWorkloadsVulnerabilities(payload: VulnerabilitiesQuery) {
+    return this.risksHttpService.getWorkloadsVulnerabilities(payload);
+  }
+
   private makeWorkloadData(w: Workload | WorkloadBrief, isChild: boolean) {
     let workload = w as Workload;
     return {
@@ -253,5 +262,87 @@ export class ContainersService {
         'MMM dd, y HH:mm:ss'
       )}'`,
     };
+  }
+
+  formatVulnerabilitiesToCSV(vulnerabilities: any[]): string {
+    if (!vulnerabilities || vulnerabilities.length === 0) {
+      return '';
+    }
+
+    const header = [
+      'image_name',
+      'tags',
+      'workload_name',
+      'name',
+      'link',
+      'severity',
+      'score',
+      'score_v3',
+      'package_name',
+      'package_version',
+      'fixed_version',
+      'description',
+      'feed_rating',
+      'file_name',
+      'vectors',
+      'vectors_v3',
+      'in_base_image',
+      'published_timestamp',
+      'last_modified_timestamp',
+    ].join(',');
+
+    const csvRows = vulnerabilities.map(vul => {
+      const image_name = vul.workload_image?.split(':')[0] || '';
+      const tags = vul.workload_image?.split(':')[1] || '';
+      const workload_name = vul.workload_name || '';
+      const name = vul.name || '';
+      const link = vul.link || '';
+      const severity = vul.severity || '';
+      const score = vul.score !== undefined ? vul.score : '';
+      const score_v3 = vul.score_v3 !== undefined ? vul.score_v3 : '';
+      const package_name = vul.package_name || '';
+      const package_version = vul.package_version || '';
+      const fixed_version = vul.fixed_version || '';
+      const description = vul.description
+        ? `"${vul.description.replace(/"/g, '""')}"`
+        : '';
+      const feed_rating = vul.feed_rating || '';
+      const file_name = vul.file_name || '';
+      const vectors = vul.vectors ? `"${vul.vectors.replace(/"/g, '""')}"` : '';
+      const vectors_v3 = vul.vectors_v3
+        ? `"${vul.vectors_v3.replace(/"/g, '""')}"`
+        : '';
+      const in_base_image =
+        vul.in_base_image !== undefined ? vul.in_base_image : '';
+      const published_timestamp = vul.published_timestamp
+        ? `'${this.datePipe.transform(vul.published_timestamp, 'MMM dd y HH:mm:ss')}'`
+        : '';
+      const last_modified_timestamp = vul.last_modified_timestamp
+        ? `'${this.datePipe.transform(vul.last_modified_timestamp, 'MMM dd y HH:mm:ss')}'`
+        : '';
+
+      return [
+        image_name,
+        tags,
+        workload_name,
+        name,
+        link,
+        severity,
+        score,
+        score_v3,
+        package_name,
+        package_version,
+        fixed_version,
+        description,
+        feed_rating,
+        file_name,
+        vectors,
+        vectors_v3,
+        in_base_image,
+        published_timestamp,
+        last_modified_timestamp,
+      ].join(',');
+    });
+    return [header, ...csvRows].join('\n');
   }
 }

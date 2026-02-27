@@ -164,4 +164,6 @@ export class PathConstant {
   public static REMOTE_REPO_URL = 'remote_repository';
   public static SCANNED_ASSETS_URL = 'scanned-assets';
   public static SCANNED_FED_REPO = 'scan/registry/fed-repo';
+  public static NODES_VULNERABILITIES_URL = 'host/scan-report';
+  public static WORKLOADS_VULNERABILITIES_URL = 'workload/scan-report';
 }

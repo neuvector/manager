@@ -1,0 +1,287 @@
+<div
+  cdkDrag
+  cdkDragHandle
+  cdkDragRootElement=".cdk-overlay-pane"
+  class="d-flex align-items-center justify-content-between"
+  style="cursor: move; margin-top: -24px; padding-top: 10px">
+  <h1 mat-dialog-title>{{ 'general.REPORT_FILTER' | translate }}</h1>
+  <button
+    mat-dialog-close
+    aria-label="Close icon button"
+    class="d-flex align-items-center justify-content-center"
+    mat-icon-button>
+    <i class="eos-icons">close</i>
+  </button>
+</div>
+<hr class="fancy mt-1 mb-4 mx-0" />
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <section class="row mx-0 mb-4 align-items-center">
+      <label class="col-2 mb-0" style="font-weight: normal" for="score_type">{{
+        'scan.report.gridHeader.SCORE' | translate
+      }}</label>
+      <label class="sr-only" for="score_type">{{
+        'scan.report.gridHeader.SCORE' | translate
+      }}</label>
+      <mat-form-field class="col-2 match mb-0">
+        <select formControlName="scoreType" id="score_type" matNativeControl>
+          <option [value]="'v2'">V2</option>
+          <option [value]="'v3'">V3</option>
+        </select>
+      </mat-form-field>
+      <div class="custom-slider col ps-0">
+        <ngx-slider
+          *ngIf="form.controls.scoreType.value === 'v3'"
+          [options]="options"
+          formControlName="scoreV3"></ngx-slider>
+        <ngx-slider
+          *ngIf="form.controls.scoreType.value === 'v2'"
+          [options]="options"
+          formControlName="scoreV2"></ngx-slider>
+      </div>
+    </section>
+    <section
+      class="row mx-0 align-items-center"
+      *ngIf="data.assetType === 'container'">
+      <label
+        class="col-2 mb-0"
+        style="font-weight: normal; margin-top: -24px"
+        for="namespaceInput">
+        {{ 'ldap.gridHeader.DOMAINS' | translate }}
+      </label>
+      <label class="sr-only" for="namespaceMatch">Match</label>
+      <mat-form-field class="col-2 match">
+        <select
+          formControlName="matchTypeNs"
+          id="namespaceMatch"
+          matNativeControl>
+          <option *ngFor="let matchType of matchTypes" [value]="matchType.id">
+            {{ matchType.name }}
+          </option>
+        </select>
+      </mat-form-field>
+      <mat-form-field class="col ps-0">
+        <mat-chip-grid
+          #chipList
+          aria-label="Namespace selection"
+          formControlName="selectedDomains"
+          id="namespaceInput">
+          <mat-chip-row
+            (removed)="remove(domainChip)"
+            *ngFor="let domainChip of form.controls.selectedDomains.value">
+            {{ domainChip }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input
+            #namespaceInput
+            (matChipInputTokenEnd)="add($event)"
+            [formControl]="namespaceCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [placeholder]="'ldap.ADD_DOMAIN' | translate" />
+        </mat-chip-grid>
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionActivated)="optionActivated($event)"
+          (optionSelected)="selected($event)">
+          <mat-option
+            *ngFor="let domain of filteredDomains | async"
+            [value]="domain">
+            {{ domain }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </section>
+    <section class="row mx-0 align-items-center">
+      <button
+        [matMenuTriggerFor]="menu"
+        [disabled]="data.assetType === 'node'"
+        [ngClass]="{
+          'move-left': data.assetType === 'node',
+        }"
+        class="col-2 d-flex"
+        style="margin-top: -24px"
+        mat-button>
+        {{ viewText }}&nbsp;<i
+          *ngIf="data.assetType === 'container'"
+          class="eos-icons"
+          >arrow_drop_down</i
+        >
+      </button>
+      <mat-menu #menu="matMenu">
+        <button
+          (click)="changeView(0)"
+          mat-menu-item
+          *ngIf="
+            form.controls.selectedDomains.value.length === 0 &&
+            data.assetType === 'container'
+          ">
+          <span>{{ 'admissionControl.names.IMAGE' | translate }}</span>
+        </button>
+        <button
+          (click)="changeView(1)"
+          mat-menu-item
+          *ngIf="form.controls.selectedDomains.value.length === 0">
+          <span>{{ 'admissionControl.names.NODE' | translate }}</span>
+        </button>
+        <button
+          (click)="changeView(2)"
+          mat-menu-item
+          *ngIf="data.assetType === 'container'">
+          <span>{{ 'admissionControl.names.CONTAINER' | translate }}</span>
+        </button>
+      </mat-menu>
+      <ng-container [ngSwitch]="view">
+        <div class="row col align-items-center">
+          <ng-container *ngSwitchCase="FilterView.IMAGE">
+            <label class="sr-only" for="imageName">{{
+              'admissionControl.names.IMAGE' | translate
+            }}</label>
+            <label class="sr-only" for="imageMatch">Match</label>
+            <mat-form-field class="col-2 pe-0 match">
+              <select
+                matNativeControl
+                formControlName="matchTypeImage"
+                id="imageMatch">
+                <option
+                  *ngFor="let matchType of matchTypes"
+                  [value]="matchType.id">
+                  {{ matchType.name }}
+                </option>
+              </select>
+            </mat-form-field>
+            <mat-form-field class="col">
+              <input formControlName="imageName" id="imageName" matInput />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngSwitchCase="FilterView.NODE">
+            <label class="sr-only" for="nodeName">{{
+              'admissionControl.names.NODE' | translate
+            }}</label>
+            <label class="sr-only" for="nodeMatch">Match</label>
+            <mat-form-field class="col-2 pe-0 match">
+              <select
+                matNativeControl
+                formControlName="matchTypeNode"
+                id="nodeMatch">
+                <option
+                  *ngFor="let matchType of matchTypes"
+                  [value]="matchType.id">
+                  {{ matchType.name }}
+                </option>
+              </select>
+            </mat-form-field>
+            <mat-form-field class="col">
+              <input formControlName="nodeName" id="nodeName" matInput />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngSwitchCase="FilterView.CONTAINER">
+            <label class="sr-only" for="containerName">{{
+              'admissionControl.names.CONTAINER' | translate
+            }}</label>
+            <label class="sr-only" for="containerMatch">Match</label>
+            <mat-form-field class="col-2 pe-0 match">
+              <select
+                matNativeControl
+                formControlName="matchTypeContainer"
+                id="containerMatch">
+                <option
+                  *ngFor="let matchType of matchTypes"
+                  [value]="matchType.id">
+                  {{ matchType.name }}
+                </option>
+              </select>
+            </mat-form-field>
+            <mat-form-field class="col">
+              <input
+                formControlName="containerName"
+                id="containerName"
+                matInput />
+            </mat-form-field>
+          </ng-container>
+        </div>
+      </ng-container>
+    </section>
+  </form>
+</div>
+<div *ngIf="data.assetType === 'container'">
+  <ng-container *ngIf="form.controls.imageName.value">
+    <span
+      class="badge badge-secondary mb-1 me-1 ms-0 d-inline-flex justify-content-center align-items-center"
+      >Image
+      {{ getOperator(form.get('matchTypeImage')?.value) }}
+      {{ form.controls.imageName.value }}
+      <button (click)="clear(FilterView.IMAGE)" class="remove-button">
+        <i class="eos-icons">close</i>
+      </button></span
+    >
+  </ng-container>
+  <ng-container *ngIf="form.controls.nodeName.value">
+    <span
+      class="badge badge-secondary mb-1 me-1 ms-0 d-inline-flex justify-content-center align-items-center"
+      >Node
+      {{ getOperator(form.get('matchTypeNode')?.value) }}
+      {{ form.controls.nodeName.value }}
+      <button (click)="clear(FilterView.NODE)" class="remove-button">
+        <i class="eos-icons">close</i>
+      </button></span
+    >
+  </ng-container>
+  <ng-container *ngIf="form.controls.containerName.value">
+    <span
+      class="badge badge-secondary mb-1 me-1 ms-0 d-inline-flex justify-content-center align-items-center"
+      >Container
+      {{ getOperator(form.get('matchTypeContainer')?.value) }}
+      {{ form.controls.containerName.value }}
+      <button (click)="clear(FilterView.CONTAINER)" class="remove-button">
+        <i class="eos-icons">close</i>
+      </button></span
+    >
+  </ng-container>
+  <ng-container
+    [ngTemplateOutletContext]="{
+      max: form.controls.scoreV2.value[1],
+      min: form.controls.scoreV2.value[0],
+      type: 'V2',
+    }"
+    [ngTemplateOutlet]="slider">
+  </ng-container>
+  <ng-container
+    [ngTemplateOutletContext]="{
+      max: form.controls.scoreV3.value[1],
+      min: form.controls.scoreV3.value[0],
+      type: 'V3',
+    }"
+    [ngTemplateOutlet]="slider">
+  </ng-container>
+</div>
+<p *ngIf="data.assetType === 'container'" class="mx-2">
+  {{ 'scan.CONDITION_HINT' | translate }}
+</p>
+<div class="float-right" mat-dialog-actions>
+  <button
+    mat-dialog-close
+    (click)="submit()"
+    cdkFocusInitial
+    color="primary"
+    mat-raised-button>
+    {{ 'cveProfile.EXPORT' | translate }}
+  </button>
+</div>
+<ng-template #slider let-max="max" let-min="min" let-type="type">
+  <span
+    *ngIf="max < 10 || min > 0"
+    class="badge badge-secondary mb-1 me-1 ms-0 d-inline-flex justify-content-center align-items-center">
+    <ng-container *ngIf="max < 10"> {{ type }} < {{ max }} </ng-container>
+    <ng-container *ngIf="max < 10 && min > 0">&nbsp; &&nbsp;</ng-container>
+    <ng-container *ngIf="min > 0"> {{ type }} > {{ min }} </ng-container>
+    <button
+      (click)="clear(type === 'V2' ? FilterView.V2 : FilterView.V3)"
+      class="remove-button">
+      <i class="eos-icons">close</i>
+    </button></span
+  >
+</ng-template>

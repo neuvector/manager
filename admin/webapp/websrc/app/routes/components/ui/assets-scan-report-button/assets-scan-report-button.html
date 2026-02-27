@@ -1,0 +1,13 @@
+<button
+  aria-label="Export assets scan report CSV"
+  type="button"
+  class="me-3 btn-width"
+  (click)="exportFullAssetsScanReport()"
+  mat-button>
+  <span *ngIf="!isReportGenerating">
+    <i class="eos-icons icon-18">csv_file</i>
+    {{ 'containers.report.FULL_REPORT' | translate }}
+  </span>
+  <mat-spinner *ngIf="isReportGenerating" class="btn__spinner" diameter="20">
+  </mat-spinner>
+</button>

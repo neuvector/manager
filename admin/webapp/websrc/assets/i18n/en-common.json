@@ -61,7 +61,8 @@
     "VIEW_MORE": "View More",
     "VIEW_LESS": "View Less",
     "SAMPLE": "Sample",
-    "EXPORT_FILE": "Exported file: "
+    "EXPORT_FILE": "Exported file: ",
+    "REPORT_FILTER": "Filter for Report Scope"
   },
   "enum": {
     "FEDADMIN": "Federated Administrator",
@@ -1033,7 +1034,8 @@
       "ruleTriggered": "On response rule",
       "top5": "Top 5 on response rule",
       "type": "Type Name",
-      "number": "Pod / container number"
+      "number": "Pod / container number",
+      "FULL_REPORT": "Full Report"
     },
     "gridHeader": {},
     "COUNT_POSTFIX": "containers found",
@@ -2826,6 +2828,7 @@
       "=": "=",
       "!=": "!=",
       "CONTAINS": "contains",
+      "NOT_CONTAINS": "!contains",
       "PREFIX": "begins with",
       "REGEX": "matches any regex in",
       "!REGEX": "matches NONE regex in",

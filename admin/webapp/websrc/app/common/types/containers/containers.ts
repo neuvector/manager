@@ -83,3 +83,26 @@ export interface ProcessInfo {
   start_timestamp: number;
   action: string;
 }
+
+export interface VulnerabilitiesQuery {
+  show_accepted?: boolean | null;
+  max_cve_records?: number | null;
+  cursor?: {
+    name?: string;
+    host_name?: string;
+    domain?: string;
+    cve_name?: string;
+    cve_package?: string;
+  };
+  view_pod?: string;
+  vul_score_filter?: {
+    score_version?: string;
+    score_bottom?: number;
+    score_top?: number;
+  };
+  filters?: {
+    name?: string;
+    op?: string;
+    value?: string[];
+  }[];
+}

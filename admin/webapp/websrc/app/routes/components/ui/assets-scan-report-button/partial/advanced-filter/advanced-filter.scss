@@ -1,0 +1,22 @@
+.col-match {
+  flex: 0 0 22%;
+  max-width: 22%;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.match {
+  width: 80px;
+}
+
+.remove-button {
+  border: none;
+  background-color: transparent;
+  color: black;
+}
+
+.move-left {
+  margin-left: -24px;
+  color: #141823;
+}

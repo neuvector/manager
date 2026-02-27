@@ -61,7 +61,8 @@
     "VIEW_MORE": "全部浏览",
     "VIEW_LESS": "简略浏览",
     "SAMPLE": "范例",
-    "EXPORT_FILE": "导出的文件名: "
+    "EXPORT_FILE": "导出的文件名: ",
+    "REPORT_FILTER": "报告范围过滤"
   },
   "enum": {
     "FEDADMIN": "集群全局管理员",
@@ -1032,7 +1033,8 @@
       "ruleTriggered": "规则触发",
       "top5": "前5名的规则触发",
       "type": "类型",
-      "number": "pod / 容器数目"
+      "number": "pod / 容器数目",
+      "FULL_REPORT": "完整报告"
     },
     "gridHeader": {},
     "COUNT_POSTFIX": "个容器",

@@ -4,6 +4,7 @@ import com.neu.api.BaseApi
 import com.neu.client.RestClient.*
 import com.neu.model.*
 import com.neu.model.SystemConfigJsonProtocol.given
+import com.neu.model.ContainerConfigJsonProtocol.given
 import com.neu.service.Utils
 import com.neu.service.device.DeviceService
 import org.apache.pekko.http.scaladsl.model.*
@@ -159,6 +160,18 @@ class DeviceApi(resourceService: DeviceService) extends BaseApi {
               parameter(Symbol("id").?) { id =>
                 Utils.respondWithWebServerHeaders() {
                   resourceService.getHost(tokenId, id)
+                }
+              }
+            }
+          } ~
+          path("scan-report") {
+            post {
+              entity(as[ScanReportRequest]) { scanReportRequest =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.getScanReport(
+                    tokenId: String,
+                    scanReportRequest: ScanReportRequest
+                  )
                 }
               }
             }

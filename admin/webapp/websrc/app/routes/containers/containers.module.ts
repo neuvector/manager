@@ -18,6 +18,7 @@ import { ContainerDetailModule } from '@components/container-detail/container-de
 import { ContainersPrintableReportComponent } from './containers-printable-report/containers-printable-report.component';
 import { ContainersPrintableReportChartComponent } from './containers-printable-report/containers-printable-report-chart/containers-printable-report-chart.component';
 import { NgChartsModule } from 'ng2-charts';
+import { AssetsScanReportButtonModule } from '@components/ui/assets-scan-report-button/assets-scan-report-button-module';
 
 const routes: Routes = [{ path: '', component: ContainersComponent }];
 
@@ -44,6 +45,7 @@ const routes: Routes = [{ path: '', component: ContainersComponent }];
     ProcessGridModule,
     QuickFilterModule,
     NgChartsModule,
+    AssetsScanReportButtonModule,
   ],
 })
 export class ContainersModule {}

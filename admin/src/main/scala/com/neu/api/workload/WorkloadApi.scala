@@ -33,6 +33,18 @@ class WorkloadApi(resourceService: WorkloadService) extends BaseApi {
               }
             }
           } ~
+          path("scan-report") {
+            post {
+              entity(as[ScanReportRequest]) { scanReportRequest =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.getScanReport(
+                    tokenId: String,
+                    scanReportRequest: ScanReportRequest
+                  )
+                }
+              }
+            }
+          } ~
           path("scanned") {
             parameter(Symbol("start").?, Symbol("limit").?) { (start, limit) =>
               Utils.respondWithWebServerHeaders() {

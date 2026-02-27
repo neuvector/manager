@@ -251,13 +251,22 @@ class WorkloadService() extends BaseService with DefaultJsonFormats with LazyLog
     )
   }
 
-  def updateDomain(tokenId: String, config: DomainConfig): Route = complete {
+  def updateDomain(tokenId: String, config: DomainConfig): Route        = complete {
     val payload = domainConfigWrapToJson(
       DomainConfigData(config)
     )
     RestClient.httpRequestWithHeader(
       s"${baseClusterUri(tokenId)}/domain",
       PATCH,
+      payload,
+      tokenId
+    )
+  }
+  def getScanReport(tokenId: String, request: ScanReportRequest): Route = complete {
+    val payload = scanReportRequestToJson(request)
+    RestClient.httpRequestWithHeader(
+      s"${baseClusterUri(tokenId)}/scan/workloads/scan_report",
+      POST,
       payload,
       tokenId
     )

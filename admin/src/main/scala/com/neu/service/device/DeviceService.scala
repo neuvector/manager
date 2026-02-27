@@ -6,6 +6,7 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.AuthenticationManager
 import com.neu.model.SystemConfigJsonProtocol.*
+import com.neu.model.ContainerConfigJsonProtocol.*
 import com.neu.model.*
 import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
@@ -684,6 +685,16 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       s"${baseClusterUri(tokenId)}/csp/file/support",
       HttpMethods.POST,
       "",
+      tokenId
+    )
+  }
+
+  def getScanReport(tokenId: String, request: ScanReportRequest): Route = complete {
+    val payload = scanReportRequestToJson(request)
+    RestClient.httpRequestWithHeader(
+      s"${baseClusterUri(tokenId)}/scan/hosts/scan_report",
+      HttpMethods.POST,
+      payload,
       tokenId
     )
   }

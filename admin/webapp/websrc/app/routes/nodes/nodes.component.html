@@ -18,6 +18,8 @@
           </mat-slide-toggle>
         </div>
       </ng-container>
+      <app-assets-scan-report-button [assetType]="'node'">
+      </app-assets-scan-report-button>
       <app-loading-button
         (btnClick)="refresh()"
         [appearance]="'mat-button'"

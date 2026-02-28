@@ -59,11 +59,8 @@ export class NodesService {
       'fixed_version',
       'description',
       'feed_rating',
-      'file_name',
       'vectors',
       'vectors_v3',
-      'in_base_image',
-      'tags',
       'published_timestamp',
       'last_modified_timestamp',
     ].join(',');
@@ -82,14 +79,10 @@ export class NodesService {
         ? `"${vul.description.replace(/"/g, '""')}"`
         : '';
       const feed_rating = vul.feed_rating || '';
-      const file_name = vul.file_name || '';
       const vectors = vul.vectors ? `"${vul.vectors.replace(/"/g, '""')}"` : '';
       const vectors_v3 = vul.vectors_v3
         ? `"${vul.vectors_v3.replace(/"/g, '""')}"`
         : '';
-      const in_base_image =
-        vul.in_base_image !== undefined ? vul.in_base_image : '';
-      const tags = vul.tags ? `"${vul.tags.join(', ')}"` : '';
       const published_timestamp = vul.published_timestamp
         ? `${this.datePipe.transform(vul.published_timestamp, 'MMM dd y HH:mm:ss')}`
         : '';
@@ -109,11 +102,8 @@ export class NodesService {
         fixed_version,
         description,
         feed_rating,
-        file_name,
         vectors,
         vectors_v3,
-        in_base_image,
-        tags,
         published_timestamp,
         last_modified_timestamp,
       ].join(',');

@@ -303,4 +303,9 @@ export class GlobalConstant {
       viewValue: 'Azure Devops',
     },
   ];
+
+  public static ASSETS_REPORT = {
+    MAX_LENGTH_TOTAL: 100000,
+    MAX_LENGTH_PER_PAGE: 10000,
+  };
 }

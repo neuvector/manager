@@ -59,12 +59,8 @@ export class AdvancedFilter implements OnInit {
       name: this.translate.instant('admissionControl.operators.NOT_CONTAINS'),
     },
   ];
-  view =
-    this.data.assetType === 'container' ? FilterView.IMAGE : FilterView.NODE;
-  viewText =
-    this.data.assetType === 'container'
-      ? this.translate.instant('admissionControl.names.IMAGE')
-      : this.translate.instant('admissionControl.names.NODE');
+  view = FilterView.IMAGE;
+  viewText = this.translate.instant('admissionControl.names.IMAGE');
   FilterView = FilterView;
   autocompleteTagsOptionActivated = false;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
@@ -146,8 +142,6 @@ export class AdvancedFilter implements OnInit {
       scoreV3: new FormControl(filter.scoreV3),
       matchTypeNs: new FormControl(filter.matchTypeNs),
       selectedDomains: new FormControl(filter.selectedDomains),
-      matchTypeService: new FormControl(filter.matchTypeService),
-      serviceName: new FormControl(filter.serviceName),
       matchTypeImage: new FormControl(filter.matchTypeImage),
       imageName: new FormControl(filter.imageName),
       matchTypeNode: new FormControl(filter.matchTypeNode),
@@ -155,6 +149,20 @@ export class AdvancedFilter implements OnInit {
       matchTypeContainer: new FormControl(filter.matchTypeContainer),
       containerName: new FormControl(filter.containerName),
     });
+
+    if (!Array.isArray(this.form.controls.selectedDomains.value)) {
+      this.form.controls.selectedDomains.setValue([]);
+    }
+    if (!Array.isArray(this.form.controls.scoreV2.value)) {
+      this.form.controls.scoreV2.setValue([0, 10]);
+    }
+    if (!Array.isArray(this.form.controls.scoreV3.value)) {
+      this.form.controls.scoreV3.setValue([0, 10]);
+    }
+
+    this.changeView(
+      this.data.assetType === 'node' ? FilterView.NODE : FilterView.IMAGE
+    );
   }
 
   submit(): void {
@@ -178,6 +186,12 @@ export class AdvancedFilter implements OnInit {
     this.form.controls.selectedDomains.value.push(event.option.viewValue);
     this.autocompleteTagsOptionActivated = false;
     this.namespaceCtrl.setValue(null);
+    if (this.form.controls.selectedDomains.value.length > 0) {
+      this.view = FilterView.CONTAINER;
+      this.viewText = this.translate.instant(
+        'admissionControl.names.CONTAINER'
+      );
+    }
   }
 
   add(event: MatChipInputEvent): void {
@@ -193,12 +207,24 @@ export class AdvancedFilter implements OnInit {
       event.chipInput.clear();
     }
     this.namespaceCtrl.setValue(null);
+    if (this.form.controls.selectedDomains.value.length > 0) {
+      this.view = FilterView.CONTAINER;
+      this.viewText = this.translate.instant(
+        'admissionControl.names.CONTAINER'
+      );
+    }
   }
 
   remove(domain: string): void {
     const chipIdx = this.form.controls.selectedDomains.value.indexOf(domain);
     if (chipIdx >= 0) {
       this.form.controls.selectedDomains.value.splice(chipIdx, 1);
+    }
+    if (this.form.controls.selectedDomains.value.length > 0) {
+      this.view = FilterView.CONTAINER;
+      this.viewText = this.translate.instant(
+        'admissionControl.names.CONTAINER'
+      );
     }
   }
 

@@ -273,7 +273,9 @@ export class ContainersService {
       'image_name',
       'tags',
       'workload_name',
-      'name',
+      'namespace',
+      'host_name',
+      'CVE name',
       'link',
       'severity',
       'score',
@@ -295,6 +297,8 @@ export class ContainersService {
       const image_name = vul.workload_image?.split(':')[0] || '';
       const tags = vul.workload_image?.split(':')[1] || '';
       const workload_name = vul.workload_name || '';
+      const namespace = vul.workload_domain || '';
+      const host_name = vul.host_name || vul.workload_host_name || '';
       const name = vul.name || '';
       const link = vul.link || '';
       const severity = vul.severity || '';
@@ -315,16 +319,18 @@ export class ContainersService {
       const in_base_image =
         vul.in_base_image !== undefined ? vul.in_base_image : '';
       const published_timestamp = vul.published_timestamp
-        ? `'${this.datePipe.transform(vul.published_timestamp, 'MMM dd y HH:mm:ss')}'`
+        ? `${this.datePipe.transform(vul.published_timestamp, 'MMM dd y HH:mm:ss')}`
         : '';
       const last_modified_timestamp = vul.last_modified_timestamp
-        ? `'${this.datePipe.transform(vul.last_modified_timestamp, 'MMM dd y HH:mm:ss')}'`
+        ? `${this.datePipe.transform(vul.last_modified_timestamp, 'MMM dd y HH:mm:ss')}`
         : '';
 
       return [
         image_name,
         tags,
         workload_name,
+        namespace,
+        host_name,
         name,
         link,
         severity,

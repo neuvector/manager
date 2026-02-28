@@ -116,7 +116,7 @@
           (click)="changeView(0)"
           mat-menu-item
           *ngIf="
-            form.controls.selectedDomains.value.length === 0 &&
+            form.controls.selectedDomains.value?.length === 0 &&
             data.assetType === 'container'
           ">
           <span>{{ 'admissionControl.names.IMAGE' | translate }}</span>
@@ -124,7 +124,7 @@
         <button
           (click)="changeView(1)"
           mat-menu-item
-          *ngIf="form.controls.selectedDomains.value.length === 0">
+          *ngIf="form.controls.selectedDomains.value?.length === 0">
           <span>{{ 'admissionControl.names.NODE' | translate }}</span>
         </button>
         <button

@@ -37,7 +37,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
     export PATH="$PATH:/root/.local/share/coursier/bin" && \
     ./cs install scala:3.3.5 sbt:1.10.2 --install-dir /usr/local/bin
 
-RUN npm install -g @angular/cli@14 && \
+RUN npm install -g @angular/cli@20 && \
     npm install -g npm-force-resolutions
 
 RUN sed -i -e 's#interim.*xxxx#'"$VERSION"'#g' ./common/src/main/resources/application.conf

@@ -172,8 +172,10 @@ export class AssetsScanReportButton implements OnInit, OnDestroy {
   parseFilterToPayload(filter: any, assetType: string): any {
     console.log('filter', filter);
     const payload: any = {
-      ...filter,
+      show_accepted: filter?.showAccepted ?? null,
       max_cve_records: GlobalConstant.ASSETS_REPORT.MAX_LENGTH_PER_PAGE,
+      cursor: filter?.cursor ?? null,
+      view_pod: filter?.viewPod ?? null,
       vul_score_filter: {
         score_version: filter?.scoreType === 'v2' ? 'v2' : 'v3',
         score_bottom:
@@ -208,12 +210,12 @@ export class AssetsScanReportButton implements OnInit, OnDestroy {
     if (assetType === 'container') {
       pushFilter('domain', filter?.matchTypeNs, filter?.selectedDomains);
       pushFilter(
-        'image_name',
+        'image',
         filter?.matchTypeImage,
         filter?.imageName?.split(',').map((s: string) => s.trim())
       );
       pushFilter(
-        'container_name',
+        'name',
         filter?.matchTypeContainer,
         filter?.containerName?.split(',').map((s: string) => s.trim())
       );

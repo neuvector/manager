@@ -23,8 +23,9 @@ object GraphCacheManager {
    * @param layout
    *   the [[com.neu.model.UserGraphLayout]]
    */
-  def saveNodeLayout(layout: UserGraphLayout): Unit =
-    if (layout.nodePositions.nonEmpty) cache.put(layout.user + "node", layout.nodePositions.get)
+  def saveNodeLayout(layout: UserGraphLayout, tokenId: String): Unit =
+    if (layout.nodePositions.nonEmpty)
+      cache.put(layout.user + tokenId.substring(0, 20) + "node", layout.nodePositions.get)
 
   /**
    * Get node graph layout for user
@@ -33,7 +34,8 @@ object GraphCacheManager {
    * @return
    *   [[com.neu.model.Position]]
    */
-  def getNodeLayout(user: String): Option[Map[String, Position]] = cache.get(user + "node")
+  def getNodeLayout(user: String, tokenId: String): Option[Map[String, Position]] =
+    cache.get(user + tokenId.substring(0, 20) + "node")
 
   /**
    * Get group layout for user

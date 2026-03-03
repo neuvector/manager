@@ -16,15 +16,20 @@ object BlacklistCacheManager {
   /**
    * Save blacklist for Graph.
    */
-  def saveBlacklist(userBlacklist: UserBlacklist): Unit =
-    userBlacklist.blacklist.foreach(cache.put(userBlacklist.user + "blacklist", _))
+  def saveBlacklist(userBlacklist: UserBlacklist, tokenId: String): Unit =
+    userBlacklist.blacklist.foreach(
+      cache.put(userBlacklist.user + tokenId.substring(0, 20) + "blacklist", _)
+    )
 
   /**
    * Get blacklist of user for Graph
    * @param user
    *   the user
+   * @param tokenId
+   *   the token ID
    * @return
    *   [[com.neu.model.Blacklist]]
    */
-  def getBlacklist(user: String): Option[Blacklist] = cache.get(user + "blacklist")
+  def getBlacklist(user: String, tokenId: String): Option[Blacklist] =
+    cache.get(user + tokenId.substring(0, 20) + "blacklist")
 }

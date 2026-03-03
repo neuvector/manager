@@ -395,12 +395,12 @@ class NotificationService()(implicit
       val (edges: Array[Edge], markedNodes: Array[Node]) = getDataSet(graphData)
 
       logger.info("Sending data")
-      logger.info("blacklist:  {}", BlacklistCacheManager.getBlacklist(user))
+      logger.info("blacklist:  {}", BlacklistCacheManager.getBlacklist(user, tokenId))
 
       NetworkGraph(
         markedNodes,
         edges,
-        BlacklistCacheManager.getBlacklist(user),
+        BlacklistCacheManager.getBlacklist(user, tokenId),
         enableGPU == "true"
       )
 
@@ -419,7 +419,7 @@ class NotificationService()(implicit
       Await.result(resultPromise, RestClient.waitingLimit.seconds)
 
       logger.info("saving positions for user: {}", graphLayout.user)
-      GraphCacheManager.saveNodeLayout(graphLayout)
+      GraphCacheManager.saveNodeLayout(graphLayout, tokenId)
       logger.debug(layoutToJson(graphLayout))
 
       HttpEntity.Empty
@@ -438,7 +438,7 @@ class NotificationService()(implicit
     try {
       val resultPromise = AuthenticationManager.validateToken(tokenId)
       Await.result(resultPromise, RestClient.waitingLimit.seconds)
-      UserGraphLayout(user, GraphCacheManager.getNodeLayout(user))
+      UserGraphLayout(user, GraphCacheManager.getNodeLayout(user, tokenId))
     } catch {
       case NonFatal(e) =>
         RestClient.handleError(
@@ -454,7 +454,7 @@ class NotificationService()(implicit
     try {
       val resultPromise = AuthenticationManager.validateToken(tokenId)
       Await.result(resultPromise, RestClient.waitingLimit.seconds)
-      BlacklistCacheManager.getBlacklist(user)
+      BlacklistCacheManager.getBlacklist(user, tokenId)
     } catch {
       case NonFatal(e) =>
         RestClient.handleError(
@@ -471,7 +471,7 @@ class NotificationService()(implicit
       val resultPromise = AuthenticationManager.validateToken(tokenId)
       Await.result(resultPromise, RestClient.waitingLimit.seconds)
       logger.info("saving blacklist for user: {}", userBlacklist.user)
-      BlacklistCacheManager.saveBlacklist(userBlacklist)
+      BlacklistCacheManager.saveBlacklist(userBlacklist, tokenId)
       HttpEntity.Empty
     } catch {
       case NonFatal(e) =>

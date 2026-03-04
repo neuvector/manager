@@ -76,6 +76,7 @@ export interface VulnerabilityQuery {
   matchTypeContainer?: MatchTypeOption;
   containerName?: string;
   viewType: VulnerabilityView;
+  showAccepted?: boolean;
 }
 
 export interface VulnerabilitiesQuerySessionData {

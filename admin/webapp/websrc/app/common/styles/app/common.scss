@@ -1906,3 +1906,11 @@ mat-checkbox {
     height: 32px !important;
     padding: 0 !important;
 }
+
+.mat-mdc-dialog-content {
+  overflow: hidden !important;
+}
+
+.mat-mdc-dialog-surface {
+  overflow: hidden !important;
+}

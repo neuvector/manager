@@ -15,6 +15,7 @@ import {
   MatAutocompleteSelectedEvent,
 } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Options } from '@angular-slider/ngx-slider';
 import { TranslateService } from '@ngx-translate/core';
 import { LastModifiedDateOption, VulnerabilityQuery } from '@common/types';
@@ -148,6 +149,7 @@ export class AdvancedFilter implements OnInit {
       nodeName: new FormControl(filter.nodeName),
       matchTypeContainer: new FormControl(filter.matchTypeContainer),
       containerName: new FormControl(filter.containerName),
+      showAccepted: new FormControl(filter.showAccepted ?? false),
     });
 
     if (!Array.isArray(this.form.controls.selectedDomains.value)) {
@@ -243,6 +245,10 @@ export class AdvancedFilter implements OnInit {
       default:
         return '!=';
     }
+  }
+
+  toggleShowAccepted(event: MatSlideToggleChange): void {
+    this.form.controls.showAccepted.setValue(event.checked);
   }
 
   private _filter(value: string): string[] {

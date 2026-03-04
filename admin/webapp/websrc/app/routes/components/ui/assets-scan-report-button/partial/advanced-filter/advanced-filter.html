@@ -205,6 +205,17 @@
         </div>
       </ng-container>
     </section>
+    <section class="row mx-0 align-items-center mt-3">
+      <ng-container>
+        <mat-slide-toggle
+          formControlName="showAccepted"
+          (change)="toggleShowAccepted($event)"
+          class="d-flex align-items-center"
+          style="margin-top: -24px">
+          {{ 'cveProfile.ACCEPT_VUL' | translate }}
+        </mat-slide-toggle>
+      </ng-container>
+    </section>
   </form>
 </div>
 <div *ngIf="data.assetType === 'container'">
@@ -258,9 +269,6 @@
     [ngTemplateOutlet]="slider">
   </ng-container>
 </div>
-<p *ngIf="data.assetType === 'container'" class="mx-2">
-  {{ 'scan.CONDITION_HINT' | translate }}
-</p>
 <div class="float-right" mat-dialog-actions>
   <button
     mat-dialog-close

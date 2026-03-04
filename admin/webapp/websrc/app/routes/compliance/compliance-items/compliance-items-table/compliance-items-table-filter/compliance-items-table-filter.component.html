@@ -72,13 +72,14 @@
       }}</label>
       <label class="sr-only" for="namespaceMatch">Match</label>
       <mat-form-field class="col-2 match">
-        <mat-select formControlName="matchType4Ns" id="namespaceMatch">
-          <mat-option
-            *ngFor="let matchType of matchTypes"
-            [value]="matchType.id">
+        <select
+          matNativeControl
+          formControlName="matchType4Ns"
+          id="namespaceMatch">
+          <option *ngFor="let matchType of matchTypes" [value]="matchType.id">
             {{ matchType.name }}
-          </mat-option>
-        </mat-select>
+          </option>
+        </select>
       </mat-form-field>
       <mat-form-field class="col ps-0">
         <mat-chip-grid
@@ -107,11 +108,11 @@
           #auto="matAutocomplete"
           (optionActivated)="optionActivated($event)"
           (optionSelected)="selected($event)">
-          <mat-option
+          <option
             *ngFor="let domain of filteredDomains | async"
             [value]="domain">
             {{ domain }}
-          </mat-option>
+          </option>
         </mat-autocomplete>
       </mat-form-field>
     </section>
@@ -147,13 +148,16 @@
             }}</label>
             <label class="sr-only" for="serviceMatch">Match</label>
             <mat-form-field class="col-2 pe-0 match" formGroupName="matchTypes">
-              <mat-select formControlName="Service" id="serviceMatch">
-                <mat-option
+              <select
+                matNativeControl
+                formControlName="Service"
+                id="serviceMatch">
+                <option
                   *ngFor="let matchType of matchTypes"
                   [value]="matchType.id">
                   {{ matchType.name }}
-                </mat-option>
-              </mat-select>
+                </option>
+              </select>
             </mat-form-field>
             <mat-form-field class="col">
               <input formControlName="serviceName" id="serviceName" matInput />
@@ -165,13 +169,13 @@
             }}</label>
             <label class="sr-only" for="imageMatch">Match</label>
             <mat-form-field class="col-2 pe-0 match" formGroupName="matchTypes">
-              <mat-select formControlName="Image" id="imageMatch">
-                <mat-option
+              <select matNativeControl formControlName="Image" id="imageMatch">
+                <option
                   *ngFor="let matchType of matchTypes"
                   [value]="matchType.id">
                   {{ matchType.name }}
-                </mat-option>
-              </mat-select>
+                </option>
+              </select>
             </mat-form-field>
             <mat-form-field class="col">
               <input formControlName="imageName" id="imageName" matInput />
@@ -183,13 +187,13 @@
             }}</label>
             <label class="sr-only" for="nodeMatch">Match</label>
             <mat-form-field class="col-2 pe-0 match" formGroupName="matchTypes">
-              <mat-select formControlName="Node" id="nodeMatch">
-                <mat-option
+              <select matNativeControl formControlName="Node" id="nodeMatch">
+                <option
                   *ngFor="let matchType of matchTypes"
                   [value]="matchType.id">
                   {{ matchType.name }}
-                </mat-option>
-              </mat-select>
+                </option>
+              </select>
             </mat-form-field>
             <mat-form-field class="col">
               <input formControlName="nodeName" id="nodeName" matInput />
@@ -201,13 +205,16 @@
             }}</label>
             <label class="sr-only" for="containerMatch">Match</label>
             <mat-form-field class="col-2 pe-0 match" formGroupName="matchTypes">
-              <mat-select formControlName="Container" id="containerMatch">
-                <mat-option
+              <select
+                matNativeControl
+                formControlName="Container"
+                id="containerMatch">
+                <option
                   *ngFor="let matchType of matchTypes"
                   [value]="matchType.id">
                   {{ matchType.name }}
-                </mat-option>
-              </mat-select>
+                </option>
+              </select>
             </mat-form-field>
             <mat-form-field class="col">
               <input

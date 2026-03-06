@@ -62,7 +62,8 @@
     "VIEW_LESS": "简略浏览",
     "SAMPLE": "范例",
     "EXPORT_FILE": "导出的文件名: ",
-    "REPORT_FILTER": "报告范围过滤"
+    "REPORT_FILTER": "报告范围过滤",
+    "MAX_EXPORT": "可导出的最大记录数为 {{max}}。请缩小您的过滤条件以导出更少的记录。"
   },
   "enum": {
     "FEDADMIN": "集群全局管理员",

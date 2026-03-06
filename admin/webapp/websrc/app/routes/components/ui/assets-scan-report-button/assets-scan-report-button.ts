@@ -10,9 +10,10 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { ContainersService } from '@services/containers.service';
 import { NodesService } from '@services/nodes.service';
-import { filter, of } from 'rxjs';
+import { of } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { UtilsService } from '@common/utils/app.utils';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   standalone: false,
@@ -27,6 +28,7 @@ export class AssetsScanReportButton implements OnInit, OnDestroy {
   domains!: string[];
   isReportGenerating = false;
   fullReport = [];
+  isVulsAuthorized = false;
 
   constructor(
     private dialog: MatDialog,
@@ -34,7 +36,8 @@ export class AssetsScanReportButton implements OnInit, OnDestroy {
     private assetsHttpService: AssetsHttpService,
     private containersService: ContainersService,
     private nodesService: NodesService,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -152,6 +155,14 @@ export class AssetsScanReportButton implements OnInit, OnDestroy {
   }
 
   processDownloadCSV(data: any[], assetType: string, filename: string): void {
+    if (data && data.length >= GlobalConstant.ASSETS_REPORT.MAX_LENGTH_TOTAL) {
+      this.notificationService.open(
+        this.tr.instant('general.MAX_EXPORT', {
+          max: GlobalConstant.ASSETS_REPORT.MAX_LENGTH_TOTAL,
+        }),
+        GlobalConstant.NOTIFICATION_TYPE.WARNING
+      );
+    }
     if (assetType === 'node') {
       const csvData = this.nodesService.formatVulnerabilitiesToCSV(data);
       this.downloadCSVFile(csvData, filename);

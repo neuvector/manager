@@ -62,7 +62,8 @@
     "VIEW_LESS": "View Less",
     "SAMPLE": "Sample",
     "EXPORT_FILE": "Exported file: ",
-    "REPORT_FILTER": "Filter for Report Scope"
+    "REPORT_FILTER": "Filter for Report Scope",
+    "MAX_EXPORT": "The maximum number of records that can be exported is {{max}}. Please narrow down your filter to export fewer records."
   },
   "enum": {
     "FEDADMIN": "Federated Administrator",

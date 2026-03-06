@@ -28,7 +28,6 @@ export class AssetsScanReportButton implements OnInit, OnDestroy {
   domains!: string[];
   isReportGenerating = false;
   fullReport = [];
-  isVulsAuthorized = false;
 
   constructor(
     private dialog: MatDialog,

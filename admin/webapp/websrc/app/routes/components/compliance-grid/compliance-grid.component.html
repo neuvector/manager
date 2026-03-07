@@ -1,14 +1,18 @@
-<div
-  class="d-flex flex-row justify-content-end align-items-center"
-  *ngIf="!isContainer">
-  <button ariaLabel="csv report" mat-button>
-    <i (click)="exportCSV()" class="eos-icons icon-18">csv_file</i>
-  </button>
+<div class="row">
+  <div class="col">
+    <div
+      class="d-flex flex-row justify-content-end align-items-center"
+      *ngIf="!isContainer">
+      <button ariaLabel="csv report" mat-button>
+        <i (click)="exportCSV()" class="eos-icons icon-18">csv_file</i>
+      </button>
+    </div>
+    <ag-grid-angular
+      (window:resize)="onResize()"
+      [gridOptions]="gridOptions"
+      [ngStyle]="{ height: tableHeight }"
+      class="ag-theme-alpine"
+      style="width: 100%">
+    </ag-grid-angular>
+  </div>
 </div>
-<ag-grid-angular
-  (window:resize)="onResize()"
-  [gridOptions]="gridOptions"
-  [ngStyle]="{ height: tableHeight }"
-  class="ag-theme-alpine"
-  style="width: 100%">
-</ag-grid-angular>

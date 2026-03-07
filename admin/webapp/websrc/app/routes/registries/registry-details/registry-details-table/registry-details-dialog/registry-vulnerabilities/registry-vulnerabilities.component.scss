@@ -2,7 +2,7 @@
   overflow-y: scroll;
   background-color: #525252;
   color: #e6e6e6;
-  height: 50%;
+  height: calc(50vh - 185px);
 
   .cmds {
     text-align: left;
@@ -12,7 +12,7 @@
 }
 
 .vulnerability-description-container {
-  height: 50%;
+  height: calc(50vh - 185px);
 
   .vulnerability-description {
     border: #babfc7 1px solid;

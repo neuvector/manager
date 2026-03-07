@@ -151,7 +151,7 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
   openDialog(selectedRegistry: Summary, image: Image): void {
     this.dialog.open(RegistryDetailsDialogComponent, {
       width: '90%',
-      height: '90%',
+      height: 'calc(100vh - 150px)',
       maxWidth: '1800px',
       data: {
         selectedRegistry,

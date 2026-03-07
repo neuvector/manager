@@ -7,8 +7,9 @@
     <button
       aria-label="Close dialog button"
       id="registry-details-dialog-close-button"
+      (click)="onNoClick()"
       mat-icon-button>
-      <i (click)="onNoClick()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
   <div style="min-height: 700px; height: calc(100% - 70px)">
@@ -42,18 +43,20 @@
         </app-registry-vulnerabilities>
       </mat-tab>
       <mat-tab label="Compliance">
-        <app-compliance-grid
-          [baseOS]="data.image.base_os"
-          [imageId]="data.image.image_id"
-          [path]="data.selectedRegistry.registry"
-          [repository]="data.image.repository"
-          [resize]="resize"
-          [rowData]="imageAndLayers.image.report.checks"
-          [includeRemediation]="true"
-          (remediation)="openRemediation($event)"
-          [useQuickFilterService]="true"
-          tableHeight="calc(100% - 42px)">
-        </app-compliance-grid>
+        <div>
+          <app-compliance-grid
+            [baseOS]="data.image.base_os"
+            [imageId]="data.image.image_id"
+            [path]="data.selectedRegistry.registry"
+            [repository]="data.image.repository"
+            [resize]="resize"
+            [rowData]="imageAndLayers.image.report.checks"
+            [includeRemediation]="true"
+            (remediation)="openRemediation($event)"
+            [useQuickFilterService]="true"
+            tableHeight="calc(100vh - 360px)">
+          </app-compliance-grid>
+        </div>
       </mat-tab>
       <mat-tab label="Modules">
         <app-registry-modules

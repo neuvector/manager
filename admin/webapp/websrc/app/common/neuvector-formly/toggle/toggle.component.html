@@ -1,4 +1,4 @@
-<div class="d-flex align-items-end">
+<div class="d-flex align-items-end mb-2">
   <span
     *ngIf="to.labelPosition === 'before'"
     class="toggle-label me-3"
@@ -17,7 +17,8 @@
     [formControl]="formControl"
     [formlyAttributes]="field"
     [aria-labelledby]="to.label ? to.label : to.ariaLabelledBy"
-    class="margin-left-m">
+    class="margin-left-m"
+    style="margin: auto 0">
   </mat-slide-toggle>
   <span
     *ngIf="!to.labelPosition || to.labelPosition === 'after'"

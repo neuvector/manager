@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NvCommonModule } from '@common/nvCommon.module';
 import { ComplianceGridComponent } from './compliance-grid.component';
 import { AgGridAngular } from 'ag-grid-angular';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +25,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   imports: [
     CommonModule,
     AgGridAngular,
+    NvCommonModule,
     DragDropModule,
     MatButtonModule,
     MatCardModule,

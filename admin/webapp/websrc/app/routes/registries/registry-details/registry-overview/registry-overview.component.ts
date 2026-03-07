@@ -17,8 +17,8 @@ import { TranslateService } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistryOverviewComponent implements OnChanges {
-  @Input() registryDetails: Image[];
-  @Input() summary4AllView: any;
+  @Input() registryDetails!: Image[];
+  @Input() summary4AllView!: any;
   @Input() isAllView!: boolean;
   @Input() gridHeight!: number;
   pieChartData!: ChartConfiguration<'pie', number[], string[]>;

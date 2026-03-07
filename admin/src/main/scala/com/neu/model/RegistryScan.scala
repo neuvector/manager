@@ -23,7 +23,7 @@ case class GcrKey(
 case class RegistryAuth(
   username: Option[String] = None,
   password: Option[String] = None,
-  auth_with_token: Boolean,
+  auth_with_token: Option[Boolean] = Some(false),
   auth_token: Option[String] = None,
   aws_key: Option[AWSAccount] = None,
   gcr_key: Option[GcrKey] = None
@@ -31,7 +31,7 @@ case class RegistryAuth(
 
 case class MaskedRegistryAuth(
   username: Option[String] = None,
-  auth_with_token: Boolean,
+  auth_with_token: Option[Boolean] = Some(false),
   aws_key: Option[MaskedAWSAccount] = None
 )
 

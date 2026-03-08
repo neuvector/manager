@@ -55,14 +55,16 @@
                 {{ 'admissionControl.EXPORT' | translate }}
               </button>
             </div>
-            <button
-              *appDisplayControl="'write_admission'"
-              mat-menu-item
-              class="d-flex align-items-center"
-              (click)="openImportPopup()">
-              <em class="eos-icons">upload</em>
-              {{ 'admissionControl.IMPORT' | translate }}
-            </button>
+            <div class="menu-width-medium">
+              <button
+                *appDisplayControl="'write_admission'"
+                mat-menu-item
+                class="d-flex align-items-center"
+                (click)="openImportPopup()">
+                <em class="eos-icons">upload</em>
+                {{ 'admissionControl.IMPORT' | translate }}
+              </button>
+            </div>
           </mat-menu>
         </div>
       </div>
@@ -106,7 +108,8 @@
         <div class="d-flex justify-content-end align-items-center">
           <div
             *ngIf="source === navSource['FED_POLICY']"
-            class="d-flex justify-content-end align-items-center me-2">
+            class="d-flex justify-content-end align-items-center me-2"
+            style="width: 220px">
             <button
               mat-menu-item
               class="d-flex align-items-center"

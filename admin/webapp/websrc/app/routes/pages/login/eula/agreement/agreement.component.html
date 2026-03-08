@@ -10,16 +10,18 @@
         <button
           aria-label="Close score improvement modal button"
           class="d-flex align-items-center justify-content-center"
+          (click)="onClose()"
           mat-icon-button>
-          <i (click)="onClose()" class="eos-icons">close</i>
+          <i class="eos-icons">close</i>
         </button>
       </div>
     </div>
   </div>
-
-  <ng-container *ngIf="showCustomPolicy; else nvPolicy">
-    <div [innerHTML]="customPolicy"></div>
-  </ng-container>
+  <div class="eula-content">
+    <ng-container *ngIf="showCustomPolicy; else nvPolicy">
+      <div [innerHTML]="customPolicy"></div>
+    </ng-container>
+  </div>
   <ng-template #nvPolicy>
     <h4>
       PLEASE READ THIS AGREEMENT CAREFULLY. BY INSTALLING, DOWNLOADING OR

@@ -9,3 +9,8 @@
     background-color: #30ba78;
   }
 }
+
+.eula-content {
+  height: calc(100vh - 240px);
+  overflow-y: auto;
+}

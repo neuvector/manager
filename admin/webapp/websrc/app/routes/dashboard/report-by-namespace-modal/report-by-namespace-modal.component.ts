@@ -50,4 +50,8 @@ export class ReportByNamespaceModalComponent {
         }
       );
   };
+
+  isOverflow(el: HTMLElement): boolean {
+    return el.scrollWidth > el.clientWidth;
+  }
 }

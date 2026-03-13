@@ -19,20 +19,23 @@
       <i class="eos-icons">close</i>
     </button>
   </div>
-  <hr class="fancy mt-1 mb-4 mx-0" />
-  <div mat-dialog-content>
-    <app-loading-button
-      (btnClick)="data.printDashboardReport()"
-      appearance="mat-button"
-      [text]="'dashboard.ALL_NAMESPACE' | translate"
-      buttonClasses="me-1 d-flex justify-content-center align-items-center">
-    </app-loading-button>
-    <app-loading-button
-      (btnClick)="printDashboardReportByDomain(domain)"
+  <hr class="fancy mt-1 mb-0 mx-0" />
+  <div mat-dialog-content class="text-black-50">
+    <div>
+      <a class="text-ns" (click)="data.printDashboardReport()">
+        {{ 'dashboard.ALL_NAMESPACE' | translate }}
+      </a>
+    </div>
+    <div
+      #domainTextEl
+      class="text-overflow-ellipsis"
       *ngFor="let domain of data.domainList"
-      [text]="domain"
-      appearance="mat-button"
-      buttonClasses="me-1 d-flex justify-content-center align-items-center">
-    </app-loading-button>
+      [matTooltip]="domain"
+      [matTooltipDisabled]="!isOverflow(domainTextEl)"
+      matTooltipPosition="above">
+      <a class="text-ns" (click)="printDashboardReportByDomain(domain)">
+        {{ domain }}
+      </a>
+    </div>
   </div>
 </div>

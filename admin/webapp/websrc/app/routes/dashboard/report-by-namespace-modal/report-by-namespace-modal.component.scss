@@ -1,0 +1,11 @@
+.text-overflow-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text-ns {
+    color: var(--mat-dialog-subhead-color, var(--mat-sys-on-surface, rgba(0, 0, 0, 0.87))) !important;
+    font-weight: 400 !important;
+    font-family: var(--mat-dialog-subhead-font, var(--mat-font-family, Roboto, "Helvetica Neue", sans-serif)) !important;
+}

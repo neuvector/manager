@@ -12,8 +12,6 @@
           [foregroundColor]="gaugeColor"
           [thick]="10"
           cap="round"
-          [thick]="10"
-          cap="round"
           [size]="120">
         </ngx-gauge>
         <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
@@ -35,7 +33,9 @@
           [animate]="true"
           [duration]="1"
           [foregroundColor]="gaugeLabelColorFixed"
-          [size]="40">
+          [thick]="10"
+          cap="round"
+          [size]="120">
         </ngx-gauge>
         <div class="score-label" [ngStyle]="{ color: gaugeLabelColorFixed }">
           {{ gaugeLabelFixed }}

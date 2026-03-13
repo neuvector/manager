@@ -1,8 +1,7 @@
 <ng-container *ngIf="noVunerablities; else chartsTemplate">
-  <div
-    class="h-100 d-flex flex-column justify-content-center align-items-center">
-    <i class="eos-icons eos-48 mb-2" style="font-size: 100px">security</i>
-    <span class="d-block display-3">{{ 'registry.NO_VULS' | translate }}</span>
+  <div class="h-100 d-flex justify-content-center align-items-center mb-4">
+    <i class="eos-icons me-2">security</i>
+    <span class="d-block">{{ 'registry.NO_VULS' | translate }}</span>
   </div>
 </ng-container>
 <ng-template #chartsTemplate>

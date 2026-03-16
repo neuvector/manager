@@ -204,7 +204,7 @@ class RiskApi(resourceService: RiskService) extends BaseApi {
           path("complianceNIST") {
             post {
               entity(as[ComplianceNISTConfigData]) { complianceNISTConfigData =>
-                resourceService.queryNistCompliances(complianceNISTConfigData)
+                resourceService.queryNistCompliances(complianceNISTConfigData, tokenId)
               }
             }
           } ~

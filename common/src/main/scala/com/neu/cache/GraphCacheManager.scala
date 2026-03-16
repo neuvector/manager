@@ -3,6 +3,7 @@ package com.neu.cache
 import com.neu.model.Position
 import com.neu.model.UserGraphLayout
 import net.sf.ehcache.CacheManager
+import com.neu.utils.Common.shortKey
 
 /**
  * Created by bxu on 2/2/18. Manager graph layout for node and group view.
@@ -23,8 +24,9 @@ object GraphCacheManager {
    * @param layout
    *   the [[com.neu.model.UserGraphLayout]]
    */
-  def saveNodeLayout(layout: UserGraphLayout): Unit =
-    if (layout.nodePositions.nonEmpty) cache.put(layout.user + "node", layout.nodePositions.get)
+  def saveNodeLayout(layout: UserGraphLayout, tokenId: String): Unit =
+    if (layout.nodePositions.nonEmpty)
+      cache.put(layout.user + shortKey(tokenId) + "node", layout.nodePositions.get)
 
   /**
    * Get node graph layout for user
@@ -33,7 +35,8 @@ object GraphCacheManager {
    * @return
    *   [[com.neu.model.Position]]
    */
-  def getNodeLayout(user: String): Option[Map[String, Position]] = cache.get(user + "node")
+  def getNodeLayout(user: String, tokenId: String): Option[Map[String, Position]] =
+    cache.get(user + shortKey(tokenId) + "node")
 
   /**
    * Get group layout for user

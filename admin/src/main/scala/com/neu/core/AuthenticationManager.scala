@@ -9,6 +9,10 @@ import com.typesafe.scalalogging.LazyLogging
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import scala.collection.mutable
+import com.neu.client.RestClient
+import com.neu.client.RestClient.*
+import org.apache.pekko.http.scaladsl.model.*
+import scala.concurrent.Future
 
 /**
  * Created by bxu on 3/25/16.
@@ -108,6 +112,14 @@ object AuthenticationManager extends LazyLogging {
 
   def putToken(id: String, userToken: UserTokenNew): Unit =
     tokenMap += id -> userToken
+
+  def validateToken(tokenId: String): Future[HttpResponse] =
+    RestClient.httpRequestWithHeader(
+      s"${baseClusterUri(tokenId)}/$auth",
+      HttpMethods.PATCH,
+      "",
+      tokenId
+    )
 
   private def getRolesDigit(
     global_role: String,

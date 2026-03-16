@@ -20,6 +20,8 @@ import scala.concurrent.TimeoutException
 import scala.util.control.NonFatal
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import scala.concurrent.Await
+import scala.concurrent.duration.DurationInt
 
 class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
 
@@ -317,9 +319,24 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
       }
     }
 
-  def queryNistCompliances(complianceNISTConfigData: ComplianceNISTConfigData): Route = complete {
-    logger.info("Get NIST compliances: {}", complianceNISTConfigData.config.names)
-    CisNISTManager.getCompliancesNIST(complianceNISTConfigData.config.names)
+  def queryNistCompliances(
+    complianceNISTConfigData: ComplianceNISTConfigData,
+    tokenId: String
+  ): Route = complete {
+    try {
+      val resultPromise = AuthenticationManager.validateToken(tokenId)
+      Await.result(resultPromise, RestClient.waitingLimit.seconds)
+      logger.info("Get NIST compliances: {}", complianceNISTConfigData.config.names)
+      CisNISTManager.getCompliancesNIST(complianceNISTConfigData.config.names)
+    } catch {
+      case NonFatal(e) =>
+        RestClient.handleError(
+          timeOutStatus,
+          authenticationFailedStatus,
+          serverErrorStatus,
+          e
+        )
+    }
   }
 
   def getCompliances(tokenId: String): Route = complete {

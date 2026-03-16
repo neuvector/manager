@@ -629,15 +629,31 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
     }
   }
 
-  def checkDebugLog(): Route = complete {
-    val isFileReady = Files.exists(Paths.get(logFile)) && Files.isReadable(
-      Paths.get(logFile)
-    )
-    logger.info(s"Log file $logFile  is ready: $isFileReady")
-    if (isFileReady) {
-      HttpResponse(StatusCodes.OK, entity = "Ready")
-    } else {
-      HttpResponse(StatusCodes.PartialContent, entity = "In progress")
+  def checkDebugLog(tokenId: String): Route = complete {
+    try {
+      val resultPromise = AuthenticationManager.validateToken(tokenId)
+      Await.result(resultPromise, RestClient.waitingLimit.seconds)
+      if (SupportLogAuthCacheManager.getSupportLogAuth(tokenId).isDefined) {
+        val isFileReady = Files.exists(Paths.get(logFile)) && Files.isReadable(
+          Paths.get(logFile)
+        )
+        logger.info(s"Log file $logFile is ready: $isFileReady")
+        if (isFileReady) {
+          HttpResponse(StatusCodes.OK, entity = "Ready")
+        } else {
+          HttpResponse(StatusCodes.PartialContent, entity = "In progress")
+        }
+      } else {
+        (StatusCodes.Forbidden, "File can not be accessed.")
+      }
+    } catch {
+      case NonFatal(e) =>
+        RestClient.handleError(
+          timeOutStatus,
+          authenticationFailedStatus,
+          serverErrorStatus,
+          e
+        )
     }
   }
 

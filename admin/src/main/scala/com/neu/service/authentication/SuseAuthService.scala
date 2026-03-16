@@ -39,12 +39,7 @@ class SuseAuthService()(implicit
 
   override def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route =
     complete {
-      RestClient.httpRequestWithHeader(
-        s"${baseClusterUri(tokenId.get)}/$auth",
-        HttpMethods.PATCH,
-        "",
-        tokenId.get
-      )
+      AuthenticationManager.validateToken(tokenId.get)
     }
 
   override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route = {

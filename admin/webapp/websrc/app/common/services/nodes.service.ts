@@ -73,8 +73,8 @@ export class NodesService {
       const score = vul.score !== undefined ? vul.score : '';
       const score_v3 = vul.score_v3 !== undefined ? vul.score_v3 : '';
       const package_name = vul.package_name || '';
-      const package_version = vul.package_version || '';
-      const fixed_version = vul.fixed_version || '';
+      const package_version = `"${vul.package_version || ''}"`;
+      const fixed_version = `"${vul.fixed_version || ''}"`;
       const description = vul.description
         ? `"${vul.description.replace(/"/g, '""')}"`
         : '';

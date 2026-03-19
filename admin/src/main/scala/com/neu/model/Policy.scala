@@ -119,7 +119,8 @@ case class ScanSummary(
   scanned_at: String,
   base_os: String,
   scanner_version: String,
-  cvedb_create_time: String
+  cvedb_create_time: String,
+  os_scan_status: Option[String]
 )
 
 case class IpAddress(

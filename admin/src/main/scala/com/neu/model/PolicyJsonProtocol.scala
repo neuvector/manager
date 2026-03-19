@@ -226,7 +226,8 @@ object PolicyJsonProtocol extends DefaultJsonProtocol with LazyLogging {
           workload.scan_summary.scanned_at,
           workload.scan_summary.base_os,
           workload.scan_summary.scanner_version,
-          workload.scan_summary.cvedb_create_time
+          workload.scan_summary.cvedb_create_time,
+          workload.scan_summary.os_scan_status
         )
       )
     }
@@ -258,7 +259,8 @@ object PolicyJsonProtocol extends DefaultJsonProtocol with LazyLogging {
           workload.security.scan_summary.scanned_at,
           workload.security.scan_summary.base_os,
           workload.security.scan_summary.scanner_version,
-          workload.security.scan_summary.cvedb_create_time
+          workload.security.scan_summary.cvedb_create_time,
+          workload.security.scan_summary.os_scan_status
         )
       )
 

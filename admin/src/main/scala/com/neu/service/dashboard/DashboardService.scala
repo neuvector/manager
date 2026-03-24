@@ -927,12 +927,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
 
   private lazy val getAutoScan = (
     autoScanConfig: AutoScanConfig
-  ) =>
-    autoScanConfig.config.enable_auto_scan_host.getOrElse(
-      autoScanConfig.config.auto_scan.getOrElse(false)
-    ) && autoScanConfig.config.enable_auto_scan_workload.getOrElse(
-      autoScanConfig.config.auto_scan.getOrElse(false)
-    )
+  ) => autoScanConfig.config.auto_scan.getOrElse(false)
 
   private lazy val getExposedConversation = (
     k: String,

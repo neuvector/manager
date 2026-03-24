@@ -69,8 +69,7 @@ export class DashboardService {
 
   setAutoScan = (isAutoScan: boolean) => {
     return this.assetsHttpService.postScanConfig({
-      enable_auto_scan_host: isAutoScan,
-      enable_auto_scan_workload: isAutoScan,
+      auto_scan: isAutoScan,
     });
   };
 

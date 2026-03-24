@@ -112,7 +112,9 @@ export class NodesComponent implements OnInit, OnDestroy {
     this.scanService.getScanConfig().subscribe({
       next: (config: ScanConfig) => {
         this.autoScan.setValue(
-          config.enable_auto_scan_host || (config.auto_scan as boolean)
+          config.enable_auto_scan_host != null
+            ? config.enable_auto_scan_host
+            : (config.auto_scan as boolean)
         );
         this.autoScanAuthorized = true;
       },

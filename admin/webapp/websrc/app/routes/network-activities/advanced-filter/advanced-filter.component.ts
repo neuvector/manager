@@ -125,6 +125,8 @@ export class AdvancedFilterComponent implements OnInit {
     this.domainChips = filter.domains;
     this.groupChips = filter.groups;
     this.advFilterForm = new FormGroup({
+      domains: new FormControl(filter.domains),
+      selectedGroups: new FormControl(filter.groups),
       vulnerabilityType: new FormControl(filter.cve),
       protocols: new FormGroup({
         tcp: new FormControl(filter.protocol.tcp),

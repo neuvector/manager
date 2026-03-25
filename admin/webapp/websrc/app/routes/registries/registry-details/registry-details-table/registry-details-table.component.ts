@@ -22,6 +22,7 @@ import { DatePipe } from '@angular/common';
 import { RegistryDetailsTableStatusCellComponent } from './registry-details-table-status-cell/registry-details-table-status-cell.component';
 import { FormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
+import { RegistryDetailsOsCell } from './registry-details-os-cell/registry-details-os-cell';
 
 @Component({
   standalone: false,
@@ -62,9 +63,9 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
     },
     {
       field: 'base_os',
-      valueFormatter: params =>
-        params.value || this.translate.instant('scan.message.OS_ERR'),
+      cellRenderer: 'osCellRenderer',
       headerValueGetter: () => this.translate.instant('scan.gridHeader.OS'),
+      minWidth: 200,
     },
     {
       field: 'size',
@@ -127,6 +128,7 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
         vulnerabilitiesCellRenderer:
           RegistryDetailsVulnerabilitiesCellComponent,
         statusCellRenderer: RegistryDetailsTableStatusCellComponent,
+        osCellRenderer: RegistryDetailsOsCell,
       },
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };

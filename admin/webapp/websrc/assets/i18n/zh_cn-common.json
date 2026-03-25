@@ -1335,10 +1335,12 @@
     "VIEW_ALL_IMAGES": "浏览全部扫描过的镜像",
     "_REPO_SCAN": "浏览集群镜像库",
     "FED._REPO_SCAN": "浏览集群镜像库",
+    "OS_UNKNOWN": "操作系统未知",
+    "OS_UNSUPPORTED": "操作系统不支持",
     "TIP": {
       "EDIT": "编辑镜像库",
       "DELETE": "删除镜像库",
-      "VIEW": "View Registry"
+      "VIEW": "浏览镜像库"
     },
     "IBM": {
       "ACCOUNT": "IBM 云用户",

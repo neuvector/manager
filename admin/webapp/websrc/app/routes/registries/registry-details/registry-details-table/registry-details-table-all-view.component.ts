@@ -32,6 +32,7 @@ import {
   retry,
 } from 'rxjs/operators';
 import { MapConstant } from '@common/constants/map.constant';
+import { RegistryDetailsOsCell } from './registry-details-os-cell/registry-details-os-cell';
 
 @Component({
   standalone: false,
@@ -94,7 +95,9 @@ export class RegistryDetailsTableAllViewComponent
     {
       field: 'base_os',
       colId: 'os',
+      cellRenderer: 'osCellRenderer',
       headerValueGetter: () => this.translate.instant('scan.gridHeader.OS'),
+      minWidth: 200,
       sortable: true,
     },
     {
@@ -166,6 +169,7 @@ export class RegistryDetailsTableAllViewComponent
         vulnerabilitiesCellRenderer:
           RegistryDetailsVulnerabilitiesCellComponent,
         statusCellRenderer: RegistryDetailsTableStatusCellComponent,
+        osCellRenderer: RegistryDetailsOsCell,
       },
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };

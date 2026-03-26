@@ -1,13 +1,8 @@
 <div>
   {{ os }}
   <span
-    *ngIf="os_scan_status !== 1"
-    class="type-label ms-2"
-    [class.customer-rule]="os_scan_status === 2"
-    [class.ground-rule]="os_scan_status === 0">
-    {{
-      (os_scan_status === 2 ? 'registry.OS_UNSUPPORTED' : 'registry.OS_UNKNOWN')
-        | translate
-    }}
+    *ngIf="os_scan_status === OS_STATUS.UNSUPPORTED"
+    class="type-label ms-2 customer-rule">
+    {{ 'registry.OS_UNSUPPORTED' | translate }}
   </span>
 </div>

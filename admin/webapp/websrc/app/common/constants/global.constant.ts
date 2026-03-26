@@ -308,4 +308,10 @@ export class GlobalConstant {
     MAX_LENGTH_TOTAL: 100000,
     MAX_LENGTH_PER_PAGE: 10000,
   };
+
+  public static OS_STATUS = {
+    UNKNOWN: 'OSScanStatusUnknown',
+    SUPPORTED: 'OSScanStatusSupported',
+    UNSUPPORTED: 'OSScanStatusUnsupported',
+  };
 }

@@ -24,7 +24,7 @@
         [class.filter-csv]="!isVulsAuthorized && !vulEmpty"
         [class.filter-view-csv]="isVulsAuthorized && !vulEmpty"
         [class.filter-view]="isVulsAuthorized && vulEmpty">
-        <div class="me-3 filter-actions">
+        <div class="me-3 filter-actions align-items-center">
           <button
             [matMenuTriggerFor]="menu"
             class="mx-2 d-flex align-items-center justify-content-center"
@@ -49,6 +49,21 @@
           </button>
           <ng-container *ngIf="isVulsAuthorized">
             <button
+            mat-icon-button
+            class="mb-1"
+            *ngIf="
+              isWriteVulsAuthorized &&
+              selectedVulnerability &&
+              !isAccepted(selectedVulnerability)
+            "
+            [attr.aria-label]="'cveProfile.ACCEPT_VUL' | translate"
+            matTooltip="{{ 'cveProfile.ACCEPT_VUL' | translate }}"
+            matTooltipPosition="above"
+            type="button"
+            (click)="onAcceptVulnerability(selectedVulnerability)">
+            <i class="eos-icons">check_box</i>
+          </button>
+            <button
               mat-button
               class="d-flex align-items-center"
               aria-label="Vulnerabilities options"
@@ -66,22 +81,10 @@
                 </i>
                 {{
                   (showAcceptedVuls
-                    ? 'enum.HIDE_ACCEPTED_VULS'
-                    : 'enum.SHOW_ACCEPTED_VULS'
+                      ? 'enum.HIDE_ACCEPTED_VULS'
+                      : 'enum.SHOW_ACCEPTED_VULS'
                   ) | translate
                 }}
-              </button>
-              <button
-                mat-menu-item
-                *ngIf="
-                  isWriteVulsAuthorized &&
-                  selectedVulnerability &&
-                  !isAccepted(selectedVulnerability)
-                "
-                class="d-flex align-items-center"
-                (click)="onAcceptVulnerability(selectedVulnerability)">
-                <i class="eos-icons me-2">check_box</i>
-                {{ 'cveProfile.ACCEPT_VUL' | translate }}
               </button>
             </mat-menu>
           </ng-container>

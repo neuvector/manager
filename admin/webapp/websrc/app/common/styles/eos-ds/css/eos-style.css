@@ -3441,6 +3441,9 @@ img.eos-48 {
     background-color: #e0dfdf; }
   .badge-info {
     background-color: #008acf; }
+  .badge-critical {
+    background-color: #E91E63;
+    color: #fff !important; }
   .badge-danger {
     background-color: #c5161f;
     color: #fff; }

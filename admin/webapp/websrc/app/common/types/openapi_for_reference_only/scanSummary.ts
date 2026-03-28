@@ -22,6 +22,7 @@ export interface ScanSummary {
   privileged: boolean;
   run_as_root: boolean;
   status: string;
+  critical: number;
   high: number;
   medium: number;
   result: string;

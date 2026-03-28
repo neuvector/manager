@@ -173,6 +173,11 @@
         >
         <div class="d-inline">
           <span
+            *ngIf="pod.workload.scan_summary?.critical"
+            class="badge badge-critical">
+            {{ pod.workload.scan_summary.critical }}</span
+          >
+          <span
             *ngIf="pod.workload.scan_summary?.high"
             class="badge badge-danger">
             {{ pod.workload.scan_summary.high }}</span

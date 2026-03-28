@@ -2,8 +2,10 @@
 
 export interface ScanSummary {
   status: string;
+  critical: number;
   high: number;
   medium: number;
+  hidden_critical?: number;
   hidden_high?: number;
   hidden_medium?: number;
   result: string;
@@ -17,8 +19,10 @@ export interface ScanSummary {
 export function isScanSummary(v: any): v is ScanSummary {
   return (
     typeof v['status'] === 'string' &&
+    typeof v['critical'] === 'number' &&
     typeof v['high'] === 'number' &&
     typeof v['medium'] === 'number' &&
+    (!v['hidden_critical'] || typeof v['hidden_critical'] === 'number') &&
     (!v['hidden_high'] || typeof v['hidden_high'] === 'number') &&
     (!v['hidden_medium'] || typeof v['hidden_medium'] === 'number') &&
     typeof v['result'] === 'string' &&

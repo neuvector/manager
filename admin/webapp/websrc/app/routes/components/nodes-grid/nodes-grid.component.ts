@@ -118,6 +118,17 @@ export class NodesGridComponent implements OnInit {
         hide: this.isMemberData,
       },
       {
+        headerName: this.tr.instant('scan.gridHeader.CRITICAL'),
+        field: 'scan_summary.critical',
+        sort: 'desc',
+        icons: {
+          sortAscending: '<em class="fa fa-sort-amount-down"></em>',
+          sortDescending: '<em class="fa fa-sort-amount-up"></em>',
+        },
+        width: 80,
+        minWidth: 80,
+      },
+      {
         headerName: this.tr.instant('scan.gridHeader.HIGH'),
         field: 'scan_summary.high',
         sort: 'desc',

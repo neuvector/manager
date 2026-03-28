@@ -3,6 +3,7 @@ export interface ScanImageSummary {
   image_id: string;
   author: string;
   status: string;
+  critical: number;
   high: number;
   medium: number;
   result: string;

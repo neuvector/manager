@@ -1,5 +1,6 @@
 export interface ScanBrief {
   status: string;
+  critical: number;
   high: number;
   medium: number;
   low: number;

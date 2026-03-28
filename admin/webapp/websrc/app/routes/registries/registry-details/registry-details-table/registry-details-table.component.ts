@@ -78,13 +78,13 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
       cellRenderer: 'vulnerabilitiesCellRenderer',
       comparator: (valueA, valueB, nodeA, nodeB) => {
         if (
-          nodeA.data.high + nodeA.data.medium ===
-          nodeB.data.high + nodeB.data.medium
+          nodeA.data.critical + nodeA.data.high + nodeA.data.medium ===
+          nodeB.data.critical + nodeB.data.high + nodeB.data.medium
         ) {
           return 0;
         }
-        return nodeA.data.high + nodeA.data.medium >
-          nodeB.data.high + nodeB.data.medium
+        return nodeA.data.critical + nodeA.data.high + nodeA.data.medium >
+          nodeB.data.critical + nodeB.data.high + nodeB.data.medium
           ? 1
           : -1;
       },

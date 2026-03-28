@@ -27,7 +27,12 @@ export type VulQueryPackageTypeOption =
   | 'withoutFix'
   | 'withFixAll';
 
-export type VulQuerySeverityTypeOption = 'all' | 'high' | 'medium' | 'low';
+export type VulQuerySeverityTypeOption =
+  | 'all'
+  | 'critical'
+  | 'high'
+  | 'medium'
+  | 'low';
 
 export type VulQueryScoreTypeOption = 'v2' | 'v3';
 

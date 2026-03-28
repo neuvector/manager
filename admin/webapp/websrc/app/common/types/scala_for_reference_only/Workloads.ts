@@ -7,6 +7,7 @@ export interface Workloads {
   name: string;
   display_name: string;
   domain: string;
+  critical: number;
   high: number;
   medium: number;
   state: string;
@@ -21,6 +22,7 @@ export function isWorkloads(v: any): v is Workloads {
     typeof v['name'] === 'string' &&
     typeof v['display_name'] === 'string' &&
     typeof v['domain'] === 'string' &&
+    typeof v['critical'] === 'number' &&
     typeof v['high'] === 'number' &&
     typeof v['medium'] === 'number' &&
     typeof v['state'] === 'string' &&

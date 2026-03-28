@@ -104,12 +104,13 @@
         *ngIf="reportPage === 'vulnerabilities'"
         class="print-cell"
         style="width: 6%">
-        <div *ngIf="node.high + node.medium + node.low > 0">
-          <span class="text-danger">{{ node.high }}</span
+        <div *ngIf="node.critical + node.high + node.medium + node.low > 0">
+          <span class="text-pink">{{ node.critical }}</span
+          >&nbsp;/&nbsp;<span class="text-danger">{{ node.high }}</span
           >&nbsp;/&nbsp;<span class="text-warning">{{ node.medium }}</span
           >&nbsp;/&nbsp;<span class="text-success">{{ node.low }}</span>
         </div>
-        <div *ngIf="node.high + node.medium + node.low === 0">
+        <div *ngIf="node.critical + node.high + node.medium + node.low === 0">
           <span class="text-success">0</span>
         </div>
       </td>
@@ -117,14 +118,14 @@
         *ngIf="reportPage === 'vulnerabilities'"
         class="print-cell"
         style="width: 26%">
-        <div *ngIf="node.high + node.medium + node.low > 0">
+        <div *ngIf="node.critical + node.high + node.medium + node.low > 0">
           <span
             *ngFor="let item of node.vulnerabilities"
             class="margin-right-s text-{{ item.split('_')[0] }}">
             {{ item.split('_')[1].trim() }}
           </span>
         </div>
-        <div *ngIf="node.high + node.medium + node.low === 0">
+        <div *ngIf="node.critical + node.high + node.medium + node.low === 0">
           <span class="text-success">{{
             'scan.NO_VULNERABILITIES' | translate
           }}</span>

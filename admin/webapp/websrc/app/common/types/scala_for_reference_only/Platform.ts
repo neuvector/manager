@@ -2,6 +2,7 @@
 
 export interface Platform {
   platform: string;
+  critical: number;
   high: number;
   medium: number;
   scanned_timestamp: number;
@@ -11,6 +12,7 @@ export interface Platform {
 export function isPlatform(v: any): v is Platform {
   return (
     typeof v['platform'] === 'string' &&
+    typeof v['critical'] === 'number' &&
     typeof v['high'] === 'number' &&
     typeof v['medium'] === 'number' &&
     typeof v['scanned_timestamp'] === 'number' &&

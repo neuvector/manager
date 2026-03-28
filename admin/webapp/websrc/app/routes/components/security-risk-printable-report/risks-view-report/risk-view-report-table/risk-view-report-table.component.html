@@ -49,11 +49,13 @@
         <td
           class="{{
             'print-cell ' +
-              (dataItem.severity.toLowerCase() === 'high'
-                ? 'text-danger'
-                : dataItem.severity.toLowerCase() === 'medium'
-                  ? 'text-warning'
-                  : 'text-success')
+              (dataItem.severity.toLowerCase() === 'critical'
+                ? 'text-pink'
+                : dataItem.severity.toLowerCase() === 'high'
+                  ? 'text-danger'
+                  : dataItem.severity.toLowerCase() === 'medium'
+                    ? 'text-warning'
+                    : 'text-success')
           }}"
           style="width: 6%">
           <div><strong>V2:</strong> {{ dataItem.score }}</div>

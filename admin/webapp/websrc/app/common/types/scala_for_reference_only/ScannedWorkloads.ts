@@ -8,6 +8,7 @@ export interface ScannedWorkloads {
   base_os: string;
   display_name: string;
   domain: string;
+  critical: number;
   high: number;
   medium: number;
   host: string;
@@ -32,6 +33,7 @@ export function isScannedWorkloads(v: any): v is ScannedWorkloads {
     typeof v['base_os'] === 'string' &&
     typeof v['display_name'] === 'string' &&
     typeof v['domain'] === 'string' &&
+    typeof v['critical'] === 'number' &&
     typeof v['high'] === 'number' &&
     typeof v['medium'] === 'number' &&
     typeof v['host'] === 'string' &&

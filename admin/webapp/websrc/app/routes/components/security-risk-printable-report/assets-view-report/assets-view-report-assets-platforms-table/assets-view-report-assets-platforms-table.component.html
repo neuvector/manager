@@ -68,12 +68,21 @@
         *ngIf="reportPage === 'vulnerabilities'"
         class="print-cell"
         style="width: 10%">
-        <div *ngIf="platform.high + platform.medium + platform.low > 0">
-          <span class="text-danger">{{ platform.high }}</span
+        <div
+          *ngIf="
+            platform.critical + platform.high + platform.medium + platform.low >
+            0
+          ">
+          <span class="text-pink">{{ platform.critical }}</span
+          >&nbsp;/&nbsp;<span class="text-danger">{{ platform.high }}</span
           >&nbsp;/&nbsp;<span class="text-warning">{{ platform.medium }}</span
           >&nbsp;/&nbsp;<span class="text-success">{{ platform.low }}</span>
         </div>
-        <div *ngIf="platform.high + platform.medium + platform.low === 0">
+        <div
+          *ngIf="
+            platform.critical + platform.high + platform.medium + platform.low ===
+            0
+          ">
           <span class="text-success">0</span>
         </div>
       </td>
@@ -81,14 +90,22 @@
         *ngIf="reportPage === 'vulnerabilities'"
         class="print-cell"
         style="width: 50%">
-        <div *ngIf="platform.high + platform.medium + platform.low > 0">
+        <div
+          *ngIf="
+            platform.critical + platform.high + platform.medium + platform.low >
+            0
+          ">
           <span
             *ngFor="let item of platform.vulnerabilities"
             class="margin-right-s text-{{ item.split('_')[0] }}">
             {{ item.split('_')[1].trim() }}
           </span>
         </div>
-        <div *ngIf="platform.high + platform.medium + platform.low === 0">
+        <div
+          *ngIf="
+            platform.critical + platform.high + platform.medium + platform.low ===
+            0
+          ">
           <span class="text-success">{{
             'scan.NO_VULNERABILITIES' | translate
           }}</span>

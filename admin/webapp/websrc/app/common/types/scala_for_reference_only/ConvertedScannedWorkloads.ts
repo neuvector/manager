@@ -8,8 +8,10 @@ export interface ConvertedScannedWorkloads {
   base_os: string;
   display_name: string;
   domain: string;
+  critical: number;
   high: number;
   medium: number;
+  hidden_critical: number;
   hidden_high: number;
   hidden_medium: number;
   host: string;
@@ -36,8 +38,10 @@ export function isConvertedScannedWorkloads(
     typeof v['base_os'] === 'string' &&
     typeof v['display_name'] === 'string' &&
     typeof v['domain'] === 'string' &&
+    typeof v['critical'] === 'number' &&
     typeof v['high'] === 'number' &&
     typeof v['medium'] === 'number' &&
+    typeof v['hidden_critical'] === 'number' &&
     typeof v['hidden_high'] === 'number' &&
     typeof v['hidden_medium'] === 'number' &&
     typeof v['host'] === 'string' &&

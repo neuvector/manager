@@ -40,6 +40,7 @@ export class VulnerabilitiesComponent implements OnDestroy {
     image: null,
   };
   styleMap4Severity: any = {
+    critical: 'pink',
     high: 'danger',
     medium: 'warning',
     low: 'success',

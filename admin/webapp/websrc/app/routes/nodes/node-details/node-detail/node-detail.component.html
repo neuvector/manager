@@ -135,6 +135,11 @@
       {{ 'group.gridHeader.VULNERABILITIES' | translate }}
       <div class="text-muted text-truncate">
         <span
+          class="badge badge-pink details-badge"
+          *ngIf="node.scan_summary.critical">
+          {{ node.scan_summary.critical }}
+        </span>
+        <span
           class="badge badge-danger details-badge"
           *ngIf="node.scan_summary.high">
           {{ node.scan_summary.high }}

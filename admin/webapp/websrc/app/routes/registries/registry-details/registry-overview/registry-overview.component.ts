@@ -36,15 +36,18 @@ export class RegistryOverviewComponent implements OnChanges {
     '#c7c7c7',
   ];
   barChartColors = {
+    critical: '#e91e63',
     high: '#ef5350',
     medium: '#ff9800',
   };
 
   static sortByVulnerabilities(a: Image, b: Image): number {
-    if (a.high + a.medium === b.high + b.medium) {
+    if (a.critical + a.high + a.medium === b.critical + b.high + b.medium) {
       return 0;
     }
-    return a.high + a.medium > b.high + b.medium ? -1 : 1;
+    return a.critical + a.high + a.medium > b.critical + b.high + b.medium
+      ? -1
+      : 1;
   }
 
   constructor(private translate: TranslateService) {}
@@ -63,18 +66,29 @@ export class RegistryOverviewComponent implements OnChanges {
         return {
           repository: image.repository,
           tag: image.tag,
-          vulnerabilities: { high: image.high, medium: image.medium },
+          vulnerabilities: {
+            critical: image.critical,
+            high: image.high,
+            medium: image.medium,
+          },
         };
       });
       const otherVulnerabilities = sortedRegistryDetails
         .slice(5, sortedRegistryDetails.length)
-        .reduce((sum, { high, medium }) => sum + high + medium, 0);
+        .reduce(
+          (sum: number, { critical, high, medium }) =>
+            sum + critical + high + medium,
+          0
+        );
       const topSix = [
         ...topFive.map(i => {
           return {
             repository: i.repository,
             tag: i.tag,
-            vulnerabilities: i.vulnerabilities.high + i.vulnerabilities.medium,
+            vulnerabilities:
+              i.vulnerabilities.critical +
+              i.vulnerabilities.high +
+              i.vulnerabilities.medium,
           };
         }),
         {
@@ -104,6 +118,7 @@ export class RegistryOverviewComponent implements OnChanges {
         return {
           repository: i.display_name,
           vulnerabilities: {
+            critical: i.critical,
             high: i.high,
             medium: i.medium,
           },
@@ -151,6 +166,13 @@ export class RegistryOverviewComponent implements OnChanges {
           return [item.repository];
         }),
         datasets: [
+          {
+            data: topFive.map(i => i.vulnerabilities.critical),
+            label: this.translate.instant('enum.CRITICAL'),
+            backgroundColor: this.barChartColors.critical,
+            barThickness: 8,
+            borderWidth: 1,
+          },
           {
             data: topFive.map(i => i.vulnerabilities.high),
             label: this.translate.instant('enum.HIGH'),

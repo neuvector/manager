@@ -110,8 +110,10 @@ case class RuleConfigData(config: RuleConfig, replicate: Option[Boolean])
 
 case class ScanSummary(
   status: String,
+  critical: Int,
   high: Int,
   medium: Int,
+  hidden_critical: Option[Int],
   hidden_high: Option[Int],
   hidden_medium: Option[Int],
   result: String,
@@ -190,6 +192,7 @@ case class ScannedWorkloadChildren(
   base_os: String,
   display_name: String,
   domain: String,
+  critical: Int,
   high: Int,
   medium: Int,
   host: String,
@@ -212,6 +215,7 @@ case class ScannedWorkloads(
   base_os: String,
   display_name: String,
   domain: String,
+  critical: Int,
   high: Int,
   medium: Int,
   host: String,
@@ -244,10 +248,10 @@ case class ConvertedScannedWorkloads(
   base_os: String,
   display_name: String,
   domain: String,
+  critical: Int,
   high: Int,
   medium: Int,
-  hidden_high: Int,
-  hidden_medium: Int,
+  hidden_vulnerability: HiddenVulnerability,
   host: String,
   image: String,
   platform_role: String,
@@ -261,6 +265,12 @@ case class ConvertedScannedWorkloads(
   children: Option[Array[ScannedWorkloadChildren]],
   scanned_timestamp: Long,
   scanned_at: String
+)
+
+case class HiddenVulnerability(
+  hidden_critical: Int,
+  hidden_high: Int,
+  hidden_medium: Int
 )
 
 case class ConvertedScannedWorkloadsWrap(

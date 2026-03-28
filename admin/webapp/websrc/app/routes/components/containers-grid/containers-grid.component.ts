@@ -173,6 +173,33 @@ export class ContainersGridComponent implements OnInit {
         hide: this.isMemberData,
       },
       {
+        headerName: this.tr.instant('scan.gridHeader.CRITICAL'),
+        field: 'security.scan_summary.critical',
+        cellRenderer: params => {
+          if (
+            params.data.children &&
+            params.data.children.length > 0 &&
+            (params.data.security.scan_summary.hidden_critical ||
+              params.data.security.scan_summary.hidden_critical === 0)
+          ) {
+            return `${params.value} (${params.data.security.scan_summary.hidden_critical})`;
+          } else {
+            return params.value;
+          }
+        },
+        sort: 'desc',
+        comparator: (value1, value2, node1, node2) =>
+          (node1.data.security.scan_summary.hidden_critical || 0) -
+          (node2.data.security.scan_summary.hidden_critical || 0),
+        icons: {
+          sortAscending: '<em class="fa fa-sort-amount-down"></em>',
+          sortDescending: '<em class="fa fa-sort-amount-up"></em>',
+        },
+        width: 100,
+        maxWidth: 100,
+        minWidth: 100,
+      },
+      {
         headerName: this.tr.instant('scan.gridHeader.HIGH'),
         field: 'security.scan_summary.high',
         cellRenderer: params => {

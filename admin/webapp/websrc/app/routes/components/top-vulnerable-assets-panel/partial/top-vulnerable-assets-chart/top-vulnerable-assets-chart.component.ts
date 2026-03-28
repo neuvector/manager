@@ -40,9 +40,11 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
     assetType: string
   ) => {
     let topVulnerableAssetsLabel: Array<string> = new Array(5);
+    let topCriticalVulnerableAssetsData: Array<number> = new Array(5);
     let topHighVulnerableAssetsData: Array<number> = new Array(5);
     let topMediumVulnerableAssetsData: Array<number> = new Array(5);
     topVulnerableAssetsLabel.fill('');
+    topCriticalVulnerableAssetsData.fill(0);
     topHighVulnerableAssetsData.fill(0);
     topMediumVulnerableAssetsData.fill(0);
     highPriorityVulnerabilities[assetType][
@@ -53,6 +55,7 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
           SecurityContext.HTML,
           asset.display_name
         )!;
+        topCriticalVulnerableAssetsData[index] = asset.critical4Dashboard;
         topHighVulnerableAssetsData[index] = asset.high4Dashboard;
         topMediumVulnerableAssetsData[index] = asset.medium4Dashboard;
       } else {
@@ -60,12 +63,15 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
           SecurityContext.HTML,
           asset.name
         )!;
+        topCriticalVulnerableAssetsData[index] = asset.scan_summary.critical;
         topHighVulnerableAssetsData[index] = asset.scan_summary.high;
         topMediumVulnerableAssetsData[index] = asset.scan_summary.medium;
       }
     });
 
     this.noChartData =
+      topCriticalVulnerableAssetsData.reduce((prev, curr) => prev + curr) ===
+        0 &&
       topHighVulnerableAssetsData.reduce((prev, curr) => prev + curr) === 0 &&
       topMediumVulnerableAssetsData.reduce((prev, curr) => prev + curr) === 0;
 
@@ -111,6 +117,16 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
       data: {
         labels: topVulnerableAssetsLabel,
         datasets: [
+          {
+            data: topCriticalVulnerableAssetsData,
+            label: this.translate.instant('enum.CRITICAL'),
+            backgroundColor: 'rgba(233, 30, 99, 0.3)',
+            borderColor: '#e91e63',
+            hoverBackgroundColor: 'rgba(233, 30, 99, 0.3)',
+            hoverBorderColor: '#e91e63',
+            barThickness: 8,
+            borderWidth: 2,
+          },
           {
             data: topHighVulnerableAssetsData,
             label: this.translate.instant('enum.HIGH'),

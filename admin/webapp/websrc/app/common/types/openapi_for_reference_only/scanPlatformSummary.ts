@@ -3,6 +3,7 @@ export interface ScanPlatformSummary {
   kube_version: string;
   openshift_version: string;
   status: string;
+  critical: number;
   high: number;
   medium: number;
   result: string;

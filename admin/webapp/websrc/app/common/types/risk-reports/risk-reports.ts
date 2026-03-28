@@ -20,8 +20,10 @@ export interface Audit {
   repository?: string;
   tag?: string;
   base_os: string;
+  critical_vul_cnt: number;
   high_vul_cnt: number;
   medium_vul_cnt: number;
+  critical_vuls?: string[];
   high_vuls?: string[];
   medium_vuls?: string[];
   cvedb_version: string;

@@ -52,6 +52,7 @@ export interface WorkloadSecurityV2 {
 }
 
 export interface ScannedWorkloadSummary extends ScanBrief {
+  hidden_critical?: number;
   hidden_high?: number;
   hidden_medium?: number;
 }

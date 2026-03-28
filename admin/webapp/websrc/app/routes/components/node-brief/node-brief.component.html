@@ -98,6 +98,11 @@
           >{{ 'group.gridHeader.VULNERABILITIES' | translate }}:</span
         >
         <div class="d-inline">
+          <span
+            *ngIf="host.scan_summary?.critical"
+            class="badge badge-critical">
+            {{ host.scan_summary.critical }}</span
+          >
           <span *ngIf="host.scan_summary?.high" class="badge badge-danger">
             {{ host.scan_summary.high }}</span
           >

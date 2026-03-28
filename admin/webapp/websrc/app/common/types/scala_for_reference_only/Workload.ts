@@ -13,6 +13,7 @@ export interface Workload {
   service: string;
   platform_role: string;
   domain: string;
+  critical4Dashboard?: number;
   high4Dashboard?: number;
   medium4Dashboard?: number;
   scan_summary?: ScanSummary4Dashboard;
@@ -27,6 +28,7 @@ export function isWorkload(v: any): v is Workload {
     typeof v['service'] === 'string' &&
     typeof v['platform_role'] === 'string' &&
     typeof v['domain'] === 'string' &&
+    (!v['critical4Dashboard'] || typeof v['critical4Dashboard'] === 'number') &&
     (!v['high4Dashboard'] || typeof v['high4Dashboard'] === 'number') &&
     (!v['medium4Dashboard'] || typeof v['medium4Dashboard'] === 'number') &&
     (!v['scan_summary'] ||

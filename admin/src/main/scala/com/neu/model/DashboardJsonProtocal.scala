@@ -194,6 +194,7 @@ case class VulnerableContainerEndpoint(
 
 case class ScanSummary4Dashboard(
   status: String,
+  critical: Int,
   high: Int,
   medium: Int
 )
@@ -207,6 +208,7 @@ case class Nodes(
 
 case class Platform(
   platform: String,
+  critical: Int,
   high: Int,
   medium: Int,
   scanned_timestamp: Long,
@@ -513,6 +515,7 @@ case class AdmissionRulesWrap(
 )
 
 case class VulnerabilityCount(
+  criticalVul: Int,
   highVul: Int,
   mediumVul: Int
 )
@@ -584,6 +587,7 @@ case class Workload(
   service: String,
   platform_role: String,
   domain: String,
+  critical4Dashboard: Option[Int],
   high4Dashboard: Option[Int],
   medium4Dashboard: Option[Int],
   scan_summary: Option[ScanSummary4Dashboard],
@@ -629,6 +633,7 @@ case class ConversationOutput(
 )
 
 case class VulContainerOutput(
+  criticalVulsMap: Map[String, Int],
   highVulsMap: Map[String, Int],
   medVulsMap: Map[String, Int],
   totalScannedPods: Int,
@@ -636,12 +641,14 @@ case class VulContainerOutput(
 )
 
 case class VulNodeOutput(
+  nodeCriticalVuls: Int,
   nodeHighVuls: Int,
   nodeMedVuls: Int,
   totalHost: Int
 )
 
 case class VulPlatformOutput(
+  platformCriticalVuls: Int,
   platformHighVuls: Int,
   platformMedVuls: Int
 )
@@ -879,11 +886,11 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   given workloadsFormat: RootJsonFormat[Workloads]                                     = jsonFormat10(Workloads.apply)
   given vulnerableContainerEndpointFormat: RootJsonFormat[VulnerableContainerEndpoint] =
     jsonFormat3(VulnerableContainerEndpoint.apply)
-  given nodeScanSummaryFormat: RootJsonFormat[ScanSummary4Dashboard]                   = jsonFormat3(
+  given nodeScanSummaryFormat: RootJsonFormat[ScanSummary4Dashboard]                   = jsonFormat4(
     ScanSummary4Dashboard.apply
   )
   given NodesFormat: RootJsonFormat[Nodes]                                             = jsonFormat4(Nodes.apply)
-  given platformFormat: RootJsonFormat[Platform]                                       = jsonFormat5(Platform.apply)
+  given platformFormat: RootJsonFormat[Platform]                                       = jsonFormat6(Platform.apply)
   given vulnerablePlatformsFormat: RootJsonFormat[VulnerablePlatforms]                 = jsonFormat2(
     VulnerablePlatforms.apply
   )
@@ -976,18 +983,18 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   given conversationOutputFormat: RootJsonFormat[ConversationOutput]                     = jsonFormat6(
     ConversationOutput.apply
   )
-  given vulContainerOutputFormat: RootJsonFormat[VulContainerOutput]                     = jsonFormat4(
+  given vulContainerOutputFormat: RootJsonFormat[VulContainerOutput]                     = jsonFormat5(
     VulContainerOutput.apply
   )
-  given vulNodeOutputFormat: RootJsonFormat[VulNodeOutput]                               = jsonFormat3(VulNodeOutput.apply)
-  given vulPlatformOutputFormat: RootJsonFormat[VulPlatformOutput]                       = jsonFormat2(
+  given vulNodeOutputFormat: RootJsonFormat[VulNodeOutput]                               = jsonFormat4(VulNodeOutput.apply)
+  given vulPlatformOutputFormat: RootJsonFormat[VulPlatformOutput]                       = jsonFormat3(
     VulPlatformOutput.apply
   )
   given policyOutputFormat: RootJsonFormat[PolicyOutput]                                 = jsonFormat2(PolicyOutput.apply)
 
   // Scoring
   // =========================================
-  given vulnerabilityCountFormat: RootJsonFormat[VulnerabilityCount]             = jsonFormat2(
+  given vulnerabilityCountFormat: RootJsonFormat[VulnerabilityCount]             = jsonFormat3(
     VulnerabilityCount.apply
   )
   given vulnerabilityExploitRiskFormat: RootJsonFormat[VulnerabilityExploitRisk] =
@@ -1001,7 +1008,7 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   given workloadChildrenFormat: RootJsonFormat[WorkloadChildren]                 = jsonFormat5(
     WorkloadChildren.apply
   )
-  given workloadFormat: RootJsonFormat[Workload]                                 = jsonFormat10(Workload.apply)
+  given workloadFormat: RootJsonFormat[Workload]                                 = jsonFormat11(Workload.apply)
   given vulnerableContainersFormat: RootJsonFormat[VulnerableContainers]         = jsonFormat3(
     VulnerableContainers.apply
   )

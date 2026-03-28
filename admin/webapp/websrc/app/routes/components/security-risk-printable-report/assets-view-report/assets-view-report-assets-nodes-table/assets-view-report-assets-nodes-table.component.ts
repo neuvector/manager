@@ -22,7 +22,9 @@ export class AssetsViewReportAssetsNodesTableComponent implements OnInit {
     this.vulHostsCnt =
       this.reportPage === 'vulnerabilities'
         ? this.nodes.length -
-          this.nodes.filter(node => node.high + node.medium === 0).length
+          this.nodes.filter(
+            node => node.critical + node.high + node.medium + node.low === 0
+          ).length
         : this.nodes.length -
           this.nodes.filter(node => node.complianceCnt === 0).length;
     this.vulRate4Hosts = this.nodes.length

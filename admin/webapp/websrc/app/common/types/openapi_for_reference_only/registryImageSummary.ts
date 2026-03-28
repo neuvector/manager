@@ -13,6 +13,7 @@ export interface RegistryImageSummary {
   labels: RegistryImageSummaryLabels;
   layers: string[];
   status: string;
+  critical: number;
   high: number;
   medium: number;
   result: string;

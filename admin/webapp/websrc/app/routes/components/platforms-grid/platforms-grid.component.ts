@@ -81,6 +81,17 @@ export class PlatformsGridComponent implements OnInit {
       minWidth: 100,
     },
     {
+      headerName: this.tr.instant('scan.gridHeader.CRITICAL'),
+      field: 'critical',
+      sort: 'desc',
+      icons: {
+        sortAscending: '<em class="fa fa-sort-amount-down"></em>',
+        sortDescending: '<em class="fa fa-sort-amount-up"></em>',
+      },
+      width: 80,
+      minWidth: 80,
+    },
+    {
       headerName: this.tr.instant('scan.gridHeader.HIGH'),
       field: 'high',
       sort: 'desc',

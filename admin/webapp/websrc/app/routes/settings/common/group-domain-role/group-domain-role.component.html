@@ -32,10 +32,25 @@
   </ng-container>
   <ng-container matColumnDef="group">
     <mat-header-cell *matHeaderCellDef class="group">{{
-      'ldap.gridHeader.GROUP' | translate
-    }}</mat-header-cell>
-    <mat-cell *matCellDef="let element" class="group">
-      {{ element.group }}
+        'ldap.gridHeader.GROUP' | translate
+      }}</mat-header-cell>
+    <mat-cell *matCellDef="let element" class="group d-flex align-items-center">
+      <span [class.password-masked]="!element.isGroupVisible">
+        {{ element.group }}
+      </span>
+
+      <button
+        *ngIf="element.group"
+        (click)="element.isGroupVisible = !element.isGroupVisible"
+        aria-label="Visibility icon to toggle visibility"
+        mat-icon-button
+        class="ms-2"
+        style="width: 24px; height: 24px; line-height: 24px; padding: 0;"
+        type="button">
+        <i class="eos-icons" style="font-size: 16px;">
+          {{ element.isGroupVisible ? 'visibility' : 'visibility_off' }}
+        </i>
+      </button>
     </mat-cell>
   </ng-container>
   <ng-container matColumnDef="globalRole">

@@ -74,9 +74,19 @@
         <mat-label>{{ 'okta.SLO_CERT' | translate }}</mat-label>
         <textarea
           cdkTextareaAutosize
+          [class.password-masked]="!sloCertVisible"
           formControlName="signing_cert"
           matInput></textarea>
       </mat-form-field>
+      <button
+        (click)="sloCertVisible = !sloCertVisible"
+        *ngIf="samlForm.controls.signing_cert.value"
+        aria-label="Visibility icon to toggle visibility"
+        class="mb-4"
+        mat-icon-button
+        type="button">
+        <i class="eos-icons">{{ sloCertVisible ? 'visibility' : 'visibility_off' }}</i>
+      </button>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons me-3 text-primary mb-4">vpn_key</i>
@@ -84,6 +94,7 @@
         <mat-label>{{ 'okta.SLO_KEY' | translate }}</mat-label>
         <textarea
           cdkTextareaAutosize
+          [class.password-masked]="!sloKeyVisible"
           formControlName="signing_key"
           matInput></textarea>
         <mat-icon
@@ -94,6 +105,15 @@
           info
         </mat-icon>
       </mat-form-field>
+      <button
+        (click)="sloKeyVisible = !sloKeyVisible"
+        *ngIf="samlForm.controls.signing_key.value"
+        aria-label="Visibility icon to toggle visibility"
+        class="mb-4"
+        mat-icon-button
+        type="button">
+        <i class="eos-icons">{{ sloKeyVisible ? 'visibility' : 'visibility_off' }}</i>
+      </button>
     </div>
     <ng-container formArrayName="x509_certs">
       <div
@@ -105,22 +125,43 @@
             <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
             <textarea
               cdkTextareaAutosize
+              [class.password-masked]="!x509CertVisible[i]"
               [formControlName]="i"
               matInput></textarea>
             <mat-error *ngIf="x509_certs.controls[0].hasError('required')">
               {{ 'general.REQUIRED' | translate }}
             </mat-error>
           </mat-form-field>
+          <button
+            (click)="x509CertVisible[i] = !x509CertVisible[i]"
+            *ngIf="x509_certs.controls[i].value"
+            aria-label="Visibility icon to toggle visibility"
+            class="mb-4"
+            mat-icon-button
+            type="button">
+            <i class="eos-icons">{{ x509CertVisible[i] ? 'visibility' : 'visibility_off' }}</i>
+          </button>
         </ng-container>
+
         <ng-template #extraCertTemplate>
           <i class="eos-icons me-3 text-primary invisible mb-4">verified</i>
           <mat-form-field class="w-100">
             <mat-label>{{ 'okta.EXTRA_CERT' | translate }}</mat-label>
             <textarea
               cdkTextareaAutosize
+              [class.password-masked]="!x509CertVisible[i]"
               [formControlName]="i"
               matInput></textarea>
           </mat-form-field>
+          <button
+            (click)="x509CertVisible[i] = !x509CertVisible[i]"
+            *ngIf="x509_certs.controls[i].value"
+            aria-label="Visibility icon to toggle visibility"
+            class="mb-4"
+            mat-icon-button
+            type="button">
+            <i class="eos-icons">{{ x509CertVisible[i] ? 'visibility' : 'visibility_off' }}</i>
+          </button>
           <button
             (click)="removeExtraCert(i)"
             aria-label="Remove extra X509_cert"
@@ -132,6 +173,7 @@
         </ng-template>
       </div>
     </ng-container>
+
     <div
       class="col-12 d-flex align-items-center"
       *ngIf="x509_certs.length <= 3">

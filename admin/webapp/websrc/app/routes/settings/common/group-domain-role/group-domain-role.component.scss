@@ -67,3 +67,7 @@ i {
   pointer-events: auto;
   cursor: grabbing;
 }
+
+.password-masked {
+  -webkit-text-security: disc;
+}

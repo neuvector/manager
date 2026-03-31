@@ -23,7 +23,6 @@ import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   standalone: false,
@@ -40,6 +39,9 @@ export class SamlFormComponent implements OnInit, OnChanges {
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'saml1';
   passwordVisible = false;
+  sloCertVisible = false;
+  sloKeyVisible = false;
+  x509CertVisible: boolean[] = [];
   samlRedirectURL!: string;
   samlForm = new FormGroup({
     sso_url: new FormControl(null, [Validators.required, urlValidator()]),
@@ -102,6 +104,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
 
   initForm(): void {
     this.x509_certs.clear();
+    this.x509CertVisible = [];
     const saml = this.samlData.server.servers.find(
       ({ server_type }) => server_type === 'saml'
     );
@@ -109,6 +112,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
       this.serverName = saml.server_name;
       this.groupMappedRoles = saml.saml.group_mapped_roles || [];
       saml.saml.x509_certs.forEach((x509_cert, idx) => {
+        this.x509CertVisible.push(false);
         this.x509_certs.push(
           new FormControl(
             x509_cert.x509_cert,
@@ -130,6 +134,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
       this.isCreated = false;
     }
     if (!this.x509_certs.length) {
+      this.x509CertVisible.push(false);
       this.x509_certs.push(new FormControl('', [Validators.required]));
     }
   }
@@ -185,10 +190,12 @@ export class SamlFormComponent implements OnInit, OnChanges {
   }
 
   addExtraCert() {
+    this.x509CertVisible.push(false);
     this.x509_certs.push(new FormControl(''));
   }
 
   removeExtraCert(index: number) {
+    this.x509CertVisible.splice(index, 1);
     this.x509_certs.removeAt(index);
   }
 }

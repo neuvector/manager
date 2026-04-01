@@ -21,7 +21,7 @@
     </ng-container>
     <ng-container *ngSwitchCase="'vulnerabilities'">
       <div class="filter" [class]="'filter-icon-' + visibleIcons">
-        <div class="d-flex">
+        <div class="d-flex align-items-center">
           <button
             [matMenuTriggerFor]="menu"
             class="mx-2 d-flex align-items-center justify-content-center"
@@ -49,7 +49,7 @@
               class="me-3"
               (click)="onAcceptVulnerability(selectedVulnerability)"
               mat-icon-button>
-              <mat-icon fontSet="fa" fontIcon="fa-check-square"></mat-icon>
+              <i class="eos-icons">check_box</i>
             </button>
             <button
               #acceptedTooltip="matTooltip"
@@ -57,15 +57,10 @@
               [attr.aria-label]="acceptedVulsMsg"
               [matTooltip]="acceptedVulsMsg"
               matTooltipPosition="above"
-              class="me-1"
+              class="me-3"
               (click)="toggleAcceptedVuls()"
               mat-icon-button>
-              <mat-icon
-                style="font-size: 14px"
-                fontSet="fa"
-                [fontIcon]="
-                  !showAcceptedVuls ? 'fa-eye' : 'fa-eye-slash'
-                "></mat-icon>
+              <i class="eos-icons">{{ !showAcceptedVuls ? 'visibility' : 'visibility_off' }}</i>
             </button>
           </ng-container>
           <button

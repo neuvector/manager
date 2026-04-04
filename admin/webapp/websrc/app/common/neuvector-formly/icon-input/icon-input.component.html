@@ -3,10 +3,17 @@
   <mat-form-field
     [class]="to.isCell ? 'pull-left' : 'w-' + (to.inputWidth ?? '100')"
     [hideRequiredMarker]="to.hideRequiredMarker ?? false"
-    [floatLabel]="to.floatLabel ? 'always' : 'auto'">
+    [floatLabel]="
+      field.templateOptions?.prefix && field.templateOptions?.prefix.length > 0
+        ? 'always'
+        : to.floatLabel
+          ? 'always'
+          : 'auto'
+    ">
     <mat-label>{{ field.templateOptions?.label || '' | translate }}</mat-label>
     <span
       matPrefix
+      class="prefix-content"
       *ngIf="
         field.templateOptions?.prefix &&
         field.templateOptions?.prefix.length > 0
@@ -16,6 +23,11 @@
     <input
       *ngIf="field.templateOptions?.type !== 'number'; else numberTmp"
       [attr.disabled]="field.templateOptions?.disabled || false"
+      [ngClass]="{
+        'text-with-prefix':
+          field.templateOptions?.prefix &&
+          field.templateOptions?.prefix.length > 0,
+      }"
       [formControl]="formControl"
       [formlyAttributes]="field"
       [maskOnBlur]="field.templateOptions?.maskOnBlur"

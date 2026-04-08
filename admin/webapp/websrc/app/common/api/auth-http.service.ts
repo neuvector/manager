@@ -31,7 +31,7 @@ interface LicenseResponse {
 }
 
 interface PublicPasswordProfileResponse {
-  pwd_profiles: PublicPasswordProfile;
+  pwd_profile: PublicPasswordProfile;
 }
 
 interface RoleResponse {
@@ -213,7 +213,7 @@ export class AuthHttpService {
   getPublicPwdProfile(): Observable<PublicPasswordProfile> {
     return GlobalVariable.http
       .get<PublicPasswordProfileResponse>(PathConstant.PUBLIC_PASSWORD_PROFILE)
-      .pipe(map(r => r.pwd_profiles));
+      .pipe(map(r => r.pwd_profile));
   }
 
   patchPwdProfile(profile: PasswordProfile): Observable<unknown> {

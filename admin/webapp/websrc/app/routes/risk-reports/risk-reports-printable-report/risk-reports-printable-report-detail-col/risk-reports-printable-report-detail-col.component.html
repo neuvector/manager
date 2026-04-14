@@ -24,10 +24,18 @@
     </span>
     <br />
   </ng-container>
-  <ng-container *ngIf="audit.medium_vul_cnt > 0 || audit.high_vul_cnt > 0">
-    <table class="print-table" style="width: 250px">
+  <ng-container
+    *ngIf="
+      audit.critical_vul_cnt > 0 ||
+      audit.medium_vul_cnt > 0 ||
+      audit.high_vul_cnt > 0
+    ">
+    <table class="print-table" style="width: 350px">
       <thead>
         <tr class="print-header">
+          <th class="print-cell" style="width: 10%">
+            {{ 'audit.gridHeader.CRITICAL_VUL' | translate }}
+          </th>
           <th class="print-cell" style="width: 10%">
             {{ 'audit.gridHeader.HIGH_VUL' | translate }}
           </th>
@@ -39,13 +47,18 @@
       <tbody>
         <tr class="print-row">
           <td class="print-cell" style="width: 10%">
-            <ng-container *ngIf="audit.medium_vul_cnt > 0">
-              <ng-container *ngTemplateOutlet="medVulList"></ng-container>
+            <ng-container *ngIf="audit.critical_vul_cnt > 0">
+              <ng-container *ngTemplateOutlet="criticalVulList"></ng-container>
             </ng-container>
           </td>
           <td class="print-cell" style="width: 10%">
             <ng-container *ngIf="audit.high_vul_cnt > 0">
               <ng-container *ngTemplateOutlet="highVulList"></ng-container>
+            </ng-container>
+          </td>
+          <td class="print-cell" style="width: 10%">
+            <ng-container *ngIf="audit.medium_vul_cnt > 0">
+              <ng-container *ngTemplateOutlet="medVulList"></ng-container>
             </ng-container>
           </td>
         </tr>
@@ -75,6 +88,21 @@
         <li>......</li>
         <li>
           ( {{ 'general.TOTAL' | translate }} : {{ audit.high_vul_cnt }}
+          {{ 'audit.gridHeader.ITEMS' | translate }} )
+        </li>
+      </ng-container>
+    </ng-container>
+  </ul>
+</ng-template>
+<ng-template #criticalVulList>
+  <ul class="report-list lh-zero">
+    <ng-container
+      *ngFor="let criticalVul of audit.critical_vuls; let i = index">
+      <li *ngIf="i < 3">{{ criticalVul }}</li>
+      <ng-container *ngIf="i === 3">
+        <li>......</li>
+        <li>
+          ( {{ 'general.TOTAL' | translate }} : {{ audit.critical_vul_cnt }}
           {{ 'audit.gridHeader.ITEMS' | translate }} )
         </li>
       </ng-container>

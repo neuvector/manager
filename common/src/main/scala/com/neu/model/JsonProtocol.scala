@@ -28,7 +28,7 @@ object JsonProtocol extends DefaultJsonProtocol {
 
   given scaleFormat: RootJsonFormat[Scale]         = jsonFormat2(Scale.apply)
   given directionFormat: RootJsonFormat[Direction] = jsonFormat1(Direction.apply)
-  given scanBriefFormat: RootJsonFormat[ScanBrief] = jsonFormat3(ScanBrief.apply)
+  given scanBriefFormat: RootJsonFormat[ScanBrief] = jsonFormat4(ScanBrief.apply)
   given subNodeFormat: RootJsonFormat[SubNode]     = jsonFormat4(SubNode.apply)
   given fixedFormat: RootJsonFormat[Fixed]         = jsonFormat2(Fixed.apply)
   given nodeFormat: RootJsonFormat[Node]           = jsonFormat19(Node.apply)

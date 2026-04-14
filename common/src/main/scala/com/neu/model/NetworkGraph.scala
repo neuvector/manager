@@ -14,7 +14,7 @@ package com.neu.model
  * @param medium
  *   The medium risky vulnerable item number
  */
-case class ScanBrief(status: String, high: Int, medium: Int)
+case class ScanBrief(status: String, critical: Int, high: Int, medium: Int)
 
 case class SubNode(
   id: String,

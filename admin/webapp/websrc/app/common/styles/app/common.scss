@@ -1570,6 +1570,7 @@ ngx-avatar.userIcon img.avatar-content {
 }
 
 .nv-full-width-row {
+  height: 130px !important;
   &.ag-row-selected::before {
     background-color: unset !important;
     position: unset !important;
@@ -1913,4 +1914,8 @@ mat-checkbox {
 
 .mat-mdc-dialog-surface {
   overflow: hidden !important;
+}
+
+.bg-pink {
+  background-color: #e91e63 !important;
 }

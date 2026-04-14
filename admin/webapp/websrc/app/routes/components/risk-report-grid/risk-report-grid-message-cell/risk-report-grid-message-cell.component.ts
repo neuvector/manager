@@ -20,6 +20,11 @@ export class RiskReportGridMessageCellComponent implements ICellRendererAngularC
   params: any;
   templateType!: TemplateType;
   labelCode!: string;
+  get displayCriticalVuls() {
+    return this.params.data.critical_vul_cnt > 5
+      ? `${this.params.data.critical_vuls.slice(0, 5).join(', ')}...`
+      : this.params.data.critical_vuls;
+  }
   get displayHighVuls() {
     return this.params.data.high_vul_cnt > 5
       ? `${this.params.data.high_vuls.slice(0, 5).join(', ')}...`

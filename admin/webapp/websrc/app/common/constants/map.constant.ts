@@ -244,7 +244,7 @@ export class MapConstant {
   public static responseRuleCriteriaSampleMap = {
     'security-event': 'level:Critical, name:Container.Suspicious.Process',
     'cve-report':
-      'name:Container.Scan.Report, cve-name:cve-2018-12345, cve-high:1, cve-medium:1, cve-high-with-fix:23 (fixed high vulnerability > 23), cve-high-with-fix:23/30 (fixed high vulnerability > 23 and reported 30 days ago)',
+      'name:Container.Scan.Report, cve-name:cve-2018-12345, cve-critical:1, cve-high:1 (Legacy severity level including critical and high), cve-high-only:1, cve-medium:1, cve-high-with-fix:23 (fixed high vulnerability >= 23), cve-high-with-fix:23/30 (fixed high vulnerability >= 23 and reported 30 days ago) and for other severity levels',
     event: 'name:Container.Stop, level:Emergency',
     compliance: 'level:Warning, name:D.5.4, name:Compliance.Image.Violation',
     'admission-control':

@@ -1220,7 +1220,7 @@
         "PACKAGE": "包",
         "PACKAGES": "包",
         "IMPACT": "影响",
-        "HI_MED": "高危/中危"
+        "HI_MED": "极危/高危/中危"
       },
       "data": {
         "V2": "V2",
@@ -1693,8 +1693,10 @@
       "HIGH_PERMISSION_STATE": "高危权限说明",
       "PLATFORM": "平台",
       "VERSION": "版本",
+      "CRITICAL_VUL_CNT": "严重",
       "HIGH_VUL_CNT": "高危",
       "MEDIUM_VUL_CNT": "中危",
+      "CRITICAL_VUL": "严重漏洞",
       "HIGH_VUL": "高危漏洞",
       "MEDIUM_VUL": "中危漏洞",
       "CVE_DB_VERSION": "CVE DB 版本",

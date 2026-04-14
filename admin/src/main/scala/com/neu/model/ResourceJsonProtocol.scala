@@ -132,7 +132,7 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
     ConversationBriefWrap.apply
   )
 
-  given scanBriefFormat: RootJsonFormat[ScanBrief]                   = jsonFormat3(ScanBrief.apply)
+  given scanBriefFormat: RootJsonFormat[ScanBrief]                   = jsonFormat4(ScanBrief.apply)
   given workloadBriefFormat: RootJsonFormat[WorkloadBrief]           = rootFormat(
     lazyFormat(jsonFormat15(WorkloadBrief.apply))
   )

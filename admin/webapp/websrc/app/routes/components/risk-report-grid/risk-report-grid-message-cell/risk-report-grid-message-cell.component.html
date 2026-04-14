@@ -51,6 +51,22 @@
   <div class="row mb-1 align-items-center">
     <div class="col-sm-6">
       <span
+        class="badge badge-pink"
+        matTooltip="{{ 'audit.gridHeader.CRITICAL_VUL' | translate }}"
+        matTooltipPosition="above">
+        {{ 'audit.gridHeader.CRITICAL_VUL_CNT' | translate }}
+      </span>
+    </div>
+    <div class="col-sm-6">
+      <span class="font-weight-light">
+        {{ 'general.TOTAL' | translate }}:&nbsp;
+        {{ params.data.critical_vul_cnt }}
+      </span>
+    </div>
+  </div>
+  <div class="row mb-1 align-items-center">
+    <div class="col-sm-6">
+      <span
         class="badge badge-danger"
         matTooltip="{{ 'audit.gridHeader.HIGH_VUL' | translate }}"
         matTooltipPosition="above">
@@ -100,6 +116,22 @@
   </div>
 </ng-template>
 <ng-template #admissionSummary>
+  <div class="row mb-1 align-items-center">
+    <div class="col-sm-6">
+      <span
+        class="badge badge-danger"
+        matTooltip="{{ 'audit.gridHeader.CRITICAL_VUL' | translate }}"
+        matTooltipPosition="above">
+        {{ 'audit.gridHeader.CRITICAL_VUL_CNT' | translate }}
+      </span>
+    </div>
+    <div class="col-sm-6">
+      <span class="font-weight-light">
+        {{ 'general.TOTAL' | translate }}:&nbsp;
+        {{ params.data.critical_vul_cnt }}
+      </span>
+    </div>
+  </div>
   <div class="row mb-1 align-items-center">
     <div class="col-sm-6">
       <span
@@ -157,6 +189,10 @@
     class="mx-1 text-danger">
     <strong>{{ 'audit.gridHeader.ERR' | translate }}:</strong>
     <span> {{ params.data.base_os }} </span>
+  </div>
+  <div *ngIf="params.data.critical_vul_cnt > 0" class="mx-1">
+    <strong>{{ 'audit.gridHeader.CRITICAL_VUL' | translate }}:</strong>
+    <span> {{ displayCriticalVuls }} </span>
   </div>
   <div *ngIf="params.data.high_vul_cnt > 0" class="mx-1">
     <strong>{{ 'audit.gridHeader.HIGH_VUL' | translate }}:</strong>

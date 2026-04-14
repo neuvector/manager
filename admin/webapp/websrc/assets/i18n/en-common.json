@@ -1221,7 +1221,7 @@
         "PACKAGE": "Package",
         "PACKAGES": "Packages",
         "IMPACT": "Impact",
-        "HI_MED": "High/Medium"
+        "HI_MED": "Critical/High/Medium"
       },
       "data": {
         "V2": "V2",
@@ -1694,8 +1694,10 @@
       "HIGH_PERMISSION_STATE": "High Level Permission Statements",
       "PLATFORM": "Platform",
       "VERSION": "Version",
+      "CRITICAL_VUL_CNT": "Critical",
       "HIGH_VUL_CNT": "High",
       "MEDIUM_VUL_CNT": "Medium",
+      "CRITICAL_VUL": "Critical Vulnerabilities",
       "HIGH_VUL": "High Vulnerabilities",
       "MEDIUM_VUL": "Medium Vulnerabilities",
       "CVE_DB_VERSION": "CVE DB Version",

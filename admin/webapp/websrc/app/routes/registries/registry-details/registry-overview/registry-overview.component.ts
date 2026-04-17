@@ -36,7 +36,7 @@ export class RegistryOverviewComponent implements OnChanges {
     '#c7c7c7',
   ];
   barChartColors = {
-    critical: '#e91e63',
+    critical: '#aa116b',
     high: '#ef5350',
     medium: '#ff9800',
   };

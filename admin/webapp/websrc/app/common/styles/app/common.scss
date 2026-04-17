@@ -108,7 +108,9 @@ $nv-mobile-width: 480px;
 .text-action {
   color: $neuvector-grey-900;
 }
-
+.text-C {
+  color: #aa116b;
+}
 .text-H {
   color: $eos-color-danger;
 }
@@ -372,7 +374,7 @@ hr.fancy {
   }
 
   &.pink {
-    background-color: #e91e63;
+    background-color: #aa116b;
     -webkit-print-color-adjust: exact;
   }
 
@@ -1259,7 +1261,7 @@ ngx-avatar.userIcon img.avatar-content {
 }
 
 .label-pink {
-  background-color: #e91e63;
+  background-color: #aa116b;
 }
 
 .label-success-tran {
@@ -1394,7 +1396,7 @@ ngx-avatar.userIcon img.avatar-content {
 
 .badge-pink {
   color: #fff;
-  background-color: #e91e63;
+  background-color: #aa116b;
 }
 
 .badge-danger-tran {
@@ -1917,5 +1919,9 @@ mat-checkbox {
 }
 
 .bg-pink {
-  background-color: #e91e63 !important;
+  background-color: #aa116b !important;
+}
+
+.text-pink {
+  color: #aa116b !important;
 }

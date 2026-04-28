@@ -143,6 +143,7 @@ export class ExposurePanelComponent implements OnInit {
           Direction: direction,
           Service: exposure.service,
           Pod: exposure.display_name,
+          'Critical Vuls': exposure.critical,
           'High Vuls': exposure.high,
           'Medium Vuls': exposure.medium,
           'Policy Mode': exposure.policy_mode,

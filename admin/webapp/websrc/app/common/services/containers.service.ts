@@ -209,6 +209,28 @@ export class ContainersService {
     return this.risksHttpService.getWorkloadsVulnerabilities(payload);
   }
 
+  private splitImageNameAndTag(imageRef?: string): {
+    image_name: string;
+    tags: string;
+  } {
+    if (!imageRef) {
+      return { image_name: '', tags: '' };
+    }
+
+    const [nameTagPart, digest] = imageRef.split('@');
+    const lastSlash = nameTagPart.lastIndexOf('/');
+    const lastColon = nameTagPart.lastIndexOf(':');
+
+    if (lastColon > lastSlash) {
+      return {
+        image_name: nameTagPart.slice(0, lastColon),
+        tags: digest || nameTagPart.slice(lastColon + 1),
+      };
+    }
+
+    return { image_name: nameTagPart, tags: digest || '' };
+  }
+
   private makeWorkloadData(w: Workload | WorkloadBrief, isChild: boolean) {
     let workload = w as Workload;
     return {
@@ -294,8 +316,9 @@ export class ContainersService {
     ].join(',');
 
     const csvRows = vulnerabilities.map(vul => {
-      const image_name = vul.workload_image?.split(':')[0] || '';
-      const tags = vul.workload_image?.split(':')[1] || '';
+      const { image_name, tags } = this.splitImageNameAndTag(
+        vul.workload_image
+      );
       const workload_name = vul.workload_name || '';
       const namespace = vul.workload_domain || '';
       const host_name = vul.host_name || vul.workload_host_name || '';

@@ -294,6 +294,7 @@ export class ContainersService {
     const header = [
       'image_name',
       'tags',
+      'digest',
       'workload_name',
       'namespace',
       'host_name',
@@ -316,8 +317,8 @@ export class ContainersService {
     ].join(',');
 
     const csvRows = vulnerabilities.map(vul => {
-      const image_name = vul.workload_image?.split(':')[0] || '';
-      const tags = vul.workload_image?.split(':')[1] || '';
+      const { image_name, tags } = this.splitImageNameAndTag(vul.workload_image);
+      const digest = vul.workload_image_digest || '';
       const workload_name = vul.workload_name || '';
       const namespace = vul.workload_domain || '';
       const host_name = vul.host_name || vul.workload_host_name || '';
@@ -350,6 +351,7 @@ export class ContainersService {
       return [
         image_name,
         tags,
+        digest,
         workload_name,
         namespace,
         host_name,

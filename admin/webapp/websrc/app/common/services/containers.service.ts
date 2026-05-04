@@ -209,6 +209,28 @@ export class ContainersService {
     return this.risksHttpService.getWorkloadsVulnerabilities(payload);
   }
 
+  private splitImageNameAndTag(imageRef?: string): {
+    image_name: string;
+    tags: string;
+  } {
+    if (!imageRef) {
+      return { image_name: '', tags: '' };
+    }
+
+    const [nameTagPart] = imageRef.split('@');
+    const lastSlash = nameTagPart.lastIndexOf('/');
+    const lastColon = nameTagPart.lastIndexOf(':');
+
+    if (lastColon > lastSlash) {
+      return {
+        image_name: nameTagPart.slice(0, lastColon),
+        tags: nameTagPart.slice(lastColon + 1),
+      };
+    }
+
+    return { image_name: nameTagPart, tags: '' };
+  }
+
   private makeWorkloadData(w: Workload | WorkloadBrief, isChild: boolean) {
     let workload = w as Workload;
     return {

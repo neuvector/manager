@@ -289,6 +289,11 @@ export class MapConstant {
     MEMBER: 'joint',
     STANDALONE: '',
   };
+  public static ROLES_WITHOUT_ADV_SETTING = [
+    MapConstant.FED_ROLES.ADMIN,
+    MapConstant.FED_ROLES.FEDADMIN,
+    'ciops',
+  ];
   public static FED_PORT = {
     MASTER: 11443,
     JOINT: 10443,

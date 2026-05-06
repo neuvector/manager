@@ -48,10 +48,12 @@ export class AddEditUserDialogComponent implements OnInit {
     const role = this.form.controls.role.value;
     return (
       (this.toggleAdvSetting || role === '') &&
-      ![MapConstant.FED_ROLES.FEDADMIN, MapConstant.FED_ROLES.ADMIN].includes(
-        role
-      )
+      !MapConstant.ROLES_WITHOUT_ADV_SETTING.includes(role)
     );
+  }
+  get hideAdvSettingButton(): boolean {
+    const role = this.form.controls.role.value;
+    return [...MapConstant.ROLES_WITHOUT_ADV_SETTING, ''].includes(role);
   }
   @ViewChild(GroupDomainRoleTableComponent)
   domainTable!: GroupDomainRoleTableComponent;

@@ -109,7 +109,7 @@
       type="button"
       *ngIf="
         isKube &&
-        !['admin', 'fedAdmin', ''].includes(form.controls.role.value) &&
+        !hideAdvSettingButton &&
         !(data.isEdit && data.user!.server.toLowerCase().includes('rancher'))
       ">
       {{

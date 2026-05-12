@@ -68,6 +68,7 @@ export class GraphService {
   private _dataSet: GraphData = { edges: [], nodes: [], enableGPU: false };
   private readonly oneMillion = 1000 * 1000;
   private readonly cveColors = {
+    critical: { fill: '#aa116b', stroke: '#aa116b' },
     high: { fill: '#fa184a', stroke: '#f76987' },
     medium: { fill: '#ff9800', stroke: '#ffbc3e' },
   };
@@ -645,13 +646,15 @@ export class GraphService {
    * @param node.scan_summary the vulnerability info
    * @param node.scanBrief the vulnerability info
    * @param node.children the containers inside pod
-   * @returns {{level: String high: Number medium: Number}}
+   * @returns {{level: String critical: Number high: Number medium: Number}}
    */
   getCveLevel = node => {
     let high = 0,
-      medium = 0;
+      medium = 0,
+      critical = 0;
     let scanBrief = node.scan_summary || node.scanBrief;
     if (scanBrief) {
+      critical = scanBrief.critical;
       high = scanBrief.high;
       medium = scanBrief.medium;
     }
@@ -667,10 +670,41 @@ export class GraphService {
         if (scanBrief && scanBrief.medium) return acc + scanBrief.medium;
         else return acc;
       }, 0);
+
+      critical += node.children.reduce((acc, child) => {
+        let scanBrief = child.scan_summary || child.scanBrief;
+        if (scanBrief && scanBrief.critical) return acc + scanBrief.critical;
+        else return acc;
+      }, 0);
     }
-    if (high > 0) return { level: 'high', high: high, medium: medium };
-    else if (medium > 0) return { level: 'medium', high: high, medium: medium };
-    else return { level: '', high: 0, medium: 0 };
+    if (critical > 0)
+      return {
+        level: 'critical',
+        critical: critical,
+        high: high,
+        medium: medium,
+      };
+    else if (high > 0)
+      return {
+        level: 'high',
+        critical: critical,
+        high: high,
+        medium: medium,
+      };
+    else if (medium > 0)
+      return {
+        level: 'medium',
+        critical: critical,
+        high: high,
+        medium: medium,
+      };
+    else
+      return {
+        level: '',
+        critical: 0,
+        high: 0,
+        medium: 0,
+      };
   };
 
   getGroupVulnerabilities = group => {
@@ -683,12 +717,13 @@ export class GraphService {
       return nodesInRisk.reduce(
         (acc, node) => {
           if (node) {
+            acc.critical += node.critical;
             acc.high += node.high;
             acc.medium += node.medium;
             return acc;
           } else return acc;
         },
-        { high: 0, medium: 0 }
+        { critical: 0, high: 0, medium: 0 }
       );
     }
   };
@@ -847,9 +882,11 @@ export class GraphService {
           } else {
             theGroup.value += 1;
             theGroup.members.push(node.id);
+            theGroup.cve.critical += node.cve.critical;
             theGroup.cve.high += node.cve.high;
             theGroup.cve.medium += node.cve.medium;
-            if (theGroup.cve.high > 0) theGroup.cve.level = 'high';
+            if (theGroup.cve.critical > 0) theGroup.cve.level = 'critical';
+            else if (theGroup.cve.high > 0) theGroup.cve.level = 'high';
             else if (theGroup.cve.medium > 0) theGroup.cve.level = 'medium';
             theGroup.quarantines += node.state === 'quarantined' ? 1 : 0;
           }
@@ -1464,6 +1501,10 @@ export class GraphService {
         field: 'cve',
         cellRenderer: params => {
           let display = '';
+          if (params.value && params.value.critical)
+            display += `<span class="badge badge-danger ">${params.value.critical}</span>`;
+          else
+            display += `<span class="badge badge-success ">${params.value.critical}</span>`;
           if (params.value && params.value.high)
             display += `<span class="badge badge-danger ">${params.value.high}</span>`;
           else

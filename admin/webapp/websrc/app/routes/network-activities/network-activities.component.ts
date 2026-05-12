@@ -1305,7 +1305,12 @@ export class NetworkActivitiesComponent implements OnInit, OnDestroy {
       let shape = evt.target;
       if (shape.get('name') === 'tag-circle') {
         showCve(
-          'High: ' + nodeMode.cve.high + ' Medium: ' + nodeMode.cve.medium,
+          'Critical: ' +
+            nodeMode.cve.critical +
+            ' High: ' +
+            nodeMode.cve.high +
+            ' Medium: ' +
+            nodeMode.cve.medium,
           {
             x: evt.canvasX,
             y: evt.canvasY,

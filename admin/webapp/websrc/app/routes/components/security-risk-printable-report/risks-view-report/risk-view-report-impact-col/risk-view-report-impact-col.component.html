@@ -29,7 +29,11 @@
     <strong>{{ 'scan.report.data.IMAGES' | translate }}</strong>
   </div>
   <div *ngFor="let image of images | slice: 0 : 5">
-    {{ image.display_name }}
+    <div>{{ image.display_name }}</div>
+
+    <div class="text-muted small" style="word-break: break-all; line-height: 1.2;">
+      {{ image.digest }}
+    </div>
   </div>
 </div>
 <div *ngIf="images && Array.isArray(images) && images.length > 5">

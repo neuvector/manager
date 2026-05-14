@@ -24,6 +24,12 @@
         *ngIf="reportPage === 'vulnerabilities'"
         class="print-cell"
         style="width: 10%">
+        {{ 'scan.report.gridHeader.CVE_DB_VERSION' | translate }}
+      </th>
+      <th
+        *ngIf="reportPage === 'vulnerabilities'"
+        class="print-cell"
+        style="width: 10%">
         {{ 'scan.report.gridHeader.HI_MED' | translate }}
       </th>
       <th
@@ -55,7 +61,21 @@
       "
       [attr.data-index]="i">
       <td class="print-cell" style="width: 30%">
-        {{ reportPage === 'vulnerabilities' ? image.name : image.image_name }}
+        <div>{{ reportPage === 'vulnerabilities' ? image.name : image.image_name }}</div>
+        <div *ngIf="reportPage === 'vulnerabilities'" class="text-muted small" style="word-break: break-all;">
+          {{ image.digest }}
+        </div>
+      </td>
+      <td
+        *ngIf="reportPage === 'vulnerabilities'"
+        class="print-cell" style="width: 10%">
+        <div>{{ image.cvedb_version }}</div>
+        <div class="text-muted small">
+          {{ 'scan.report.gridHeader.CVE_DB_LAST_UPDATED' | translate }}
+        </div>
+        <div class="text-muted small">
+          {{ image.cvedb_create_time | date:'yyyy-MM-dd HH:mm:ss' }}
+        </div>
       </td>
       <td
         *ngIf="reportPage === 'vulnerabilities'"
@@ -76,19 +96,18 @@
         *ngIf="reportPage === 'vulnerabilities'"
         class="print-cell"
         style="width: 60%">
-        <div *ngIf="image.critical + image.high + image.medium + image.low > 0">
+        <ng-container *ngIf="image.critical + image.high + image.medium + image.low > 0; else noVulns">
           <span
             *ngFor="let item of image.vulnerabilities"
             class="margin-right-s text-{{ item.split('_')[0] }}">
             {{ item.split('_')[1].trim() }}
           </span>
-        </div>
-        <div
-          *ngIf="image.critical + image.high + image.medium + image.low === 0">
+        </ng-container>
+        <ng-template #noVulns>
           <span class="text-success">{{
             'scan.NO_VULNERABILITIES' | translate
           }}</span>
-        </div>
+        </ng-template>
       </td>
       <td
         *ngIf="reportPage === 'compliance'"

@@ -188,30 +188,21 @@ export class VulnerabilitiesComponent implements OnDestroy {
       data: {
         pdf_name: this.tr.instant('scan.report.PDF_LINK2'),
         isPdf: true,
+        isAssetsView: true,
       },
     });
     dialogRef.componentInstance.submitDate.subscribe(params => {
-      if (params.date) {
-        this.getAssetsViewReportData(
-          this.vulnerabilitiesService.activeToken,
-          this.exportAssetsViewPdfFile,
-          dialogRef,
-          {
-            lastModifiedTime: params.date.getTime() / 1000,
-            withoutAppendix: params.withoutAppendix,
-          }
-        );
-      } else {
-        this.getAssetsViewReportData(
-          this.vulnerabilitiesService.activeToken,
-          this.exportAssetsViewPdfFile,
-          dialogRef,
-          {
-            lastModifiedTime: 0,
-            withoutAppendix: params.withoutAppendix,
-          }
-        );
-      }
+      const lastModifiedTime = params.date ? params.date.getTime() / 1000 : 0;
+      this.getAssetsViewReportData(
+        this.vulnerabilitiesService.activeToken,
+        this.exportAssetsViewPdfFile,
+        dialogRef,
+        {
+          lastModifiedTime: lastModifiedTime,
+          withoutAppendix: params.withoutAppendix,
+          includeNoVulAssets: params.includeNoVulAssets
+        }
+      );
     });
   };
 
@@ -243,7 +234,10 @@ export class VulnerabilitiesComponent implements OnDestroy {
   ) => {
     this.withoutAppendix = options.withoutAppendix;
     this.vulnerabilitiesService
-      .getAssetsViewReportData(queryToken, options.lastModifiedTime)
+      .getAssetsViewReportData(
+        queryToken,
+        options.lastModifiedTime,
+        options.includeNoVulAssets)
       .subscribe(
         (response: any) => {
           cb(response, dialogRef);
@@ -276,11 +270,15 @@ export class VulnerabilitiesComponent implements OnDestroy {
 
   private exportAssetsViewPdfFile = (data: any, dialogRef) => {
     console.log('Assets View data()PDF: ', data);
+    const combinedImages = [
+      ...(data.images || []),
+      ...(data.no_vul_images || [])
+    ];
     this.masterGrids = [
       data.workloads,
       data.nodes,
       data.platforms,
-      data.images,
+      combinedImages,
     ];
     this.vulnerabilitiesList = data.vulnerabilities;
     dialogRef.componentInstance.saving$.next(false);

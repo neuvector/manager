@@ -38,6 +38,7 @@ export class PdfGenerationDialogComponent {
       Validators.required
     ),
     withoutAppendix: new FormControl(false),
+    includeNoVulAssets: new FormControl(false),
   });
   saving$ = new Subject();
   get customDate(): Date {
@@ -52,6 +53,10 @@ export class PdfGenerationDialogComponent {
 
   get withoutAppendix(): boolean {
     return this.form.get('withoutAppendix')?.value || false;
+  }
+
+  get includeNoVulAssets(): boolean {
+    return this.form.get('includeNoVulAssets')?.value || false;
   }
 
   constructor(
@@ -69,6 +74,7 @@ export class PdfGenerationDialogComponent {
     this.submitDate.emit({
       date: this.getDate(this.selectedDateOption, this.customDate),
       withoutAppendix: this.withoutAppendix,
+      includeNoVulAssets: this.includeNoVulAssets,
     });
   }
 

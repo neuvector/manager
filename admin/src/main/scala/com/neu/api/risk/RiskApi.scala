@@ -101,12 +101,12 @@ class RiskApi(resourceService: RiskService) extends BaseApi {
               pathEnd {
                 patch {
                   parameter(Symbol("queryToken").?) { queryToken =>
-                    entity(as[TimeRange]) { timeRange =>
+                    entity(as[VulnerabilityAssetQuery]) { assetQuery =>
                       Utils.respondWithWebServerHeaders() {
                         resourceService.queryCveAssetsView(
                           tokenId,
                           queryToken,
-                          timeRange
+                          assetQuery
                         )
                       }
                     }

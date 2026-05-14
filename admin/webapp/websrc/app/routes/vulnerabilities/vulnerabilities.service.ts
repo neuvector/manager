@@ -283,11 +283,11 @@ export class VulnerabilitiesService {
 
   getAssetsViewReportData(
     queryToken: string,
-    lastModifiedTime: number
+    lastModifiedTime: number,
+    includeNoVulAssets: boolean = false
   ): Observable<any> {
     return this.risksHttpService
-      .postAssetsViewData(queryToken, lastModifiedTime)
-      .pipe();
+      .postAssetsViewData(queryToken, lastModifiedTime, includeNoVulAssets);
   }
 
   getDomain(): Observable<string[]> {

@@ -158,6 +158,7 @@ export interface ServerPatchBody {
 export interface UserGetResponse {
   domain_roles: string[];
   global_roles: string[];
+  roles_not_for_domain: string[];
   users: User[];
 }
 

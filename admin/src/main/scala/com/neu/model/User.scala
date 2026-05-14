@@ -61,12 +61,14 @@ case class SelfWrap(
 case class Users(
   domain_roles: Option[Array[String]],
   global_roles: Option[Array[String]],
+  roles_not_for_domain: Option[Array[String]],
   users: Array[User]
 )
 
 case class UsersOutput(
   domain_roles: Option[Array[String]],
   global_roles: Option[Array[String]],
+  roles_not_for_domain: Option[Array[String]],
   users: Array[UserImage]
 )
 

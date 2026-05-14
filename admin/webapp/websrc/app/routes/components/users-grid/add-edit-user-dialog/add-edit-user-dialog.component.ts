@@ -26,6 +26,7 @@ export interface AddEditUserDialog {
   isEdit: boolean;
   globalRoles: string[];
   domainRoles: string[];
+  rolesNotForDomain: string[];
   domains: string[];
   user?: User;
   isReadOnly?: boolean;
@@ -44,16 +45,26 @@ export class AddEditUserDialogComponent implements OnInit {
   saving$ = new Subject();
   toggleAdvSetting = false;
   domainTableSource!: MatTableDataSource<any>;
-  get showAdvSetting() {
+
+  private get isRoleWithoutDomainScope(): boolean {
     const role = this.form.controls.role.value;
-    return (
-      (this.toggleAdvSetting || role === '') &&
-      !MapConstant.ROLES_WITHOUT_ADV_SETTING.includes(role)
-    );
+    return [
+      MapConstant.FED_ROLES.ADMIN,
+      MapConstant.FED_ROLES.FEDADMIN,
+      ...this.data.rolesNotForDomain,
+    ].includes(role);
   }
+
+  get showAdvSetting(): boolean {
+    if (this.isRoleWithoutDomainScope) return false;
+    const role = this.form.controls.role.value;
+    if (role === '') return true;
+    return this.toggleAdvSetting;
+  }
+
   get hideAdvSettingButton(): boolean {
     const role = this.form.controls.role.value;
-    return [...MapConstant.ROLES_WITHOUT_ADV_SETTING, ''].includes(role);
+    return role === '' || this.isRoleWithoutDomainScope;
   }
   @ViewChild(GroupDomainRoleTableComponent)
   domainTable!: GroupDomainRoleTableComponent;

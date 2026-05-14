@@ -24,9 +24,9 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
 
   given extraPermissionFormat: RootJsonFormat[ExtraPermission] = jsonFormat2(ExtraPermission.apply)
   given userFormat: RootJsonFormat[User]                       = jsonFormat16(User.apply)
-  given usersFormat: RootJsonFormat[Users]                     = jsonFormat3(Users.apply)
+  given usersFormat: RootJsonFormat[Users]                     = jsonFormat4(Users.apply)
   given userImageFormat: RootJsonFormat[UserImage]             = jsonFormat16(UserImage.apply)
-  given usersOutputFormat: RootJsonFormat[UsersOutput]         = jsonFormat3(UsersOutput.apply)
+  given usersOutputFormat: RootJsonFormat[UsersOutput]         = jsonFormat4(UsersOutput.apply)
   given selfWrapFormat: RootJsonFormat[SelfWrap]               = jsonFormat5(SelfWrap.apply)
   given userWrapFormat: RootJsonFormat[UserWrap]               = jsonFormat1(UserWrap.apply)
   given userTokenFormat: RootJsonFormat[UserToken]             = jsonFormat4(UserToken.apply)

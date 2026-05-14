@@ -23,9 +23,11 @@ export class UsersComponent implements OnInit {
   error: unknown;
   globalRoles!: string[];
   domainRoles!: string[];
+  rolesNotForDomain!: string[];
   users$ = this.settingsService.getUsers().pipe(
     tap(user => {
       this.domainRoles = user.domain_roles;
+      this.rolesNotForDomain = user.roles_not_for_domain || [];
       if (!this.authUtils.userPermission.isNamespaceUser) {
         this.globalRoles = user.global_roles;
       } else {

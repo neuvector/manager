@@ -62,6 +62,7 @@ export class UsersGridComponent implements OnInit {
   }
   @Input() globalRoles!: string[];
   @Input() domainRoles!: string[];
+  @Input() rolesNotForDomain: string[] = [];
   get rowData() {
     return this._rowData;
   }
@@ -251,6 +252,7 @@ export class UsersGridComponent implements OnInit {
         isEdit: false,
         globalRoles: this.globalRoles,
         domainRoles: this.domainRoles,
+        rolesNotForDomain: this.rolesNotForDomain,
         domains: this.domains,
       },
     });
@@ -308,6 +310,7 @@ export class UsersGridComponent implements OnInit {
         user: event.data,
         globalRoles: this.globalRoles,
         domainRoles: this.domainRoles,
+        rolesNotForDomain: this.rolesNotForDomain,
         domains: this.domains,
       },
     });
@@ -400,6 +403,7 @@ export class UsersGridComponent implements OnInit {
         user: event.data,
         globalRoles: this.globalRoles,
         domainRoles: this.domainRoles,
+        rolesNotForDomain: this.rolesNotForDomain,
         domains: this.domains,
       },
     });

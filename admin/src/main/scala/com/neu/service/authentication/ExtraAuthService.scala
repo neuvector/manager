@@ -208,6 +208,7 @@ class ExtraAuthService() extends BaseService with DefaultJsonFormats with LazyLo
         UsersOutput(
           users.domain_roles,
           users.global_roles,
+          users.roles_not_for_domain,
           userImage
         )
       } catch {

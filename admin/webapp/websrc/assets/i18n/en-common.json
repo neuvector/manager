@@ -1181,6 +1181,7 @@
     "PROTECTED_CONTAINER": "Protected container",
     "LAST_MODIFIED": "Last Modified",
     "WITHOUT_APPENDIX": "Without Appendix",
+    "INCLUDE_ALL_SCANNED_IMAGES": "Include all scanned images (including those without vulnerabilities)",
     "PUBLISHED": "Published",
     "PUBLISHED_TYPE": "Published Type",
     "WITH_FIX": "With Fix",
@@ -1221,7 +1222,9 @@
         "PACKAGE": "Package",
         "PACKAGES": "Packages",
         "IMPACT": "Impact",
-        "HI_MED": "Critical/High/Medium"
+        "HI_MED": "Critical/High/Medium",
+        "CVE_DB_VERSION": "CVE DB Version",
+        "CVE_DB_LAST_UPDATED": "DB Updated:"
       },
       "data": {
         "V2": "V2",

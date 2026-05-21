@@ -1180,6 +1180,7 @@
     "PROTECTED_CONTAINER": "被保护的容器",
     "LAST_MODIFIED": "上一次更改",
     "WITHOUT_APPENDIX": "不打印附表",
+    "INCLUDE_ALL_SCANNED_IMAGES": "包含所有扫描的镜像（包括无漏洞的镜像）",
     "PUBLISHED": "发布时间",
     "PUBLISHED_TYPE": "发布类型",
     "WITH_FIX": "修复",
@@ -1220,7 +1221,9 @@
         "PACKAGE": "包",
         "PACKAGES": "包",
         "IMPACT": "影响",
-        "HI_MED": "极危/高危/中危"
+        "HI_MED": "极危/高危/中危",
+        "CVE_DB_VERSION": "CVE 数据库版本",
+        "CVE_DB_LAST_UPDATED": "数据库更新时间："
       },
       "data": {
         "V2": "V2",

@@ -64,9 +64,15 @@ export class VulnerabilitiesComponent implements OnDestroy {
 
   changeSelectedView(view: VulnerabilityView) {
     this.selectedView = view;
+    const isAssetView = view === 'infrastructure' || view === 'registry';
     this.vulnerabilitiesFilterService.vulQuerySubject$.next({
       ...this.vulnerabilitiesFilterService.vulQuerySubject$.value,
       viewType: this.selectedView,
+      ...(isAssetView && {
+        serviceName: '',
+        containerName: '',
+        selectedDomains: [],
+      }),
     });
     setTimeout(() => {
       this.refresh();

@@ -36,6 +36,8 @@ let CALENDAR: any = {
   SECONDS: 'seconds',
 };
 
+export const SEVERITY_SORT_ORDER = ['low', 'medium', 'high', 'critical'];
+
 export const FEED_RATING_SORT_ORDER = [
   'untriaged',
   'not yet assigned',

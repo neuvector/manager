@@ -23,6 +23,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { UtilsService } from '@common/utils/app.utils';
 import {
   FEED_RATING_SORT_ORDER,
+  SEVERITY_SORT_ORDER,
   capitalizeWord,
 } from '@common/utils/common.utils';
 import { VulnerabilityItemsTableScoreCellComponent } from '@routes/vulnerabilities/vulnerability-items/vulnerability-items-table/vulnerability-items-table-score-cell/vulnerability-items-table-score-cell.component';
@@ -59,6 +60,9 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
       field: 'severity',
       cellRenderer: 'severityCellRenderer',
       cellClass: ['d-flex', 'align-items-center'],
+      comparator: (value1, value2) =>
+        SEVERITY_SORT_ORDER.indexOf((value1 || '').toLowerCase()) -
+        SEVERITY_SORT_ORDER.indexOf((value2 || '').toLowerCase()),
       headerValueGetter: () =>
         this.translate.instant('scan.gridHeader.SEVERITY'),
       width: 130,

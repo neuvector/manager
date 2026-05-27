@@ -173,6 +173,7 @@ export class SecurityEventsComponent
     this.securityEventsService.displayedSecurityEvents = [];
     this.printableData = [];
     this.securityEventsService.cachedSecurityEvents = [];
+    this.displayedSecurityEventsJsonBeforeApplyAdvFilter = '[]';
     this.preprocessSecurityEventsData();
   };
 

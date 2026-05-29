@@ -3531,6 +3531,14 @@
       "REMOVE_VERIFIER_NG": "检测器删除时发生错误!"
     }
   },
+  "vulnerability": {
+    "advanced_filter": {
+      "image_base_os": {
+        "label": "镜像基础操作系统",
+        "placeholder": "例如 alpine, ubuntu, redhat"
+      }
+    }
+  },
   "just_now": "刚才",
   "seconds_ago": "{{time}}秒前",
   "a_minute_ago": "1分钟前",

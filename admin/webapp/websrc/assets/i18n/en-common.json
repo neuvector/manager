@@ -3537,6 +3537,14 @@
       "REMOVE_VERIFIER_NG": "Error happens when removing verifier!"
     }
   },
+  "vulnerability": {
+    "advanced_filter": {
+      "image_base_os": {
+        "label": "Image Base OS",
+        "placeholder": "e.g alpine, ubuntu, redhat"
+      }
+    }
+  },
   "just_now": "just now",
   "seconds_ago": "{{time}} seconds ago",
   "a_minute_ago": "a minute ago",

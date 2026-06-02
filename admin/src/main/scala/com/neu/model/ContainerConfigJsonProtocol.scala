@@ -17,7 +17,8 @@ case class ScanReportRequest(
   cursor: Option[Cursor] = None,
   view_pod: Option[String] = None,
   vul_score_filter: Option[VulScoreFilter] = None,
-  filters: Option[Seq[Filter]] = None
+  filters: Option[Seq[Filter]] = None,
+  severity_filter: Option[String] = None
 )
 
 case class Cursor(
@@ -54,7 +55,7 @@ object ContainerConfigJsonProtocol extends DefaultJsonProtocol {
     SnifferParamWarp.apply
   )
   given snifferDataFormat: RootJsonFormat[SnifferData]                               = jsonFormat2(SnifferData.apply)
-  given scanReportRequestFormat: RootJsonFormat[ScanReportRequest]                   = jsonFormat6(
+  given scanReportRequestFormat: RootJsonFormat[ScanReportRequest]                   = jsonFormat7(
     ScanReportRequest.apply
   )
   given cursorFormat: RootJsonFormat[Cursor]                                         = jsonFormat5(Cursor.apply)

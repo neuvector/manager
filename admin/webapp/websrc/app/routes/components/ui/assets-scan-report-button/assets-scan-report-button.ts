@@ -198,6 +198,11 @@ export class AssetsScanReportButton implements OnInit, OnDestroy {
             : filter?.scoreV3?.[1]) ?? 10,
       },
       filters: [],
+      severity_filter:
+        filter?.severityType && filter.severityType !== 'all'
+          ? filter.severityType.charAt(0).toUpperCase() +
+            filter.severityType.slice(1)
+          : '',
     };
 
     const pushFilter = (

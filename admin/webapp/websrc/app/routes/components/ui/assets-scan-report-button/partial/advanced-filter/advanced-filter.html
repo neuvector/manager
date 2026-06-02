@@ -206,6 +206,29 @@
       </ng-container>
     </section>
     <section class="row mx-0 align-items-center mt-3">
+      <span class="d-block col-2">{{ 'profile.TITLE' | translate }}</span>
+      <mat-radio-group
+        aria-label="Severity"
+        class="col row"
+        formControlName="severityType">
+        <mat-radio-button class="col-2" value="all">{{
+          'setting.ALL' | translate
+        }}</mat-radio-button>
+        <mat-radio-button class="col-2" value="critical">{{
+          'enum.CRITICAL' | translate
+        }}</mat-radio-button>
+        <mat-radio-button class="col-2" value="high">{{
+          'enum.HIGH' | translate
+        }}</mat-radio-button>
+        <mat-radio-button class="col-2" value="medium">{{
+          'enum.MEDIUM' | translate
+        }}</mat-radio-button>
+        <mat-radio-button class="col-2" value="low">{{
+          'enum.LOW' | translate
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </section>
+    <section class="row mx-0 align-items-center mt-3">
       <ng-container>
         <mat-slide-toggle
           formControlName="showAccepted"

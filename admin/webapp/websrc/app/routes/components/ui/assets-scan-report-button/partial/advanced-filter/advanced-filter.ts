@@ -150,6 +150,7 @@ export class AdvancedFilter implements OnInit {
       matchTypeContainer: new FormControl(filter.matchTypeContainer),
       containerName: new FormControl(filter.containerName),
       showAccepted: new FormControl(filter.showAccepted ?? false),
+      severityType: new FormControl(filter.severityType ?? 'all'),
     });
 
     if (!Array.isArray(this.form.controls.selectedDomains.value)) {

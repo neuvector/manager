@@ -146,7 +146,7 @@ export const NetworkServiceModeField = {
   },
   expressionProperties: {
     'templateOptions.disabled':
-      '!formState.permissions.isNewServiceModeAuthorized',
+      '!formState.permissions.isNewServiceModeAuthorized || !model.net_svc.net_service_status',
     'templateOptions.hint': model =>
       model.net_svc.net_service_status
         ? 'setting.description.ENABLED_NET_POLICY_MODE'

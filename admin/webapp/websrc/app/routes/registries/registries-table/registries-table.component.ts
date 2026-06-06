@@ -238,11 +238,15 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
 
   onSelectionChanged(params: GridReadyEvent): void {
     if (params.api.getSelectedNodes().length > 0) {
-      console.log(params.api.getSelectedNodes()[0].data);
+      const newSelectedRegistry = params.api.getSelectedNodes()[0].data;
+      const currentSelectedRegistry = this.registriesCommunicationService.selectedRegistry;
+
       this.registriesCommunicationService.setSelectedRegistry(
-        params.api.getSelectedNodes()[0].data
+        newSelectedRegistry
       );
-      this.registriesCommunicationService.detailFilter.setValue('');
+      if(!currentSelectedRegistry || currentSelectedRegistry.name !== newSelectedRegistry.name) {
+        this.registriesCommunicationService.detailFilter.setValue('');
+      }
     }
     this.cd.markForCheck();
   }

@@ -240,12 +240,14 @@ export class AddEditUserDialogComponent implements OnInit {
   @Output() confirm = new EventEmitter();
   submit(): void {
     this.saving$.next(true);
-    const role_domains = this.domainTableSource.data
-      .filter(({ namespaces }) => namespaces.length)
-      .reduce((acc, role) => {
-        const { namespaceRole, namespaces } = role;
-        return { ...acc, [namespaceRole]: [...namespaces] };
-      }, {});
+    const role_domains = this.isRoleWithoutDomainScope
+      ? {}
+      : this.domainTableSource.data
+          .filter(({ namespaces }) => namespaces.length)
+          .reduce((acc, role) => {
+            const { namespaceRole, namespaces } = role;
+            return { ...acc, [namespaceRole]: [...namespaces] };
+          }, {});
     if (this.data.isEdit) {
       this.confirm.emit({
         ...this.data.user,

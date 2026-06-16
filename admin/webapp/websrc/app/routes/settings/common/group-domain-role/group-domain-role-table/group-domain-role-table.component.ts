@@ -37,6 +37,7 @@ export class GroupDomainRoleTableComponent
   @Input() global_role!: string;
   @Input() group_roles!: string[];
   @Input() isReadOnly: boolean = false;
+  @Input() rolesNotForDomain: string[] = [];
   displayedColumns = ['namespaceRoles', 'namespaces'];
   separatorKeysCodes: number[] = [ENTER, COMMA];
   namespaceCtrl = new FormControl();
@@ -148,19 +149,18 @@ export class GroupDomainRoleTableComponent
   }
 
   updateTable(): void {
-    if (this.global_role === 'admin') {
-      this.dataSource.data = this.dataSource.data.filter(
-        ({ namespaceRole }) => namespaceRole !== 'admin'
-      );
-      this.dataSource.data[0].namespaces = [];
-      this.domainChips = [];
-      return;
-    }
     this.dataSource.data = this.dataSource.data.filter(
-      ({ namespaceRole }) => namespaceRole !== this.global_role
+      ({ namespaceRole }) =>
+        namespaceRole !== this.global_role &&
+        !this.rolesNotForDomain.includes(namespaceRole)
     );
     this.group_roles.forEach((role: string) => {
-      if (role && !this.findRowFromRole(role) && role !== this.global_role) {
+      if (
+        role &&
+        !this.findRowFromRole(role) &&
+        role !== this.global_role &&
+        !this.rolesNotForDomain.includes(role)
+      ) {
         this.dataSource.data = [
           ...this.dataSource.data,
           { namespaceRole: role, namespaces: [] },

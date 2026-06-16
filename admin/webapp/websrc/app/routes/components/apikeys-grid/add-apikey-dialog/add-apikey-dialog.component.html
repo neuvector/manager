@@ -174,7 +174,7 @@
         class="me-3 mb-3 apikey__icon"
         >key
       </mat-icon>
-      <mat-form-field class="w-75" appearance="outline">
+      <mat-form-field class="w-75">
         <mat-label>{{ 'apikey.gridHeader.NAME' | translate }}</mat-label>
         <input
           matInput
@@ -184,11 +184,13 @@
         <button
           matSuffix
           [cdkCopyToClipboard]="apikeyInit.apikey_name"
-          class="d-flex justify-content-center align-items-center"
+          class="d-flex justify-content-center align-items-center copy-btn"
           mat-stroked-button
           type="button">
-          <i class="eos-icons">content_copy</i>
-          {{ 'apikey.addApikey.COPY' | translate }}
+          <div class="d-flex justify-content-center align-items-center">
+            <i class="eos-icons">content_copy</i>
+            {{ 'apikey.addApikey.COPY' | translate }}
+          </div>
         </button>
       </mat-form-field>
     </div>
@@ -199,7 +201,7 @@
         class="me-3 mb-3 apikey__icon"
         >key
       </mat-icon>
-      <mat-form-field class="w-75" appearance="outline">
+      <mat-form-field class="w-75">
         <mat-label>{{ 'apikey.addApikey.SECRET' | translate }}</mat-label>
         <input
           matInput
@@ -209,11 +211,13 @@
         <button
           matSuffix
           [cdkCopyToClipboard]="apikeyInit.apikey_secret"
-          class="d-flex justify-content-center align-items-center"
+          class="d-flex justify-content-center align-items-center copy-btn"
           mat-stroked-button
           type="button">
-          <i class="eos-icons">content_copy</i>
-          {{ 'apikey.addApikey.COPY' | translate }}
+          <div class="d-flex justify-content-center align-items-center">
+            <i class="eos-icons">content_copy</i>
+            {{ 'apikey.addApikey.COPY' | translate }}
+          </div>
         </button>
       </mat-form-field>
     </div>
@@ -230,7 +234,7 @@
         class="me-3 mb-3 apikey__icon"
         >key
       </mat-icon>
-      <mat-form-field class="w-75" appearance="outline">
+      <mat-form-field class="w-75">
         <mat-label>{{ 'apikey.addApikey.TOKEN' | translate }}</mat-label>
         <input
           matInput
@@ -240,11 +244,12 @@
         <button
           matSuffix
           [cdkCopyToClipboard]="bearerToken"
-          class="d-flex justify-content-center align-items-center"
           mat-stroked-button
           type="button">
-          <i class="eos-icons">content_copy</i>
-          {{ 'apikey.addApikey.COPY' | translate }}
+          <div class="d-flex justify-content-center align-items-center">
+            <i class="eos-icons">content_copy</i>
+            {{ 'apikey.addApikey.COPY' | translate }}
+          </div>
         </button>
       </mat-form-field>
     </div>

@@ -24,7 +24,7 @@ trait StaticResources extends Directives with LazyLogging {
     val rawPathOption: Option[String] = sys.env.get("PATH_PREFIX")
 
     rawPathOption match {
-      case Some(value) => "/" + value.trim
+      case Some(value) => "/" + UrlEscapers.urlFragmentEscaper().escape(value.trim)
       case None        => ""
     }
   }

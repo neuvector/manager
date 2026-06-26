@@ -19,9 +19,11 @@ trait StaticResources extends Directives with LazyLogging {
   private val shortPath           = 10
   private val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
   private val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
+  private val managerPathPrefix: Option[String] =
+    sys.env.get("PATH_PREFIX").map(_.trim).filter(_.nonEmpty)
 
   private val _managerPathPrefixWithPrependedSlash: String = {
-    val rawPathOption: Option[String] = sys.env.get("PATH_PREFIX")
+    val rawPathOption: Option[String] = managerPathPrefix
 
     rawPathOption match {
       case Some(value) => "/" + UrlEscapers.urlFragmentEscaper().escape(value.trim)
@@ -53,7 +55,7 @@ trait StaticResources extends Directives with LazyLogging {
     }
 
   val staticResources: Route = get {
-    rawPathPrefix(sys.env.get("PATH_PREFIX").map(r => Slash ~ r).getOrElse("")) {
+    rawPathPrefix(managerPathPrefix.map(r => Slash ~ r).getOrElse("")) {
       path("") {
         redirectMe(
           UrlEscapers

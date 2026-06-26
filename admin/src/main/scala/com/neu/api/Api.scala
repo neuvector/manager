@@ -40,6 +40,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 trait Api extends Directives with CoreActors with Core {
 
+  private val managerPathPrefix: Option[String] =
+    sys.env.get("PATH_PREFIX").map(_.trim).filter(_.nonEmpty)
   private final val timeOutStatus              = "Status: 408"
   private final val authenticationFailedStatus = "Status: 401"
   private final val serverErrorStatus          = "Status: 503"
@@ -93,7 +95,7 @@ trait Api extends Directives with CoreActors with Core {
   private val workloadApi       = new WorkloadApi(workloadService)
 
   val routes: Route = handleExceptions(exceptionHandler) {
-    rawPathPrefix(sys.env.get("PATH_PREFIX").map(r => Slash ~ r).getOrElse("")) {
+    rawPathPrefix(managerPathPrefix.map(r => Slash ~ r).getOrElse("")) {
       authenticationApi.route ~
       dashboardApi.route ~
       clusterApi.route ~

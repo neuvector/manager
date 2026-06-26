@@ -16,9 +16,9 @@ import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
 
 trait StaticResources extends Directives with LazyLogging {
-  private val shortPath           = 10
-  private val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
-  private val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
+  private val shortPath                         = 10
+  private val isUsingSSL: Boolean               = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
+  private val isDev: Boolean                    = sys.env.getOrElse("IS_DEV", "false") == "true"
   private val managerPathPrefix: Option[String] =
     sys.env.get("PATH_PREFIX").map(_.trim).filter(_.nonEmpty)
 

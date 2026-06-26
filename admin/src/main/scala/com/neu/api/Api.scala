@@ -42,9 +42,9 @@ trait Api extends Directives with CoreActors with Core {
 
   private val managerPathPrefix: Option[String] =
     sys.env.get("PATH_PREFIX").map(_.trim).filter(_.nonEmpty)
-  private final val timeOutStatus              = "Status: 408"
-  private final val authenticationFailedStatus = "Status: 401"
-  private final val serverErrorStatus          = "Status: 503"
+  private final val timeOutStatus               = "Status: 408"
+  private final val authenticationFailedStatus  = "Status: 401"
+  private final val serverErrorStatus           = "Status: 503"
 
   implicit def exceptionHandler: ExceptionHandler =
     ExceptionHandler {

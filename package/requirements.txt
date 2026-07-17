@@ -3,6 +3,6 @@ cmd2==2.3.3
 prettytable==2.5.0
 requests==2.33.0
 six==1.11.0
-supervisor==4.2.5
+supervisor==4.3.0
 urllib3==2.7.0
 setuptools==83.0.0

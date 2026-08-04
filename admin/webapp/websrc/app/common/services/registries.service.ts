@@ -214,7 +214,7 @@ export class RegistriesService {
       .pipe(
         map(res => {
           return {
-            queryToken: res.query_token,
+            queryId: res.query_id,
             summary: res.summary,
             totalRecords: res.total_records,
           };

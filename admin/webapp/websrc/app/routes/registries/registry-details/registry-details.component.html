@@ -104,7 +104,7 @@
         <app-registry-details-table-all-view
           *ngIf="registryDetails.isAllView"
           [filter]="filter"
-          [queryToken]="registryDetails.allScannedImagesSummary!.queryToken"
+          [queryId]="registryDetails.allScannedImagesSummary!.queryId"
           [totalCount]="registryDetails.allScannedImagesSummary!.totalRecords"
           [gridHeight]="gridHeight"
           [linkedImage]="linkedImage"

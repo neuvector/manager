@@ -87,7 +87,7 @@ export interface VulnerabilitiesQuerySessionData {
 }
 
 export interface VulnerabilitiesQueryData {
-  query_token: string;
+  query_id: string;
   status: string;
   summary: VulnerabilitiesQuerySummary;
   total_matched_records: number;

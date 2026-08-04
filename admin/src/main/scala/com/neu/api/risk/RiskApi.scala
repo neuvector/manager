@@ -100,12 +100,12 @@ class RiskApi(resourceService: RiskService) extends BaseApi {
             pathPrefix("assets-view") {
               pathEnd {
                 patch {
-                  parameter(Symbol("queryToken").?) { queryToken =>
+                  parameter(Symbol("queryId").?) { queryId =>
                     entity(as[VulnerabilityAssetQuery]) { assetQuery =>
                       Utils.respondWithWebServerHeaders() {
                         resourceService.queryCveAssetsView(
                           tokenId,
-                          queryToken,
+                          queryId,
                           assetQuery
                         )
                       }

@@ -133,13 +133,13 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
 
   def queryCveAssetsView(
     tokenId: String,
-    queryToken: Option[String],
+    queryId: Option[String],
     query: VulnerabilityAssetQuery
   ): Route = {
-    val url = queryToken.fold(
+    val url = queryId.fold(
       s"${baseClusterUri(tokenId)}/assetvul"
-    ) { queryToken =>
-      s"${baseClusterUri(tokenId)}/assetvul?token=$queryToken"
+    ) { queryId =>
+      s"${baseClusterUri(tokenId)}/assetvul?token=$queryId"
     }
     complete {
       RestClient.httpRequestWithHeader(

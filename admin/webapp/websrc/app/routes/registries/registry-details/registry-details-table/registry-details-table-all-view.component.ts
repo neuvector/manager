@@ -46,7 +46,7 @@ export class RegistryDetailsTableAllViewComponent
 {
   @Input() gridHeight!: number;
   @Input() selectedRegistry!: Summary;
-  @Input() queryToken!: string;
+  @Input() queryId!: string;
   @Input() totalCount!: number;
   @Input() filter!: FormControl;
   @Input() linkedImage: string;
@@ -151,7 +151,7 @@ export class RegistryDetailsTableAllViewComponent
   ) {}
 
   ngOnInit(): void {
-    console.log('On all images view', this.queryToken);
+    console.log('On all images view', this.queryId);
     this.gridOptions = {
       defaultColDef: {
         resizable: true,
@@ -192,7 +192,7 @@ export class RegistryDetailsTableAllViewComponent
   getData(params: IGetRowsParams) {
     return this.registriesService
       .getAllScannedImages(
-        this.queryToken,
+        this.queryId,
         params.startRow,
         300,
         params.sortModel,

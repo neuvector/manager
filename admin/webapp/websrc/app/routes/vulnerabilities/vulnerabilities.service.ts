@@ -37,7 +37,7 @@ export class VulnerabilitiesService {
             )
           ) {
             let emptyQuery: VulnerabilitiesQueryData = {
-              query_token: '',
+              query_id: '',
               total_matched_records: 0,
               total_records: 0,
               status: '',
@@ -64,7 +64,7 @@ export class VulnerabilitiesService {
       )
     ),
     tap(queryData => {
-      this.activeToken = queryData.query_token;
+      this.activeToken = queryData.query_id;
       this.activeSummary = queryData.summary;
       this.status = queryData.status;
       this.activeSummarySubject$.next();
@@ -282,12 +282,12 @@ export class VulnerabilitiesService {
   }
 
   getAssetsViewReportData(
-    queryToken: string,
+    queryId: string,
     lastModifiedTime: number,
     includeNoVulAssets: boolean = false
   ): Observable<any> {
     return this.risksHttpService
-      .postAssetsViewData(queryToken, lastModifiedTime, includeNoVulAssets);
+      .postAssetsViewData(queryId, lastModifiedTime, includeNoVulAssets);
   }
 
   getDomain(): Observable<string[]> {

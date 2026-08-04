@@ -213,7 +213,7 @@ export class VulnerabilitiesComponent implements OnDestroy {
   };
 
   private getVulnerabilitiesViewReportData = (
-    queryToken: string,
+    queryId: string,
     cb: Function,
     dialogRef,
     options
@@ -233,7 +233,7 @@ export class VulnerabilitiesComponent implements OnDestroy {
   };
 
   private getAssetsViewReportData = (
-    queryToken: string,
+    queryId: string,
     cb: Function,
     dialogRef,
     options
@@ -241,7 +241,7 @@ export class VulnerabilitiesComponent implements OnDestroy {
     this.withoutAppendix = options.withoutAppendix;
     this.vulnerabilitiesService
       .getAssetsViewReportData(
-        queryToken,
+        queryId,
         options.lastModifiedTime,
         options.includeNoVulAssets)
       .subscribe(

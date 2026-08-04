@@ -145,14 +145,14 @@ export class RisksHttpService {
     );
   }
 
-  postAssetsViewData(queryToken: string, lastModifiedTime: number, includeNoVulAssets: boolean = false) {
+  postAssetsViewData(queryId: string, lastModifiedTime: number, includeNoVulAssets: boolean = false) {
     return GlobalVariable.http.patch<any>(
       PathConstant.ASSETS_VULS_URL,
       {
         last_modified_timestamp: lastModifiedTime,
         include_no_vul_assets: includeNoVulAssets
       },
-      { params: { queryToken: queryToken } }
+      { params: { queryId: queryId } }
     );
   }
 

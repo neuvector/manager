@@ -37,7 +37,7 @@ export class ContainerDetailComponent {
   redirectToRegistry(imageId: string) {
     this.registriesService.getAllScannedImagesSummary().subscribe(data => {
       this.registriesService
-        .getAllScannedImages(data.queryToken, 0, 1, [], {
+        .getAllScannedImages(data.queryId, 0, 1, [], {
           '-': {
             filter: imageId,
           },

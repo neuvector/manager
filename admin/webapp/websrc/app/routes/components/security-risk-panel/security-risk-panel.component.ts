@@ -110,12 +110,14 @@ export class SecurityRiskPanelComponent implements OnInit {
       ],
       factorComment: [
         `${this.translate.instant('dashboard.heading.CVE_DB_VERSION')}: ${
-          summaryInfo.cvedb_version
+          summaryInfo.cvedb_version || '-'
         }`,
-        `(${this.datePipe.transform(
-          summaryInfo.cvedb_create_time,
-          'MMM dd, y'
-        )})`,
+        summaryInfo.cvedb_create_time
+          ? `(${this.datePipe.transform(
+              summaryInfo.cvedb_create_time,
+              'MMM dd, y'
+            )})`
+          : '',
       ],
       subScore: {
         height: `${95 - scoreInfo.security_scores.vulnerability_score_by_100}%`,

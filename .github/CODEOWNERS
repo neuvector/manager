@@ -6,3 +6,9 @@
 #   https://github.com/rancher/dashboard/blob/master/.github/OWNERS.md
 #
 # To find out who to contact about this repository, see that file.
+
+# For Neuvector team's ownership configuration
+* @neuvector/nv-ui
+cli/ @neuvector/backend
+package/requirements.txt @neuvector/backend
+.github/ @neuvector/backend 

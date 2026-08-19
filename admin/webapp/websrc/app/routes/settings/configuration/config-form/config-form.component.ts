@@ -17,7 +17,7 @@ import { FormlyFormOptions } from '@ngx-formly/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
 import { SettingsService } from '@services/settings.service';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { ConfigFormConfig } from './config-form-config';
 import { OtherWebhookType } from './config-form-config/constants';
@@ -36,6 +36,9 @@ export class ConfigFormComponent implements OnInit {
 
   ibmSetup!: IBMSetupGetResponse;
   submittingForm = false;
+  hasPendingCertificateEdit = true;
+  hasWebhookValueChanged = false;
+  private originalWebhooks: any[] = [];
   configForm = new FormGroup({});
   configFields = cloneDeep(ConfigFormConfig);
   configOptions: FormlyFormOptions = {
@@ -74,6 +77,35 @@ export class ConfigFormComponent implements OnInit {
     return this._config;
   }
 
+  private updatePendingCertificateEdit(): void {
+    const formValue = this.configForm?.getRawValue() as any;
+    const certs =
+      formValue?.tls?.cacerts ?? this._config?.tls?.cacerts ?? [];
+    this.hasPendingCertificateEdit =
+      Array.isArray(certs) && certs.some(c => c?.isEditable === true);
+  }
+
+  private updateWebhookValueChanges(): void {
+    const formValue = this.configForm?.getRawValue() as any;
+    const currentWebhooks = cloneDeep(formValue?.webhooks ?? []);
+
+    if (!Array.isArray(currentWebhooks) || !Array.isArray(this.originalWebhooks)) {
+      this.hasWebhookValueChanged = false;
+      return;
+    }
+
+    const normalize = (items: any[] = []) =>
+      items.map(({ isEditable, ...webhook }) => ({
+        ...webhook,
+        type: webhook.type === OtherWebhookType ? '' : webhook.type,
+      }));
+
+    this.hasWebhookValueChanged = !isEqual(
+      normalize(currentWebhooks),
+      normalize(this.originalWebhooks)
+    );
+  }
+
   @Input() set config(val) {
     this._config = val;
     if (this._config.proxy.registry_http_proxy.url) {
@@ -96,6 +128,9 @@ export class ConfigFormComponent implements OnInit {
       e.type = e.type || OtherWebhookType;
     });
     this._config.ibmsa.ibmsa_ep_dashboard_url ||= this.dashboardUrl;
+    this.originalWebhooks = cloneDeep(this._config?.webhooks ?? []);
+    this.updatePendingCertificateEdit();
+    this.updateWebhookValueChanges();
   }
 
   constructor(
@@ -127,6 +162,12 @@ export class ConfigFormComponent implements OnInit {
       isNsUserExportNetworkRuleAuthorized: isSettingAuth,
     };
     this.serverErrorMessage = '';
+    this.configForm.valueChanges.subscribe(() => {
+      this.updatePendingCertificateEdit();
+      this.updateWebhookValueChanges();
+    });
+    this.updatePendingCertificateEdit();
+    this.updateWebhookValueChanges();
     this.cd.detectChanges();
 
     // reset the status of the sliders to fix the issue NVSHAS-8599
@@ -159,6 +200,14 @@ export class ConfigFormComponent implements OnInit {
               this._config.misc.cluster_name;
             this.multiClusterService.dispatchClusterNameChangeEvent();
           }
+
+          this.originalWebhooks = cloneDeep(
+            (this.configForm.getRawValue() as any)?.webhooks ??
+              this._config?.webhooks ??
+              []
+          );
+          this.updateWebhookValueChanges();
+
           this.notificationService.open(this.tr.instant('setting.SUBMIT_OK'));
           this.configOptions.resetModel?.(this._config);
           setTimeout(() => this.configOptions.resetModel?.(this._config));

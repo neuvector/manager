@@ -97,7 +97,7 @@ export const TlsTableField: FormlyFieldConfig = {
           rows: 15,
           readOnly: {
             type: 'text',
-            template: field => `${field.model[field.key] || ''}`,
+            template: () => '',
           },
         },
         validators: {
@@ -110,7 +110,7 @@ export const TlsTableField: FormlyFieldConfig = {
         defaultValue: true,
         templateOptions: {
           flexWidth: '10%',
-          showDeleteButtonOnly: true,
+          showDeleteButtonOnly: false,
           fieldClass: 'justify-content-center',
         },
         expressionProperties: {

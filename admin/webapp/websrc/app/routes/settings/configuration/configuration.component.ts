@@ -83,6 +83,7 @@ export class ConfigurationComponent
             cacerts: value.tls_cfg?.cacerts?.map((c, i) => ({
               id: i,
               context: c,
+              isEditable: false,
             })),
           },
         };

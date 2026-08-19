@@ -8,7 +8,11 @@
   </ng-container>
   <ng-template #otherButtons>
     <ng-container *ngIf="isEditable.value">
-      <button type="button" mat-button (click)="submit()">
+      <button
+        type="button"
+        mat-button
+        (click)="submit()"
+        [disabled]="!form.valid">
         {{ 'cveProfile.ACCEPT' | translate }}
       </button>
       <button type="button" mat-button (click)="cancel()">
@@ -17,10 +21,10 @@
     </ng-container>
     <ng-container *ngIf="!isEditable.value">
       <button type="button" mat-button (click)="edit()">
-        {{ 'cveProfile.EDIT' | translate }}
+        <em class="eos-icons">edit</em>
       </button>
       <button type="button" mat-button (click)="delete()">
-        {{ 'cveProfile.REMOVE' | translate }}
+        <em class="eos-icons">delete</em>
       </button>
     </ng-container>
   </ng-template>

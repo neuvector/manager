@@ -12,7 +12,7 @@
       *appDisplayControl="'write_config'"
       [appearance]="'mat-raised-button'"
       [color]="'primary'"
-      [disabled]="!configForm.valid || !configForm.dirty || submittingForm"
+      [disabled]="hasPendingCertificateEdit || !configForm.valid || (!configForm.dirty && !hasWebhookValueChanged) || submittingForm"
       [loading]="submittingForm"
       [text]="'setting.SUBMIT' | translate"
       [type]="'submit'">

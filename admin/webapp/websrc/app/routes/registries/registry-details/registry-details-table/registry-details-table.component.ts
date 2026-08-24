@@ -76,6 +76,10 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
     {
       field: 'vulnerabilities',
       cellRenderer: 'vulnerabilitiesCellRenderer',
+      valueGetter: params =>
+        params.data
+          ? `${params.data.critical}_${params.data.high}_${params.data.medium}`
+          : '',
       comparator: (valueA, valueB, nodeA, nodeB) => {
         if (
           nodeA.data.critical + nodeA.data.high + nodeA.data.medium ===

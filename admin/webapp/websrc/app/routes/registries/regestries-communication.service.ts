@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { RepoGetResponse, Summary } from '@common/types';
 import {
   filter,
@@ -15,6 +15,7 @@ import { FormControl } from '@angular/forms';
 export interface RegistryDetails {
   selectedRegistry: Summary;
   isAllView: boolean;
+  isFedRepo?: boolean;
   repositories?: RepoGetResponse;
   allScannedImagesSummary?: any;
 }
@@ -30,17 +31,20 @@ export class RegistriesCommunicationService {
   detailFilter: FormControl;
   selectedRegistry$: Observable<Summary | undefined> =
     this.selectedRegistrySubject$.asObservable();
+
   private refreshingDetailsSubject$ = new BehaviorSubject<boolean>(false);
   refreshingDetails$ = this.refreshingDetailsSubject$.asObservable();
-  registryDetails$ = this.selectedRegistry$
+
+  registryDetails$ = combineLatest([
+    this.selectedRegistry$.pipe(filter(summary => summary !== undefined)),
+    this.refreshDetailsSubject$.pipe(startWith(null)),
+  ])
     .pipe(
-      filter(summary => summary !== undefined),
-      // distinctUntilChanged(),
-      switchMap(summary => {
+      switchMap(([summary]) => {
         if (!!summary!.isAllView) {
           return this.registriesService.getAllScannedImagesSummary().pipe(
             map(allScannedImagesSummary => ({
-              selectedRegistry: summary,
+              selectedRegistry: summary!,
               isAllView: true,
               isFedRepo: false,
               allScannedImagesSummary,
@@ -56,7 +60,7 @@ export class RegistriesCommunicationService {
             .getFederatedRepoScanRegistrySummary(summary!.name)
             .pipe(
               map(repositories => ({
-                selectedRegistry: summary,
+                selectedRegistry: summary!,
                 isAllView: false,
                 isFedRepo: true,
                 repositories,
@@ -70,7 +74,7 @@ export class RegistriesCommunicationService {
         } else {
           return this.registriesService.getRepo(summary!.name).pipe(
             map(repositories => ({
-              selectedRegistry: summary,
+              selectedRegistry: summary!,
               isAllView: false,
               repositories,
             })),
@@ -82,8 +86,8 @@ export class RegistriesCommunicationService {
           );
         }
       })
-    )
-    .pipe() as Observable<RegistryDetails>;
+    ) as Observable<RegistryDetails>;
+
   private startingScanSubject$ = new BehaviorSubject<boolean>(false);
   startingScan$ = this.startingScanSubject$.asObservable();
   private stoppingScanSubject$ = new BehaviorSubject<boolean>(false);

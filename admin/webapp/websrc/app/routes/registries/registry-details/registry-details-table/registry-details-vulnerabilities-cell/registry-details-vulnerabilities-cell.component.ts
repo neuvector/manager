@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
@@ -11,18 +11,26 @@ import { ICellRendererParams } from 'ag-grid-community';
 })
 export class RegistryDetailsVulnerabilitiesCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
-  critical!: string;
-  high!: string;
-  medium!: string;
+  critical!: number | string;
+  high!: number | string;
+  medium!: number | string;
+
+  constructor(private cd: ChangeDetectorRef) {}
 
   agInit(params: ICellRendererParams): void {
-    this.params = params;
-    this.critical = params && params.node.data ? params.node.data.critical : 0;
-    this.high = params && params.node.data ? params.node.data.high : 0;
-    this.medium = params && params.node.data ? params.node.data.medium : 0;
+    this.updateValues(params);
   }
 
   refresh(params: ICellRendererParams): boolean {
-    return false;
+    this.updateValues(params);
+    this.cd.markForCheck();
+    return true;
+  }
+
+  private updateValues(params: ICellRendererParams): void {
+    this.params = params;
+    this.critical = params && params.node?.data ? params.node.data.critical : 0;
+    this.high = params && params.node?.data ? params.node.data.high : 0;
+    this.medium = params && params.node?.data ? params.node.data.medium : 0;
   }
 }

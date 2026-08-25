@@ -4,6 +4,7 @@ import {
   Component,
   Inject,
   Input,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -19,6 +20,7 @@ import { NotificationService } from '@services/notification.service';
 import { SettingsService } from '@services/settings.service';
 import { cloneDeep, isEqual } from 'lodash';
 import { finalize } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { ConfigFormConfig } from './config-form-config';
 import { OtherWebhookType } from './config-form-config/constants';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -31,8 +33,9 @@ import { MultiClusterService } from '@services/multi-cluster.service';
   templateUrl: './config-form.component.html',
   styleUrls: ['./config-form.component.scss'],
 })
-export class ConfigFormComponent implements OnInit {
+export class ConfigFormComponent implements OnInit, OnDestroy {
   private _config!: ConfigV2Vo;
+  private valueChangesSub?: Subscription;
 
   ibmSetup!: IBMSetupGetResponse;
   submittingForm = false;
@@ -162,7 +165,7 @@ export class ConfigFormComponent implements OnInit {
       isNsUserExportNetworkRuleAuthorized: isSettingAuth,
     };
     this.serverErrorMessage = '';
-    this.configForm.valueChanges.subscribe(() => {
+    this.valueChangesSub = this.configForm.valueChanges.subscribe(() => {
       this.updatePendingCertificateEdit();
       this.updateWebhookValueChanges();
     });
@@ -174,6 +177,10 @@ export class ConfigFormComponent implements OnInit {
     setTimeout(() => {
       this.configForm.markAsPristine();
     }, 300);
+  }
+
+  ngOnDestroy(): void {
+    this.valueChangesSub?.unsubscribe();
   }
 
   submitForm(): void {

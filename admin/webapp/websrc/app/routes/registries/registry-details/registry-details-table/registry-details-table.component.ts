@@ -64,6 +64,10 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
     {
       field: 'base_os',
       cellRenderer: 'osCellRenderer',
+      valueGetter: params =>
+        params.data
+          ? `${params.data.base_os}_${params.data.os_scan_status}`
+          : '',
       headerValueGetter: () => this.translate.instant('scan.gridHeader.OS'),
       minWidth: 200,
     },

@@ -11,9 +11,9 @@ import { ICellRendererParams } from 'ag-grid-community';
 })
 export class RegistryDetailsVulnerabilitiesCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
-  critical!: number | string;
-  high!: number | string;
-  medium!: number | string;
+  critical: number = 0;
+  high: number = 0;
+  medium: number = 0;
 
   constructor(private cd: ChangeDetectorRef) {}
 
@@ -29,8 +29,8 @@ export class RegistryDetailsVulnerabilitiesCellComponent implements ICellRendere
 
   private updateValues(params: ICellRendererParams): void {
     this.params = params;
-    this.critical = params && params.node?.data ? params.node.data.critical : 0;
-    this.high = params && params.node?.data ? params.node.data.high : 0;
-    this.medium = params && params.node?.data ? params.node.data.medium : 0;
+    this.critical = params && params.node?.data ? params.node.data.critical ?? 0 : 0;
+    this.high = params && params.node?.data ? params.node.data.high ?? 0 : 0;
+    this.medium = params && params.node?.data ? params.node.data.medium ?? 0 : 0;
   }
 }

@@ -46,7 +46,7 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
 
   given groupMappedRoleFormat: RootJsonFormat[GroupMappedRole] = jsonFormat3(GroupMappedRole.apply)
   given ldapServerFormat: RootJsonFormat[LdapServer]           = jsonFormat13(LdapServer.apply)
-  given samlServerFormat: RootJsonFormat[SamlServer]           = jsonFormat13(SamlServer.apply)
+  given samlServerFormat: RootJsonFormat[SamlServer]           = jsonFormat14(SamlServer.apply)
   given ssoServerFormat: RootJsonFormat[SsoServer]             = jsonFormat3(SsoServer.apply)
   given samlTokenFormat: RootJsonFormat[SamlToken]             = jsonFormat3(SamlToken.apply)
   given samlResponseFormat: RootJsonFormat[SamlResponse]       = jsonFormat3(SamlResponse.apply)

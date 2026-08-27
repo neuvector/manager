@@ -46,6 +46,23 @@
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <i class="eos-icons me-3 text-primary mb-4">account_box</i>
+      <mat-form-field class="w-100">
+        <mat-label> {{ 'okta.AUDIENCE_URI' | translate }}</mat-label>
+        <input
+          formControlName="audience_uri"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
+        <mat-error *ngIf="samlForm.controls.audience_uri.hasError('required')">
+          {{ 'general.REQUIRED' | translate }}
+        </mat-error>
+        <mat-error
+          *ngIf="samlForm.controls.audience_uri.hasError('invalidURL')">
+          {{ 'okta.INVALID_URL' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons me-3 text-primary mb-4">logout</i>
       <span class="me-3 mb-4">{{ 'okta.SAML_SLO' | translate }}</span>
       <mat-slide-toggle

@@ -43,6 +43,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
   samlForm = new FormGroup({
     sso_url: new FormControl(null, [Validators.required, urlValidator()]),
     issuer: new FormControl(null, [Validators.required, urlValidator()]),
+    audience_uri: new FormControl(null, [Validators.required, urlValidator()]),
     slo_enabled: new FormControl(false, [Validators.required]),
     slo_url: new FormControl({ value: null, disabled: true }, [
       Validators.required,

@@ -3444,6 +3444,7 @@
     "EXTRA_CERT": "额外的X.509证书",
     "INVALID_URL": "请输入有效的网址.",
     "GROUP_CLAIM": "组别声明",
+    "AUDIENCE_URI": "受众URI",
     "ADMIN_HINT": "添加SAML组到管理员",
     "READER_HINT": "添加SAML组到用户",
     "CI_HINT": "添加SAML组到CI集成",

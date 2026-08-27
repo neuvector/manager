@@ -16,7 +16,8 @@ case class SamlServer(
   slo_enabled: Option[Boolean],
   slo_url: Option[String],
   signing_cert: Option[String],
-  signing_key: Option[String]
+  signing_key: Option[String],
+  audience_uri: Option[String]
 )
 
 case class SamlConfig(name: String, saml: SamlServer)

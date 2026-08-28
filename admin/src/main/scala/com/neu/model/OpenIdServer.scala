@@ -75,4 +75,4 @@ case class OpenIdServerConfig(name: String, oidc: OpenIdServer)
  * @param redirect_endpoint
  *   the redirect url
  */
-case class RedirectURL(redirect_endpoint: String)
+case class RedirectURL(redirect_endpoint: String, sso_nonce: Option[String] = None)

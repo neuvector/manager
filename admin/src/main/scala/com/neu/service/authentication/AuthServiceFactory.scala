@@ -21,12 +21,17 @@ trait AuthService extends BaseService with DefaultJsonFormats with LazyLogging {
     state: Option[String],
     ip: String,
     host: Option[String],
-    serverName: Option[String]
+    serverName: Option[String],
+    nonce: String
   ): Route
 
-  def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route
+  def validateToken(
+    tokenId: Option[String],
+    ip: Option[RemoteAddress],
+    nonce: Option[String]
+  ): Route
 
-  def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route
+  def login(ip: RemoteAddress, host: String, ctx: RequestContext, nonce: String): Route
 
   def logout(host: Option[String], tokenId: String): Route
 

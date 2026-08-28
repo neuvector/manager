@@ -4,6 +4,11 @@ import com.neu.api.*
 import com.neu.service.Utils
 import com.neu.service.authentication.AuthService
 import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.model.headers.HttpCookie
+
+import java.nio.charset.StandardCharsets
+import java.util.Base64
+import java.util.UUID
 
 //noinspection UnstableApiUsage
 class OpenIdAuthApi(
@@ -19,13 +24,29 @@ class OpenIdAuthApi(
           optionalHeaderValueByName("Host") { host =>
             parameter(Symbol("serverName").?) { serverName =>
               Utils.respondWithWebServerHeaders() {
-                authService.getResources(
-                  code,
-                  state,
-                  ip.toString(),
-                  host,
-                  serverName
-                )
+                if (code.isEmpty && state.isEmpty) {
+                  // Initial request: generate nonce and set cookie
+                  val nonce        = java.util.UUID.randomUUID().toString
+                  val encodedNonce =
+                    Base64.getEncoder.encodeToString(nonce.getBytes(StandardCharsets.UTF_8))
+                  setCookie(HttpCookie("temp", encodedNonce)) {
+                    authService.getResources(code, state, ip.toString(), host, serverName, nonce)
+                  }
+                } else {
+                  // OAuth callback: read nonce from existing cookie, do not overwrite it
+                  optionalCookie("temp") { tempCookie =>
+                    val nonce = tempCookie
+                      .flatMap(c =>
+                        scala.util
+                          .Try(
+                            new String(Base64.getDecoder.decode(c.value), StandardCharsets.UTF_8)
+                          )
+                          .toOption
+                      )
+                      .getOrElse("")
+                    authService.getResources(code, state, ip.toString(), host, serverName, nonce)
+                  }
+                }
               }
             }
           }
@@ -34,8 +55,17 @@ class OpenIdAuthApi(
     } ~
     (patch & path(openId)) {
       extractClientIP { ip =>
-        Utils.respondWithWebServerHeaders() {
-          authService.validateToken(None, Some(ip))
+        optionalCookie("temp") { tempCookie =>
+          val nonce = tempCookie.flatMap(c =>
+            scala.util
+              .Try(new String(Base64.getDecoder.decode(c.value), StandardCharsets.UTF_8))
+              .toOption
+          )
+          Utils.respondWithWebServerHeaders() {
+            deleteCookie("temp") {
+              authService.validateToken(None, Some(ip), nonce)
+            }
+          }
         }
       }
     }

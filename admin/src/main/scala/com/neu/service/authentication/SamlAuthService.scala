@@ -27,14 +27,14 @@ class SamlAuthService()(implicit
   val saml             = "token_auth_server"
   val samlslo          = "token_auth_server_slo"
   private val rootPath = "/"
-  private val samlKey  = "samlSso"
 
   override def getResources(
     code: Option[String],
     state: Option[String],
     ip: String,
     host: Option[String],
-    serverName: Option[String]
+    serverName: Option[String],
+    nonce: String
   ): Route = {
     val resourcesFuture = if (serverName.isEmpty) {
       logger.info("saml-g: servername is empty")
@@ -47,7 +47,8 @@ class SamlAuthService()(implicit
         samlRedirectUrlToJson(
           SamlRedirectURL(
             s"https://${host.getOrElse("")}/$saml",
-            s"https://${host.getOrElse("")}/$saml"
+            s"https://${host.getOrElse("")}/$saml",
+            Some(nonce)
           )
         )
       )
@@ -58,13 +59,16 @@ class SamlAuthService()(implicit
     complete(result)
   }
 
-  override def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route = {
+  override def validateToken(
+    tokenId: Option[String],
+    ip: Option[RemoteAddress],
+    nonce: Option[String]
+  ): Route = {
     logger.info("saml-pt: to validate authToken.")
-    val authToken = AuthenticationManager.validate(samlKey)
-    authToken match {
+    nonce.flatMap(AuthenticationManager.validateSsoToken) match {
       case Some(token) =>
         logger.info("saml-pt: authToken matched.")
-        AuthenticationManager.invalidate(samlKey)
+        nonce.foreach(AuthenticationManager.invalidateSsoToken)
         complete(token)
       case None        =>
         logger.info("saml-pt: no authToken.")
@@ -72,9 +76,9 @@ class SamlAuthService()(implicit
     }
   }
 
-  override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route = {
+  override def login(ip: RemoteAddress, host: String, ctx: RequestContext, nonce: String): Route = {
     logger.info(s"saml-p: $host")
-    onComplete(processLoginRequest(ctx, ip, host)) {
+    onComplete(processLoginRequest(ctx, ip, host, nonce)) {
       case Success(route) => route
       case Failure(ex)    =>
         logger.error("Login process failed", ex)
@@ -110,18 +114,20 @@ class SamlAuthService()(implicit
   private def processLoginRequest(
     ctx: RequestContext,
     ip: RemoteAddress,
-    host: String
+    host: String,
+    nonce: String
   ): Future[Route] =
     for {
       entityString <- Unmarshal(ctx.request.entity).to[String]
-      response     <- makeAuthRequest(entityString, ip.toString, host)
-      route        <- handleAuthResponse(response)
+      response     <- makeAuthRequest(entityString, ip.toString, host, nonce)
+      route        <- handleAuthResponse(response, nonce)
     } yield route
 
   private def makeAuthRequest(
     entityString: String,
     ip: String,
-    host: String
+    host: String,
+    nonce: String
   ): Future[HttpResponse] =
     RestClient.passHttpRequest(
       s"$baseUri/$auth/saml1",
@@ -133,26 +139,32 @@ class SamlAuthService()(implicit
             SamlToken(
               entityString,
               None,
-              Some(s"https://$host/$saml")
+              Some(s"https://$host/$saml"),
+              Some(nonce)
             )
           )
         )
       )
     )
 
-  private def handleAuthResponse(response: HttpResponse): Future[Route] = {
-    logger.info("saml-p: added temp cookie.")
+  private def handleAuthResponse(response: HttpResponse, nonce: String): Future[Route] = {
+    logger.info("saml-p: processing auth response.")
     response.status match {
       case StatusCodes.OK =>
-        logger.info(s"saml-p: added authToken. redirect to $rootPath")
+        logger.info(s"saml-p: success, storing token under nonce. redirecting to $rootPath")
         Unmarshal(response.entity).to[String].map { authToken =>
           val userToken: UserTokenNew = AuthenticationManager.parseToken(authToken)
-          AuthenticationManager.putToken("samlSso", userToken)
+          AuthenticationManager.putSsoToken(nonce, userToken)
           redirect(rootPath, StatusCodes.Found)
         }
       case _              =>
         logger.warn(s"saml-p: ${response.status}. SAML login error. redirect to $rootPath ")
-        Future.successful(redirect(rootPath, StatusCodes.MovedPermanently))
+        // Clear the temp cookie so the browser does not retain a stale nonce
+        Future.successful(
+          deleteCookie("temp") {
+            redirect(rootPath, StatusCodes.MovedPermanently)
+          }
+        )
     }
   }
 }

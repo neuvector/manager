@@ -18,7 +18,7 @@ class SuseAuthApi(
       extractClientIP { ip =>
         extractRequestContext { ctx =>
           Utils.respondWithWebServerHeaders() {
-            authService.login(ip, "", ctx)
+            authService.login(ip, "", ctx, "")
           }
         }
       }
@@ -34,7 +34,7 @@ class SuseAuthApi(
       pathPrefix("heartbeat") {
         patch {
           Utils.respondWithWebServerHeaders() {
-            authService.validateToken(Some(tokenId), None)
+            authService.validateToken(Some(tokenId), None, None)
           }
         }
       } ~

@@ -48,7 +48,7 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   given ldapServerFormat: RootJsonFormat[LdapServer]           = jsonFormat13(LdapServer.apply)
   given samlServerFormat: RootJsonFormat[SamlServer]           = jsonFormat14(SamlServer.apply)
   given ssoServerFormat: RootJsonFormat[SsoServer]             = jsonFormat3(SsoServer.apply)
-  given samlTokenFormat: RootJsonFormat[SamlToken]             = jsonFormat3(SamlToken.apply)
+  given samlTokenFormat: RootJsonFormat[SamlToken]             = jsonFormat4(SamlToken.apply)
   given samlResponseFormat: RootJsonFormat[SamlResponse]       = jsonFormat3(SamlResponse.apply)
 
   given serverOIDCFormat: RootJsonFormat[ServerOIDC]                 = jsonFormat11(ServerOIDC.apply)
@@ -58,8 +58,8 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   given openIdServerConfigFormat: RootJsonFormat[OpenIdServerConfig] = jsonFormat2(
     OpenIdServerConfig.apply
   )
-  given redirectURLFormat: RootJsonFormat[RedirectURL]               = jsonFormat1(RedirectURL.apply)
-  given samlRedirectURLFormat: RootJsonFormat[SamlRedirectURL]       = jsonFormat2(SamlRedirectURL.apply)
+  given redirectURLFormat: RootJsonFormat[RedirectURL]               = jsonFormat2(RedirectURL.apply)
+  given samlRedirectURLFormat: RootJsonFormat[SamlRedirectURL]       = jsonFormat3(SamlRedirectURL.apply)
 
   given ldapSettingFormat: RootJsonFormat[LdapSetting]                     = jsonFormat4(LdapSetting.apply)
   given ldapSettingWrapFormat: RootJsonFormat[LdapSettingWrap]             = jsonFormat1(LdapSettingWrap.apply)

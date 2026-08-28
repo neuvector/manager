@@ -26,12 +26,17 @@ case class SamlConfigWrap(config: SamlConfig)
 
 case class SsoServer(server_name: String, server_type: String, redirect_url: String)
 
-case class SamlRedirectURL(redirect_endpoint: String, issuer: String)
+case class SamlRedirectURL(
+  redirect_endpoint: String,
+  issuer: String,
+  sso_nonce: Option[String] = None
+)
 
 case class SamlToken(
   token: String,
   state: Option[String] = None,
-  redirect_endpoint: Option[String] = None
+  redirect_endpoint: Option[String] = None,
+  sso_nonce: Option[String] = None
 )
 
 case class SamlResponse(

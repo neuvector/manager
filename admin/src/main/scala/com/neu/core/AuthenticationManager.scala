@@ -22,6 +22,28 @@ object AuthenticationManager extends LazyLogging {
   private val tokenMap: mutable.Map[String, UserTokenNew] =
     scala.collection.mutable.Map[String, UserTokenNew]()
 
+  // Per-attempt SSO tokens keyed by nonce; entries expire after 5 minutes
+  private val ssoTtlMs: Long                                           = 5L * 60 * 1000
+  private val pendingSsoMap: mutable.Map[String, (UserTokenNew, Long)] = mutable.Map.empty
+
+  def putSsoToken(nonce: String, userToken: UserTokenNew): Unit = {
+    cleanExpiredSsoTokens()
+    pendingSsoMap += nonce -> (userToken, System.currentTimeMillis())
+  }
+
+  def validateSsoToken(nonce: String): Option[UserTokenNew] =
+    pendingSsoMap.get(nonce).collect {
+      case (t, ts) if System.currentTimeMillis() - ts <= ssoTtlMs => t
+    }
+
+  def invalidateSsoToken(nonce: String): Unit =
+    pendingSsoMap -= nonce
+
+  private def cleanExpiredSsoTokens(): Unit = {
+    val now = System.currentTimeMillis()
+    pendingSsoMap.filterInPlace { case (_, (_, ts)) => now - ts <= ssoTtlMs }
+  }
+
   private val tokenClusterMap: mutable.Map[String, String] =
     scala.collection.mutable.Map[String, String]()
 

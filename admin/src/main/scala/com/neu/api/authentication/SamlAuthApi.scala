@@ -22,15 +22,19 @@ class SamlAuthApi(
   private val saml        = "token_auth_server"
   private val samlslo     = "token_auth_server_slo"
   private val rootPath    = "/"
-  private val samlKey     = "samlSso"
 
   val route: Route =
     (get & path(saml)) {
       extractClientIP { _ =>
         optionalHeaderValueByName("Host") { host =>
           parameter(Symbol("serverName").?) { serverName =>
-            Utils.respondWithWebServerHeaders() {
-              authService.getResources(None, None, "", host, serverName)
+            val nonce        = java.util.UUID.randomUUID().toString
+            val encodedNonce =
+              Base64.getEncoder.encodeToString(nonce.getBytes(StandardCharsets.UTF_8))
+            setCookie(HttpCookie("temp", encodedNonce)) {
+              Utils.respondWithWebServerHeaders() {
+                authService.getResources(None, None, "", host, serverName, nonce)
+              }
             }
           }
         }
@@ -38,8 +42,19 @@ class SamlAuthApi(
     } ~
     (patch & path(saml)) {
       extractClientIP { _ =>
-        Utils.respondWithWebServerHeaders() {
-          authService.validateToken(None, None)
+        optionalCookie("temp") { tempCookie =>
+          val nonce = tempCookie.flatMap { c =>
+            scala.util
+              .Try(
+                new String(Base64.getDecoder.decode(c.value), StandardCharsets.UTF_8)
+              )
+              .toOption
+          }
+          deleteCookie("temp") {
+            Utils.respondWithWebServerHeaders() {
+              authService.validateToken(None, None, nonce)
+            }
+          }
         }
       }
     } ~
@@ -47,11 +62,16 @@ class SamlAuthApi(
       extractClientIP { ip =>
         optionalHeaderValueByName("Host") {
           case Some(host) =>
-            val text = Base64.getEncoder.encodeToString(samlKey.getBytes(StandardCharsets.UTF_8))
-
-            setCookie(HttpCookie("temp", text)) {
+            optionalCookie("temp") { tempCookie =>
+              val nonce = tempCookie
+                .flatMap(c =>
+                  scala.util
+                    .Try(new String(Base64.getDecoder.decode(c.value), StandardCharsets.UTF_8))
+                    .toOption
+                )
+                .getOrElse("")
               extractRequestContext { ctx =>
-                authService.login(ip, host, ctx)
+                authService.login(ip, host, ctx, nonce)
               }
             }
           case None       =>

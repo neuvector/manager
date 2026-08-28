@@ -34,10 +34,15 @@ class SuseAuthService()(implicit
     state: Option[String],
     ip: String,
     host: Option[String],
-    serverName: Option[String]
+    serverName: Option[String],
+    nonce: String
   ): Route = complete((StatusCodes.MethodNotAllowed, "Method not allowed."))
 
-  override def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route =
+  override def validateToken(
+    tokenId: Option[String],
+    ip: Option[RemoteAddress],
+    nonce: Option[String]
+  ): Route =
     complete {
       RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId.get)}/$auth",
@@ -47,7 +52,7 @@ class SuseAuthService()(implicit
       )
     }
 
-  override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route = {
+  override def login(ip: RemoteAddress, host: String, ctx: RequestContext, nonce: String): Route = {
     val suseCookieOpt              = ctx.request.cookies.find(_.name == suseCookieName)
     val bodyFuture: Future[String] = ctx.request.entity match {
       case HttpEntity.Strict(_, data) =>

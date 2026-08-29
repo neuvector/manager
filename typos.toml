@@ -2,3 +2,6 @@
 extend-exclude = [
   "admin/src/main/resources/**"
 ]
+
+[default.extend-words]
+fo = "fo"

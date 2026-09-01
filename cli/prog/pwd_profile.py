@@ -53,7 +53,7 @@ def detail(data, name):
 
     if profile["enable_block_after_failed_login"] is True and profile["block_after_failed_login_count"] > 0 and profile[
         "block_minutes"] > 0:
-        profile[header1] = "block {} minutes after {} consecutive login faulures".format(profile["block_minutes"],
+        profile[header1] = "block {} minutes after {} consecutive login failures".format(profile["block_minutes"],
                                                                                          profile[
                                                                                              "block_after_failed_login_count"])
     else:

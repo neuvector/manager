@@ -215,7 +215,7 @@ def set_user_local_config(data, global_role, timeout, email, locale, password):
         user["locale"] = locale
     if password == True:
         if data.username == data.id_or_name:
-            # set currrent login user's password
+            # set current login user's password
             current = click.prompt("Current Password", hide_input=True)
         pass1 = click.prompt("New Password", hide_input=True)
         pass2 = click.prompt("Confirm Password", hide_input=True)
@@ -246,7 +246,7 @@ def set_user_local_config(data, global_role, timeout, email, locale, password):
 @click.option('--domain', '-d', multiple=True, help="Domains of the role.")
 @click.pass_obj
 def set_user_local_role(data, role, domain):
-    """Set user role domain access control. Users with global role fedAdmin cannot be assined domain roles."""
+    """Set user role domain access control. Users with global role fedAdmin cannot be assigned domain roles."""
 
     if len(domain) > 0:
         user = {"fullname": data.id_or_name, "role": role, "domains": domain}

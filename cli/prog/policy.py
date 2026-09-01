@@ -471,7 +471,7 @@ def create_response_rule(data, scope, group, event, condition, action, webhook, 
 @set.group("response")
 @click.pass_obj
 def set_response(data):
-    """Set reponse rule configuration."""
+    """Set response rule configuration."""
 
 
 @set_response.command("rule")
@@ -543,13 +543,13 @@ def set_response_rule(data, id, scope, group, event, condition, action, webhook,
 @unset.group("response")
 @click.pass_obj
 def unset_response(data):
-    """Unset reponse rule configuration."""
+    """Unset response rule configuration."""
 
 
 @unset_response.group("rule")
 @click.pass_obj
 def unset_response_rule(data):
-    """Unset reponse rule configuration."""
+    """Unset response rule configuration."""
 
 
 @unset_response_rule.command("group")

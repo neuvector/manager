@@ -390,10 +390,10 @@ def custom_check(data, id_or_name):
     if not group:
         return
 
-    enabledDsiplay = "enabled"
+    enabledDisplay = "enabled"
     if not group["enabled"]:
-        enabledDsiplay = "disabled"
-    click.echo("custom check is {}".format(enabledDsiplay))
+        enabledDisplay = "disabled"
+    click.echo("custom check is {}".format(enabledDisplay))
     click.echo("")
     
     if not group["writable"]:
@@ -554,7 +554,7 @@ def set_group_setting(data, image, node, domain, container, service, label, addr
     """Set group configuration.
 
     For partial match, add @ in front of the value streig, for example --image @nginx.
-    if the option value starts with ^, the criterion matches strign with prefix 'value'.
+    if the option value starts with ^, the criterion matches string with prefix 'value'.
     For --label, use: key=value, key^value or key@value.
     For --address, use: --address=1.2.3.4, --address=1.2.3.0/24, --address 1.2.3.1-1.2.3.31
     To input an empty string, use: --service =

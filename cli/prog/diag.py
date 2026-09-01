@@ -303,7 +303,7 @@ def pcap(data, filename, limit, id):
 
     click.echo("read end")
     kwargs = {'strict': True}
-    clen = int(headers.get('Content-Length', '-1'))
+    contentLen = int(headers.get('Content-Length', '-1'))
     ctype, options = multipart.parse_options_header(headers.get("Content-Type"))
     boundary = options.get('boundary', '')
     if ctype != 'multipart/form-data' or not boundary:
@@ -311,7 +311,7 @@ def pcap(data, filename, limit, id):
         return
 
     try:
-        for part in multipart.MultipartParser(io.BytesIO(body.content), boundary, clen):
+        for part in multipart.MultipartParser(io.BytesIO(body.content), boundary, contentLen):
             if part.name == "pcap" and part.content_type == "application/cap":
                 click.echo("write %d" % len(part.raw))
                 _write_part(part, filename)

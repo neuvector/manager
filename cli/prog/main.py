@@ -15,7 +15,7 @@ from prog import client
 from prog import cluster
 from prog import compliance
 from prog import controller
-from prog import convers
+from prog import conversation
 from prog import diag
 from prog import dlp
 from prog import waf

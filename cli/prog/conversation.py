@@ -9,42 +9,42 @@ from prog import output
 from prog import utils
 
 
-def _show_display_format(conver):
+def _show_display_format(conversation):
     f = "bytes"
-    if f in conver:
+    if f in conversation:
         fo = output.key_output(f)
-        conver[fo] = utils.convert_byte(conver[f], 0)
+        conversation[fo] = utils.convert_byte(conversation[f], 0)
 
 
-def _list_display_format(conver, src, dst, id_only):
+def _list_display_format(conversation, src, dst, id_only):
     if src["kind"] == client.EndpointKindContainer:
         if id_only:
-            conver["client"] = "%s" % src["id"][:output.SHORT_ID_LENGTH]
+            conversation["client"] = "%s" % src["id"][:output.SHORT_ID_LENGTH]
         else:
-            conver["client"] = "%s - %s" % (src["id"][:output.SHORT_ID_LENGTH], src["display_name"])
+            conversation["client"] = "%s - %s" % (src["id"][:output.SHORT_ID_LENGTH], src["display_name"])
     else:
-        conver["client"] = src["id"]
+        conversation["client"] = src["id"]
 
     if dst["kind"] == client.EndpointKindContainer:
         if id_only:
-            conver["server"] = "%s" % dst["id"][:output.SHORT_ID_LENGTH]
+            conversation["server"] = "%s" % dst["id"][:output.SHORT_ID_LENGTH]
         else:
-            conver["server"] = "%s - %s" % (dst["id"][:output.SHORT_ID_LENGTH], dst["display_name"])
+            conversation["server"] = "%s - %s" % (dst["id"][:output.SHORT_ID_LENGTH], dst["display_name"])
     else:
-        conver["server"] = dst["id"]
+        conversation["server"] = dst["id"]
 
     f = "applications"
-    if f in conver:
-        conver[output.key_output(f)] = ",".join(conver[f])
+    if f in conversation:
+        conversation[output.key_output(f)] = ",".join(conversation[f])
     else:
-        conver[output.key_output(f)] = ""
+        conversation[output.key_output(f)] = ""
     f = "ports"
-    if f in conver:
-        conver[output.key_output(f)] = ",".join(conver[f])
+    if f in conversation:
+        conversation[output.key_output(f)] = ",".join(conversation[f])
     else:
-        conver[output.key_output(f)] = ""
+        conversation[output.key_output(f)] = ""
 
-    _show_display_format(conver)
+    _show_display_format(conversation)
 
 
 @show.group("conversation", invoke_without_command=True)
@@ -55,7 +55,7 @@ def _list_display_format(conver, src, dst, id_only):
 @click.option("--page", default=40, type=click.IntRange(1), help="list page size, default=40")
 @click.pass_obj
 @click.pass_context
-def show_conver(ctx, data, group, domain, verbose, id_only, page):
+def show_conversation(ctx, data, group, domain, verbose, id_only, page):
     """Show conversations."""
     if ctx.invoked_subcommand is not None:
         return
@@ -75,10 +75,10 @@ def show_conver(ctx, data, group, domain, verbose, id_only, page):
         for ep in data["endpoints"]:
             eps[ep["id"]] = ep
 
-    convers = data["conversations"]
+    conversations = data["conversations"]
     fromid = ""
     toid = ""
-    for c in convers:
+    for c in conversations:
         if verbose:
             fromid = c["from"]["id"]
             toid = c["to"]["id"]
@@ -106,7 +106,7 @@ def show_conver(ctx, data, group, domain, verbose, id_only, page):
             _list_display_format(c, eps[fromid], eps[toid], id_only)
 
     start = 0
-    size = len(convers)
+    size = len(conversations)
     while True:
         if start + page > size:
             end = size
@@ -115,7 +115,7 @@ def show_conver(ctx, data, group, domain, verbose, id_only, page):
 
         columns = (
         "client", "server", "policy_action", "severity", "bytes", "sessions", "applications", "ports", "xff_entry")
-        output.list(columns, convers[start:end])
+        output.list(columns, conversations[start:end])
 
         start = end
         if start >= size:
@@ -127,7 +127,7 @@ def show_conver(ctx, data, group, domain, verbose, id_only, page):
             break
 
 
-@show_conver.command()
+@show_conversation.command()
 @click.argument("client")
 @click.argument("server")
 @click.pass_obj
@@ -139,17 +139,17 @@ def pair(data, client, server):
     s = utils.get_managed_object_id(data.client, "workload", "workload", server)
     if not s:
         s = server
-    conver = data.client.show("conversation/%s" % c, "conversation", s)
+    conversation = data.client.show("conversation/%s" % c, "conversation", s)
 
-    for e in conver["entries"]:
+    for e in conversation["entries"]:
         _show_display_format(e)
 
     columns = ("port", "mapped_port", "application", "policy_action", "policy_id", "severity",
                "bytes", "sessions", "last_seen_at", "client_ip", "server_ip", "fqdn", "xff", "to_sidecar")
-    output.list(columns, conver["entries"])
+    output.list(columns, conversation["entries"])
 
 
-@show_conver.command()
+@show_conversation.command()
 @click.option('-v', '--view', type=click.Choice(['', 'pod']), default='', help="specify view")
 @click.option("-g", "--group", default=None, help="filter endpoints by group")
 @click.option("--page", default=40, type=click.IntRange(1), help="list page size, default=40")
@@ -184,7 +184,7 @@ def endpoint(data, view, group, page):
 @delete.group("conversation", invoke_without_command=True)
 @click.pass_obj
 @click.pass_context
-def delete_conver(ctx, data):
+def delete_conversation(ctx, data):
     """Delete all conversations."""
     if ctx.invoked_subcommand is not None:
         return
@@ -192,7 +192,7 @@ def delete_conver(ctx, data):
     data.client.delete("conversation", None)
 
 
-@delete_conver.command()
+@delete_conversation.command()
 @click.argument("client")
 @click.argument("server")
 @click.pass_obj
@@ -204,10 +204,10 @@ def pair(data, client, server):
     s = utils.get_managed_object_id(data.client, "workload", "workload", server)
     if not s:
         s = server
-    conver = data.client.delete("conversation/%s/%s" % (c, s), None)
+    conversation = data.client.delete("conversation/%s/%s" % (c, s), None)
 
 
-@delete_conver.command()
+@delete_conversation.command()
 @click.argument("endpoint")
 @click.pass_obj
 @click.pass_context
@@ -218,11 +218,11 @@ def endpoint(ctx, data, endpoint):
 
 @cli_set.group("conversation")
 @click.pass_obj
-def set_conver(data):
+def set_conversation(data):
     """Set conversation configuration."""
 
 
-@set_conver.command("endpoint")
+@set_conversation.command("endpoint")
 @click.argument("endpoint")
 @click.option('--alias', help="Set endpoint alias.")
 @click.pass_obj
@@ -237,11 +237,11 @@ def set_endpoint(data, endpoint, alias):
 
 @unset.group("conversation")
 @click.pass_obj
-def unset_conver(data):
+def unset_conversation(data):
     """Unset conversation configuration."""
 
 
-@unset_conver.command("endpoint")
+@unset_conversation.command("endpoint")
 @click.argument("endpoint")
 @click.option('--alias', is_flag=True, help="Unset endpoint alias.")
 @click.pass_obj

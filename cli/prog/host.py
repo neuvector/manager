@@ -60,7 +60,7 @@ def detail(data, id_or_name):
 @click.argument("id_or_name")
 @click.pass_obj
 def ip_2_container(data, id_or_name):
-    """Show node ip-continer map."""
+    """Show node ip-container map."""
     host = utils.get_managed_object(data.client, "host", "host", id_or_name)
     if not host:
         return

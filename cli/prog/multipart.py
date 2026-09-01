@@ -292,7 +292,7 @@ class MultipartParser(object):
 
         # For each part in stream...
         mem_used, disk_used = 0, 0  # Track used resources to prevent DoS
-        is_tail = False  # True if the last line was incomplete (cutted)
+        is_tail = False  # True if the last line was incomplete (cut)
 
         opts = {
             "buffer_size": self.buffer_size,

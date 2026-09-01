@@ -444,7 +444,7 @@ def internal_subnets(data):
 @click.option("--page", default=20, type=click.IntRange(1), help="list page size, default=20")
 @click.pass_obj
 def ip_2_container(data, page):
-    """Show ip-continer map."""
+    """Show ip-container map."""
     filter = {"start": 0, "limit": page}
     while True:
         wls = data.client.list("debug/ip2workload", "ip_2_workload", **filter)
@@ -656,7 +656,7 @@ def set_system(data):
 @set_system.group('new_service')
 @click.pass_obj
 def set_system_new_service(data):
-    """Set system new service configruation"""
+    """Set system new service configuration"""
 
 
 @set_system_new_service.command("policy_mode")
@@ -686,7 +686,7 @@ def set_system_new_service_profile_baseline(data, baseline):
 @set_system.group('unused_group')
 @click.pass_obj
 def set_system_unused_group(data):
-    """Set system unused group configruation"""
+    """Set system unused group configuration"""
 
 
 @set_system_unused_group.command("aging")
@@ -868,7 +868,7 @@ def set_system_controller_debug(data, category):
 @click.argument('order')
 @click.pass_obj
 def set_system_auth_order(data, order):
-    """Set authentication order in comma-seperated server names"""
+    """Set authentication order in comma-separated server names"""
     servers = order.split(",")
     data.client.config_system(auth_order=servers)
 
@@ -1384,7 +1384,7 @@ def export_config(data, section, raw, filename):
         return
 
     kwargs = {'strict': True}
-    clen = int(headers.get('Content-Length', '-1'))
+    contentLen = int(headers.get('Content-Length', '-1'))
     ctype, options = multipart.parse_options_header(headers.get("Content-Type"))
     boundary = options.get('boundary', '')
     if ctype != 'multipart/form-data' or not boundary:
@@ -1392,7 +1392,7 @@ def export_config(data, section, raw, filename):
         return
 
     try:
-        for part in multipart.MultipartParser(io.BytesIO(body.content), boundary, clen):
+        for part in multipart.MultipartParser(io.BytesIO(body.content), boundary, contentLen):
             if part.name == "configuration" and part.content_type == "application/x-gzip":
                 _write_part(part, filename)
                 return
@@ -1833,7 +1833,7 @@ def import_compliance_profile(data, filename):
 @click.option("-t", "--tail", default=0, help="number of lines to show from the end of debug logs ")
 @click.option("-f", "--filename", default="/var/neuvector/nv_debug",
               type=click.Path(dir_okay=False, writable=True, resolve_path=True), \
-              help="location to store the ouput")
+              help="location to store the output")
 @click.pass_obj
 def debug(data, enforcer, tail, filename):
     """Request export debug """
@@ -1854,7 +1854,7 @@ def debug(data, enforcer, tail, filename):
         url += "?" + filter
 
     headers, body = data.client.download(url, None)
-    clen = int(headers.get('Content-Length', '-1'))
+    contentLen = int(headers.get('Content-Length', '-1'))
     ctype, options = multipart.parse_options_header(headers.get("Content-Type"))
     boundary = options.get('boundary', '')
     if ctype != 'multipart/form-data' or not boundary:
@@ -1864,7 +1864,7 @@ def debug(data, enforcer, tail, filename):
     if filename.endswith(".tar.gz") == False:
         filename += ".tar.gz"
     try:
-        for part in multipart.MultipartParser(io.BytesIO(body.content), boundary, clen):
+        for part in multipart.MultipartParser(io.BytesIO(body.content), boundary, contentLen):
             if part.name == "debug" and part.content_type == "application/x-gzip":
                 _write_part(part, filename)
                 return
@@ -1933,7 +1933,7 @@ def delete(data):
 @set_system.group('auto_mode')
 @click.pass_obj
 def set_system_config_atmo(data):
-    """Set system auto mode upgrader configruation"""
+    """Set system auto mode upgrader configuration"""
 
 @set_system_config_atmo.command("config")
 @click.option("-p","--path", default="d2m", type=click.Choice(["d2m", "m2p"]), help="d2m: Discover to Monitor, m2p: Monitor to Protect")

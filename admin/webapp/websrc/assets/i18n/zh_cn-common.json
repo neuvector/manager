@@ -3451,7 +3451,8 @@
     "LOAD_ERR": "SAML配置失败",
     "CALLBACK_URL": "SAML回调网址: ",
     "message": {
-      "GET_SAML_ERR": "获取SAML配置时发生错误"
+      "GET_SAML_ERR": "获取SAML配置时发生错误",
+      "AUDIENCE_URI_ADV": "建议指定受众URI。"
     }
   },
   "openId": {

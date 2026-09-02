@@ -53,13 +53,9 @@
           formControlName="audience_uri"
           matInput
           [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
-        <mat-error *ngIf="samlForm.controls.audience_uri.hasError('required')">
-          {{ 'general.REQUIRED' | translate }}
-        </mat-error>
-        <mat-error
-          *ngIf="samlForm.controls.audience_uri.hasError('invalidURL')">
-          {{ 'okta.INVALID_URL' | translate }}
-        </mat-error>
+        <mat-hint class="text-warning p-0">
+          {{ 'okta.message.AUDIENCE_URI_ADV' | translate }}
+        </mat-hint>
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">

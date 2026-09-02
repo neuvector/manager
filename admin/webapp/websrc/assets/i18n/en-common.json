@@ -3450,7 +3450,8 @@
     "LOAD_ERR": "Failed to set up SAML",
     "CALLBACK_URL": "SAML Redirect URI: ",
     "message": {
-      "GET_SAML_ERR": "Error happened when getting SAML configuration"
+      "GET_SAML_ERR": "Error happened when getting SAML configuration",
+      "AUDIENCE_URI_ADV": "Specify the Audience URI is recommened."
     }
   },
   "openId": {

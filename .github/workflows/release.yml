@@ -29,8 +29,10 @@ jobs:
             secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials username | PRIME_REGISTRY_USERNAME ;
             secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials password | PRIME_REGISTRY_PASSWORD
       - name: Parse target tag
+        env:
+          TARGET_REF: ${{ github.ref_name }}
         run: |
-          TARGET=${{ github.ref_name }}
+          TARGET="${TARGET_REF}"
           echo "TAG=${TARGET#v}" >> $GITHUB_ENV
       - name: Publish neuvector manifest
         uses: rancher/ecm-distro-tools/actions/publish-image@2a5f19818678d4406e1d8f66e675b72fb0074965 # v0.76.0

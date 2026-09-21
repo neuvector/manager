@@ -84,7 +84,7 @@ RUN cd /chroot/usr/bin/ && \
     rm -rf basename chcon chgrp chmod chown chroot cksum dd df dircolors \
     dirname du install install-info join locale localedef mkdir mkfifo \
     mknod mktemp paste pathchk readlink realpath sync smidiff smidump \
-    smilink smiquery smistrip smixlate tee tiemout tload top truncate \
+    smilink smiquery smistrip smixlate tee timeout tload top truncate \
     unlink watch
 
 FROM micro

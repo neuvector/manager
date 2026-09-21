@@ -11,7 +11,7 @@ base_url="https://127.0.0.1:8443"
 file="${inputDir}/test_data.properties"
 
 function start_test {
-  #Variables initialzation
+  #Variables initialization
 
   #Remove all output files
   rm -f ${outputDir}

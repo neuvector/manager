@@ -7,7 +7,7 @@ export interface Group {
   reserved: boolean;
   policy_mode?: string;
   domain: string;
-  creater_domains: string[];
+  creator_domains: string[];
   kind: string;
   platform_role: string;
   cap_change_mode: boolean;

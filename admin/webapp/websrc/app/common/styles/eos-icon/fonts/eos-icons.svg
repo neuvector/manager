@@ -2229,7 +2229,7 @@ v43h43v-43h-43zM405 85v43h43q0 -18 -12.5 -30.5t-30.5 -12.5zM107 299v-256h256v-43
     <glyph glyph-name="flip_to_front" unicode="flip_to_front" 
 d="M64 171v42h43v-42h-43zM64 85v43h43v-43h-43zM107 0q-18 0 -30.5 12.5t-12.5 30.5h43v-43zM64 256v43h43v-43h-43zM320 0v43h43v-43h-43zM405 384q18 0 30.5 -12.5t12.5 -30.5v-213q0 -18 -12.5 -30.5t-30.5 -12.5h-213q-18 0 -30.5 12.5t-12.5 30.5v213q0 18 12.5 30.5
 t30.5 12.5h213zM405 128v213h-213v-213h213zM235 0v43h42v-43h-42zM149 0v43h43v-43h-43z" />
-    <glyph glyph-name="flourescent" unicode="flourescent" 
+    <glyph glyph-name="fluorescent" unicode="fluorescent" 
 d="M107 128v128h298v-128h-298zM235 341v64h42v-64h-42zM399 281l-30 30l38 39l30 -30zM235 -21v64h42v-64h-42zM369 70l30 30l38 -38l-30 -30zM113 282l-38 38l30 30l38 -38zM105 32l-31 30l39 39l30 -31z" />
     <glyph glyph-name="flutter_dash" unicode="flutter_dash" 
 d="M236 198q11 15 27 8q6 -2 9 -7q6 -7 5 -18q-2 -11 -11 -17l-90 -51q-17 -8 -19 -6q-1 1 7 11t19.5 23.5t23.5 26.5t21 22zM469 235q0 -19 -3 -32.5t-8.5 -20t-10.5 -9t-10 -2.5q-7 0 -13 5q-15 -105 -114 -128q5 -16 21 -16h12q8 0 10 -8q5 -13 22 -28q4 -3 4 -8t-5 -8

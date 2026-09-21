@@ -28,7 +28,7 @@ export class MultiClusterGridActionCellComponent implements ICellRendererAngular
   buttonDisplayMap: any;
   left_status: string = MapConstant.FED_STATUS.LEFT;
   disconnect_status: string = MapConstant.FED_STATUS.DISCONNECTED;
-  upgrade_status: string = MapConstant.FED_STATUS.UPGADE_REQUIRED;
+  upgrade_status: string = MapConstant.FED_STATUS.UPGRADE_REQUIRED;
   kicked_status: string = MapConstant.FED_STATUS.KICKED;
   pending_status: string = MapConstant.FED_STATUS.PENDING;
   primaryClusterRestVersion: string = '';

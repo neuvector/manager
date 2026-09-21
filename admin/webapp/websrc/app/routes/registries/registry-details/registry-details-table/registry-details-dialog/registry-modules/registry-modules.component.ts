@@ -55,7 +55,7 @@ export class RegistryModulesComponent {
         name: module.name,
         source: module.source,
         version: module.version,
-        count_of_vulnerabilies: module.cves
+        count_of_vulnerabilities: module.cves
           ? this.translateService.instant('registry.gridHeader.FIXABLE') +
             ': ' +
             module.cves.filter(
@@ -66,7 +66,7 @@ export class RegistryModulesComponent {
             ': ' +
             module.cves.length
           : '',
-        vulnerabilites: module.cves
+        vulnerabilities: module.cves
           ? `'${module.cves
               .map(cve => {
                 if (vulMap[cve.name]) {

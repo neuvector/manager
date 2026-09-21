@@ -316,7 +316,7 @@ h6, .h6 {
 .title-underline {
   border-bottom: 1px solid #f2f2f2; }
 
-.title-no-margings {
+.title-no-margins {
   margin: 0; }
 
 .subheadline {
@@ -774,16 +774,16 @@ eos-alert ~ .content {
   @media screen and (max-width: 769px) {
     .main-menu {
       display: none; } }
-  .main-menu .menu-togglable {
+  .main-menu .menu-toggleable {
     margin-bottom: 40px;
     max-height: calc(100vh - 141px);
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0 0 48px 0; }
-    .main-menu .menu-togglable:first-child {
+    .main-menu .menu-toggleable:first-child {
       margin-bottom: 0;
       padding-bottom: 0; }
-    .main-menu .menu-togglable li {
+    .main-menu .menu-toggleable li {
       padding: 0; }
   .main-menu .menu-title {
     border-left: 5px solid transparent;
@@ -846,13 +846,13 @@ eos-alert ~ .content {
     margin-right: 0; }
 
 /* Uncollapsed sidebar styles for dropdown menu */
-.menu-togglable .menu-dropdown-list {
+.menu-toggleable .menu-dropdown-list {
   background: #f2f2f2;
   padding-top: 0; }
-  .menu-togglable .menu-dropdown-list li a {
+  .menu-toggleable .menu-dropdown-list li a {
     padding-left: 48px;
     text-decoration: none; }
-    .menu-togglable .menu-dropdown-list li a:hover {
+    .menu-toggleable .menu-dropdown-list li a:hover {
       text-decoration: underline; }
 
 .menu-collapsed-title, .main-collapsed-single {
@@ -894,20 +894,20 @@ eos-alert ~ .content {
     margin: 0; }
   .collapsed-sidebar.main-menu .menu-title-content, .collapsed-sidebar.main-menu .menu-expand {
     display: none; }
-  .collapsed-sidebar.main-menu .menu-togglable {
+  .collapsed-sidebar.main-menu .menu-toggleable {
     height: 100%;
     max-height: calc(100vh - 141px);
     overflow-x: hidden;
     overflow-y: auto;
     width: 100%; }
-    .collapsed-sidebar.main-menu .menu-togglable .menu-item {
+    .collapsed-sidebar.main-menu .menu-toggleable .menu-item {
       position: static; }
-      .collapsed-sidebar.main-menu .menu-togglable .menu-item .menu-element {
+      .collapsed-sidebar.main-menu .menu-toggleable .menu-item .menu-element {
         display: none;
         position: absolute; }
-      .collapsed-sidebar.main-menu .menu-togglable .menu-item .menu-dropdown-list {
+      .collapsed-sidebar.main-menu .menu-toggleable .menu-item .menu-dropdown-list {
         border: 1px solid #f2f2f2; }
-      .collapsed-sidebar.main-menu .menu-togglable .menu-item:hover > .menu-element {
+      .collapsed-sidebar.main-menu .menu-toggleable .menu-item:hover > .menu-element {
         display: flex; }
   .collapsed-sidebar.main-menu .menu-dropdown-list {
     background: #fff;
@@ -1023,15 +1023,15 @@ eos-alert ~ .content {
       max-height: calc(100vh - 85px);
       overflow-y: scroll;
       padding-top: 16px; }
-    .mobile-menu nav .menu-togglable {
+    .mobile-menu nav .menu-toggleable {
       margin: 0;
       padding: 0; }
-      .mobile-menu nav .menu-togglable li {
+      .mobile-menu nav .menu-toggleable li {
         cursor: pointer;
         list-style: none;
         margin: 0;
         padding: 0; }
-        .mobile-menu nav .menu-togglable li .menu-title {
+        .mobile-menu nav .menu-toggleable li .menu-title {
           border-left: 5px solid transparent;
           color: #141823;
           cursor: pointer;
@@ -1041,32 +1041,32 @@ eos-alert ~ .content {
           padding: 8px 24px;
           transition: .1s;
           user-select: none; }
-          .mobile-menu nav .menu-togglable li .menu-title i {
+          .mobile-menu nav .menu-toggleable li .menu-title i {
             font-size: 18px;
             height: 18px;
             text-align: center;
             width: 18px; }
-          .mobile-menu nav .menu-togglable li .menu-title:hover {
+          .mobile-menu nav .menu-toggleable li .menu-title:hover {
             border-left: 5px solid #30ba78;
             text-decoration: none; }
-          .mobile-menu nav .menu-togglable li .menu-title.selected {
+          .mobile-menu nav .menu-toggleable li .menu-title.selected {
             background-color: #0e7e3c;
             color: #fff; }
-            .mobile-menu nav .menu-togglable li .menu-title.selected > label {
+            .mobile-menu nav .menu-toggleable li .menu-title.selected > label {
               color: #fff; }
-        .mobile-menu nav .menu-togglable li .menu-element li a {
+        .mobile-menu nav .menu-toggleable li .menu-element li a {
           padding-left: 48px; }
-        .mobile-menu nav .menu-togglable li.menu-dropdown.selected label {
+        .mobile-menu nav .menu-toggleable li.menu-dropdown.selected label {
           color: #fff; }
-        .mobile-menu nav .menu-togglable li.menu-dropdown input[type='checkbox'] {
+        .mobile-menu nav .menu-toggleable li.menu-dropdown input[type='checkbox'] {
           display: none; }
-        .mobile-menu nav .menu-togglable li.menu-dropdown .menu-element ul {
+        .mobile-menu nav .menu-toggleable li.menu-dropdown .menu-element ul {
           display: none; }
-        .mobile-menu nav .menu-togglable li.menu-dropdown input[type='checkbox']:checked .menu-element > ul, .mobile-menu nav .menu-togglable li.menu-dropdown.selected .menu-element > ul {
+        .mobile-menu nav .menu-toggleable li.menu-dropdown input[type='checkbox']:checked .menu-element > ul, .mobile-menu nav .menu-toggleable li.menu-dropdown.selected .menu-element > ul {
           display: block; }
-        .mobile-menu nav .menu-togglable li.menu-dropdown input[type='checkbox']:checked ~ label, .mobile-menu nav .menu-togglable li.menu-dropdown.selected ~ label {
+        .mobile-menu nav .menu-toggleable li.menu-dropdown input[type='checkbox']:checked ~ label, .mobile-menu nav .menu-toggleable li.menu-dropdown.selected ~ label {
           color: #141823; }
-          .mobile-menu nav .menu-togglable li.menu-dropdown input[type='checkbox']:checked ~ label .menu-expand, .mobile-menu nav .menu-togglable li.menu-dropdown.selected ~ label .menu-expand {
+          .mobile-menu nav .menu-toggleable li.menu-dropdown input[type='checkbox']:checked ~ label .menu-expand, .mobile-menu nav .menu-toggleable li.menu-dropdown.selected ~ label .menu-expand {
             margin-right: 0; }
 
 .dark-theme .main-menu {
@@ -1077,16 +1077,16 @@ eos-alert ~ .content {
     color: #fff; }
   .dark-theme .main-menu hr {
     border-top-color: #686565; }
-  .dark-theme .main-menu .menu-togglable .menu-dropdown-list {
+  .dark-theme .main-menu .menu-toggleable .menu-dropdown-list {
     background: #2b2e38; }
-    .dark-theme .main-menu .menu-togglable .menu-dropdown-list li a {
+    .dark-theme .main-menu .menu-toggleable .menu-dropdown-list li a {
       background: transparent;
       color: #fff;
       text-decoration: none; }
-      .dark-theme .main-menu .menu-togglable .menu-dropdown-list li a:hover {
+      .dark-theme .main-menu .menu-toggleable .menu-dropdown-list li a:hover {
         background: transparent;
         text-decoration: underline; }
-      .dark-theme .main-menu .menu-togglable .menu-dropdown-list li a.selected {
+      .dark-theme .main-menu .menu-toggleable .menu-dropdown-list li a.selected {
         color: #30ba78;
         text-decoration: none; }
   .dark-theme .main-menu .menu-dropdown input[type='checkbox']:checked ~ .menu-title, .dark-theme .main-menu .menu-dropdown.selected ~ .menu-title {
@@ -1103,9 +1103,9 @@ eos-alert ~ .content {
   background-color: #2b2e38; }
   .dark-theme .mobile-menu nav hr {
     border-top-color: #686565; }
-  .dark-theme .mobile-menu nav .menu-togglable .menu-dropdown-list {
+  .dark-theme .mobile-menu nav .menu-toggleable .menu-dropdown-list {
     background: #2b2e38; }
-  .dark-theme .mobile-menu nav .menu-togglable li .menu-title {
+  .dark-theme .mobile-menu nav .menu-toggleable li .menu-title {
     color: #fff; }
   .dark-theme .mobile-menu nav .menu-dropdown input[type='checkbox']:checked ~ .menu-title, .dark-theme .mobile-menu nav .menu-dropdown.selected ~ .menu-title {
     background-color: #2b2e38;
@@ -1128,7 +1128,7 @@ eos-alert ~ .content {
 .dark-theme .collapsed-sidebar .menu-dropdown-list {
   border: 1px solid #757575; }
 
-.dark-theme .collapsed-sidebar.main-menu .menu-togglable .menu-item .menu-dropdown-list {
+.dark-theme .collapsed-sidebar.main-menu .menu-toggleable .menu-item .menu-dropdown-list {
   border: 1px solid #757575; }
 
 /* Footer

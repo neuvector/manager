@@ -132,7 +132,7 @@
     margin-bottom: $eos-alert-global-height;
   }
 
-  // if mobile-menu is open in conjuntion with a alert-global, then the menu needs
+  // if mobile-menu is open in conjunction with a alert-global, then the menu needs
   // extra spacing on top
   @media screen and (max-width: $eos-sd-max) {
     ~ .mobile-menu {

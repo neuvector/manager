@@ -6,7 +6,7 @@ export interface GroupBrief {
   profile_mode?: string;
   not_scored: boolean;
   domain: string;
-  creater_domains: string[];
+  creator_domains: string[];
   kind: string;
   platform_role: string;
   cfg_type: string;

@@ -332,20 +332,20 @@ export class VulnerabilitiesFilterService {
   }
 
   filterView(
-    vulnerabilites: VulnerabilityAsset[],
+    vulnerabilities: VulnerabilityAsset[],
     selectedView: VulnerabilityView
   ): VulnerabilityAsset[] {
     switch (selectedView) {
       case 'all':
-        return vulnerabilites;
+        return vulnerabilities;
       case 'containers':
-        return vulnerabilites.filter(vul => vul.workloads.length);
+        return vulnerabilities.filter(vul => vul.workloads.length);
       case 'infrastructure':
-        return vulnerabilites.filter(
+        return vulnerabilities.filter(
           vul => vul.nodes.length || vul.platforms.length
         );
       case 'registry':
-        return vulnerabilites.filter(vul => vul.images.length);
+        return vulnerabilities.filter(vul => vul.images.length);
     }
   }
 }

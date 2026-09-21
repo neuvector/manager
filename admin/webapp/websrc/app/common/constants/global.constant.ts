@@ -27,7 +27,7 @@ export class GlobalConstant {
   public static NETWORK_RULES_PORTS_DISPLAY_LEN = 40;
   public static EXTERNAL = 'external';
   public static PROXY_VALUE = 'neuvector-service-webui:8443/proxy';
-  public static NO_CAHCE = 'no-cache';
+  public static NO_CACHE = 'no-cache';
   public static KUBE = 'kubernetes';
   public static OPENSHIFT = 'Kubernetes-OpenShift';
   public static RANCHER = 'Kubernetes-Rancher';
@@ -190,7 +190,7 @@ export class GlobalConstant {
       SOURCE: 'source',
       DESTINATION: 'destination',
     },
-    PROTOCOL: 'protocal',
+    PROTOCOL: 'protocol',
   };
 
   public static TAB_NAME = {
@@ -281,7 +281,7 @@ export class GlobalConstant {
     WAF: 'cfgWafExport.yaml',
     COMPLIANCE_PROFILE: 'cfgComplianceProfileExport.yaml',
     VUL_PROFILE: 'cfgVulProfileExport.yaml',
-    RESPONSE_RULES: 'cfgReponseRulesExport.yaml',
+    RESPONSE_RULES: 'cfgResponseRulesExport.yaml',
     FED_SYSTEM_CONFIG: 'cfgFedSystemConfigExport.yaml',
   };
 

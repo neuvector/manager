@@ -658,7 +658,7 @@ case class PolicyOutput(
   applicationsInPolicy: List[(String, Int)]
 )
 /*=========================================
-    For new dashbaord API
+    For new dashboard API
   =========================================*/
 case class DashboardNotificationDTO(
   criticalSecurityEvents: CriticalSecurityEventDTO,
@@ -945,7 +945,7 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   )
 
   /*=========================================
-      For new dashbaord API
+      For new dashboard API
     =========================================*/
 
   given podFormat: RootJsonFormat[Pod]                                                   = jsonFormat7(Pod.apply)

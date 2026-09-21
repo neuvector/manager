@@ -248,7 +248,7 @@ export class ComplianceService {
             medium: 0,
             evaluation: 0, //0: compliant, 1: risky
             complianceCnt: 0,
-            vulnerabilites: [],
+            vulnerabilities: [],
             complianceList: [],
           };
           if (workload.state !== 'exit') {
@@ -259,7 +259,7 @@ export class ComplianceService {
               medium: 0,
               evaluation: 0, //0: compliant, 1: risky
               complianceCnt: 0,
-              vulnerabilites: [],
+              vulnerabilities: [],
               complianceList: [],
             };
             if (workload.children) {
@@ -283,7 +283,7 @@ export class ComplianceService {
                   medium: 0,
                   evaluation: 0, //0: compliant, 1: risky
                   complianceCnt: 0,
-                  vulnerabilites: [],
+                  vulnerabilities: [],
                   complianceList: [],
                 };
               });
@@ -325,7 +325,7 @@ export class ComplianceService {
             medium: 0,
             evaluation: 0, //0: compliant, 1: risky
             complianceCnt: 0,
-            vulnerabilites: [],
+            vulnerabilities: [],
             complianceList: [],
           };
         });
@@ -356,7 +356,7 @@ export class ComplianceService {
             high: 0,
             medium: 0,
             complianceCnt: 0,
-            vulnerabilites: [],
+            vulnerabilities: [],
             complianceList: [],
           };
         });

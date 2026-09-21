@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RegistriesCommunicationService } from './regestries-communication.service';
+import { RegistriesCommunicationService } from './registries-communication.service';
 import { catchError, map } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { ActivatedRoute } from '@angular/router';

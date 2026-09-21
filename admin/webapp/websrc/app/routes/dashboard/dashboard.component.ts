@@ -129,8 +129,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }, 500);
   };
 
-  private getBasicData = (isRefeshing = false) => {
-    if (!isRefeshing) {
+  private getBasicData = (isRefreshing = false) => {
+    if (!isRefreshing) {
       const response = this.activatedRoute.snapshot.data['basicData'];
       this.handleBasicData(response);
     } else {

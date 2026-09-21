@@ -43,7 +43,7 @@ import { LayersTableCvesCellComponent } from './registry-details/registry-detail
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
-import { RegistriesCommunicationService } from './regestries-communication.service';
+import { RegistriesCommunicationService } from './registries-communication.service';
 import { RegistryDetailsTableStatusCellComponent } from './registry-details/registry-details-table/registry-details-table-status-cell/registry-details-table-status-cell.component';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';

@@ -45,7 +45,7 @@ class OpenIdAuthService()(implicit
     } else {
       Await
         .result(
-          handleExistingResoureces(code, state, ip, host, nonce),
+          handleExistingResources(code, state, ip, host, nonce),
           RestClient.waitingLimit.seconds
         )
     }
@@ -105,7 +105,7 @@ class OpenIdAuthService()(implicit
       }
     }
 
-  private def handleExistingResoureces(
+  private def handleExistingResources(
     code: Option[String],
     state: Option[String],
     ip: String,

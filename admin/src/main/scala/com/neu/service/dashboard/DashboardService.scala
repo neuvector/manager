@@ -409,13 +409,13 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       )
       logger.debug("Got {}", dashboardScoreDTO)
       val endTime           = new DateTime()
-      logger.info("Dashbaord scores - End: {}", endTime)
+      logger.info("Dashboard scores - End: {}", endTime)
       logger.info(
-        "Dashbaord scores - Calculation Duration: {}",
+        "Dashboard scores - Calculation Duration: {}",
         endTime.getMillis - calculationStartTime.getMillis
       )
       logger.info(
-        "Dashbaord scores - Duration: {}",
+        "Dashboard scores - Duration: {}",
         endTime.getMillis - startTime.getMillis
       )
 

@@ -1,4 +1,5 @@
 import { RiskType } from './enum';
+import { UpgradeVersion } from '../settings/settings';
 
 export enum SystemAlertType {
   RBAC = 'RBAC',
@@ -27,15 +28,9 @@ export interface SystemAlert {
   message: string;
 }
 
-export interface UpgradeVerion {
-  release_date: Date;
-  tag: string;
-  version: string;
-}
-
 export interface UpgradeInfo {
-  max_upgrade_version?: UpgradeVerion;
-  min_upgrade_version?: UpgradeVerion;
+  max_upgrade_version?: UpgradeVersion;
+  min_upgrade_version?: UpgradeVersion;
 }
 
 export interface Score {

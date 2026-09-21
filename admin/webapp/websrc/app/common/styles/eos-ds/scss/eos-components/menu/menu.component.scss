@@ -23,7 +23,7 @@
     display: none;
   }
 
-  .menu-togglable {
+  .menu-toggleable {
     margin-bottom: $eos-menu-ul-margin-bottom;
     max-height: $eos-menu-navbar-max-height;
     overflow-x: hidden;
@@ -130,7 +130,7 @@
 }
 
 /* Uncollapsed sidebar styles for dropdown menu */
-.menu-togglable {
+.menu-toggleable {
   .menu-dropdown-list {
     background: $eos-menu-bg;
     padding-top: 0;
@@ -222,7 +222,7 @@
       display: none;
     }
 
-    .menu-togglable {
+    .menu-toggleable {
       height: 100%;
       max-height: $eos-menu-navbar-max-height;
       overflow-x: hidden;
@@ -426,7 +426,7 @@
       padding-top: $eos-mm-nav-wrap-padding-top;
     }
 
-    .menu-togglable {
+    .menu-toggleable {
       margin: 0;
       padding: 0;
 

@@ -27,7 +27,7 @@ export class ScoreInstructionComponent {
   };
 
   openScoreImprovementConsole = () => {
-    const scoreImpovementDialogRef = this.dialog.open(
+    const scoreImprovementDialogRef = this.dialog.open(
       ScoreImprovementModalComponent,
       {
         data: {
@@ -39,7 +39,7 @@ export class ScoreInstructionComponent {
         height: '685px',
       }
     );
-    scoreImpovementDialogRef.afterClosed().subscribe(result => {
+    scoreImprovementDialogRef.afterClosed().subscribe(result => {
       this.dashboardService.refresh();
     });
   };

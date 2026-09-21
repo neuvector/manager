@@ -190,13 +190,13 @@
 
     JQ.extend({
         children: function(selector) {
-            var childs = [];
+            var children = [];
             this.each(function(i, item) {
-                childs = childs.concat(map(item.children, function(item) {
+                children = children.concat(map(item.children, function(item) {
                     return item
                 }))
             })
-            return JQ.Constructor(childs).filter(selector);
+            return JQ.Constructor(children).filter(selector);
         },
         siblings: function() {
             var sibs = []

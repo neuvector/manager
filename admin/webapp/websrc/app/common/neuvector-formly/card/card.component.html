@@ -7,35 +7,35 @@
     to.header | translate
   }}</mat-card-header>
   <mat-card-content *ngIf="to.content">
-    <ng-container *ngIf="isArrayContent(to.content); else OtherDiplay">
-      <ng-container *ngIf="to.isBulletMode; else NormalListDiplay">
+    <ng-container *ngIf="isArrayContent(to.content); else OtherDisplay">
+      <ng-container *ngIf="to.isBulletMode; else NormalListDisplay">
         <ul>
           <li *ngFor="let c of to.content">{{ c | translate }}</li>
         </ul>
       </ng-container>
-      <ng-template #NormalListDiplay>
+      <ng-template #NormalListDisplay>
         <div *ngFor="let c of to.content">
           {{ c | translate }}
         </div>
       </ng-template>
     </ng-container>
-    <ng-template #OtherDiplay>
+    <ng-template #OtherDisplay>
       <ng-container
-        *ngIf="isObjectContent(to.content); else NormalStringDiplay">
-        <ng-container *ngIf="to.isBulletMode; else NormalObjectDiplay">
+        *ngIf="isObjectContent(to.content); else NormalStringDisplay">
+        <ng-container *ngIf="to.isBulletMode; else NormalObjectDisplay">
           <ul>
             <li *ngFor="let c of getObjectContentKeys(to.content)">
               {{ c | translate }} - {{ to.content[c] }}
             </li>
           </ul>
         </ng-container>
-        <ng-template #NormalObjectDiplay>
+        <ng-template #NormalObjectDisplay>
           <div *ngFor="let c of getObjectContentKeys(to.content)">
             {{ c | translate }} - {{ to.content[c] }}
           </div>
         </ng-template>
       </ng-container>
-      <ng-template #NormalStringDiplay>
+      <ng-template #NormalStringDisplay>
         <pre>{{ to.content }}</pre>
       </ng-template>
     </ng-template>

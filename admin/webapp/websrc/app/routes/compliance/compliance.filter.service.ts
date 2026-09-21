@@ -87,13 +87,13 @@ export class ComplianceFilterService {
     if (
       Object.keys(this.advFilter.tags).some(tag => this.advFilter.tags[tag])
     ) {
-      let comlianceTags = Object.keys(compliance.tags);
-      if (comlianceTags && comlianceTags.length > 0) {
+      let complianceTags = Object.keys(compliance.tags);
+      if (complianceTags && complianceTags.length > 0) {
         let res = Object.keys(this.advFilter.tags).filter(
           filter => this.advFilter.tags[filter]
         );
-        console.log('selected', res, 'compliance', comlianceTags);
-        return comlianceTags.some(tag => res.includes(tag));
+        console.log('selected', res, 'compliance', complianceTags);
+        return complianceTags.some(tag => res.includes(tag));
       } else return false;
     }
     if (this.advFilter.scoredType !== 'all') {

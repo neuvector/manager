@@ -526,8 +526,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private nav2LinkedUrl(url) {
-    let trimedUrl = url.split('#')[1];
-    let pathSec = trimedUrl.split('?');
+    let trimmedUrl = url.split('#')[1];
+    let pathSec = trimmedUrl.split('?');
     let refPath = pathSec[0];
     let querySec = pathSec[1] ? pathSec[1].split('&') : [];
     let query = {};

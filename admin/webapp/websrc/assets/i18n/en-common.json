@@ -242,7 +242,7 @@
     "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days",
     "UPGRADE_AVAILABLE": "NeuVector is running {{currentVersion}} and can be upgraded to {{newVersion}}",
     "RBAC_ALERT": {
-      "RETRIVE_BOOTSTRAP_PASSWORD": "To retrieve the bootstrap password from Kubernetes Secret.",
+      "RETRIEVE_BOOTSTRAP_PASSWORD": "To retrieve the bootstrap password from Kubernetes Secret.",
       "PASSWORD_RETRIEVAL_ERROR": "Unable to get password from K8s Secret ",
       "ROLEBINDING_DETAILS_LINK": "(role/rolebinding error)",
       "TITLE_GET_BOOTSTRAP_PASSWORD": "Get Bootstrap Password",
@@ -1601,7 +1601,7 @@
     "AUTOCOMPLETE_INVALID": "{{field}} not recognized. Click one of the autocomplete options.",
     "label": {
       "NETWORK": "Network",
-      "PRIVILEDGE": "Privilege",
+      "PRIVILEGE": "Privilege",
       "FILE": "File",
       "TUNNEL": "Tunnel",
       "PROCESS": "Process",
@@ -2225,11 +2225,11 @@
       "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)",
       "REMOVE_CONFIRM": "Will you remove file access rule? - Filter:",
       "REMOVE_OK": "Your file access rule has been removed.",
-      "REMOVE_NG": "Error happened when removing file acess rule!",
+      "REMOVE_NG": "Error happened when removing file access rule!",
       "ADD_OK": "Your file access rule has been added.",
-      "ADD_NG": "Error happened when adding file acess rule!",
+      "ADD_NG": "Error happened when adding file access rule!",
       "EDIT_OK": "Your file access rule has been modified.",
-      "EDIT_NG": "Error happened when editing file acess rule!"
+      "EDIT_NG": "Error happened when editing file access rule!"
     },
     "dlp": {
       "TITLE": "DLP",
@@ -3175,8 +3175,8 @@
     "ENABLED_CPATH_NG": "Error happens when enabling controller control path debug!",
     "DISABLED_CPATH_NG": "Error happens when disabling controller control path debug!",
     "ENFORCERS": "Enforcers",
-    "ENFORCERS_HINT": "Select enforcers to include their support information if necessary. Up to {{maxSlectedEnforcer}} enforcers can be selected.",
-    "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support information.",
+    "ENFORCERS_HINT": "Select enforcers to include their support information if necessary. Up to {{maxSelectedEnforcer}} enforcers can be selected.",
+    "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSelectedEnforcer}} enforcers for support information.",
     "AS_STANDALONE": "Import configuration as standalone cluster",
     "RANCHER_EP": "Rancher Endpoint",
     "NOTICE": "Notice",
@@ -3385,7 +3385,7 @@
       "ADD_ON_TOP": "Add on Top",
       "INSERT": "Insert",
       "EDIT": "Edit",
-      "ROMOVE": "Remove",
+      "REMOVE": "Remove",
       "MOVE": "Move"
     },
     "dialog": {
@@ -3467,7 +3467,7 @@
     "CALLBACK_URL": "SAML Redirect URI: ",
     "message": {
       "GET_SAML_ERR": "Error happened when getting SAML configuration",
-      "AUDIENCE_URI_ADV": "Specify the Audience URI is recommened."
+      "AUDIENCE_URI_ADV": "Specify the Audience URI is recommended."
     }
   },
   "openId": {

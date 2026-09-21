@@ -18,7 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ErrorResponse, RegistryConfig, Summary } from '@common/types';
 import { RegistriesTableButtonsComponent } from './registries-table-buttons/registries-table-buttons.component';
 import { RegistriesService } from '@services/registries.service';
-import { RegistriesCommunicationService } from '../regestries-communication.service';
+import { RegistriesCommunicationService } from '../registries-communication.service';
 import { TranslateService } from '@ngx-translate/core';
 import { RegistryTableStatusCellComponent } from './registry-table-status-cell/registry-table-status-cell.component';
 import { cloneDeep } from 'lodash';

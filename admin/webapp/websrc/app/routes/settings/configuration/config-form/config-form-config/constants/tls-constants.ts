@@ -64,7 +64,7 @@ export const TlsTableField: FormlyFieldConfig = {
             try {
               const cert = certificateDeserializer.getCertificate(context);
               const manifest: CertificateManifest =
-                certificateDeserializer.getMainfest(cert);
+                certificateDeserializer.getManifest(cert);
 
               return {
                 'setting.tls.CERTIFICATE_MANIFEST.COMMON_NAME':

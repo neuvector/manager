@@ -36,7 +36,7 @@ export class NetworkRulesService {
   w: any;
   isNetworkRuleChanged: boolean = false;
   networkRuleBackup: Array<any> = [];
-  squence: number = GlobalConstant.NEW_ID_SEED.NETWORK_RULE;
+  sequence: number = GlobalConstant.NEW_ID_SEED.NETWORK_RULE;
 
   constructor(
     public sanitizer: DomSanitizer,

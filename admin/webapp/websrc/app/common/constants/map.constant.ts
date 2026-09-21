@@ -298,7 +298,7 @@ export class MapConstant {
     LEFT: 'left',
     KICKED: 'kicked',
     DISCONNECTED: 'disconnected',
-    UPGADE_REQUIRED: 'joint_upgrade_required',
+    UPGRADE_REQUIRED: 'joint_upgrade_required',
     SYNCED: 'synced',
     OUT_OF_SYNC: 'out_of_sync',
     JOIN: 'join',

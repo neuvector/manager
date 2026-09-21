@@ -22,7 +22,7 @@ export class ReportByNamespaceModalComponent {
         ([
           scoreInfo,
           dashboardSecurityEvent,
-          dashbaordDetails,
+          dashboardDetails,
           summaryInfo,
         ]: any[]) => {
           let reportInfo = {
@@ -36,12 +36,12 @@ export class ReportByNamespaceModalComponent {
                 dashboardSecurityEvent.criticalSecurityEvents.summary,
             },
             dashboardDetailsInfo: {
-              isAutoScanOn: dashbaordDetails.autoScanConfig,
+              isAutoScanOn: dashboardDetails.autoScanConfig,
               highPriorityVulnerabilities:
-                dashbaordDetails.highPriorityVulnerabilities,
-              containers: dashbaordDetails.containers,
-              services: dashbaordDetails.services,
-              applications: dashbaordDetails.applications2,
+                dashboardDetails.highPriorityVulnerabilities,
+              containers: dashboardDetails.containers,
+              services: dashboardDetails.services,
+              applications: dashboardDetails.applications2,
             },
           };
           setTimeout(() => {

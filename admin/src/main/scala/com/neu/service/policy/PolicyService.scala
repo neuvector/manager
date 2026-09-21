@@ -851,7 +851,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
   }
 
   def addAdmissionRules(tokenId: String, admissionRuleConfig: AdmRuleConfig): Route = complete {
-    logger.info("Adding addmission rule: {}", admissionRuleConfig)
+    logger.info("Adding admission rule: {}", admissionRuleConfig)
     logger.info(
       "config in json: {}",
       admissionRuleConfigToJson(admissionRuleConfig)
@@ -867,7 +867,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
   }
 
   def updateAdmissionRule(tokenId: String, admissionRuleConfig: AdmRuleConfig): Route = complete {
-    logger.info("Updating addmission rule: {}", admissionRuleConfig)
+    logger.info("Updating admission rule: {}", admissionRuleConfig)
     logger.info(
       "config in json: {}",
       admissionRuleConfigToJson(admissionRuleConfig)

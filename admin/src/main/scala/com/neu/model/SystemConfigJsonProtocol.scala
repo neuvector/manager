@@ -7,17 +7,17 @@ import spray.json.*
  */
 object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   given errorFormat: RootJsonFormat[Error]                                           = jsonFormat1(Error.apply)
-  given registyHttpsProxyFormat: RootJsonFormat[RegistyHttpsProxy]                   = jsonFormat3(
-    RegistyHttpsProxy.apply
+  given registryHttpsProxyFormat: RootJsonFormat[RegistryHttpsProxy]                 = jsonFormat3(
+    RegistryHttpsProxy.apply
   )
-  given registyHttpProxyFormat: RootJsonFormat[RegistyHttpProxy]                     = jsonFormat3(
-    RegistyHttpProxy.apply
+  given registryHttpProxyFormat: RootJsonFormat[RegistryHttpProxy]                   = jsonFormat3(
+    RegistryHttpProxy.apply
   )
-  given registyHttpsProxyCfgFormat: RootJsonFormat[RegistyHttpsProxyCfg]             = jsonFormat3(
-    RegistyHttpsProxyCfg.apply
+  given registryHttpsProxyCfgFormat: RootJsonFormat[RegistryHttpsProxyCfg]           = jsonFormat3(
+    RegistryHttpsProxyCfg.apply
   )
-  given registyHttpProxyCfgFormat: RootJsonFormat[RegistyHttpProxyCfg]               = jsonFormat3(
-    RegistyHttpProxyCfg.apply
+  given registryHttpProxyCfgFormat: RootJsonFormat[RegistryHttpProxyCfg]             = jsonFormat3(
+    RegistryHttpProxyCfg.apply
   )
   given githubConfigurationFormat: RootJsonFormat[GithubConfiguration]               = jsonFormat6(
     GithubConfiguration.apply

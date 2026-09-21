@@ -124,7 +124,7 @@ object Utils extends LazyLogging with Directives {
      * bit1 bit2 bit3 bit4
      * ----------------------------------------------------------------------------------------------------------------------------
      * Supplemental bit 1 ONLY env MANAGER_SSL on: 1 Request static resources env IS_DEV == true or
-     * NOT requset js files off: 0 true: 1 true: 1 (undefined): 0 false: 0 false: 0
+     * NOT request js files off: 0 true: 1 true: 1 (undefined): 0 false: 0 false: 0
      */
     val headerConfigMapKey: Short =
       (1000 + isUsingSSLBit * 100 + isStaticResourceBit * 10 + isDevOrNotJsBit).toShort

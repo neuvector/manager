@@ -14,7 +14,7 @@
       border-top-color: $eos-dark-main-menu-border;
     }
 
-    .menu-togglable .menu-dropdown-list {
+    .menu-toggleable .menu-dropdown-list {
       background: $eos-dark-main-menu-background;
 
       li a {
@@ -57,7 +57,7 @@
         border-top-color: $eos-dark-main-menu-border;
       }
 
-      .menu-togglable {
+      .menu-toggleable {
         .menu-dropdown-list {
           background: $eos-dark-main-menu-background;
         }
@@ -100,7 +100,7 @@
     }
   }
 
-  .collapsed-sidebar.main-menu .menu-togglable .menu-item .menu-dropdown-list {
+  .collapsed-sidebar.main-menu .menu-toggleable .menu-item .menu-dropdown-list {
     border: $eos-mm-dropdown-dark;
   }
 }

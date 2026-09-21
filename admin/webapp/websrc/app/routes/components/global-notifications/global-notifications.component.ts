@@ -141,7 +141,7 @@ export class GlobalNotificationsComponent implements OnInit {
 
   generateNotifications(): void {
     this.generateManagerNotifications();
-    this.generaterUserNotifications();
+    this.generateUserNotifications();
     this.generateSystemAlertNotifications();
   }
 
@@ -346,7 +346,7 @@ export class GlobalNotificationsComponent implements OnInit {
     }
   }
 
-  private generaterUserNotifications(): void {
+  private generateUserNotifications(): void {
     if (this.passwordExpiration >= 0 && this.passwordExpiration < 10) {
       this.globalNotifications.push({
         type: GlobalNotificationType.USER_NOTIFICATION,

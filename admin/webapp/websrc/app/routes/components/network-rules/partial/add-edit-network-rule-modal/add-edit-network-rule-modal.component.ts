@@ -91,7 +91,7 @@ export class AddEditNetworkRuleModalComponent implements OnInit {
               ).slice()
         )
       );
-    let enpointList =
+    let endpointList =
       this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
         ? this.data.networkRuleOptions.groupList.map(group => group.name)
         : this.data.networkRuleOptions.hostList
@@ -103,13 +103,13 @@ export class AddEditNetworkRuleModalComponent implements OnInit {
       .get('from')!
       .valueChanges.pipe(
         startWith(''),
-        map((from: string) => this.filter(from, enpointList))
+        map((from: string) => this.filter(from, endpointList))
       );
     this.filteredToEndpoints = this.addEditNetworkRuleForm
       .get('to')!
       .valueChanges.pipe(
         startWith(''),
-        map((to: string) => this.filter(to, enpointList))
+        map((to: string) => this.filter(to, endpointList))
       );
   }
 
@@ -187,7 +187,7 @@ export class AddEditNetworkRuleModalComponent implements OnInit {
       state: GlobalConstant.NETWORK_RULES_STATE.NEW,
       disable: false,
       learned: false,
-      id: this.networkRulesService.squence++,
+      id: this.networkRulesService.sequence++,
     };
   };
 

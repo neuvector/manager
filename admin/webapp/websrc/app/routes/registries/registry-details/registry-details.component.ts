@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import {
   RegistriesCommunicationService,
   RegistryDetails,
-} from '../regestries-communication.service';
+} from '../registries-communication.service';
 import { FormControl } from '@angular/forms';
 import { catchError, tap } from 'rxjs/operators';
 import { arrayToCsv } from '@common/utils/common.utils';

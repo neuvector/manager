@@ -75,7 +75,7 @@ lazy val commonSettings = Seq(
   )
 )
 
-// lazy val buil1dSettings = Defaults.coreDefaultSettings ++ Seq(
+// lazy val build1dSettings = Defaults.coreDefaultSettings ++ Seq(
 //   scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-target:jvm-1.7"),
 //   libraryDependencies                        := Seq(scalaTest),
 //   libraryDependencies += "javax.activation"   % "activation"         % "1.1.1",

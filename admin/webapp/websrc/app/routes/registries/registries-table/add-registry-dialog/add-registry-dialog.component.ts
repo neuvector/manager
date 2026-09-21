@@ -26,7 +26,7 @@ import {
 import { RegistriesService } from '@services/registries.service';
 import { finalize, take } from 'rxjs/operators';
 import { TestSettingsDialogComponent } from './test-connection-dialog/test-settings-dialog.component';
-import { RegistriesCommunicationService } from '../../regestries-communication.service';
+import { RegistriesCommunicationService } from '../../registries-communication.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';

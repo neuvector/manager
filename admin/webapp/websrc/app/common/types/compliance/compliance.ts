@@ -6,7 +6,7 @@ export * from './hostData';
 export * from './workloadData';
 export * from './workloadCompliance';
 export * from './platform';
-export * from './complainceProfile';
+export * from './complianceProfile';
 export * from './complianceNIST';
 
 export interface Compliance {

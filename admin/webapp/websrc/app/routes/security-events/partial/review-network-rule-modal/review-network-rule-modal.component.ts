@@ -60,7 +60,7 @@ export class ReviewNetworkRuleModalComponent implements OnInit {
     if (this.data.networkRule.id) {
       this.prepareRegularNetworkRule();
     } else {
-      this.prepareImplictNetworkRule();
+      this.prepareImplicitNetworkRule();
     }
   };
 
@@ -95,7 +95,7 @@ export class ReviewNetworkRuleModalComponent implements OnInit {
       MapConstant.colourMap[this.data.networkRule.cfg_type.toUpperCase()];
   };
 
-  private prepareImplictNetworkRule = () => {
+  private prepareImplicitNetworkRule = () => {
     let srcGroup = this.data.secEvent.endpoint.source.group4Rule;
     let destGroup = this.data.secEvent.endpoint.destination.group4Rule;
     this.violatedImplicitRuleText = this.translate.instant(

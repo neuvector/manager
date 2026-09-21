@@ -3,14 +3,14 @@ package com.neu.model
 /**
  * Created by bxu on 4/28/16.
  */
-case class RegistyHttpProxy(url: String, username: String, password: Option[String])
-case class RegistyHttpsProxy(url: String, username: String, password: Option[String])
-case class RegistyHttpProxyCfg(
+case class RegistryHttpProxy(url: String, username: String, password: Option[String])
+case class RegistryHttpsProxy(url: String, username: String, password: Option[String])
+case class RegistryHttpProxyCfg(
   url: Option[String],
   username: Option[String],
   password: Option[String]
 )
-case class RegistyHttpsProxyCfg(
+case class RegistryHttpsProxyCfg(
   url: Option[String],
   username: Option[String],
   password: Option[String]
@@ -71,8 +71,8 @@ case class SystemConfig(
   webhooks: Option[Array[Webhook]] = None,
   cluster_name: Option[String] = None,
   auth_by_platform: Option[Boolean] = None,
-  registry_http_proxy: Option[RegistyHttpProxy] = None,
-  registry_https_proxy: Option[RegistyHttpsProxy] = None,
+  registry_http_proxy: Option[RegistryHttpProxy] = None,
+  registry_https_proxy: Option[RegistryHttpsProxy] = None,
   registry_http_proxy_status: Option[Boolean] = None,
   registry_https_proxy_status: Option[Boolean] = None,
   xff_enabled: Option[Boolean] = None,
@@ -128,10 +128,10 @@ case class SystemConfigAuthCfgV2(
 case class SystemConfigProxyCfgV2(
   registry_http_proxy_status: Option[Boolean] = None,
   registry_https_proxy_status: Option[Boolean] = None,
-  registry_http_proxy: Option[RegistyHttpProxy] = None,
-  registry_https_proxy: Option[RegistyHttpsProxy] = None,
-  registry_http_proxy_cfg: Option[RegistyHttpProxyCfg] = None,
-  registry_https_proxy_cfg: Option[RegistyHttpsProxyCfg] = None
+  registry_http_proxy: Option[RegistryHttpProxy] = None,
+  registry_https_proxy: Option[RegistryHttpsProxy] = None,
+  registry_http_proxy_cfg: Option[RegistryHttpProxyCfg] = None,
+  registry_https_proxy_cfg: Option[RegistryHttpsProxyCfg] = None
 )
 
 case class SystemConfigIBMSAVCfg2(

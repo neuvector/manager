@@ -1,7 +1,13 @@
 [files]
 extend-exclude = [
-  "admin/src/main/resources/**"
+  "admin/src/main/resources/**",
+  "admin/webapp/websrc/assets/img/country-flag/**"
 ]
 
 [default.extend-words]
 fo = "fo"
+EDE = "EDE"
+IST = "IST"
+indx = "indx"
+Implicits = "Implicits"
+assemblys = "assemblys"

@@ -49,7 +49,7 @@ export class CertificateDeserializer {
     }
   }
 
-  public getMainfest(cert: forge.pki.Certificate): CertificateManifest {
+  public getManifest(cert: forge.pki.Certificate): CertificateManifest {
     const keyAlgorithmType = this.getKeyAlgorithmType(cert);
     const validFrom = moment(cert.validity.notBefore);
     const validTo = moment(cert.validity.notAfter);

@@ -7,14 +7,14 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./risk-view-report-description-col.component.scss'],
 })
 export class RiskViewReportDescriptionColComponent implements OnInit {
-  displayedDescrition: string[];
+  displayedDescription: string[];
 
   @Input() description: string;
 
   constructor() {}
 
   ngOnInit(): void {
-    this.displayedDescrition = this.description
+    this.displayedDescription = this.description
       ? this.description.split('\n')
       : ['N/A'];
   }

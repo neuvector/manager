@@ -1600,7 +1600,7 @@
     "AUTOCOMPLETE_INVALID": "{{field}}未被识别。单击其中一个自动完成选项。",
     "label": {
       "NETWORK": "网络",
-      "PRIVILEDGE": "权限",
+      "PRIVILEGE": "权限",
       "FILE": "文件",
       "TUNNEL": "隧道",
       "PROCESS": "进程",
@@ -2667,7 +2667,7 @@
     "DOWNLOAD": "下载",
     "CONFIG": "包含配置",
     "CAN_NOT_CONFIG": "由于配置是通过CRD部署的，配置设定被禁用.",
-    "NOT_SUPPORT": " 由于不是Kubernates系统，配置设定被禁用.",
+    "NOT_SUPPORT": " 由于不是Kubernetes系统，配置设定被禁用.",
     "NOT_BINDING": " 由于要求的绑定不存在，配置设定被禁用.",
     "EXCLUDE_RULES": "排除缺省规则",
     "DEFAULT_RULES": "缺省规则",
@@ -3171,8 +3171,8 @@
     "ENABLED_CPATH_NG": "控制器控制路径调试启用时发生错误!",
     "DISABLED_CPATH_NG": "控制器控制路径调试停用时发生错误!",
     "ENFORCERS": "代理",
-    "ENFORCERS_HINT": "如果需要可以选择代理以加入它们的支持信息. 最多可以选择{{maxSlectedEnforcer}}个",
-    "MAX_SELECTED_ENFORCER_HINT": "请为支持信息选择不超过{{maxSlectedEnforcer}}个代理.",
+    "ENFORCERS_HINT": "如果需要可以选择代理以加入它们的支持信息. 最多可以选择{{maxSelectedEnforcer}}个",
+    "MAX_SELECTED_ENFORCER_HINT": "请为支持信息选择不超过{{maxSelectedEnforcer}}个代理.",
     "AS_STANDALONE": "作为独立集群导入配置",
     "RANCHER_EP": "Rancher端点",
     "NOTICE": "注意",
@@ -3380,7 +3380,7 @@
       "ADD_ON_TOP": "自顶添加",
       "INSERT": "添加",
       "EDIT": "编辑",
-      "ROMOVE": "删除",
+      "REMOVE": "删除",
       "MOVE": "移动"
     },
     "dialog": {

@@ -20,7 +20,7 @@ export const FilterCategory = {
   file: 'file',
   tunnel: 'tunnel',
   process: 'process',
-  priviledge: 'priviledge',
+  privilege: 'privilege',
 };
 
 export const Other = {

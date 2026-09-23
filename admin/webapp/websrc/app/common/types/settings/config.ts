@@ -151,6 +151,8 @@ export interface Webhook {
   use_proxy: boolean;
   type: string;
   cfg_type: string;
+  username: string;
+  password: string | null;
   isEditable?: boolean;
 }
 

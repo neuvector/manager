@@ -111,6 +111,42 @@ export const WebhookTableField = {
         },
       },
       {
+        key: 'username',
+        wrappers: [FormlyComponents.READONLY_WRAPPER],
+        type: FormlyComponents.ICON_INPUT,
+        templateOptions: {
+          viewValue: 'login.USERNAME',
+          placeholder: 'login.USERNAME',
+          isCell: true,
+          required: false,
+          hideRequiredMarker: true,
+          maxLength: 1000,
+        },
+        validators: {
+          validation: [FormlyValidators.ObjName],
+        },
+        expressionProperties: {
+          'templateOptions.disabled': model => {
+            return !model.isEditable;
+          },
+        },
+      },
+      {
+        key: 'password',
+        type: FormlyComponents.ICON_INPUT,
+        templateOptions: {
+          viewValue: 'login.PASSWORD',
+          isCell: true,
+          maxLength: 1000,
+          type: 'password',
+        },
+        expressionProperties: {
+          'templateOptions.disabled': model => {
+            return !model.isEditable;
+          },
+        },
+      },
+      {
         key: 'use_proxy',
         type: FormlyComponents.CHECKBOX,
         defaultValue: false,

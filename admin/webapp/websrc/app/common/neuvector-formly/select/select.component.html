@@ -1,17 +1,20 @@
-<mat-form-field
-  [hideRequiredMarker]="to.hideRequiredMarker ?? false"
-  class="w-100">
-  <mat-label>{{ field.templateOptions?.label ?? '' | translate }}</mat-label>
-  <mat-select
-    (selectionChange)="change($event)"
-    [attr.disabled]="field.templateOptions?.disabled ?? false"
-    [formControl]="formControl"
-    [formlyAttributes]="field"
-    [required]="field.templateOptions?.required ?? false">
-    <mat-option
-      *ngFor="let item of field.templateOptions?.items"
-      [value]="item.value">
-      {{ item.viewValue | translate }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<div [class]="!to.isCell ? 'd-flex align-items-center' : 'mt-3'">
+  <mat-form-field
+    [hideRequiredMarker]="to.hideRequiredMarker ?? false"
+    [class]="to.isCell ? 'pull-left' : 'w-' + (to.inputWidth ?? '100')"
+    class="w-100">
+    <mat-label>{{ field.templateOptions?.label ?? '' | translate }}</mat-label>
+    <mat-select
+      (selectionChange)="change($event)"
+      [attr.disabled]="field.templateOptions?.disabled ?? false"
+      [formControl]="formControl"
+      [formlyAttributes]="field"
+      [required]="field.templateOptions?.required ?? false">
+      <mat-option
+        *ngFor="let item of field.templateOptions?.items"
+        [value]="item.value">
+        {{ item.viewValue | translate }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

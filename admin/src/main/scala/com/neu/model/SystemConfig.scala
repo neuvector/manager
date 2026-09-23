@@ -21,8 +21,20 @@ case class Webhook(
   enable: Boolean,
   use_proxy: Boolean,
   `type`: String,
+  cfg_type: String,
+  username: Option[String] = None,
+  password: Option[String] = None
+)
+
+case class MaskedWebhook(
+  name: String,
+  url: String,
+  enable: Boolean,
+  use_proxy: Boolean,
+  `type`: String,
   cfg_type: String
 )
+
 case class RemoteRepository(
   nickname: String,
   provider: String,
@@ -184,6 +196,10 @@ case class SystemConfigWrap(
 
 case class WebhookConfigWrap(
   config: Webhook
+)
+
+case class MaskedWebhookConfigWrap(
+  config: MaskedWebhook
 )
 
 case class SystemConfig4DashboardWrap(

@@ -73,6 +73,7 @@ export const WebhookTableField = {
         templateOptions: {
           viewValue: 'setting.webhook.WH_TYPE',
           placeholder: 'setting.webhook.WH_TYPE',
+          isCell: true,
           items: WebhookTypes,
           required: true,
           hideRequiredMarker: true,
@@ -102,6 +103,48 @@ export const WebhookTableField = {
           viewValue: 'setting.webhook.STATUS',
           flexWidth: '10%',
           ariaLabelledBy: 'setting.webhook.STATUS',
+        },
+        expressionProperties: {
+          'templateOptions.disabled': (model, formState) => {
+            return (
+              !formState.permissions.isWebhookAuthorized ||
+              model.cfg_type === GlobalConstant.CFG_TYPE.FED
+            );
+          },
+        },
+      },
+      {
+        key: 'username',
+        wrappers: [FormlyComponents.READONLY_WRAPPER],
+        type: FormlyComponents.ICON_INPUT,
+        templateOptions: {
+          viewValue: 'login.USERNAME',
+          placeholder: 'login.USERNAME',
+          isCell: true,
+          required: false,
+          hideRequiredMarker: true,
+          maxLength: 1000,
+        },
+        validators: {
+          validation: [FormlyValidators.ObjName],
+        },
+        expressionProperties: {
+          'templateOptions.disabled': (model, formState) => {
+            return (
+              !formState.permissions.isWebhookAuthorized ||
+              model.cfg_type === GlobalConstant.CFG_TYPE.FED
+            );
+          },
+        },
+      },
+      {
+        key: 'password',
+        type: FormlyComponents.ICON_INPUT,
+        templateOptions: {
+          viewValue: 'login.PASSWORD',
+          isCell: true,
+          maxLength: 1000,
+          type: 'password',
         },
         expressionProperties: {
           'templateOptions.disabled': (model, formState) => {

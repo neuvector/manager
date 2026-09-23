@@ -8,7 +8,7 @@ export const RemoteRepoFormConfig: FormlyFieldConfig[] = [
     fieldGroupClassName: 'row',
     fieldGroup: [
       {
-        className: 'col-12 col-md-6 mt-2',
+        className: 'col-12 col-md-6',
         ...ProviderField,
       },
       {

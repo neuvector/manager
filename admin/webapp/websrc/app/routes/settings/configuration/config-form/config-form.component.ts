@@ -216,6 +216,9 @@ export class ConfigFormComponent implements OnInit, OnDestroy {
           this.updateWebhookValueChanges();
 
           this.notificationService.open(this.tr.instant('setting.SUBMIT_OK'));
+          this._config.webhooks.forEach(webhook => {
+            webhook.password = '';
+          });
           this.configOptions.resetModel?.(this._config);
           setTimeout(() => this.configOptions.resetModel?.(this._config));
         },

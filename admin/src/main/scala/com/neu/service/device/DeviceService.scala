@@ -127,8 +127,21 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
   }
 
   def updateWebhook(tokenId: String, webhook: Webhook, scope: Option[String]): Route = complete {
+    val printedPayload = maskedWebhookConfigWrapToJson(
+      MaskedWebhookConfigWrap(
+        MaskedWebhook(
+          name = webhook.name,
+          url = webhook.url,
+          enable = webhook.enable,
+          use_proxy = webhook.use_proxy,
+          `type` = webhook.`type`,
+          cfg_type = webhook.cfg_type
+        )
+      )
+    )
+    logger.info("Update config: {}", printedPayload)
+
     val payload = webhookConfigWrapToJson(WebhookConfigWrap(webhook))
-    logger.info("Update config: {}", payload)
 
     RestClient.httpRequestWithHeader(
       scope.fold(

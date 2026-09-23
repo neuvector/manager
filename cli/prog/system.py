@@ -189,7 +189,9 @@ def showFedSystemConfig(data, scope):
     if "webhooks" in conf:
         for wh in conf["webhooks"]:
             wh["scope"] = client.CfgTypeDisplay[wh["cfg_type"]]
-    columns = ("name", "url", "type", "enable", "scope", "use_proxy")
+            if "username" not in wh:
+                wh["username"] = ""
+    columns = ("name", "url", "type", "enable", "scope", "use_proxy", "username")
     output.list(columns, conf["webhooks"])
 
 
@@ -335,10 +337,12 @@ def showLocalSystemConfig(data, scope):
     if "webhooks" in conf:
         for wh in conf["webhooks"]:
             wh["scope"] = client.CfgTypeDisplay[wh["cfg_type"]]
+            if "username" not in wh:
+                wh["username"] = ""
     click.echo("")
     click.echo("Webhooks:")
     if len(conf["webhooks"]) > 0:
-        columns = ("name", "url", "type", "enable", "scope", "use_proxy")
+        columns = ("name", "url", "type", "enable", "scope", "use_proxy", "username")
         output.list(columns, conf["webhooks"])
 
     click.echo("")
@@ -561,15 +565,26 @@ def create_system(data):
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
               help="It's for local or federal response rule")
 @click.option("--proxy", default=False, is_flag=True, help="Use proxy to connect")
+@click.option("--username", help="webhook user name")
+@click.option("--password", is_flag=True, help="webhook password")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
-def create_system_webhook(data, name, url, type, scope, proxy, enable):
+def create_system_webhook(data, name, url, type, scope, proxy, username, password, enable):
     """Create webhook settings"""
     if type == "slack":
         type = "Slack"
     elif type == 'json':
         type = "JSON"
     body = {"name": name, "url": url, "enable": enable, "type": type, "use_proxy": proxy}
+    if username:
+        body["username"] = username
+    if password:
+        pass1 = click.prompt("Password", hide_input=True)
+        pass2 = click.prompt("Confirm Password", hide_input=True)
+        if pass1 != pass2:
+            click.echo("Passwords do not match")
+            return
+        body["password"] = pass1
     if scope == "fed":
         body["cfg_type"] = "federal"
     else:
@@ -915,13 +930,24 @@ def set_system_cluster_name(data, name):
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
               help="It's for local or federal response rule")
 @click.option("--proxy", default=False, is_flag=True, help="Use proxy to connect")
+@click.option("--username", help="webhook user name")
+@click.option("--password", is_flag=True, help="webhook password")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
-def set_system_webhook_url(data, name, url, type, scope, proxy, enable):
+def set_system_webhook_url(data, name, url, type, scope, proxy, username, password, enable):
     """Set webhook settings"""
     if type == "slack":
         type = "Slack"
     body = {"name": name, "url": url, "enable": enable, "type": type, "use_proxy": proxy}
+    if username:
+        body["username"] = username
+    if password:
+        pass1 = click.prompt("Password", hide_input=True)
+        pass2 = click.prompt("Confirm Password", hide_input=True)
+        if pass1 != pass2:
+            click.echo("Passwords do not match")
+            return
+        body["password"] = pass1
     args = {}
     args["scope"] = scope
     data.client.config("system/config/webhook", name, {"config": body}, **args)

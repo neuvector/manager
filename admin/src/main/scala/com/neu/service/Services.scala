@@ -90,11 +90,13 @@ class RoutedHttpService() extends Actor with ActorLogging with Directives {
 
   def receive: Receive = Actor.emptyBehavior // No need to handle messages directly
 
-  def handleConnection: Receive = {
-    case b: Bound              =>
-      log.info("***REST Server Started***")
-    case failed: CommandFailed =>
-      log.warning("***REST Server Could not be Started***" + failed.cmd.failureMessage)
+  def handleConnection: Receive = { case x: Matchable =>
+    x match {
+      case b: Bound              =>
+        log.info("***REST Server Started***")
+      case failed: CommandFailed =>
+        log.warning("***REST Server Could not be Started***" + failed.cmd.failureMessage)
+    }
   }
 }
 

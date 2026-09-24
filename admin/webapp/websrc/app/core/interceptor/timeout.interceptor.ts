@@ -32,7 +32,7 @@ export class TimeoutInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    // console.log('Timeout intecepting...');
+    // console.log('Timeout intercepting...');
 
     return next.handle(req).pipe(
       tap(

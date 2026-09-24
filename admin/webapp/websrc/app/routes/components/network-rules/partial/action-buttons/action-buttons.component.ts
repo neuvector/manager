@@ -214,7 +214,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     }, 500);
   };
 
-  promoteNeworkRuleOnEntry = id => {
+  promoteNetworkRuleOnEntry = id => {
     let payload = {
       request: {
         ids: [id],

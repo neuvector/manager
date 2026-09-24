@@ -384,13 +384,13 @@ export class ResponseRulesService {
   }
 
   filterSelectedOptions(optionsBoolean, optionList) {
-    let selecetedOptions: Array<any> = [];
+    let selectedOptions: Array<any> = [];
     optionList.forEach((action, index) => {
       if (optionsBoolean[index]) {
-        selecetedOptions.push(action);
+        selectedOptions.push(action);
       }
     });
-    return selecetedOptions;
+    return selectedOptions;
   }
 
   removeResponseRuleData(id) {

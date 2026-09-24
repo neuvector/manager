@@ -7,17 +7,17 @@ import spray.json.*
  */
 object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   given errorFormat: RootJsonFormat[Error]                                           = jsonFormat1(Error.apply)
-  given registyHttpsProxyFormat: RootJsonFormat[RegistyHttpsProxy]                   = jsonFormat3(
-    RegistyHttpsProxy.apply
+  given registryHttpsProxyFormat: RootJsonFormat[RegistryHttpsProxy]                 = jsonFormat3(
+    RegistryHttpsProxy.apply
   )
-  given registyHttpProxyFormat: RootJsonFormat[RegistyHttpProxy]                     = jsonFormat3(
-    RegistyHttpProxy.apply
+  given registryHttpProxyFormat: RootJsonFormat[RegistryHttpProxy]                   = jsonFormat3(
+    RegistryHttpProxy.apply
   )
-  given registyHttpsProxyCfgFormat: RootJsonFormat[RegistyHttpsProxyCfg]             = jsonFormat3(
-    RegistyHttpsProxyCfg.apply
+  given registryHttpsProxyCfgFormat: RootJsonFormat[RegistryHttpsProxyCfg]           = jsonFormat3(
+    RegistryHttpsProxyCfg.apply
   )
-  given registyHttpProxyCfgFormat: RootJsonFormat[RegistyHttpProxyCfg]               = jsonFormat3(
-    RegistyHttpProxyCfg.apply
+  given registryHttpProxyCfgFormat: RootJsonFormat[RegistryHttpProxyCfg]             = jsonFormat3(
+    RegistryHttpProxyCfg.apply
   )
   given githubConfigurationFormat: RootJsonFormat[GithubConfiguration]               = jsonFormat6(
     GithubConfiguration.apply
@@ -25,7 +25,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   given azureDevopsConfigurationFormat: RootJsonFormat[AzureDevopsConfiguration]     = jsonFormat5(
     AzureDevopsConfiguration.apply
   )
-  given webhookFormat: RootJsonFormat[Webhook]                                       = jsonFormat6(Webhook.apply)
+  given webhookFormat: RootJsonFormat[Webhook]                                       = jsonFormat8(Webhook.apply)
   given remoteRepoFormat: RootJsonFormat[RemoteRepository]                           = jsonFormat6(RemoteRepository.apply)
   given remoteRepositoryWrapFormat: RootJsonFormat[RemoteRepositoryWrap]             = jsonFormat1(
     RemoteRepositoryWrap.apply
@@ -50,6 +50,11 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   given serviceConfigFormat: RootJsonFormat[ServiceConfig]                           = jsonFormat1(ServiceConfig.apply)
   given webhookConfigWrapFormat: RootJsonFormat[WebhookConfigWrap]                   = jsonFormat1(
     WebhookConfigWrap.apply
+  )
+
+  given MaskedWebhookFormat: RootJsonFormat[MaskedWebhook]                     = jsonFormat6(MaskedWebhook.apply)
+  given MaskedWebhookConfigWrapFormat: RootJsonFormat[MaskedWebhookConfigWrap] = jsonFormat1(
+    MaskedWebhookConfigWrap.apply
   )
 
   given systemConfigSvcCfgV2Format: RootJsonFormat[SystemConfigSvcCfgV2]               = jsonFormat3(
@@ -103,6 +108,9 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
 
   def webhookConfigWrapToJson(webhookConfigWrap: WebhookConfigWrap): String =
     webhookConfigWrap.toJson.compactPrint
+
+  def maskedWebhookConfigWrapToJson(maskedWebhookConfigWrap: MaskedWebhookConfigWrap): String =
+    maskedWebhookConfigWrap.toJson.compactPrint
 
   def remoteRepositoryToJson(remoteRepository: RemoteRepository): String =
     remoteRepository.toJson.compactPrint

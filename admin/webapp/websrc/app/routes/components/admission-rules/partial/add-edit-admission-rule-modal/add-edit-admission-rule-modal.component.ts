@@ -338,7 +338,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   onCustomizedViewCancel = () => {
     this.clearCustomizedCriterion();
     this.isMainView = true;
-    this.destoryListeners();
+    this.destroyListeners();
   };
 
   isCustomCriterionValid = customCriterion => {
@@ -361,7 +361,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   addCustomizedCriteria = customCriterion => {
     this.addCriterionIntoChip(customCriterion);
     this.isMainView = true;
-    this.destoryListeners();
+    this.destroyListeners();
   };
 
   clickEditor = event => {
@@ -831,7 +831,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     });
   };
 
-  private destoryListeners = () => {
+  private destroyListeners = () => {
     this.jsonEditorPrevBtnEl.removeEventListener('click', this.searchMove);
     this.jsonEditorNextBtnEl.removeEventListener('click', this.searchMove);
   };

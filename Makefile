@@ -83,7 +83,7 @@ buildx-machine:
 	docker buildx create --name=$(MACHINE) --platform=$(DEFAULT_PLATFORMS)
 
 test-image:
-	# Instead of loading image, target all platforms, effectivelly testing
+	# Instead of loading image, target all platforms, effectively testing
 	# the build for the target architectures.
 	$(MAKE) build-image BUILD_ACTION="--platform=$(TARGET_PLATFORMS)"
 

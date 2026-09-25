@@ -41,7 +41,7 @@ lazy val commonDependencies = Seq(
   "javax.xml.bind"           % "jaxb-api"           % "2.3.1",
   "com.sun.xml.ws"           % "jaxws-ri"           % "4.0.3",
   "javax.xml.soap"           % "javax.xml.soap-api" % "1.4.0",
-  "org.apache.logging.log4j" % "log4j-api"          % "2.26.1",
+  "ch.qos.reload4j"          % "reload4j"           % "1.2.25",
   "net.logstash.log4j"       % "jsonevent-layout"   % "1.7",
   "org.json4s"              %% "json4s-native"      % "4.0.7",
   "org.bouncycastle"         % "bcprov-jdk18on"     % "1.79",

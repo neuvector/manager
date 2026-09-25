@@ -26,7 +26,7 @@ class OpenIdAuthApi(
               Utils.respondWithWebServerHeaders() {
                 if (code.isEmpty && state.isEmpty) {
                   // Initial request: generate nonce and set cookie
-                  val nonce        = java.util.UUID.randomUUID().toString
+                  val nonce        = UUID.randomUUID().toString
                   val encodedNonce =
                     Base64.getEncoder.encodeToString(nonce.getBytes(StandardCharsets.UTF_8))
                   setCookie(HttpCookie("temp", encodedNonce)) {

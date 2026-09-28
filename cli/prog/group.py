@@ -553,7 +553,7 @@ def set_group(ctx, data, name):
 def set_group_setting(data, image, node, domain, container, service, label, address, monitor_metric, cur_sess, sess_rate, bandwidth):
     """Set group configuration.
 
-    For partial match, add @ in front of the value streig, for example --image @nginx.
+    For partial match, add @ in front of the value string, for example --image @nginx.
     if the option value starts with ^, the criterion matches string with prefix 'value'.
     For --label, use: key=value, key^value or key@value.
     For --address, use: --address=1.2.3.4, --address=1.2.3.0/24, --address 1.2.3.1-1.2.3.31

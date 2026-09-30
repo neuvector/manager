@@ -315,6 +315,9 @@ export class ConfigFormComponent implements OnInit, OnDestroy {
             if (webhook.type === OtherWebhookType) {
               webhook.type = '';
             }
+            if (webhook.password === '') {
+              webhook.password = null;
+            }
             webhook.url = webhook.url.trim();
             return webhook;
           }),

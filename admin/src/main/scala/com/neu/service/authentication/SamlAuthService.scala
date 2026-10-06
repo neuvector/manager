@@ -150,14 +150,28 @@ class SamlAuthService()(implicit
   private def handleAuthResponse(response: HttpResponse, nonce: String): Future[Route] = {
     logger.info("saml-p: processing auth response.")
     response.status match {
-      case StatusCodes.OK =>
-        logger.info(s"saml-p: success, storing token under nonce. redirecting to $rootPath")
+      case StatusCodes.OK                =>
         Unmarshal(response.entity).to[String].map { authToken =>
           val userToken: UserTokenNew = AuthenticationManager.parseToken(authToken)
           AuthenticationManager.putSsoToken(nonce, userToken)
           redirect(rootPath, StatusCodes.Found)
         }
-      case _              =>
+      case StatusCodes.TemporaryRedirect =>
+        response.headers.find(_.is("location")) match {
+          case Some(location) =>
+            logger.info(s"saml-p: temporary redirect to ${location.value}")
+            val locationParts = location.value.split("#", 2)
+            val baseUri       = Uri(locationParts(0))
+            val redirectUri   =
+              if (locationParts.length > 1) baseUri.withFragment(locationParts(1))
+              else baseUri
+            Future.successful(
+              redirect(redirectUri, StatusCodes.SeeOther)
+            )
+          case None           =>
+            Future.successful(complete(StatusCodes.BadGateway))
+        }
+      case _                             =>
         logger.warn(s"saml-p: ${response.status}. SAML login error. redirect to $rootPath ")
         // Clear the temp cookie so the browser does not retain a stale nonce
         Future.successful(

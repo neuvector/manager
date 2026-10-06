@@ -39,8 +39,6 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
   private final val admissionControlTest       = "debug/admission/test"
   private final val fedDeploy                  = "fed/deploy"
 
-  final val serverErrorStatus = "Status: 503"
-
   def deployFedRules(tokenId: String, deployFedRulesConfig: DeployFedRulesConfig): Route =
     complete {
       logger.info("Inform rule deployment")
@@ -207,12 +205,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
         )
       } catch {
         case NonFatal(e) =>
-          RestClient.handleError(
-            timeOutStatus,
-            authenticationFailedStatus,
-            serverErrorStatus,
-            e
-          )
+          RestClient.handleError(e)
       }
     }
 
@@ -238,12 +231,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
         )
       } catch {
         case NonFatal(e) =>
-          RestClient.handleError(
-            timeOutStatus,
-            authenticationFailedStatus,
-            serverErrorStatus,
-            e
-          )
+          RestClient.handleError(e)
       }
     }
 
@@ -655,12 +643,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
         )
       } catch {
         case NonFatal(e) =>
-          RestClient.handleError(
-            timeOutStatus,
-            authenticationFailedStatus,
-            serverErrorStatus,
-            e
-          )
+          RestClient.handleError(e)
       }
     }
 
@@ -683,12 +666,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -709,12 +687,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
         )
       } catch {
         case NonFatal(e) =>
-          RestClient.handleError(
-            timeOutStatus,
-            authenticationFailedStatus,
-            serverErrorStatus,
-            e
-          )
+          RestClient.handleError(e)
       }
     }
 
@@ -988,12 +961,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -1015,12 +983,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
         )
       } catch {
         case NonFatal(e) =>
-          RestClient.handleError(
-            timeOutStatus,
-            authenticationFailedStatus,
-            serverErrorStatus,
-            e
-          )
+          RestClient.handleError(e)
       }
     }
 

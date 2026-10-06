@@ -24,20 +24,23 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     console.log('Auth intercepting...');
+    if (req.url.includes('/assets/i18n/')) {
+      return next.handle(req);
+    }
     let authToken;
     try {
       authToken = this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TOKEN)
         ? this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TOKEN).token.token
         : '';
-      if (
-        !(
-          req.url.indexOf(PathConstant.LOGIN_URL) >= 0 &&
-          typeof req.method === 'string' &&
-          req.method === 'POST'
-        )
-      ) {
+      const isLoginRequest =
+        req.url.indexOf(PathConstant.LOGIN_URL) >= 0 &&
+        typeof req.method === 'string' &&
+        req.method === 'POST';
+      if (!isLoginRequest) {
         if (authToken === '') {
-          this.router.navigate([GlobalConstant.PATH_LOGIN]);
+          if (!this.isLoginRoute()) {
+            this.router.navigate([GlobalConstant.PATH_LOGIN]);
+          }
         } else {
           const authReq = req.clone({
             headers: req.headers
@@ -52,11 +55,18 @@ export class AuthInterceptor implements HttpInterceptor {
       if (GlobalVariable.isSUSESSO) {
         this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TOKEN);
         this.router.navigate([GlobalConstant.PATH_LOGOUT]);
-      } else {
+      } else if (!this.isLoginRoute()) {
         this.router.navigate([GlobalConstant.PATH_LOGIN]);
       }
     }
 
     return next.handle(req);
+  }
+
+  private isLoginRoute(): boolean {
+    return (
+      GlobalVariable.window.location.hash.split('?')[0] ===
+      `#/${GlobalConstant.PATH_LOGIN}`
+    );
   }
 }

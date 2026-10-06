@@ -27,11 +27,8 @@ import scala.util.control.NonFatal
 
 class DeviceService extends Directives with DefaultJsonFormats with LazyLogging {
 
-  final val timeOutStatus              = "Status: 408"
-  final val authenticationFailedStatus = "Status: 401"
-  final val serverErrorStatus          = "Status: 503"
-  private final val benchHostPath      = "bench/host"
-  private var logFile                  = "/tmp/debug.gz"
+  private final val benchHostPath = "bench/host"
+  private var logFile             = "/tmp/debug.gz"
 
   def getEnforcers(tokenId: String, id: Option[String]): Route = complete {
     if (id.isEmpty) {
@@ -411,12 +408,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       }
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -442,12 +434,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -472,12 +459,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -501,12 +483,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -537,12 +514,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       }
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -617,28 +589,13 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
             )
           }
         case Right(false) =>
-          RestClient.handleError(
-            timeOutStatus,
-            authenticationFailedStatus,
-            serverErrorStatus,
-            new RuntimeException("Status: 401")
-          )
+          RestClient.handleError(new RuntimeException("Status: 401"))
         case Left(error)  =>
-          RestClient.handleError(
-            timeOutStatus,
-            authenticationFailedStatus,
-            serverErrorStatus,
-            error
-          )
+          RestClient.handleError(error)
       }
     catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -661,12 +618,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       }
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 

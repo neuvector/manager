@@ -232,6 +232,7 @@
     "OKTA_LOGIN": "Login with SAML",
     "OIDC_LOGIN": "Login with OpenID",
     "AUTH_ERROR": "Authentication failed!",
+    "NO_ROLE_ASSIGNED": "No role assigned!",
     "SESSION_TIMEOUT": "Session has expired. Please login.",
     "CHANGE_DEFAULT_PASSWORD": "You should change the default password!",
     "CHANGE_DEFAULT_PASSWORD_RANCHER": "NeuVector default admin user's password should be changed!",

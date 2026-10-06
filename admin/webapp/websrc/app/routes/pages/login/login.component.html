@@ -30,9 +30,9 @@
               mode="indeterminate"></mat-progress-bar>
             <div
               class="text-danger text-center clearfix"
-              *ngIf="authMsg && isFromSSO"
+              *ngIf="(loginErrorStatus || authMsg) && isFromSSO"
               style="padding: 0 10px; clear: both">
-              {{ authMsg }}
+              {{ LoginErrorMsg || authMsg | translate }}
             </div>
           </div>
           <div
@@ -196,8 +196,8 @@
               class="text-danger text-center clearfix"
               [ngClass]="{ 'mt-3': servers && servers.length === 2 }"
               style="padding: 0 10px; clear: both">
-              <div *ngIf="authMsg">
-                {{ authMsg }}
+              <div *ngIf="loginErrorStatus || authMsg">
+                {{ LoginErrorMsg || authMsg | translate }}
               </div>
               <div *ngIf="rbacAlertMessage">
                 {{ 'login.RBAC_ALERT.PASSWORD_RETRIEVAL_ERROR' | translate }}

@@ -35,10 +35,6 @@ class DashboardService()(implicit executionContext: ExecutionContext)
   private final val DENY      = "deny"
   private final val DASHBOARD = "dashboard"
 
-  private final val timeOutStatus              = "Status: 408"
-  private final val authenticationFailedStatus = "Status: 401"
-  private final val serverErrorStatus          = "Status: 503"
-
   def getMultiClusterSummary(tokenId: String, clusterId: Option[String]): Route = complete {
     try {
       val baseUrl                                          =
@@ -118,12 +114,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -422,12 +413,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       dashboardScoreDTO
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -546,12 +532,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       dashboardNotificationDTO
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 

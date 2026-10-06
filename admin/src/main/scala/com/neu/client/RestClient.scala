@@ -297,19 +297,24 @@ class RestClient()(using
   }
 
   def handleError(
-    timeOutStatus: String,
-    authenticationFailedStatus: String,
-    serverErrorStatus: String,
     e: Throwable
   ): (StatusCode, String) = {
     val PERMISSION_DENIED = "Permission denied"
     val sw                = new StringWriter
+
+    val timeOutStatus              = "Status: 408"
+    val authenticationFailedStatus = "Status: 401"
+    val authorizationFailedStatus  = "Status: 403"
+    val serverErrorStatus          = "Status: 503"
+
     e.printStackTrace(new PrintWriter(sw))
     logger.warn(sw.toString)
     if (e.getMessage.contains(timeOutStatus)) {
       (StatusCodes.RequestTimeout, "Session expired!")
     } else if (e.getMessage.contains(authenticationFailedStatus)) {
       (StatusCodes.Unauthorized, "Authentication failed!")
+    } else if (e.getMessage.contains(authorizationFailedStatus)) {
+      (StatusCodes.Forbidden, "No role assigned!")
     } else if (e.getMessage.contains(serverErrorStatus)) {
       (StatusCodes.ServiceUnavailable, "Server is not available!")
     } else if (e.getMessage.contains(PERMISSION_DENIED)) {

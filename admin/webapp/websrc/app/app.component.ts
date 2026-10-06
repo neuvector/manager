@@ -123,7 +123,8 @@ export class AppComponent implements OnInit {
     this.commonHttpService.getGravatar().subscribe(val => {
       GlobalVariable.gravatar = val;
     });
-    if (this.win.location.hash !== '#/login' && this.win.location.hash !== '') {
+    const currentRoute = this.win.location.hash.split('?')[0];
+    if (currentRoute !== '#/login' && currentRoute !== '') {
       this.authService
         .refreshToken(
           this.win.location.href.includes(GlobalConstant.PROXY_VALUE)
@@ -212,7 +213,7 @@ export class AppComponent implements OnInit {
 
   private heartbeat = () => {
     let currTimer: number = new Date().getTime();
-    if (this.win.location.hash !== '#/login') {
+    if (this.win.location.hash.split('?')[0] !== '#/login') {
       if (currTimer - this.initTimer > 29000 || this.isFirstAction) {
         this.isFirstAction = false;
         this.initTimer = currTimer;

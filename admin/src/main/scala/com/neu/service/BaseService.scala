@@ -59,14 +59,20 @@ open class BaseService extends Directives with LazyLogging {
   }
 
   protected def onUnauthorized(e: HttpResponseException, res: String): StandardRoute =
-    if (res.contains("\"code\":14")) {
-      complete((StatusCodes.BadRequest, res))
-    } else if (res.contains("\"code\":47")) {
-      complete((StatusCodes.Unauthorized, blocked))
-    } else if (res.contains("\"code\":48")) {
-      complete((StatusCodes.Unauthorized, passwordExpired))
-    } else if (res.contains("\"code\":50")) {
-      complete(StatusCodes.Unauthorized, authSSODisabledError)
+    if (e.getMessage.contains("Status: 401")) {
+      if (res.contains("\"code\":14")) {
+        complete((StatusCodes.BadRequest, res))
+      } else if (res.contains("\"code\":47")) {
+        complete((StatusCodes.Unauthorized, blocked))
+      } else if (res.contains("\"code\":48")) {
+        complete((StatusCodes.Unauthorized, passwordExpired))
+      } else if (res.contains("\"code\":50")) {
+        complete(StatusCodes.Unauthorized, authSSODisabledError)
+      } else {
+        complete((StatusCodes.Unauthorized, authError))
+      }
+    } else if (e.getMessage.contains("Status: 403")) {
+      complete((StatusCodes.Forbidden, "No role assigned!"))
     } else {
       complete((StatusCodes.Unauthorized, authError))
     }

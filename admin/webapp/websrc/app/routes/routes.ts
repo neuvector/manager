@@ -194,6 +194,6 @@ export const routes: Routes = [
   // Not found
   { path: 'logout', component: LogoutComponent },
   { path: 'eula', component: LoginComponent },
-  { path: '**', redirectTo: 'login' },
   { path: 'login', component: LoginComponent },
+  { path: '**', redirectTo: 'login' },
 ];

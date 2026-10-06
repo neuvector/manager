@@ -232,6 +232,7 @@
     "OKTA_LOGIN": "SAML登录",
     "OIDC_LOGIN": "OpenID登录",
     "AUTH_ERROR": "身分验证错误!",
+    "NO_ROLE_ASSIGNED": "未分配角色!",
     "SESSION_TIMEOUT": "会话超时，请重新登录",
     "CHANGE_DEFAULT_PASSWORD": "请修改缺省密码!",
     "CHANGE_DEFAULT_PASSWORD_RANCHER": "NeuVector的默认Admin的密码应该被修改!",

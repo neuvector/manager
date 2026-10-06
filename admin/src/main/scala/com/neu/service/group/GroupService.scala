@@ -24,8 +24,6 @@ import scala.util.control.NonFatal
 
 class GroupService extends BaseService with DefaultJsonFormats with LazyLogging {
 
-  private final val serverErrorStatus = "Status: 503"
-
   def getGroupList(tokenId: String, scope: Option[String], f_kind: Option[String]): Route =
     complete {
       var url = s"${baseClusterUri(tokenId)}/group?start=0&brief=true"
@@ -643,12 +641,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -673,12 +666,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -790,12 +778,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -820,12 +803,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 

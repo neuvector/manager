@@ -39,9 +39,8 @@ class NotificationService()(implicit
     with DefaultJsonFormats
     with LazyLogging {
 
-  final val serverErrorStatus = "Status: 503"
-  val topLimit                = 5
-  val client                  = "client"
+  val topLimit = 5
+  val client   = "client"
 
   def getIpLocations(ipList: Array[String]): Route = complete {
     logger.info("Getting ip locations")
@@ -189,12 +188,7 @@ class NotificationService()(implicit
             pagedRes
           } catch {
             case NonFatal(e) =>
-              RestClient.handleError(
-                timeOutStatus,
-                authenticationFailedStatus,
-                serverErrorStatus,
-                e
-              )
+              RestClient.handleError(e)
           }
         } else {
           auditStr
@@ -425,12 +419,7 @@ class NotificationService()(implicit
       HttpEntity.Empty
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -441,12 +430,7 @@ class NotificationService()(implicit
       UserGraphLayout(user, GraphCacheManager.getNodeLayout(user, tokenId))
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -457,12 +441,7 @@ class NotificationService()(implicit
       BlacklistCacheManager.getBlacklist(user, tokenId)
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -475,12 +454,7 @@ class NotificationService()(implicit
       HttpEntity.Empty
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 

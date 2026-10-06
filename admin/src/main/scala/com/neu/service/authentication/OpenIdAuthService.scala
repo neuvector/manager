@@ -108,7 +108,7 @@ class OpenIdAuthService()(implicit
     ip: String,
     host: Option[String],
     nonce: String
-  ): Future[Route] = Future {
+  ): Future[Route] = {
     logger.info(s"openId-g: state is ${state.get}.")
     logger.info(s"openId-g: code is ${code.getOrElse("no code")}")
     logger.info(s"openId-g: host is ${host.getOrElse("no host")}")
@@ -134,18 +134,35 @@ class OpenIdAuthService()(implicit
     logger.info("openId-g: OpenId Login. ")
 
     response.status match {
-      case StatusCodes.OK =>
+      case StatusCodes.OK                =>
         val authTokenFuture: Future[String] = Unmarshal(response.entity).to[String]
         val authToken                       = Await.result(authTokenFuture, RestClient.waitingLimit.seconds)
         val userToken: UserTokenNew         = AuthenticationManager.parseToken(authToken)
         logger.info("openId-g: added authToken")
         AuthenticationManager.putSsoToken(nonce, userToken)
-        redirect(ROOT_PATH, StatusCodes.Found)
-      case _              =>
-        logger.warn("openId-g: invalid response. redirect /")
-        deleteCookie("temp") {
-          redirect(ROOT_PATH, StatusCodes.MovedPermanently)
+        Future.successful(redirect(ROOT_PATH, StatusCodes.Found))
+      case StatusCodes.TemporaryRedirect =>
+        response.headers.find(_.is("location")) match {
+          case Some(location) =>
+            logger.info(s"openId-g: temporary redirect to ${location.value}")
+            val locationParts = location.value.split("#", 2)
+            val baseUri       = Uri(locationParts(0))
+            val redirectUri   =
+              if (locationParts.length > 1) baseUri.withFragment(locationParts(1))
+              else baseUri
+            Future.successful(
+              redirect(redirectUri, StatusCodes.SeeOther)
+            )
+          case None           =>
+            Future.successful(complete(StatusCodes.BadGateway))
         }
+      case _                             =>
+        logger.warn("openId-g: invalid response. redirect /")
+        Future.successful(
+          deleteCookie("temp") {
+            redirect(ROOT_PATH, StatusCodes.MovedPermanently)
+          }
+        )
     }
   }
 }

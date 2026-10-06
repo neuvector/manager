@@ -7,7 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { SwitchersService } from '@core/switchers/switchers.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   LOCAL_STORAGE,
   SESSION_STORAGE,
@@ -49,6 +49,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public loginForm: FormGroup;
   public inProgress: boolean = false;
   public authMsg: string = '';
+  public loginErrorStatus: string = '';
+  public LoginErrorMsg: string = '';
   public servers: Array<any> = [];
   public showPassword: boolean = false;
   public isFromSSO: boolean = false;
@@ -86,6 +88,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private commonHttpService: CommonHttpService,
     private summaryService: SummaryService,
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
     private sanitizer: DomSanitizer,
@@ -102,6 +105,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.inProgress = false;
     this.samlEnabled = false;
     this.oidcEnabled = false;
+    this.loginErrorStatus =
+      this.route.snapshot.queryParamMap.get('error') || '';
+    const loginErrorMessages: Record<string, string> = {
+      '401': 'login.AUTH_ERROR',
+      '403': 'login.NO_ROLE_ASSIGNED',
+    };
+    this.LoginErrorMsg = loginErrorMessages[this.loginErrorStatus] || '';
     this.now = new Date();
     this.app = this.switchersService.getAppSwitcher('');
     this.localStorage.set('login_time', this.now.toString());

@@ -31,8 +31,6 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
   private val complianceFilterUrl     = "compliance/available_filter"
   private val vulnerabilityProfileUrl = "vulnerability/profile"
 
-  final val serverErrorStatus = "Status: 503"
-
   def queryScannedAssets(tokenId: String, scannedAssetsQuery: ScannedAssetsQuery): Route =
     complete {
       logger.info("Getting scanned assets ...")
@@ -282,12 +280,7 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -310,12 +303,7 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
         )
       } catch {
         case NonFatal(e) =>
-          RestClient.handleError(
-            timeOutStatus,
-            authenticationFailedStatus,
-            serverErrorStatus,
-            e
-          )
+          RestClient.handleError(e)
       }
     }
 
@@ -330,12 +318,7 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
       CisNISTManager.getCompliancesNIST(complianceNISTConfigData.config.names)
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -434,12 +417,7 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 
@@ -461,12 +439,7 @@ class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
       )
     } catch {
       case NonFatal(e) =>
-        RestClient.handleError(
-          timeOutStatus,
-          authenticationFailedStatus,
-          serverErrorStatus,
-          e
-        )
+        RestClient.handleError(e)
     }
   }
 }

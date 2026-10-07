@@ -418,10 +418,12 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
           },
         });
         dialog.afterClosed().subscribe(change => {
-          if (change && isEdit) {
-            this.registriesCommunicationService.setSelectedRegistry(
-              this.gridApi.getSelectedNodes()[0].data
-            );
+          if (change) {
+            if (isEdit && this.gridApi && this.gridApi.getSelectedNodes().length > 0) {
+              this.registriesCommunicationService.setSelectedRegistry(
+                this.gridApi.getSelectedNodes()[0].data
+              );
+            }
           }
           this.cd.markForCheck();
         });

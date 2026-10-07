@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject, timer, of } from 'rxjs';
 import { RepoGetResponse, Summary } from '@common/types';
 import {
   filter,
@@ -8,6 +8,9 @@ import {
   startWith,
   switchMap,
   tap,
+  takeWhile,
+  take,
+  catchError
 } from 'rxjs/operators';
 import { RegistriesService } from '@services/registries.service';
 import { FormControl } from '@angular/forms';
@@ -136,6 +139,23 @@ export class RegistriesCommunicationService {
     } else {
       this.refreshRegistriesSubject$.next(true);
     }
+  }
+
+  refreshUntilFound(expectedName: string, maxAttempts = 20, intervalMs = 500): void {
+    timer(0, intervalMs)
+      .pipe(
+        take(maxAttempts),
+        switchMap(() => this.registriesService.getRegistries().pipe(catchError(() => of({ summarys: [] })))),
+        tap(({ summarys }) => {
+          const found = summarys.some(s => s.name === expectedName);
+          if (found) {
+            // Push update into the normal data stream
+            this.refreshRegistriesSubject$.next(true);
+          }
+        }),
+        takeWhile(({ summarys }) => !summarys.some(s => s.name === expectedName), true)
+      )
+      .subscribe();
   }
 
   refreshDetails(): void {

@@ -11,12 +11,11 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { RegistriesTableComponent } from '../registries-table.component';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { AddRegistryFieldConfig } from './add-registry-form-configs';
 import { cloneDeep } from 'lodash';
 import { INTERVAL_STEP_VALUES } from './add-registry-form-configs/constants/constants';
 import {
-  AWSKey,
   ErrorResponse,
   GCRKey,
   RegistryConfig,
@@ -31,7 +30,6 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { MapConstant } from '@common/constants/map.constant';
 import { ConfigHttpService } from '@common/api/config-http.service';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
@@ -148,19 +146,16 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
             take(1),
             finalize(() => {
               this.submittingForm = false;
+              this.registriesCommunicationService.cancelSave();
             })
           )
           .subscribe({
             complete: () => {
-              this.registriesCommunicationService.refreshRegistries(1000);
-              this.saving$.subscribe(saving => {
-                if (!saving) {
-                  this.dialogRef.close(true);
-                }
-              });
+              this.registriesCommunicationService.initRefreshingRegistries();
+              this.registriesCommunicationService.refreshRegistries();
+              this.dialogRef.close(true);
             },
             error: ({ error }: { error: ErrorResponse }) => {
-              this.registriesCommunicationService.cancelSave();
               this.notificationService.open(
                 error.message,
                 GlobalConstant.NOTIFICATION_TYPE.ERROR
@@ -171,21 +166,18 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
         this.registriesService
           .postRegistry(body)
           .pipe(
+            take(1),
             finalize(() => {
               this.submittingForm = false;
+              this.registriesCommunicationService.cancelSave();
             })
           )
           .subscribe({
             complete: () => {
-              this.registriesCommunicationService.refreshRegistries(1000);
-              this.saving$.subscribe(saving => {
-                if (!saving) {
-                  this.dialogRef.close(true);
-                }
-              });
+              this.dialogRef.close(true);
+              this.registriesCommunicationService.refreshUntilFound(body.config.name);
             },
             error: ({ error }: { error: ErrorResponse }) => {
-              this.registriesCommunicationService.cancelSave();
               this.notificationService.open(
                 error.message,
                 GlobalConstant.NOTIFICATION_TYPE.ERROR

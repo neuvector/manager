@@ -119,7 +119,7 @@ def set_controller(data, id_or_name):
 
 @set_controller.command()
 @click.option('--category', '-c', multiple=True,
-              type=click.Choice(['all', 'cpath', 'conn', 'mutex', 'scan', 'cluster'])
+              type=click.Choice(['all', 'cpath', 'conn', 'mutex', 'scan', 'cluster', 'k8s_monitor'])
               )
 @click.pass_obj
 def debug(data, category):
@@ -133,7 +133,7 @@ def debug(data, category):
     s = set()
     for c in category:
         if c == 'all':
-            s |= set(['cpath', 'conn', 'mutex', 'scan', 'cluster'])
+            s |= set(['cpath', 'conn', 'mutex', 'scan', 'cluster', 'k8s_monitor'])
         else:
             s.add(c)
     # Can't use list(s) because we overwrite list with our own function

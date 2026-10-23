@@ -130,7 +130,7 @@
     "ajv": "^8.17.1",
     "ajv-keywords": "^5.1.0",
     "brotli-webpack-plugin": "^1.1.0",
-    "compression-webpack-plugin": "^10.0.0",
+    "compression-webpack-plugin": "^12.0.0",
     "eslint": "^9.39.2",
     "husky": "^7.0.4",
     "jasmine-core": "3.99.1",

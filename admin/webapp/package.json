@@ -96,7 +96,7 @@
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^20.0.0",
-    "@angular-devkit/build-angular": "^20.3.13",
+    "@angular-devkit/build-angular": "20.3.39",
     "@angular-eslint/builder": "^20.0.0",
     "@angular-eslint/eslint-plugin": "^20.0.0",
     "@angular-eslint/eslint-plugin-template": "^20.0.0",
@@ -104,7 +104,7 @@
     "@angular-eslint/template-parser": "^20.0.0",
     "@angular/animations": "^20.3.15",
     "@angular/cdk": "^20.2.14",
-    "@angular/cli": "^20.3.13",
+    "@angular/cli": "20.3.39",
     "@angular/common": "^20.3.15",
     "@angular/compiler": "^20.3.15",
     "@angular/compiler-cli": "^20.3.15",

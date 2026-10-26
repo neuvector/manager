@@ -123,7 +123,10 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
         sortable: true,
         resizable: true,
       },
-      getRowId: params => params.data.tag ? `${params.data.repository}:${params.data.tag}` : params.data.repository,
+      getRowId: params =>
+        params.data.tag
+          ? `${params.data.repository}:${params.data.tag}`
+          : params.data.repository,
       suppressScrollOnNewData: true,
       rowData: this.rowData,
       columnDefs: this.columnDefs,

@@ -26,8 +26,7 @@ export class RegistryDetailsComponent {
   queryId: string;
   registryDetails$ = this.registriesCommunicationService.registryDetails$.pipe(
     tap(res => {
-      if (!!res.isAllView)
-        this.queryId = res.allScannedImagesSummary!.queryId;
+      if (!!res.isAllView) this.queryId = res.allScannedImagesSummary!.queryId;
     }),
     catchError(err => {
       this.error = err;

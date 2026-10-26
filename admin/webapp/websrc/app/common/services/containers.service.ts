@@ -317,7 +317,9 @@ export class ContainersService {
     ].join(',');
 
     const csvRows = vulnerabilities.map(vul => {
-      const { image_name, tags } = this.splitImageNameAndTag(vul.workload_image);
+      const { image_name, tags } = this.splitImageNameAndTag(
+        vul.workload_image
+      );
       const digest = vul.workload_image_digest || '';
       const workload_name = vul.workload_name || '';
       const namespace = vul.workload_domain || '';

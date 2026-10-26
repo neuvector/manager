@@ -31,7 +31,9 @@
   <div *ngFor="let image of images | slice: 0 : 5">
     <div>{{ image.display_name }}</div>
 
-    <div class="text-muted small" style="word-break: break-all; line-height: 1.2;">
+    <div
+      class="text-muted small"
+      style="word-break: break-all; line-height: 1.2">
       {{ image.digest }}
     </div>
   </div>

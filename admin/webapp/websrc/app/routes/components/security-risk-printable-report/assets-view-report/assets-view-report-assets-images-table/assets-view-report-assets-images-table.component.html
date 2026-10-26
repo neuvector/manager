@@ -61,20 +61,26 @@
       "
       [attr.data-index]="i">
       <td class="print-cell" style="width: 30%">
-        <div>{{ reportPage === 'vulnerabilities' ? image.name : image.image_name }}</div>
-        <div *ngIf="reportPage === 'vulnerabilities'" class="text-muted small" style="word-break: break-all;">
+        <div>
+          {{ reportPage === 'vulnerabilities' ? image.name : image.image_name }}
+        </div>
+        <div
+          *ngIf="reportPage === 'vulnerabilities'"
+          class="text-muted small"
+          style="word-break: break-all">
           {{ image.digest }}
         </div>
       </td>
       <td
         *ngIf="reportPage === 'vulnerabilities'"
-        class="print-cell" style="width: 10%">
+        class="print-cell"
+        style="width: 10%">
         <div>{{ image.cvedb_version }}</div>
         <div class="text-muted small">
           {{ 'scan.report.gridHeader.CVE_DB_LAST_UPDATED' | translate }}
         </div>
         <div class="text-muted small">
-          {{ image.cvedb_create_time | date:'yyyy-MM-dd HH:mm:ss' }}
+          {{ image.cvedb_create_time | date: 'yyyy-MM-dd HH:mm:ss' }}
         </div>
       </td>
       <td
@@ -96,7 +102,11 @@
         *ngIf="reportPage === 'vulnerabilities'"
         class="print-cell"
         style="width: 60%">
-        <ng-container *ngIf="image.critical + image.high + image.medium + image.low > 0; else noVulns">
+        <ng-container
+          *ngIf="
+            image.critical + image.high + image.medium + image.low > 0;
+            else noVulns
+          ">
           <span
             *ngFor="let item of image.vulnerabilities"
             class="margin-right-s text-{{ item.split('_')[0] }}">

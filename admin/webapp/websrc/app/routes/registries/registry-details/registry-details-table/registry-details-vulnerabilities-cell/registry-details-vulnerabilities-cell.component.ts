@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
@@ -29,8 +33,10 @@ export class RegistryDetailsVulnerabilitiesCellComponent implements ICellRendere
 
   private updateValues(params: ICellRendererParams): void {
     this.params = params;
-    this.critical = params && params.node?.data ? params.node.data.critical ?? 0 : 0;
-    this.high = params && params.node?.data ? params.node.data.high ?? 0 : 0;
-    this.medium = params && params.node?.data ? params.node.data.medium ?? 0 : 0;
+    this.critical =
+      params && params.node?.data ? (params.node.data.critical ?? 0) : 0;
+    this.high = params && params.node?.data ? (params.node.data.high ?? 0) : 0;
+    this.medium =
+      params && params.node?.data ? (params.node.data.medium ?? 0) : 0;
   }
 }

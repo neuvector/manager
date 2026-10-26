@@ -8,9 +8,8 @@ describe('RegistryDetailsOsCell', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RegistryDetailsOsCell]
-    })
-    .compileComponents();
+      imports: [RegistryDetailsOsCell],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RegistryDetailsOsCell);
     component = fixture.componentInstance;

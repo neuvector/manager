@@ -5,34 +5,20 @@ export type PolicyMode = 'Discover' | 'Monitor' | 'Protect' | '';
 export type ProfileBaseline = 'basic' | 'zero-drift';
 
 export type ScannerAutoscaleStrategy =
-  | 'immediate'
-  | 'delayed'
-  | 'disabled'
-  | 'n/a'
-  | '';
+  'immediate' | 'delayed' | 'disabled' | 'n/a' | '';
 
 export type VulnerabilityView =
-  | 'all'
-  | 'containers'
-  | 'infrastructure'
-  | 'registry';
+  'all' | 'containers' | 'infrastructure' | 'registry';
 
 export type DataOps = 'add' | 'edit' | 'delete';
 
 export type VulQueryPublishedTimeOption = 'all' | 'before' | 'after';
 
 export type VulQueryPackageTypeOption =
-  | 'all'
-  | 'withFix'
-  | 'withoutFix'
-  | 'withFixAll';
+  'all' | 'withFix' | 'withoutFix' | 'withFixAll';
 
 export type VulQuerySeverityTypeOption =
-  | 'all'
-  | 'critical'
-  | 'high'
-  | 'medium'
-  | 'low';
+  'all' | 'critical' | 'high' | 'medium' | 'low';
 
 export type VulQueryScoreTypeOption = 'v2' | 'v3';
 
@@ -47,21 +33,12 @@ export type VulQueryOrderByColumnOption =
   | 'impact';
 
 export type ImageQueryOrderByColumnOption =
-  | 'repository'
-  | 'imageid'
-  | 'createdat'
-  | 'os'
-  | 'size'
-  | 'scannedat';
+  'repository' | 'imageid' | 'createdat' | 'os' | 'size' | 'scannedat';
 
 export type OrderByOption = 'desc' | 'asc';
 
 export type LastModifiedDateOption =
-  | 'all'
-  | 'twoweeks'
-  | 'onemonth'
-  | 'threemonths'
-  | 'custom';
+  'all' | 'twoweeks' | 'onemonth' | 'threemonths' | 'custom';
 
 export type CfgType = 'ground' | 'user_created' | '';
 

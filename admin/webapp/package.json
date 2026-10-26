@@ -79,7 +79,7 @@
     "node-forge": "^1.4.0",
     "pako": "^2.0.4",
     "popper.js": "1.16.1",
-    "prettier-eslint": "^16.4.2",
+    "prettier-eslint": "^17.1.2",
     "roboto-fontface": "0.10.0",
     "rxjs-compat": "6.6.7",
     "save-dev": "0.0.1-security",

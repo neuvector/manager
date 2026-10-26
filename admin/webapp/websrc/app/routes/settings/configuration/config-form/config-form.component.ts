@@ -82,8 +82,7 @@ export class ConfigFormComponent implements OnInit, OnDestroy {
 
   private updatePendingCertificateEdit(): void {
     const formValue = this.configForm?.getRawValue() as any;
-    const certs =
-      formValue?.tls?.cacerts ?? this._config?.tls?.cacerts ?? [];
+    const certs = formValue?.tls?.cacerts ?? this._config?.tls?.cacerts ?? [];
     this.hasPendingCertificateEdit =
       Array.isArray(certs) && certs.some(c => c?.isEditable === true);
   }
@@ -92,7 +91,10 @@ export class ConfigFormComponent implements OnInit, OnDestroy {
     const formValue = this.configForm?.getRawValue() as any;
     const currentWebhooks = cloneDeep(formValue?.webhooks ?? []);
 
-    if (!Array.isArray(currentWebhooks) || !Array.isArray(this.originalWebhooks)) {
+    if (
+      !Array.isArray(currentWebhooks) ||
+      !Array.isArray(this.originalWebhooks)
+    ) {
       this.hasWebhookValueChanged = false;
       return;
     }

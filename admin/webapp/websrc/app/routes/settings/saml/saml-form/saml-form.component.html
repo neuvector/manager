@@ -98,7 +98,9 @@
         class="mb-4"
         mat-icon-button
         type="button">
-        <i class="eos-icons">{{ sloCertVisible ? 'visibility' : 'visibility_off' }}</i>
+        <i class="eos-icons">{{
+          sloCertVisible ? 'visibility' : 'visibility_off'
+        }}</i>
       </button>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
@@ -125,7 +127,9 @@
         class="mb-4"
         mat-icon-button
         type="button">
-        <i class="eos-icons">{{ sloKeyVisible ? 'visibility' : 'visibility_off' }}</i>
+        <i class="eos-icons">{{
+          sloKeyVisible ? 'visibility' : 'visibility_off'
+        }}</i>
       </button>
     </div>
     <ng-container formArrayName="x509_certs">
@@ -152,7 +156,9 @@
             class="mb-4"
             mat-icon-button
             type="button">
-            <i class="eos-icons">{{ x509CertVisible[i] ? 'visibility' : 'visibility_off' }}</i>
+            <i class="eos-icons">{{
+              x509CertVisible[i] ? 'visibility' : 'visibility_off'
+            }}</i>
           </button>
         </ng-container>
 
@@ -173,7 +179,9 @@
             class="mb-4"
             mat-icon-button
             type="button">
-            <i class="eos-icons">{{ x509CertVisible[i] ? 'visibility' : 'visibility_off' }}</i>
+            <i class="eos-icons">{{
+              x509CertVisible[i] ? 'visibility' : 'visibility_off'
+            }}</i>
           </button>
           <button
             (click)="removeExtraCert(i)"

@@ -206,7 +206,7 @@ export class VulnerabilitiesComponent implements OnDestroy {
         {
           lastModifiedTime: lastModifiedTime,
           withoutAppendix: params.withoutAppendix,
-          includeNoVulAssets: params.includeNoVulAssets
+          includeNoVulAssets: params.includeNoVulAssets,
         }
       );
     });
@@ -243,7 +243,8 @@ export class VulnerabilitiesComponent implements OnDestroy {
       .getAssetsViewReportData(
         queryId,
         options.lastModifiedTime,
-        options.includeNoVulAssets)
+        options.includeNoVulAssets
+      )
       .subscribe(
         (response: any) => {
           cb(response, dialogRef);
@@ -278,7 +279,7 @@ export class VulnerabilitiesComponent implements OnDestroy {
     console.log('Assets View data()PDF: ', data);
     const combinedImages = [
       ...(data.images || []),
-      ...(data.no_vul_images || [])
+      ...(data.no_vul_images || []),
     ];
     this.masterGrids = [
       data.workloads,

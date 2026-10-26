@@ -60,7 +60,9 @@
               class="me-3"
               (click)="toggleAcceptedVuls()"
               mat-icon-button>
-              <i class="eos-icons">{{ !showAcceptedVuls ? 'visibility' : 'visibility_off' }}</i>
+              <i class="eos-icons">{{
+                !showAcceptedVuls ? 'visibility' : 'visibility_off'
+              }}</i>
             </button>
           </ng-container>
           <button

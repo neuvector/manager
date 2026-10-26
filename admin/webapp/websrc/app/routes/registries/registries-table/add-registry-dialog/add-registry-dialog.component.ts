@@ -175,7 +175,9 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
           .subscribe({
             complete: () => {
               this.dialogRef.close(true);
-              this.registriesCommunicationService.refreshUntilFound(body.config.name);
+              this.registriesCommunicationService.refreshUntilFound(
+                body.config.name
+              );
             },
             error: ({ error }: { error: ErrorResponse }) => {
               this.notificationService.open(

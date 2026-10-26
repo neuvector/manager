@@ -220,12 +220,7 @@ export interface Role {
 }
 
 export type ApikeyExpiration =
-  | 'never'
-  | 'onehour'
-  | 'oneday'
-  | 'onemonth'
-  | 'oneyear'
-  | 'hours';
+  'never' | 'onehour' | 'oneday' | 'onemonth' | 'oneyear' | 'hours';
 
 export interface Apikey {
   expiration_type: ApikeyExpiration;

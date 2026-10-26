@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subject, timer, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  Observable,
+  Subject,
+  timer,
+  of,
+} from 'rxjs';
 import { RepoGetResponse, Summary } from '@common/types';
 import {
   filter,
@@ -10,7 +17,7 @@ import {
   tap,
   takeWhile,
   take,
-  catchError
+  catchError,
 } from 'rxjs/operators';
 import { RegistriesService } from '@services/registries.service';
 import { FormControl } from '@angular/forms';
@@ -41,44 +48,30 @@ export class RegistriesCommunicationService {
   registryDetails$ = combineLatest([
     this.selectedRegistry$.pipe(filter(summary => summary !== undefined)),
     this.refreshDetailsSubject$.pipe(startWith(null)),
-  ])
-    .pipe(
-      switchMap(([summary]) => {
-        if (!!summary!.isAllView) {
-          return this.registriesService.getAllScannedImagesSummary().pipe(
-            map(allScannedImagesSummary => ({
-              selectedRegistry: summary!,
-              isAllView: true,
-              isFedRepo: false,
-              allScannedImagesSummary,
-            })),
-            finalize(() => {
-              if (this.refreshingDetailsSubject$.value) {
-                this.refreshingDetailsSubject$.next(false);
-              }
-            })
-          );
-        } else if (!!summary!.isFedRepo) {
-          return this.registriesService
-            .getFederatedRepoScanRegistrySummary(summary!.name)
-            .pipe(
-              map(repositories => ({
-                selectedRegistry: summary!,
-                isAllView: false,
-                isFedRepo: true,
-                repositories,
-              })),
-              finalize(() => {
-                if (this.refreshingDetailsSubject$.value) {
-                  this.refreshingDetailsSubject$.next(false);
-                }
-              })
-            );
-        } else {
-          return this.registriesService.getRepo(summary!.name).pipe(
+  ]).pipe(
+    switchMap(([summary]) => {
+      if (!!summary!.isAllView) {
+        return this.registriesService.getAllScannedImagesSummary().pipe(
+          map(allScannedImagesSummary => ({
+            selectedRegistry: summary!,
+            isAllView: true,
+            isFedRepo: false,
+            allScannedImagesSummary,
+          })),
+          finalize(() => {
+            if (this.refreshingDetailsSubject$.value) {
+              this.refreshingDetailsSubject$.next(false);
+            }
+          })
+        );
+      } else if (!!summary!.isFedRepo) {
+        return this.registriesService
+          .getFederatedRepoScanRegistrySummary(summary!.name)
+          .pipe(
             map(repositories => ({
               selectedRegistry: summary!,
               isAllView: false,
+              isFedRepo: true,
               repositories,
             })),
             finalize(() => {
@@ -87,9 +80,22 @@ export class RegistriesCommunicationService {
               }
             })
           );
-        }
-      })
-    ) as Observable<RegistryDetails>;
+      } else {
+        return this.registriesService.getRepo(summary!.name).pipe(
+          map(repositories => ({
+            selectedRegistry: summary!,
+            isAllView: false,
+            repositories,
+          })),
+          finalize(() => {
+            if (this.refreshingDetailsSubject$.value) {
+              this.refreshingDetailsSubject$.next(false);
+            }
+          })
+        );
+      }
+    })
+  ) as Observable<RegistryDetails>;
 
   private startingScanSubject$ = new BehaviorSubject<boolean>(false);
   startingScan$ = this.startingScanSubject$.asObservable();
@@ -141,11 +147,19 @@ export class RegistriesCommunicationService {
     }
   }
 
-  refreshUntilFound(expectedName: string, maxAttempts = 20, intervalMs = 500): void {
+  refreshUntilFound(
+    expectedName: string,
+    maxAttempts = 20,
+    intervalMs = 500
+  ): void {
     timer(0, intervalMs)
       .pipe(
         take(maxAttempts),
-        switchMap(() => this.registriesService.getRegistries().pipe(catchError(() => of({ summarys: [] })))),
+        switchMap(() =>
+          this.registriesService
+            .getRegistries()
+            .pipe(catchError(() => of({ summarys: [] })))
+        ),
         tap(({ summarys }) => {
           const found = summarys.some(s => s.name === expectedName);
           if (found) {
@@ -153,7 +167,10 @@ export class RegistriesCommunicationService {
             this.refreshRegistriesSubject$.next(true);
           }
         }),
-        takeWhile(({ summarys }) => !summarys.some(s => s.name === expectedName), true)
+        takeWhile(
+          ({ summarys }) => !summarys.some(s => s.name === expectedName),
+          true
+        )
       )
       .subscribe();
   }

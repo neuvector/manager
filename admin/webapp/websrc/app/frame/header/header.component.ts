@@ -146,9 +146,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.email = this.localStorage.get(
       GlobalConstant.LOCAL_STORAGE_TOKEN
     )?.emailHash;
-    this.username = this.localStorage.get(
-      GlobalConstant.LOCAL_STORAGE_TOKEN
-    )?.token?.username;
+    this.username = this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TOKEN)
+      ?.token?.username;
     const role = this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TOKEN)
       ?.token?.role;
     this.displayRole = role

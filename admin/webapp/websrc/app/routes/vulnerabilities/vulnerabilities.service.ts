@@ -286,8 +286,11 @@ export class VulnerabilitiesService {
     lastModifiedTime: number,
     includeNoVulAssets: boolean = false
   ): Observable<any> {
-    return this.risksHttpService
-      .postAssetsViewData(queryId, lastModifiedTime, includeNoVulAssets);
+    return this.risksHttpService.postAssetsViewData(
+      queryId,
+      lastModifiedTime,
+      includeNoVulAssets
+    );
   }
 
   getDomain(): Observable<string[]> {

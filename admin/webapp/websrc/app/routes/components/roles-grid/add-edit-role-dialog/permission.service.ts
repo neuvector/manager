@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Permission, PermissionOption, Role } from '@common/types';
+import { Permission } from '@common/types';
+import type { PermissionOption, Role } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 
 export interface PermissionDialogOption extends PermissionOption {

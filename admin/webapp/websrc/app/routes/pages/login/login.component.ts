@@ -17,7 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
 import { NotificationService } from '@services/notification.service';
 import { SummaryService } from '@services/summary.service';
-import {
+import type {
   ErrorResponse,
   PublicPasswordProfile,
   SystemSummary,

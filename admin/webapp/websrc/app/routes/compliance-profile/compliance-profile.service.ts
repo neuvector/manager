@@ -8,8 +8,8 @@ import {
   ComplianceProfileData,
   complianceProfileEntries,
   ComplianceProfileTemplateData,
-  DomainGetResponse,
 } from '@common/types';
+import type { DomainGetResponse } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 

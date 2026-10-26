@@ -149,7 +149,7 @@
     "ts-node": "8.10.2",
     "typescript": "5.8",
     "webpack": "^5.103.0",
-    "webpack-dev-server": "^5.2.3",
+    "webpack-dev-server": "^6.1.0",
     "zone.js": "^0.15.0"
   },
   "overrides": {

@@ -610,33 +610,9 @@ class DashboardService()(implicit executionContext: ExecutionContext)
           + container.scan_summary.fold(0)(scan_summary => scan_summary.medium)
         )
       )
+      // Pod-level scan_summary from /workload?view=pod already aggregates its child containers,
+      // so children must not be added again (doing so double-counts vulnerabilities).
       totalScannedPodsWithoutSystem += 1
-      if (
-        container.children.isDefined && container.children
-          .getOrElse(Array.empty[WorkloadChildren])
-          .nonEmpty
-      ) {
-        container.children.get.filter(child => child.state != "exit").foreach { child =>
-          criticalVulsMap += (
-            container.state -> (
-              criticalVulsMap.getOrElse(container.state, 0)
-              + child.scan_summary.fold(0)(scan_summary => scan_summary.critical)
-            )
-          )
-          highVulsMap += (
-            container.state -> (
-              highVulsMap.getOrElse(container.state, 0)
-              + child.scan_summary.fold(0)(scan_summary => scan_summary.high)
-            )
-          )
-          medVulsMap += (
-            container.state -> (
-              medVulsMap.getOrElse(container.state, 0)
-              + child.scan_summary.fold(0)(scan_summary => scan_summary.medium)
-            )
-          )
-        }
-      }
     }
 
     VulContainerOutput(
@@ -1076,29 +1052,12 @@ class DashboardService()(implicit executionContext: ExecutionContext)
           )
 
       val top5Workloads = vulContainersByDomain.map { container =>
-        val vulnerabilityNum = container.children.fold(
-          (
-            container.scan_summary.fold(0)(scan_summary => scan_summary.critical),
-            container.scan_summary.fold(0)(scan_summary => scan_summary.high),
-            container.scan_summary.fold(0)(scan_summary => scan_summary.medium)
-          )
-        )(children =>
-          children
-            .filter(child => child.state != "exit")
-            .foldLeft(
-              container.scan_summary.fold(0)(scan_summary => scan_summary.critical),
-              container.scan_summary.fold(0)(scan_summary => scan_summary.high),
-              container.scan_summary.fold(0)(scan_summary => scan_summary.medium)
-            ) { (container, child) =>
-              (
-                container._1 + child.scan_summary
-                  .fold(0)(scan_summary => scan_summary.critical),
-                container._2 + child.scan_summary
-                  .fold(0)(scan_summary => scan_summary.high),
-                container._3 + child.scan_summary
-                  .fold(0)(scan_summary => scan_summary.medium)
-              )
-            }
+        // Pod-level scan_summary from /workload?view=pod already aggregates its child containers,
+        // so children must not be added again (doing so double-counts vulnerabilities).
+        val vulnerabilityNum = (
+          container.scan_summary.fold(0)(scan_summary => scan_summary.critical),
+          container.scan_summary.fold(0)(scan_summary => scan_summary.high),
+          container.scan_summary.fold(0)(scan_summary => scan_summary.medium)
         )
 
         val workload = container.copy(

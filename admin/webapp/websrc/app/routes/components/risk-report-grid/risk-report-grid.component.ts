@@ -158,7 +158,7 @@ export class RiskReportGridComponent implements OnInit {
         cellClass: ['d-flex', 'align-items-center'],
       },
       getRowId: params => params.data.id,
-      getRowHeight: params => (!this.isParent(params.node) ? 110 : 90),
+      getRowHeight: params => (!this.isParent(params.node) ? 130 : 90),
       postSortRows: this.postSortRows.bind(this),
       onGridReady: this.onGridReady.bind(this),
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
